@@ -1,4 +1,9 @@
+#!/usr/bin/pythond
+# -*- coding: utf-8 -*-
+
 import urllib
+import re
+from time import sleep
 from bs4 import BeautifulSoup
 
 _hankyung_latest_list_url = "http://www.hankyung.com/news/app/newslist_all.php?tab=&iscts=&popup=1&sdate=&page="
@@ -35,6 +40,32 @@ def _get_soup_in_container (html_doc, container) :
 
 	return soup_in_container
 
+def _except_dom_in_contents (contents) :
+	paragraph_list = []
+	news_view = contents.find(id="newsView")
+	for dom in news_view.contents :
+		#exit condition
+		if dom.name == "div" :
+			# sns구조 전까지 검색 후 종료
+			if dom["class"][0] == "sns_article" : break
+			else : continue
+
+			#advertisement
+			if dom["class"][0] == "articleAD_L" :
+				continue
+
+		#ignore
+		if dom.name == "br" or dom.name == "iframe" :
+			continue
+		if dom.string is None or dom.string == "\n" or dom.string == " " :
+			continue
+		if dom.string.find ( u"서브 제목" ) != -1 or dom.string.find ( u"//서브 제목" ) != -1 :
+			continue
+
+		paragraph_list.append(dom.string)
+
+	return paragraph_list
+
 
 ## 라인의 앞뒤 공백을 제거 후 마지막에 마침표가 있으면 문단이라고 판단
 ## 특히 첫번째 문단 마지막에 마침표가 있는 경우 기자정보가 없다고 판단하고 종료
@@ -45,7 +76,7 @@ def _has_period(paragraph):
 	return False
 
 
-def _categorize_by_author_code(paragraph, private_flag) :
+def _categorize_by_author_code(line, private_flag) :
 	# email 보유여부 확인
 	emails = re.findall(_email_pattern, line)
 	return_code_list = [False, "public", "private"]
@@ -86,9 +117,8 @@ def _categorize_by_author_code(paragraph, private_flag) :
 
 
 
-
 # 특정 단어가 있는 경우 그 내용을 뽑아서 리스트로 출력해주는 로직
-def _pick_up_line (contents) :
+def _nominate_paragraphes_of_investigation(contents) :
 
 	# authorCode에 따라서 분류
 	line_list = {"public":[], "private":[], "special":""}
@@ -163,12 +193,12 @@ def _pick_up_line (contents) :
 			index = line[0:line_len - email_len ].rfind(".")
 			line_list["private"][0] = line[index + 1:line_len].strip()
 
-	return lineList
+	return line_list
 
 
 
 def get_article_urls_with_pagenum (page) :
-	hankyung_latest_list_url_with_page = hankyung_latest_list_url+str(page)
+	hankyung_latest_list_url_with_page = _hankyung_latest_list_url+str(page)
 	html_doc = _get_html_doc(hankyung_latest_list_url_with_page)
 
 	article_list = _get_soup_in_container(html_doc, "newslist_ty1")
@@ -180,21 +210,21 @@ def get_article_urls_with_pagenum (page) :
 
 
 def parse_article_with_url (url) :
-	try :
-		html_doc = _get_html_doc(url)
+	# try :
+	html_doc = _get_html_doc(url)
 
-		article = {}
-		article["url"] = url
-		article["section"] = extract_section(html_doc)
-		article["title"] = extract_title(html_doc)
-		article["datetime"] = extract_datetime(html_doc)
-		article["contents"] = extract_contetns(html_doc)
-		# article["author"] = extract_author(html_doc)
+	article = {}
+	article["url"] = url
+	article["section"] = extract_section(html_doc)
+	article["title"] = extract_title(html_doc)
+	article["datetime"] = extract_datetime(html_doc)
+	article["contents"] = extract_contents(html_doc)
+	article["author"] = extract_author(html_doc)
 
-		return article
+	return article
 
-	except :
-		return False
+	# except :
+	# 	return False
 	
 
 def extract_section (html_doc) :
@@ -217,52 +247,32 @@ def extract_title (html_doc) :
 
 def extract_datetime (html_doc) :
 	contents = _get_soup_in_container(html_doc, "contents")
+	date_pattern = "^\d{4}-\d{2}-\d{2}\s?\d{2}:\d{2}"
 
-	date_list = []
-	date_list = contents.find("dl",{"class":"modify_date"}).findAll("dd")
-	## 입력과 수정의 날짜,시간이 같은 경우 수정부분 입력 안함
-	for date in date_list :
-		if len(date.string) == date_len :
-			if len(date_list) == 1 and date_list[0] == date.string :
-				continue
-			date_list.append(date.string)
-	#입력된 시간의 date_list만 반환
-	return date_list[0]
+	date_list = contents.find("dl",{"class":"modify_date"}).findAll("dd")	
+	date = re.match(date_pattern, date_list[0].string)
 
+	return date.group()
+	
 
 def extract_contents (html_doc) :
 	contents = _get_soup_in_container(html_doc, "contents")
+	contents_of_article = ""
+	
+	paragraph_list = _except_dom_in_contents(contents)
+	for paragraph in paragraph_list :
+		contents_of_article += paragraph.string
 
-	news_view = contents.find(id="newsView")
-	for dom in news_view.contents :
-		#exit condition
-		if dom.name == "div" :
-			# sns구조 전까지 검색 후 종료
-			if dom["class"][0] == "sns_article" : break
-			else : continue
-
-			#advertisement
-			if dom["class"][0] == "articleAD_L" :
-				continue
-
-		#ignore
-		if dom.name == "br" or dom.name == "iframe" :
-			continue
-		if dom.string is None or dom.string == "\n" or dom.string == " " :
-			continue
-		if dom.string.find ( u"서브 제목" ) != -1 or dom.string.find ( u"//서브 제목" ) != -1 :
-			continue
-		
-		_paragraph_list_of_article.append(dom.string)
-		contents_of_article += dom.string
-
-	return contents_of_article
+	return contents_of_article.strip()
 
 
 def extract_author (html_doc) :
-	##### 기존 로직에서 변경
-	##### 이메일, 관련단어를 찾으면 그 내용을 찾아주는 로직
-	line_list = pick_up_line(contents)
+	
+	contents = _get_soup_in_container(html_doc, "contents")
+	paragraph_list = _except_dom_in_contents(contents)
+	
+	# 이메일, 관련단어를 찾으면 그 내용을 찾아주는 로직
+	line_list = _nominate_paragraphes_of_investigation(paragraph_list)
 	author = ""
 
 	if line_list["private"] :
@@ -293,7 +303,11 @@ for url in url_list :
 #print
 for article in articles :
 	print "url: " + article["url"]
+	print "section: " + article["section"]
 	print "title: " + article["title"]
+	print "datetime: " + article["datetime"]
+	print "author: " + article["author"]
+	print "contents: " + article["contents"]
 	print "------------------------\n"
 
 
