@@ -3,6 +3,7 @@
 
 import urllib
 import re
+from newsSQL import NewsSQL
 from time import sleep
 from bs4 import BeautifulSoup
 
@@ -171,7 +172,7 @@ def _nominate_paragraphes_of_investigation(contents) :
 			period = _has_period(special_line)
 
 			if not period and len(special_line) < _min_len :
-				for word in key_word["special"] :
+				for word in _key_word["special"] :
 					index = special_line.find ( word )
 					if index != -1 :
 						line_list["special"] = special_line
@@ -293,22 +294,46 @@ def extract_author (html_doc) :
 
 
 # main
-articles = []
-for page in range(1,2) :
-	url_list = get_article_urls_with_pagenum(page)
 
-for url in url_list :
-	articles.append(parse_article_with_url(url))
+print "\n\nstart"
 
-#print
-for article in articles :
-	print "url: " + article["url"]
-	print "section: " + article["section"]
-	print "title: " + article["title"]
-	print "datetime: " + article["datetime"]
-	print "author: " + article["author"]
-	print "contents: " + article["contents"]
-	print "------------------------\n"
+try :
+	config = { "host":"10.73.45.134", "user":"root", "password":"wildgoose", "database":"Wildgoose"}
+	conn = NewsSQL(config)
+	query = "INSERT INTO Articles ( URL, title, section, content, author, datetime ) VALUES ( %(url)s, %(title)s, %(section)s, %(contents)s, %(author)s, %(datetime)s )"
+
+	for page in range(1,2) :
+		url_list = get_article_urls_with_pagenum(page)
+
+	articles = []
+	for url in url_list :
+		articles.append(parse_article_with_url(url))
+
+	for article in articles :
+
+		conn.insert(query, article)
+		print "url: " + article["url"]
+		print "section: " + article["section"]
+		print "title: " + article["title"]
+		print "datetime: " + article["datetime"]
+		print "author: " + article["author"]
+		print "contents: " + article["contents"]
+		print "------------------------\n"
+
+		sleep ( 1 )
+
+except :
+	print "error"
+
+else :
+	try :
+		conn.close()
+	except :
+		print "close error"
+
+
+
+print "\n\nEnd"
 
 
 

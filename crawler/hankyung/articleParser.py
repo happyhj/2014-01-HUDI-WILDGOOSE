@@ -165,7 +165,7 @@ class ArticleParser :
 		##### 기존 로직에서 변경
 		##### 이메일, 관련단어를 찾으면 그 내용을 찾아주는 로직
 		lineList = self.pickUpLine ( contents )
-		author = ""
+		author = ""`
 
 		if lineList [ "private" ] :
 			for line in lineList [ "private" ] :
