@@ -3,9 +3,16 @@
 
 import urllib
 import re
-from newsSQL import NewsSQL
+import os, sys
 from time import sleep
 from bs4 import BeautifulSoup
+
+#first change the cwd to the script path
+scriptPath = os.path.realpath(os.path.dirname(sys.argv[0]))
+os.chdir(scriptPath)
+#append the relative location you want to import from
+sys.path.append("../utility")
+from newsSQL import NewsSQL
 
 _hankyung_latest_list_url = "http://www.hankyung.com/news/app/newslist_all.php?tab=&iscts=&popup=1&sdate=&page="
 _date_len = 19
