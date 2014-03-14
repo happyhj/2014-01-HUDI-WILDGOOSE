@@ -1,59 +1,52 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import sys
-import os.path
-parent_dir = os.path.abspath(os.path.join(sys.path[0], os.pardir))
-sys.path.append(parent_dir)
-
 import re
 import urllib
 from bs4 import BeautifulSoup
 
-import articleList
-import getServiceCodeName
-
-def parse_joongang(page_num) :
-	PRE_URL = articleList.get_url('joongang')
+# return: list of articles
+def get_article_urls_with_pagenum(page_num) :
+	PRE_URL = "http://article.joins.com/news/list/list.asp?sc=JO&ctg=17&page="
 	URL = PRE_URL + str(page_num)
 
 	html_doc = urllib.urlopen(URL).read()
 	soup = BeautifulSoup(html_doc)
 
 	news_list = soup.find('div', 'bd').ul
-
+	article_urls = []
 	for news in news_list.find_all('li') :
 		# NON-TEXT CHILD
 		article_url = news.dl.dt.a['href']
-		news_info = parse_joongang_article(article_url)
-		print_news_info(news_info)
+		article_urls.append(article_url)
+	return article_urls
 
-def parse_joongang_article(article_url) :
+# return: dict of article
+def parse_article_with_url(article_url) :
 	article = urllib.urlopen(article_url).read()
+	
+	article_info = dict()
+	article_info['URL'] = article_url
+	article_info['title'] = extract_title(article)
+	article_info['datetime'] = extract_datetime(article)
+	article_info['content'] = extract_content(article)
+	article_info['provider'] = extract_provider(article)
+
+	article_info['section'] = extract_section(article)
+	article_info['author'] = extract_author(article)
+
+	return article_info
+
+def extract_title(article) :
 	article_soup = BeautifulSoup(article)
-
-	# remove photo div
-	[s.extract() for s in article_soup('div', 'html_photo')]
-
-	news_info = dict()
-
-	news_info['URL'] = article_url
-
 	title_div = article_soup.find('div', 'title')
-	content_div = article_soup.find('div', 'article_content');
+	title = title_div.h3.get_text()
+	return title
 
-	news_info['title'] = title_div.h3.get_text()
-	news_info['datetime'] = title_div.find('span', 'date').get_text()
-	news_info['content'] = content_div.get_text().strip()
-	# news_info['provider'] = title_div.find('em', 'provide').get_text()[1:-1]
+def extract_section(article) :
+	import getServiceCodeName
 
-	news_info['section'] = get_joongang_section(article_soup)
-	news_info['author'] = get_journalist_name(content_div)
-	news_info['email'] = get_email(content_div)
-
-	return news_info
-
-def get_joongang_section(article_soup) :
+	article_soup = BeautifulSoup(article)
 	script_text = article_soup.head.get_text()
 	ctg_code_pos = script_text.find('sServiceCode')
 	ctg_code = script_text[ctg_code_pos+16:ctg_code_pos+20]
@@ -62,24 +55,54 @@ def get_joongang_section(article_soup) :
 	small_code = ctg_code[2:4]
 
 	large_ctg = getServiceCodeName.CTG_CODE[large_code]['k']
-	if (small_code == '00') :
-		return large_ctg
-	else :
-		small_ctg = getServiceCodeName.CTG_CODE[large_code]['s'+small_code]['k']
-		return large_ctg + ' > ' + small_ctg
+	return large_ctg
+
+def extract_datetime(article) :
+	article_soup = BeautifulSoup(article)
+	title_div = article_soup.find('div', 'title')
+	date = title_div.find('span', 'date').get_text()
+	datetime = re.search('[0-9\.]+\s[0-9:]+', date).group(0) + ':00'
+	return datetime
+
+def extract_author(article) :
+	article_soup = BeautifulSoup(article)
+	article_soup = remove_photo(article_soup)
+
+	content_div = article_soup.find('div', 'article_content');
+	jname = get_journalist_name(content_div)
+	jemail = get_email(content_div)
+	return jname + ' / ' + jemail
+
+def extract_content(article) :
+	article_soup = BeautifulSoup(article)
+	article_soup = remove_photo(article_soup)
+
+	content_div = article_soup.find('div', 'article_content');
+	content = content_div.get_text().strip()
+	return content
+
+def extract_provider(article) :
+	article_soup = BeautifulSoup(article)
+	title_div = article_soup.find('div', 'title')
+	provider = title_div.find('em', 'provide').get_text()[1:-1]
+
+	return provider
 
 def get_journalist_name(content_div) :
-	news_text = content_div.get_text()
-	result = re.findall(u'[가-힣]+\s?[(인턴)(선임)]*?[^(연)(학생)]기자[^(간담)(회견)(들)(와)(가)(에게)(동차)(재)]+?', news_text)
+	content = content_div.get_text()
+	result = re.findall(u'[가-힣·,\s]+\s?[가-힣]*?[^(연)(학생)]기자[^(간담)(회견)(들)(의)(는)(와)(가)(로)(에게)(인)(답게)(동차)(재)(예요)(조선)(기)]+?', content)
+	faraway = re.findall(u'[가-힣·]+\s?특파원[^(들)(의)(와)(가)(에게)(인)(답게)(으로)]+?', content)
+
+	result += faraway
 
 	if (len(result) != 0) :
 		i = 0
 		for name in result :
-			result[i] = name[:-1]
-	# 		if (name.find("뉴시스") == 0) :
-	# 			result[i] = name[12:]
+			result[i] = name[:-1].strip()
 			i += 1
 		return ','.join(result)
+
+
 
 	return 'None'
 
@@ -91,18 +114,24 @@ def get_email(content_div) :
 
 	return 'None'
 
-def print_news_info(news_info) :
-	# print news_info['URL'].encode('utf-8')
-	# print news_info['title'].encode('utf-8')
-	# print news_info['datetime'].encode('utf-8')
-	# print news_info['content'].encode('utf-8')
-	# print news_info['provider']
+def remove_photo(article_soup) :
+	# remove photo div
+	photo_divs = article_soup.find_all('div', 'html_photo')
+	photo_divs += article_soup.find_all('div', 'html_photo_center')
+	if(photo_divs is not None):
+		for photo_div in photo_divs :
+			photo_div.clear()
+	return article_soup
+
+def print_article_info(article_info) :
+	print article_info['URL'].encode('utf-8')
+	# print article_info['title'].encode('utf-8')
+	# print article_info['datetime'].encode('utf-8')
+	# print article_info['content'].encode('utf-8')
+	print article_info['provider'].encode('utf-8')
 
 	# Section text is saved in python file -> no need to encode
-	# print news_info['section']
-	print news_info['author'].encode('utf-8')
-	# print news_info['email'].encode('utf-8')
+	# print article_info['section']
+	print article_info['author'].encode('utf-8')
 	print ''
 
-for i in range(1, 10) :
-	parse_joongang(i)
