@@ -8,6 +8,10 @@ Project WILD GOOSE
 [내용 정리 Trello](https://trello.com/b/gpoy7DIX/)
 
 [기획서](https://github.com/NHNNEXT/2014-01-HUDI-WILDGOOSE/wiki/%EA%B8%B0%ED%9A%8D%EC%84%9C)
+//
+[회의록](https://github.com/NHNNEXT/2014-01-HUDI-WILDGOOSE/wiki/회의록)
+//
+[스터디](https://github.com/NHNNEXT/2014-01-HUDI-WILDGOOSE/wiki/스터디)
 
 목표: 적당한 수준으로 프로젝트 완결, 성공경험 하기
 
