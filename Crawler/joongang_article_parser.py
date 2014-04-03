@@ -5,9 +5,13 @@ import re
 import urllib
 from bs4 import BeautifulSoup
 
+def get_press_id():
+	return "joongang"
+
+
 # return: list of articles
 def get_article_urls_with_pagenum(page_num) :
-	PRE_URL = "http://article.joins.com/news/list/list.asp?sc=JO&ctg=17&page="
+	PRE_URL = "http://article.joins.com/news/list/list.asp?sc=JO&page="
 	URL = PRE_URL + str(page_num)
 
 	html_doc = urllib.urlopen(URL).read()
@@ -26,14 +30,15 @@ def parse_article_with_url(article_url) :
 	article = urllib.urlopen(article_url).read()
 	
 	article_info = dict()
-	article_info['URL'] = article_url
+	article_info['URL'] = article_url.encode('utf-8')
 	article_info['title'] = extract_title(article)
 	article_info['datetime'] = extract_datetime(article)
 	article_info['content'] = extract_content(article)
-	article_info['provider'] = extract_provider(article)
+	#article_info['provider'] = extract_provider(article)
+	article_info['press_id'] = 3
 
 	article_info['section'] = extract_section(article)
-	article_info['author'] = extract_author(article)
+	article_info['author_info'] = extract_author(article)
 
 	return article_info
 
@@ -41,7 +46,7 @@ def extract_title(article) :
 	article_soup = BeautifulSoup(article)
 	title_div = article_soup.find('div', 'title')
 	title = title_div.h3.get_text()
-	return title
+	return title.encode('utf-8')
 
 def extract_section(article) :
 	import getServiceCodeName
@@ -71,7 +76,7 @@ def extract_author(article) :
 	content_div = article_soup.find('div', 'article_content');
 	jname = get_journalist_name(content_div)
 	jemail = get_email(content_div)
-	return jname + ' / ' + jemail
+	return (jname + ' ' + jemail).encode('utf-8')
 
 def extract_content(article) :
 	article_soup = BeautifulSoup(article)
@@ -79,14 +84,14 @@ def extract_content(article) :
 
 	content_div = article_soup.find('div', 'article_content');
 	content = content_div.get_text().strip()
-	return content
+	return content.encode('utf-8')
 
 def extract_provider(article) :
 	article_soup = BeautifulSoup(article)
 	title_div = article_soup.find('div', 'title')
 	provider = title_div.find('em', 'provide').get_text()[1:-1]
 
-	return provider
+	return provider.encode('utf-8')
 
 def get_journalist_name(content_div) :
 	content = content_div.get_text()
