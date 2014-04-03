@@ -1,1 +1,4 @@
 .DS_Store
+wildgoose/.settings
+wildgoose/target
+wildgoose/.project
