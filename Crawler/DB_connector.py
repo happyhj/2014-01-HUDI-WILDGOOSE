@@ -20,7 +20,8 @@ def make_insert_query(table_name, data) :
 
     for key in data.keys() :
         value = data[key]
-        value = handle_apostrophe(value)
+        if type(value) is str :
+            value = handle_apostrophe(value)
         query_column.append(key)
         query_value.append(value)
 
@@ -50,8 +51,6 @@ def make_insert_query(table_name, data) :
     return QUERY
 
 def handle_apostrophe(string) :
-    if type(string) is not str :
-    	return string
     splited = string.split("'")
     edited = "\\'".join(splited)
     return edited

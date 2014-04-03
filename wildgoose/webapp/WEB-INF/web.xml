@@ -14,8 +14,4 @@
   	<servlet-name>SearchArticles</servlet-name>
   	<url-pattern>/SearchArticles</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>SearchArticles</servlet-name>
-  	<url-pattern>/</url-pattern>
-  </servlet-mapping>
 </web-app>

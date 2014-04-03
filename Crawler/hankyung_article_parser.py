@@ -27,11 +27,10 @@
 
 import urllib
 import re
-import os, sys
-#from time import sleep
 from bs4 import BeautifulSoup
 
 '''
+import os, sys
 ## 아래 코드는 상위 폴더에 있는 python file을 import하기 위한 코드 입니다.
 ## 인터넷에서 그대로 복사했습니다
 #first change the cwd to the script path
@@ -44,6 +43,67 @@ from newsSQL import NewsSQL
 
 # _reporter_pattern_in_first_line = u"[가-힝|\s|\w]*"
 
+
+def get_press_name():
+	return "hankyung"
+
+### 1번
+### 해당 url이 가진 기사 url정보를 list형으로 반환
+def get_article_urls_with_pagenum (page) :
+	# hankyung_latest_list_url_with_page = _hankyung_latest_list_url+str(page)
+	_hankyung_list_url = "http://www.hankyung.com/news/app/newslist_all.php?iscts=1&popup=1&page="
+	hankyung_latest_list_url_with_page = _hankyung_list_url+str(page)
+
+	### url의 html 문서를 가져와 html_doc에 저장
+	### A번으로 이동
+	html_doc = _get_html_doc(hankyung_latest_list_url_with_page)
+
+	### html_doc 중에서 id가 newslist_ty1인 정보만 Beautiful soup로 변환하여 article_list에 저장
+	### B번으로 이동
+	article_list = _get_soup_in_container(html_doc, "newslist_ty1")
+
+	### article_list에서 tag가 h3인 부분만 찾아 tags에 저장
+	tags = article_list.findAll("h3")
+
+	### urls에 기사의 url정보를 담을 list를 생성
+	urls = []
+
+	### tags를 순회
+	for tag in tags :
+		### 개별 h3 tag 내에서 a tag 중 href 속성만 찾아 url에 저장
+		url = tag.a["href"]
+		### 확인을 위해 url 출력
+		print url
+		### url을 urls에 추가
+		urls.append(url)
+
+	### urls list 반환
+	return urls
+
+### 2번
+### url을 인자로 받아 article이라는 객체를 생성하고 반환
+def parse_article_with_url (url) :
+	# try :
+
+	### 해당 url의 html 문서를 받아 html_doc에 저장
+	html_doc = _get_html_doc(url)
+
+	### article에 새로운 dict를 생성
+	article = {}
+	article["press_id"] = 4
+	article["url"] = url.encode('utf-8')
+	article["author_info"] = _extract_author_info(html_doc)
+	article["section"] = _extract_section(html_doc)
+	article["title"] = _extract_title(html_doc)
+	article["datetime"] = _extract_datetime(html_doc)
+	article["content"] = _extract_contents(html_doc)
+
+	return article
+
+	# except :
+	# 	return False
+
+
 ### A번
 ### url에 담긴 html정보를 읽고 반환
 def _get_html_doc (url) :
@@ -52,7 +112,6 @@ def _get_html_doc (url) :
 	u.close()
 
 	return html_doc
-
 
 ### B번
 def _get_soup_in_container (html_doc, container) :
@@ -230,10 +289,7 @@ def _combine_meaningful_paragraphs(paragraphs_divided_by_author_code):
 	return "anonymous"
 
 
-
-### 3번
-### html_doc을 받아 author 정보를 반환
-def extract_author (html_doc) :
+def _extract_author_info (html_doc) :
 
 	### html_doc에서 필요없는 문단을 제외시킨 결과를 contents에 저장
 	### 8번으로 이동
@@ -259,98 +315,17 @@ def extract_author (html_doc) :
 
 	return _combine_meaningful_paragraphs(paragraphs_divided_by_author_code).encode('utf-8')
 
-
-
-def extract_contents (html_doc) :
+def _extract_contents (html_doc) :
 	contents = _filter_out_useless_paragraphs(html_doc)
 	return "".join(contents).strip().encode('utf-8')
-
-
-### 1번
-### 해당 url이 가진 기사 url정보를 list형으로 반환
-def get_article_urls_with_pagenum (page) :
-	# hankyung_latest_list_url_with_page = _hankyung_latest_list_url+str(page)
-	_hankyung_list_url = "http://www.hankyung.com/news/app/newslist_all.php?tab=&iscts=&popup=1&sdate=&page="
-	hankyung_latest_list_url_with_page = _hankyung_list_url+str(page)
-
-	### url의 html 문서를 가져와 html_doc에 저장
-	### A번으로 이동
-	html_doc = _get_html_doc(hankyung_latest_list_url_with_page)
-
-	### html_doc 중에서 id가 newslist_ty1인 정보만 Beautiful soup로 변환하여 article_list에 저장
-	### B번으로 이동
-	article_list = _get_soup_in_container(html_doc, "newslist_ty1")
-
-	### article_list에서 tag가 h3인 부분만 찾아 tags에 저장
-	tags = article_list.findAll("h3")
-
-	### urls에 기사의 url정보를 담을 list를 생성
-	urls = []
-
-	### tags를 순회
-	for tag in tags :
-		### 개별 h3 tag 내에서 a tag 중 href 속성만 찾아 url에 저장
-		url = tag.a["href"]
-		### 확인을 위해 url 출력
-		print url
-		### url을 urls에 추가
-		urls.append(url)
-
-	### urls list 반환
-	return urls
-
-def get_press_id():
-	return "hankyung"
-
-### 2번
-### url을 인자로 받아 article이라는 객체를 생성하고 반환
-def parse_article_with_url (url) :
-	# try :
-
-	### 해당 url의 html 문서를 받아 html_doc에 저장
-	html_doc = _get_html_doc(url)
-
-	### article에 새로운 dict를 생성
-	article = {}
-	article["press_id"] = 4
-
-	### article["url"]에 url 정보 저장
-	article["url"] = url.encode('utf-8')
-
-	### article["author"]에 추출된 author 값을 저장
-	### 3번으로 이동
-	article["author_info"] = extract_author(html_doc)
-
-	### article["section"]에 추출된 section 값을 저장
-	### 4번으로 이동
-	article["section"] = extract_section(html_doc)
-
-	### article["title"]에 추출된 title 값을 저장
-	### 5번으로 이동
-	article["title"] = extract_title(html_doc)
-
-	### article["datetime"]에 추천된 datetime 값을 저장
-	### 6번으로 이동
-	article["datetime"] = extract_datetime(html_doc)
-
-	### article["contents"]에 추출된 contents 값을 저장
-	### 7번으로 이동
-	article["content"] = extract_contents(html_doc)
-
-	### article 객체를 반환
-	return article
-
-	# except :
-	# 	return False
 	
-
-def extract_section (html_doc) :
+def _extract_section (html_doc) :
 	contents = _get_soup_in_container(html_doc, "contents")
 	section = contents.find("span",{"class":"cate"} ).a.string.strip()
 
 	return section.encode('utf-8')
 
-def extract_title (html_doc) :
+def _extract_title (html_doc) :
 	contents = _get_soup_in_container(html_doc, "contents")
 
 	title = contents.h1.find (text=True, recursive=False)
@@ -361,8 +336,7 @@ def extract_title (html_doc) :
 
 	return title.encode('utf-8')
 
-
-def extract_datetime (html_doc) :
+def _extract_datetime (html_doc) :
 	contents = _get_soup_in_container(html_doc, "contents")
 	date_pattern = "^\d{4}-\d{2}-\d{2}\s?\d{2}:\d{2}"
 

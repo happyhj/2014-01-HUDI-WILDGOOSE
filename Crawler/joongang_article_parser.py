@@ -5,9 +5,8 @@ import re
 import urllib
 from bs4 import BeautifulSoup
 
-def get_press_id():
+def get_press_name():
 	return "joongang"
-
 
 # return: list of articles
 def get_article_urls_with_pagenum(page_num) :
@@ -31,24 +30,34 @@ def parse_article_with_url(article_url) :
 	
 	article_info = dict()
 	article_info['URL'] = article_url.encode('utf-8')
-	article_info['title'] = extract_title(article)
-	article_info['datetime'] = extract_datetime(article)
-	article_info['content'] = extract_content(article)
-	#article_info['provider'] = extract_provider(article)
+	article_info['title'] = _extract_title(article)
+	article_info['datetime'] = _extract_datetime(article)
+	article_info['content'] = _extract_content(article)
+	#article_info['provider'] = _extract_provider(article)
 	article_info['press_id'] = 3
 
-	article_info['section'] = extract_section(article)
-	article_info['author_info'] = extract_author(article)
+	article_info['section'] = _extract_section(article)
+	article_info['author_info'] = _extract_author(article)
 
 	return article_info
 
-def extract_title(article) :
+def print_article_info(article_info) :
+	print article_info['URL'].encode('utf-8')
+	print article_info['title']
+	# print article_info['datetime']
+	# print article_info['content']
+	# print article_info['provider']
+	# print article_info['section']
+	print article_info['author']
+	print ''
+
+def _extract_title(article) :
 	article_soup = BeautifulSoup(article)
 	title_div = article_soup.find('div', 'title')
 	title = title_div.h3.get_text()
 	return title.encode('utf-8')
 
-def extract_section(article) :
+def _extract_section(article) :
 	import getServiceCodeName
 
 	article_soup = BeautifulSoup(article)
@@ -62,38 +71,38 @@ def extract_section(article) :
 	large_ctg = getServiceCodeName.CTG_CODE[large_code]['k']
 	return large_ctg
 
-def extract_datetime(article) :
+def _extract_datetime(article) :
 	article_soup = BeautifulSoup(article)
 	title_div = article_soup.find('div', 'title')
 	date = title_div.find('span', 'date').get_text()
 	datetime = re.search('[0-9\.]+\s[0-9:]+', date).group(0) + ':00'
 	return datetime
 
-def extract_author(article) :
+def _extract_author(article) :
 	article_soup = BeautifulSoup(article)
-	article_soup = remove_photo(article_soup)
+	article_soup = __remove_photo(article_soup)
 
 	content_div = article_soup.find('div', 'article_content');
-	jname = get_journalist_name(content_div)
-	jemail = get_email(content_div)
+	jname = __get_journalist_name(content_div)
+	jemail = __get_email(content_div)
 	return (jname + ' ' + jemail).encode('utf-8')
 
-def extract_content(article) :
+def _extract_content(article) :
 	article_soup = BeautifulSoup(article)
-	article_soup = remove_photo(article_soup)
+	article_soup = __remove_photo(article_soup)
 
 	content_div = article_soup.find('div', 'article_content');
 	content = content_div.get_text().strip()
 	return content.encode('utf-8')
 
-def extract_provider(article) :
+def _extract_provider(article) :
 	article_soup = BeautifulSoup(article)
 	title_div = article_soup.find('div', 'title')
 	provider = title_div.find('em', 'provide').get_text()[1:-1]
 
 	return provider.encode('utf-8')
 
-def get_journalist_name(content_div) :
+def __get_journalist_name(content_div) :
 	content = content_div.get_text()
 	result = re.findall(u'[가-힣·,\s]+\s?[가-힣]*?[^(연)(학생)]기자[^(간담)(회견)(들)(의)(는)(와)(가)(로)(에게)(인)(답게)(동차)(재)(예요)(조선)(기)]+?', content)
 	faraway = re.findall(u'[가-힣·]+\s?특파원[^(들)(의)(와)(가)(에게)(인)(답게)(으로)]+?', content)
@@ -106,12 +115,9 @@ def get_journalist_name(content_div) :
 			result[i] = name[:-1].strip()
 			i += 1
 		return ','.join(result)
-
-
-
 	return 'None'
 
-def get_email(content_div) :
+def __get_email(content_div) :
 	email_list = re.findall('[-0-9a-zA-Z][-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[-0-9a-zA-Z.+_]+', content_div.get_text().strip())
 
 	if (len(email_list) != 0) :
@@ -119,7 +125,7 @@ def get_email(content_div) :
 
 	return 'None'
 
-def remove_photo(article_soup) :
+def __remove_photo(article_soup) :
 	# remove photo div
 	photo_divs = article_soup.find_all('div', 'html_photo')
 	photo_divs += article_soup.find_all('div', 'html_photo_center')
@@ -127,16 +133,3 @@ def remove_photo(article_soup) :
 		for photo_div in photo_divs :
 			photo_div.clear()
 	return article_soup
-
-def print_article_info(article_info) :
-	print article_info['URL'].encode('utf-8')
-	# print article_info['title'].encode('utf-8')
-	# print article_info['datetime'].encode('utf-8')
-	# print article_info['content'].encode('utf-8')
-	print article_info['provider'].encode('utf-8')
-
-	# Section text is saved in python file -> no need to encode
-	# print article_info['section']
-	print article_info['author'].encode('utf-8')
-	print ''
-
