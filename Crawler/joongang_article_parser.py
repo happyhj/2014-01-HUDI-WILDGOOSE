@@ -58,7 +58,7 @@ def _extract_title(article) :
 	return title.encode('utf-8')
 
 def _extract_section(article) :
-	import getServiceCodeName
+	from joongang_service_code import CTG_CODE
 
 	article_soup = BeautifulSoup(article)
 	script_text = article_soup.head.get_text()
@@ -68,7 +68,7 @@ def _extract_section(article) :
 	large_code = ctg_code[0:2]
 	small_code = ctg_code[2:4]
 
-	large_ctg = getServiceCodeName.CTG_CODE[large_code]['k']
+	large_ctg = CTG_CODE[large_code]['k']
 	return large_ctg
 
 def _extract_datetime(article) :

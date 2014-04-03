@@ -28,7 +28,7 @@ def get_article_urls_with_pagenum(page_num) :
 
     article_urls = []
 
-    # PARSING CODES HERE
+    # PARSING CODE HERE
 
     return article_urls
 
@@ -36,17 +36,19 @@ def parse_article_with_url(url) :
     html_doc = _get_html_doc(url)
     article = {}
 
-    article["url"] = url
+    article["url"] = url.encode('utf-8')
     article["section"] = _extract_section(html_doc)
     article["title"] = _extract_title(html_doc)
     article["datetime"] = _extract_datetime(html_doc)
     article["contents"] = _extract_contents(html_doc)
     article["author_info"] = _extract_author_info(html_doc)
+    article["is_email_exist"] = _is_email_exist(article["author_info"])
 
     return article
 
 """
 private methods
+starts with _
 """
 
 def _get_html_doc(url) :
@@ -56,21 +58,25 @@ def _get_html_doc(url) :
     return html_doc
 
 def _extract_section(html_doc):
-    # CODES HERE
-    return "section" # SHOULD BE UTF-8
+    # CODE HERE
+    return "section".encode('utf-8') # SHOULD BE UTF-8
 
 def _extract_title(html_doc):
-    # CODES HERE
-    return "title" # SHOULD BE UTF-8
+    # CODE HERE
+    return "title".encode('utf-8') # SHOULD BE UTF-8
 
 def _extract_datetime(html_doc):
-    # CODES HERE
-    return "yyyy-mm-dd hh:mm" # SHOULD BE UTF-8
+    # CODE HERE
+    return "yyyy-mm-dd hh:mm:ss"
 
 def _extract_contents(html_doc):
-    # CODES HERE
-    return "contents" # SHOULD BE UTF-8
+    # CODE HERE
+    return "contents".encode('utf-8') # SHOULD BE UTF-8
 
 def _extract_author_info(html_doc):
-    # CODES HERE
-    return "author info have author@email.com and other text" # SHOULD BE UTF-8
+    # CODE HERE
+    return "author info have author@email.com and other text" .encode('utf-8')# SHOULD BE UTF-8
+
+def _is_email_exist(author_info) :
+    # CODE HERE
+    return 1 #=true or 0=false
