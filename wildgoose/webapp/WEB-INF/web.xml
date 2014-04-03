@@ -4,4 +4,18 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+  	<servlet-name>SearchArticles</servlet-name>
+  	<display-name>SearchArticles</display-name>
+  	<description></description>
+  	<servlet-class>next.wildgoose.SearchArticles</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>SearchArticles</servlet-name>
+  	<url-pattern>/SearchArticles</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>SearchArticles</servlet-name>
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
 </web-app>
