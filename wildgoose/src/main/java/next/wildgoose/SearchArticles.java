@@ -58,15 +58,17 @@ public class SearchArticles extends HttpServlet {
 		// getting database connection to MySQL server
 		try {
 			if(request.getParameter("q")!=null) {
-				String dbURL = "jdbc:mysql://10.73.45.134:3306/Wildgoose?useUnicode=true&characterEncoding=UTF8";
+//				String dbURL = "jdbc:mysql://10.73.45.134:3306/wildgoose?useUnicode=true&characterEncoding=UTF8";
+				String dbURL = "jdbc:mysql://127.0.0.1:3306/wildgoose?useUnicode=true&characterEncoding=UTF8";
+
 				String username = "root";
-				String password = "wildgoose";
-		
+//				String password = "wildgoose";
+				String password = "kimi5423";
 				Connection dbCon = null;
 				Statement stmt = null;
 				ResultSet rs = null;
 		
-				String mysql_query = "SELECT * FROM Articles WHERE title LIKE '%"+search_query+"%'";
+				String mysql_query = "SELECT * FROM article WHERE title LIKE '%"+search_query+"%'";
 				
 				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 				dbCon = DriverManager.getConnection(dbURL, username, password);
@@ -80,7 +82,7 @@ public class SearchArticles extends HttpServlet {
 //					article.URL = StringEscapeUtils.escapeHtml(rs.getString("URL"));
 					article.content = StringEscapeUtils.escapeHtml(rs.getString("content"));
 //					article.section = StringEscapeUtils.escapeHtml(rs.getString("section"));
-					article.author = StringEscapeUtils.escapeHtml(rs.getString("author"));
+//					article.author = StringEscapeUtils.escapeHtml(rs.getString("author"));
 					article.datetime = StringEscapeUtils.escapeHtml(rs.getString("datetime"));
 					articles.add(article);
 				}

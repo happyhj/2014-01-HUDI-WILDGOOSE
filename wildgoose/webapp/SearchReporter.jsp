@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Search Article</title>
+<title>Search Reporter</title>
 </head>
 <body>
 <!--  
@@ -16,12 +16,21 @@
 </form>
 -->
 <input type="search" id="query" value="<%= request.getAttribute("search_query") %>"/>
-<a href="/SearchArticles" id="action"><button>SEARCH</button></a>
-	<div class="output">
-		<c:forEach var="article" items="${ requestScope.articles }">
-			${ article.title }
-			<br>
+<a href="/" id="action"><button>SEARCH</button></a>
+	<div class="search_result">
+	<ul>
+		<c:forEach var="reporter" items="${ requestScope.reporters }">
+			<li>
+				<div>
+					${ reporter.email }
+					${ reporter.author_info }
+					${ reporter.press_name }
+					${ reporter.article_title }
+					${ reporter.article_URL }
+				</div>
+			</li>
 		</c:forEach>
+	</ul>
 	</div>
 <script>
 var inputEl = document.getElementById("query");
@@ -33,10 +42,10 @@ inputEl.addEventListener("keyup",function(e) {
 		if(last_value !== this.value) {
 			console.log(this.value);
 			if(this.value.length >= 1) {
-				linkEl.setAttribute("href","/SearchArticles?q="+ encodeURIComponent(this.value));
+				linkEl.setAttribute("href","/SearchReporter?q="+ encodeURIComponent(this.value));
 			}
 			else 
-				linkEl.setAttribute("href","/SearchArticles");
+				linkEl.setAttribute("href","/");
 			last_value = this.value;
 		}	
 		if (e.keyCode === 13) {
