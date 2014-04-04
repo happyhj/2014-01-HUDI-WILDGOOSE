@@ -51,10 +51,23 @@ def main(argv) :
 
                 author_info = article['author_info']
                 do_something_with_author_info(author_info)
+                
+                if article['is_email_exist'] > 0:
+                	insert_email_to_author_table(author_info, con)
     con.close()
 
+# 이메일을 추출 후 DB author 테이블에 추가하기
+def insert_email_to_author_table(author_info, con) :
+    query = db.make_insert_email_to_author_table_query(author_info)	
+    with closing(con.cursor()) as cur :
+        cur.execute(query)
+        con.commit()
+    return None
+    
 def do_something_with_author_info(author_info) :
     return None
 
+
+	
 if __name__ == "__main__":
     main(sys.argv)

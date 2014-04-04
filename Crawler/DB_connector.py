@@ -3,6 +3,8 @@
 # FILE_NAME: DB_connector.py
 
 import mysql.connector
+import re
+
 
 def connect() :
 #    config = {  "host":"10.73.45.134",
@@ -51,6 +53,18 @@ def make_insert_query(table_name, data) :
         return None
 
     return QUERY
+
+def make_insert_email_to_author_table_query(author_info) :
+	emails = _extract_emails(author_info)
+	QUERY = "INSERT INTO author VALUES "
+	for email in emails :
+		QUERY += "('"+email+"'),"
+	return QUERY[:-1]	
+	
+def _extract_emails (paragraph) :
+	email_pattern = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}"	
+	emails = re.findall(email_pattern, paragraph)
+	return emails	
 
 def handle_apostrophe(string) :
     splited = string.split("'")
