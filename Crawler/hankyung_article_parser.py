@@ -43,10 +43,6 @@ from newsSQL import NewsSQL
 
 # _reporter_pattern_in_first_line = u"[가-힝|\s|\w]*"
 
-
-def get_press_name():
-	return "hankyung"
-
 ### 1번
 ### 해당 url이 가진 기사 url정보를 list형으로 반환
 def get_article_urls_with_pagenum (page) :
@@ -97,6 +93,7 @@ def parse_article_with_url (url) :
 	article["title"] = _extract_title(html_doc)
 	article["datetime"] = _extract_datetime(html_doc)
 	article["content"] = _extract_contents(html_doc)
+	article['is_email_exist'] = _extract_email_existance(article['author_info'])
 
 	return article
 
@@ -187,6 +184,12 @@ def _extract_emails (paragraph) :
 	emails = re.findall(email_pattern, paragraph)
 	return emails
 
+# 이메일 갯수로 저장	-> 단순 BOOL 값 이상의 정보를 가진다.
+def _extract_email_existance(author_info):
+	email_pattern = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}"
+	emails = re.findall(email_pattern, author_info)
+	return len(emails)
+	
 def _has_period(paragraph):
 	paragraph = paragraph.strip()
 	if paragraph[len(paragraph)-1 ] == "." :

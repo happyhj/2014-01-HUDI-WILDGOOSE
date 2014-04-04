@@ -16,25 +16,32 @@ import DB_connector as db
 import sys
 from contextlib import closing
 
-press_list = [donga, hani, joongang, hankyung]
+#press_list = [donga, hani, joongang, hankyung]
+press_dict = {
+	"donga" : donga, 
+	"hani" : hani, 
+	"joongang" : joongang, 
+	"hankyung" : hankyung
+}
 
 # NEEDS MANUAL HANDLING
 def main(argv) :
-    press_index = int(argv[1])-1
+    #press_index = int(argv[1])-1
+    press_name = argv[1]
     start_page_index = int(argv[2])
     end_page_index = int(argv[3])
-    print press_index
-    
-    press = press_list[press_index]
-    press_name = press.get_press_name()
     print press_name
+    
+    press = press_dict[press_name]
+#    press_name = press.get_press_name()
+#    print press_name
     
     con = db.connect()
     with closing(con.cursor()) as cur :
         for i in range(start_page_index, end_page_index+1) :
             # get 10-20 url and insert
             url_list = press.get_article_urls_with_pagenum(i)
-            print "page: " + i
+            print "page: " + str(i)
 
             for url in url_list :
                 article = press.parse_article_with_url(url)

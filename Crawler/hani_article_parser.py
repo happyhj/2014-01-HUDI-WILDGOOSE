@@ -5,9 +5,6 @@ import urllib
 import re
 from bs4 import BeautifulSoup
 
-def get_press_name():
-	return "hani"
-
 def get_article_urls_with_pagenum(page):
 	URLs = [];
 	PRE_URL = "http://www.hani.co.kr/arti/?type=0&cline="
@@ -44,7 +41,7 @@ def parse_article_with_url(url):
 	article['content'] = _extract_content(html_doc)
 	try :
 		article['author_info'] = _extract_author_info(html_doc)
-		article['is_email_exist'] = _check_email_exit(article['author_info'])
+		article['is_email_exist'] = _extract_email_existance(article['author_info'])
 		
 		# print article['content']
 		# print article['URL']
@@ -111,14 +108,19 @@ def _extract_author_info(html_doc):
 		author_info = author_info[author_info.split('@')[0].rfind(".")+1: ].strip()
 
 	return author_info.strip()
-
+'''
 def _check_email_exit(author_info):
 	match = re.search(r'\w+@\w+', author_info)
 	if match:
 		return 1
 	else:
 		return 0
-
+'''	
+# 이메일 갯수로 저장	-> 단순 BOOL 값 이상의 정보를 가진다.
+def _extract_email_existance(author_info):
+	email_pattern = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}"
+	emails = re.findall(email_pattern, author_info)
+	return len(emails)
 
 # 전체 기사의 URL을 모두 긁어온다
 # def _find_last_pagenum():

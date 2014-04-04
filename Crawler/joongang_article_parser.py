@@ -5,9 +5,6 @@ import re
 import urllib
 from bs4 import BeautifulSoup
 
-def get_press_name():
-	return "joongang"
-
 # return: list of articles
 def get_article_urls_with_pagenum(page_num) :
 	PRE_URL = "http://article.joins.com/news/list/list.asp?sc=JO&page="
@@ -38,6 +35,7 @@ def parse_article_with_url(article_url) :
 
 	article_info['section'] = _extract_section(article)
 	article_info['author_info'] = _extract_author(article)
+	article_info['is_email_exist'] = _extract_email_existance(article_info['author_info'])
 
 	return article_info
 
@@ -119,12 +117,16 @@ def __get_journalist_name(content_div) :
 
 def __get_email(content_div) :
 	email_list = re.findall('[-0-9a-zA-Z][-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[-0-9a-zA-Z.+_]+', content_div.get_text().strip())
-
 	if (len(email_list) != 0) :
 		return ','.join(email_list)
-
 	return 'None'
 
+# 이메일 갯수로 저장	-> 단순 BOOL 값 이상의 정보를 가진다.
+def _extract_email_existance(author_info):
+	email_pattern = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}"
+	emails = re.findall(email_pattern, author_info)
+	return len(emails)
+	
 def __remove_photo(article_soup) :
 	# remove photo div
 	photo_divs = article_soup.find_all('div', 'html_photo')

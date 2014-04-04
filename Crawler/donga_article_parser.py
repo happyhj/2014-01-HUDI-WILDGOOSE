@@ -4,15 +4,12 @@
 import urllib
 import re
 from bs4 import BeautifulSoup
-
-def get_press_name() :
-	return "donga"
 	
 def get_article_urls_with_pagenum(page) :
 	# print "PAGE NUMBER : " + str(page)
 	LIST_URL = "http://news.donga.com/List?p="
 	number_of_article_per_page = 16
-	article_list_URL = domain + str( 1 + number_of_article_per_page * ( page - 1 ) )	
+	article_list_URL = LIST_URL + str( 1 + number_of_article_per_page * ( page - 1 ) )	
 	# 동아일보 기사만
 	article_list_URL += "&m=NP"
 
@@ -61,14 +58,13 @@ def parse_article_with_url(URL):
 	article["content"] = _extract_contents(html_doc)
 	article["author_info"] = _extract_author_info(html_doc)
 	article["press_id"] = 1
-	article["is_email_exist"] = 1
+	article["is_email_exist"] = _extract_email_existance(article["author_info"])
 
 	# 기자이름을 발견하지 못할 시 관련 정보 콘솔에 출력
 	if(article["author_info"] == "") :
 		_no_author_info_error(article)   
-	print "기사 읽는 중 ... " + article["author_info"]
-
 	'''
+	print "기사 읽는 중 ... " + article["author_info"]
 	print u"--제목--- "+ article["title"]		
 	print u"--주소--- "+ article["URL"]
 	print u"--기자--- "+ article["author_info"]
@@ -96,6 +92,11 @@ def _no_author_info_error(article) :
 		print "--제목--- "+ article["title"]		
 		print "--주소--- "+ article["URL"]
 		print "------!!!!!------- ----- ----- ----- ----- --- ------!!!!!------" 
+		
+def _extract_email_existance(author_info):
+	email_pattern = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}"
+	emails = re.findall(email_pattern, author_info)
+	return len(emails)
 
 def _extract_section(html_doc) :
 	article_soup = BeautifulSoup(html_doc)
