@@ -12,6 +12,7 @@ def connect() :
                 "user":"root",
 #                "password":"wildgoose",
                 "database":"wildgoose",
+                "password":"kimi5423",
                 "charset" :'utf8'}
 
     con = mysql.connector.connect(**config)
@@ -54,12 +55,19 @@ def make_insert_query(table_name, data) :
 
     return QUERY
 
-def make_insert_email_to_author_table_query(author_info) :
+def make_insert_into_author_table_query(author_info) :
 	emails = _extract_emails(author_info)
 	QUERY = "INSERT INTO author VALUES "
 	for email in emails :
 		QUERY += "('"+email+"'),"
 	return QUERY[:-1]	
+	
+def make_insert_into_article_author_table_query(url, author_info) :
+	emails = _extract_emails(author_info)
+	QUERY = "INSERT INTO article_author VALUES "
+	for email in emails :
+		QUERY += "('"+email+"','"+url+"'),"
+	return QUERY[:-1]
 	
 def _extract_emails (paragraph) :
 	email_pattern = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}"	
