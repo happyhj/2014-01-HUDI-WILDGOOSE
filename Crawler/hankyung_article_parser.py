@@ -69,7 +69,7 @@ def get_article_urls_with_pagenum (page) :
 		### 개별 h3 tag 내에서 a tag 중 href 속성만 찾아 url에 저장
 		url = tag.a["href"]
 		### 확인을 위해 url 출력
-		print url
+		#print url
 		### url을 urls에 추가
 		urls.append(url)
 
@@ -87,7 +87,7 @@ def parse_article_with_url (url) :
 	### article에 새로운 dict를 생성
 	article = {}
 	article["press_id"] = 4
-	article["url"] = url.encode('utf-8')
+	article["URL"] = url.encode('utf-8')
 	article["author_info"] = _extract_author_info(html_doc)
 	article["section"] = _extract_section(html_doc)
 	article["title"] = _extract_title(html_doc)
