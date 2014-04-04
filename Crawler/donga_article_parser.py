@@ -87,12 +87,13 @@ def _no_author_info_error(article) :
 		text_file.write("\n--주소--" + article["URL"])
 		text_file.write("\n--내용--" + article["content"])
 		text_file.close()
+		'''
 		print "------!!!!!------- 기자를 찾지못한 기사입니다 ------!!!!!------"
 		print "--내용--- "+ article["content"]	
 		print "--제목--- "+ article["title"]		
 		print "--주소--- "+ article["URL"]
 		print "------!!!!!------- ----- ----- ----- ----- --- ------!!!!!------" 
-		
+		'''
 def _extract_email_existance(author_info):
 	email_pattern = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}"
 	emails = re.findall(email_pattern, author_info)
@@ -108,6 +109,7 @@ def _extract_section(html_doc) :
 		section = article_section.contents[0].strip()		
 		#print("*** SECTION *** " + article_section.contents[0] )	
 	section = section[5:]
+	section = section.split(u' > ', 1 )[0];
 	return section.encode('utf-8')
 
 def _extract_title(html_doc) :
