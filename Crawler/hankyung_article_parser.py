@@ -1,4 +1,4 @@
-#!/usr/bin/pythond
+ #!/usr/bin/pythond
 # -*- coding: utf-8 -*-
 
 ###
@@ -86,7 +86,7 @@ def parse_article_with_url (url) :
 
 	### article에 새로운 dict를 생성
 	article = {}
-	article["press_id"] = 4
+	article["press_id"] = 11
 	article["URL"] = url.encode('utf-8')
 	article["author_info"] = _extract_author_info(html_doc)
 	article["section"] = _extract_section(html_doc)

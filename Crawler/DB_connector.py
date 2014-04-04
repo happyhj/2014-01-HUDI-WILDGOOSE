@@ -7,12 +7,11 @@ import re
 
 
 def connect() :
-#    config = {  "host":"10.73.45.134",
-    config = {  "host":"127.0.0.1",
+    config = {  "host":"10.73.45.134",
+#    config = {  "host":"127.0.0.1",
                 "user":"root",
-#                "password":"wildgoose",
+                "password":"wildgoose",
                 "database":"wildgoose",
-                "password":"kimi5423",
                 "charset" :'utf8'}
 
     con = mysql.connector.connect(**config)

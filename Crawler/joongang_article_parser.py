@@ -31,7 +31,7 @@ def parse_article_with_url(article_url) :
 	article_info['datetime'] = _extract_datetime(article)
 	article_info['content'] = _extract_content(article)
 	#article_info['provider'] = _extract_provider(article)
-	article_info['press_id'] = 3
+	article_info['press_id'] = 2
 
 	article_info['section'] = _extract_section(article)
 	article_info['author_info'] = _extract_author(article)
