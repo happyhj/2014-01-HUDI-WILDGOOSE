@@ -794,8 +794,4 @@ standard deployment descriptor.
     <servlet-name>SearchReporter</servlet-name>
     <url-pattern>/SearchReporter</url-pattern>
   </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>SearchReporter</servlet-name>
-    <url-pattern>/</url-pattern>
-  </servlet-mapping>
 </web-app>

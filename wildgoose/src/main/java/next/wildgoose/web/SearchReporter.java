@@ -1,15 +1,9 @@
-package next.wildgoose;
+package next.wildgoose.web;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.util.Enumeration;
-
-
 // DB 연결을 위한 라이브러리
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+import next.wildgoose.model.Reporter;
 
 //HTML entity로 encoding된 한글을 다루기 위한 라이브러
 import org.apache.commons.lang.StringEscapeUtils;

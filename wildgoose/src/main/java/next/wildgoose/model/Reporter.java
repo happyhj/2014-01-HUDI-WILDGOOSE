@@ -1,4 +1,4 @@
-package next.wildgoose;
+package next.wildgoose.model;
 
 public class Reporter {
 	public String email;

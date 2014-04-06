@@ -774,18 +774,22 @@ standard deployment descriptor.
 -->
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
   <display-name>Archetype Created Web Application</display-name>
+  
+  <!-- SERVLET NAME-CLASS MAPPINGS -->
   <servlet>
     <description></description>
     <display-name>SearchArticles</display-name>
     <servlet-name>SearchArticles</servlet-name>
-    <servlet-class>next.wildgoose.SearchArticles</servlet-class>
+    <servlet-class>next.wildgoose.web.SearchArticles</servlet-class>
   </servlet>
   <servlet>
     <description></description>
     <display-name>SearchReporter</display-name>
     <servlet-name>SearchReporter</servlet-name>
-    <servlet-class>next.wildgoose.SearchReporter</servlet-class>
+    <servlet-class>next.wildgoose.web.SearchReporter</servlet-class>
   </servlet>
+  
+  <!-- SERVLET NAME-URL MAPPINGS -->
   <servlet-mapping>
     <servlet-name>SearchArticles</servlet-name>
     <url-pattern>/SearchArticles</url-pattern>
@@ -794,4 +798,19 @@ standard deployment descriptor.
     <servlet-name>SearchReporter</servlet-name>
     <url-pattern>/SearchReporter</url-pattern>
   </servlet-mapping>
+  
+  <!-- CONTEXT PARAMETERS -->
+  <context-param>
+  	<param-name>dbURL</param-name>
+  	<param-value>jdbc:mysql://10.73.45.134:3306/wildgoose</param-value>
+  </context-param>
+  <context-param>
+  	<param-name>userName</param-name>
+  	<param-value>viewer</param-value>
+  </context-param>
+  <context-param>
+  	<param-name>userPassword</param-name>
+  	<param-value></param-value>
+  </context-param>
+  
 </web-app>
