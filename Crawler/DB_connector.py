@@ -19,32 +19,31 @@ def connect() :
 
 def make_insert_query(table_name, data) :
     # ORDERING DATA
-    query_column = []
-    query_value = []
+    key_list = data.keys()
+    value_list = []
 
-    for key in data.keys() :
+    for key in key_list :
         value = data[key]
         if type(value) is str :
             value = handle_apostrophe(value)
-        query_column.append(key)
-        query_value.append(value)
+        value_list.append(value)
 
-    column_count = len(query_column)
+    key_len = len(key_list)
 
     # MAKE QUERY
     try :
         QUERY = "INSERT INTO " + table_name + " ("
-        for i in range(0, column_count) :
-            QUERY += query_column[i] + ', '
+        for key in key_list :
+            QUERY += key + ', '
         QUERY = QUERY[:-2] + ") "
 
         QUERY += "VALUES ("
-        for i in range(0, column_count) :
-            QUERY += "'" + str(query_value[i]) + "', "
+        for value in value_list :
+            QUERY += "'" + str(value) + "', "
         QUERY = QUERY[:-2] + ") ON DUPLICATE KEY UPDATE "
 
-        for i in range(0, column_count) :
-            QUERY += query_column[i] + "='" + str(query_value[i]) + "', "
+        for i in range(0, key_len) :
+            QUERY += key_list[i] + "='" + str(value_list[i]) + "', "
         QUERY = QUERY[:-2]
 
     except UnicodeError :
@@ -54,6 +53,50 @@ def make_insert_query(table_name, data) :
 
     return QUERY
 
+### 지금은 Case별로 Insert Query를 만드는게 효과적이지만, 
+### 다양해지고 나면 범용 함수로 관리하는게 나을지도 모르므로
+### 미리 만들어둠.
+def make_list_insert_query(table_name, data_list, const_data=None) :
+    key_list = data_list[0].keys()
+    key_len = len(key_list)
+    if (const_data is not None) :
+        const_key_list = const_data.keys()
+        const_len = len(const_data)
+
+    try :
+        QUERY = "INSERT INTO " + table_name + " ("
+        for key in key_list :
+            QUERY += key + ', '
+        if (const_data is not None) :
+            for ckey in const_key_list :
+                QUERY += ckey + ", "
+        QUERY = QUERY[:-2] + ") "
+    
+        QUERY += "VALUES "
+        for data in data_list :
+            QUERY += "("
+            for key in key_list :
+                value = data[key]
+                if type(value) is str :
+                    value = handle_apostrophe(value)
+                
+                QUERY += "'" + str(value) + "', "
+            if (const_data is not None) :
+                for ckey in const_key_list :
+                    value = const_data[ckey]
+                    if type(value) is str :
+                        value = handle_apostrophe(value)
+                    QUERY += "'" + str(value) + "', "
+            QUERY = QUERY[:-2] + "), "
+        QUERY = QUERY[:-2]
+
+    except UnicodeError :
+        # print QUERY
+        print "Unicode Error at " + str(data)
+        return None
+
+    return QUERY
+    
 def make_insert_into_author_table_query(author_info) :
 	emails = _extract_emails(author_info)
 	QUERY = "INSERT INTO author VALUES "
