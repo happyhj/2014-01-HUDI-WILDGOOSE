@@ -33,23 +33,18 @@ public class SearchReporter extends HttpServlet {
      */
     public SearchReporter() {
         super();
-        // TODO Auto-generated constructor stub
     }
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		request.setCharacterEncoding("utf-8");
-		response.setCharacterEncoding("utf-8");
-		response.setContentType("text/html");
-
 		String search_query = null;
 		
-		if(request.getParameter("q")!=null) {
+		if(request.getParameter("q")!=null && request.getParameter("q")!="" ) {
 			search_query = new String(request.getParameter("q").getBytes("8859_1"),"UTF-8");
 		} else {
-			search_query = "";
+			System.out.println("입력이 없다");
+			search_query = null;
 		}
 		
 		System.out.println(search_query);
@@ -59,7 +54,7 @@ public class SearchReporter extends HttpServlet {
 		
 		// getting database connection to MySQL server
 		try {
-			if(request.getParameter("q")!=null) {
+			if(search_query!=null) {
 				String dbURL = "jdbc:mysql://10.73.45.134:3306/wildgoose?useUnicode=true&characterEncoding=UTF8";
 //				String dbURL = "jdbc:mysql://127.0.0.1:3306/wildgoose?useUnicode=true&characterEncoding=UTF8";
 
