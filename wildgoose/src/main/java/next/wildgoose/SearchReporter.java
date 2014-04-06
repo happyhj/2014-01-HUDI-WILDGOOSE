@@ -60,12 +60,12 @@ public class SearchReporter extends HttpServlet {
 		// getting database connection to MySQL server
 		try {
 			if(request.getParameter("q")!=null) {
-//				String dbURL = "jdbc:mysql://10.73.45.134:3306/wildgoose?useUnicode=true&characterEncoding=UTF8";
-				String dbURL = "jdbc:mysql://127.0.0.1:3306/wildgoose?useUnicode=true&characterEncoding=UTF8";
+				String dbURL = "jdbc:mysql://10.73.45.134:3306/wildgoose?useUnicode=true&characterEncoding=UTF8";
+//				String dbURL = "jdbc:mysql://127.0.0.1:3306/wildgoose?useUnicode=true&characterEncoding=UTF8";
 
 				String username = "root";
-//				String password = "wildgoose";
-				String password = "kimi5423";
+				String password = "wildgoose";
+//				String password = "kimi5423";
 				Connection dbCon = null;
 				Statement stmt = null;
 				ResultSet rs = null;
