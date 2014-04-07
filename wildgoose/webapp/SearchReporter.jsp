@@ -20,16 +20,16 @@
 			<img src="image/logo.png" alt="wildgoose logo" class="logo-image"/>
 		</div>
 		<div class="search-container">
-			<form action="./SearchReporter" method="get">
-				<div class="search-entry">
+			<form action="./SearchReporter" method="get" >
+				<div class="search-entry column">
 					<input type="search" id="query-entry" class="text-entry query-entry" name="q" placeholder="기자를 검색어로 찾아보세요." value="${ requestScope.search_query }" />
 				</div>
-				<div class="search-button">
+				<div class="search-button column">
 					<input type="submit" id="search-action" value ="Search"/>
 				</div>
 			</form>
 		</div>
-		<div class="search-result container">
+		<div class="search-result">
 			<ul>
 				<c:forEach var="reporter" items="${ requestScope.reporters }">
 					<li class="card" >
