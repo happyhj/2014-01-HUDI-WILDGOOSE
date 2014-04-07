@@ -13,7 +13,7 @@
 <input type="submit" value="SEARCH" onclick="test()")/>
 </form>
 -->
-<div class="wrap">
+<div class="wrap viewport">
 	<header class="header"></header>
 	<div class="container">
 		<div class="logo-container">
@@ -33,10 +33,12 @@
 			<ul>
 				<c:forEach var="reporter" items="${ requestScope.reporters }">
 					<li class="card" >
-						<h3>${ reporter.email }</h3>
-						<p>${ reporter.author_info }</p>
-						${ reporter.press_name }					
-						<a href="${ reporter.article_URL }" target="_blank">${ reporter.article_title }</a>
+						<h3 class="email">${ reporter.email }</h3>
+						<p class="sub-email">${ reporter.author_info }</p>
+						<h4 class="press-name">${ reporter.press_name }</h4>			
+						<div class="article-container">
+							<a href="${ reporter.article_URL }" target="_blank">${ reporter.article_title }</a>
+						</div>
 					</li>
 				</c:forEach>
 			</ul>
