@@ -84,13 +84,13 @@
 	color: #fff;
 }
 
-.search-button > input[type='submit']: hover {
+.search-button > input[type='submit']:hover {
 	-webkit-box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
 	-moz-box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
 	box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
 }
 
-.search-button > input[type='submit']: active {
+.search-button > input[type='submit']:active {
 	-webkit-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
 	-moz-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
 	box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
