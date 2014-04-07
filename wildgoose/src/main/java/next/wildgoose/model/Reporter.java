@@ -1,25 +1,42 @@
 package next.wildgoose.model;
 
 public class Reporter {
-	public String email;
-	public String author_info;
-	public String article_URL;
-	public String article_title;
-	public String press_name;
+	private String email;
+	private String authorInfo;
+	private String articleURL;
+	private String articleTitle;
+	private String pressName;
 
 	public String getEmail() {
 		return this.email;
 	}
-	public String getAuthor_info() {
-		return this.author_info;
+	public String getAuthorInfo() {
+		return this.authorInfo;
 	}
-	public String getArticle_URL() {
-		return this.article_URL;
+	public String getArticleURL() {
+		return this.articleURL;
 	}
-	public String getArticle_title() {
-		return this.article_title;
+	public String getArticleTitle() {
+		return this.articleTitle;
 	}
-	public String getPress_name() {
-		return this.press_name;
+	public String getPressName() {
+		return this.pressName;
 	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public void setAuthorInfo(String authorInfo) {
+		this.authorInfo = authorInfo;
+	}
+	public void setArticleURL(String articleURL) {
+		this.articleURL = articleURL;
+	}
+	public void setArticleTitle(String articleTitle) {
+		this.articleTitle = articleTitle;
+	}
+	public void setPressName(String pressName) {
+		this.pressName = pressName;
+	}
+	
+	
 }

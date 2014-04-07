@@ -21,7 +21,7 @@
 		<div class="search-container">
 			<form action="./SearchReporter" method="get" >
 				<div class="search-entry column">
-					<input type="search" id="query-entry" class="text-entry query-entry" name="q" placeholder="기자를 검색어로 찾아보세요." value="${ requestScope.search_query }" />
+					<input type="search" id="query-entry" class="text-entry query-entry" name="q" placeholder="기자를 검색어로 찾아보세요." value="${ requestScope.searchQuery }" />
 				</div>
 				<div class="search-button column">
 					<input type="submit" id="search-action" value ="Search"/>
@@ -33,10 +33,10 @@
 				<c:forEach var="reporter" items="${ requestScope.reporters }">
 					<li class="card" >
 						<h3 class="email">${ reporter.email }</h3>
-						<p class="sub-email">${ reporter.author_info }</p>
-						<h4 class="press-name">${ reporter.press_name }</h4>			
+						<p class="sub-email">${ reporter.authorInfo }</p>
+						<h4 class="press-name">${ reporter.pressName }</h4>			
 						<div class="article-container">
-							<a href="${ reporter.article_URL }" target="_blank">${ reporter.article_title }</a>
+							<a href="${ reporter.articleURL }" target="_blank">${ reporter.articleTitle }</a>
 						</div>
 					</li>
 				</c:forEach>

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import next.wildgoose.model.Article;
 
 // HTML entity로 encoding된 한글을 다루기 위한 라이브러
-import org.apache.commons.lang.StringEscapeUtils;
+//import org.apache.commons.lang.StringEscapeUtils;
 
 public class SearchArticles extends HttpServlet {
 
@@ -68,12 +68,16 @@ public class SearchArticles extends HttpServlet {
 				rs = stmt.executeQuery(mysql_query);
 				while (rs.next()) {
 					Article article = new Article();
-					article.title = StringEscapeUtils.escapeHtml(rs.getString("title"));
+					article.title = rs.getString("title");
+					article.content = rs.getString("content");
+					article.datetime = rs.getString("datetime");
+					
+//					article.title = StringEscapeUtils.escapeHtml(rs.getString("title"));
 //					article.URL = StringEscapeUtils.escapeHtml(rs.getString("URL"));
-					article.content = StringEscapeUtils.escapeHtml(rs.getString("content"));
+//					article.content = StringEscapeUtils.escapeHtml(rs.getString("content"));
 //					article.section = StringEscapeUtils.escapeHtml(rs.getString("section"));
 //					article.author = StringEscapeUtils.escapeHtml(rs.getString("author"));
-					article.datetime = StringEscapeUtils.escapeHtml(rs.getString("datetime"));
+//					article.datetime = StringEscapeUtils.escapeHtml(rs.getString("datetime"));
 					articles.add(article);
 				}
 			} 
