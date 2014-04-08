@@ -813,4 +813,8 @@ standard deployment descriptor.
   	<param-value></param-value>
   </context-param>
   
+  <!-- LISTENERS -->
+  <listener>
+  	<listener-class>next.wildgoose.listener.DatabaseContextListener</listener-class>
+  </listener>
 </web-app>

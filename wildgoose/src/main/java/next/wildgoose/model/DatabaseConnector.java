@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
 
 public class DatabaseConnector {
 
@@ -19,8 +21,10 @@ public class DatabaseConnector {
 		
 	}
 	
-	public ResultSet select(String query) {
-		return null;
+	public static ResultSet select(String query) throws SQLException {
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery(query);
+		return rs;
 	}
 	
 	public static void close() {
