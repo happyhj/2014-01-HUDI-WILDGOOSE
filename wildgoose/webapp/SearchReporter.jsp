@@ -16,7 +16,7 @@
 	<header class="header"></header>
 	<div class="container">
 		<div class="logo-container">
-			<img src="image/logo.png" alt="wildgoose logo" class="logo-image"/>
+			<a href="/SearchReporter"><img src="image/logo.png" alt="wildgoose logo" class="logo-image"/></a>
 		</div>
 		<div class="search-container">
 			<form action="./SearchReporter" method="get" >
@@ -29,18 +29,26 @@
 			</form>
 		</div>
 		<div class="search-result">
-			<ul>
-				<c:forEach var="reporter" items="${ requestScope.reporters }">
-					<li class="card" >
-						<h3 class="email">${ reporter.email }</h3>
-						<p class="sub-email">${ reporter.authorInfo }</p>
-						<h4 class="press-name">${ reporter.pressName }</h4>			
-						<div class="article-container">
-							<a href="${ reporter.articleURL }" target="_blank">${ reporter.articleTitle }</a>
-						</div>
-					</li>
-				</c:forEach>
-			</ul>
+			<c:choose>
+				<c:when test="${ empty requestScope.webError }">
+					<ul>
+						<c:forEach var="reporter" items="${ requestScope.reporters }">
+							<li class="card" >
+								<h3 class="email">${ reporter.email }</h3>
+								<p class="sub-email">${ reporter.authorInfo }</p>
+								<h4 class="press-name">${ reporter.pressName }</h4>			
+								<div class="article-container">
+									<a href="${ reporter.articleURL }" target="_blank">${ reporter.articleTitle }</a>
+								</div>
+							</li>
+						</c:forEach>
+					</ul>
+				</c:when>
+				<c:otherwise>
+						${ requestScope.webError.cause }
+						${ requestScope.webError.notice }
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</div>
 	<footer class="footer"></footer>

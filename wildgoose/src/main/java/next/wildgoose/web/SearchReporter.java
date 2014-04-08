@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import next.wildgoose.model.Reporter;
+import next.wildgoose.model.VerifySearchQuery;
+import next.wildgoose.model.WebError;
 
 //HTML entity로 encoding된 한글을 다루기 위한 라이브러
 //import org.apache.commons.lang.StringEscapeUtils;
@@ -33,9 +35,12 @@ public class SearchReporter extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String searchQuery = null;
+		WebError webError = null;
 		
 		if (request.getParameter("q") != null && request.getParameter("q") != "" ) {
 			searchQuery = new String(request.getParameter("q").getBytes("8859_1"), "UTF-8");
+			VerifySearchQuery verifySQ = new VerifySearchQuery(searchQuery);
+			webError = verifySQ.getError();
 		} else {
 			System.out.println("입력이 없다");
 			searchQuery = null;
@@ -48,7 +53,10 @@ public class SearchReporter extends HttpServlet {
 		
 		// getting database connection to MySQL server
 		try {
-			if(searchQuery!=null) {
+			if (webError != null) {
+				request.setAttribute("webError", webError);
+			}
+			else if (searchQuery != null) {
 				String dbURL = "jdbc:mysql://10.73.45.134:3306/wildgoose?useUnicode=true&characterEncoding=UTF8";
 //				String dbURL = "jdbc:mysql://127.0.0.1:3306/wildgoose?useUnicode=true&characterEncoding=UTF8";
 
