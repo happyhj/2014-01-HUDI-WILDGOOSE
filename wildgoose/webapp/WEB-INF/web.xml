@@ -772,7 +772,12 @@ information in the standard deployment descriptor.
 Tools are not allowed to add the non-standard information into the
 standard deployment descriptor.
 -->
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<!--web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"-->
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+                        http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+                        version="3.0">
   <display-name>Archetype Created Web Application</display-name>
   
   <welcome-file-list>
@@ -792,6 +797,13 @@ standard deployment descriptor.
     <servlet-name>SearchReporter</servlet-name>
     <servlet-class>next.wildgoose.web.SearchReporter</servlet-class>
   </servlet>
+  <servlet>
+  	<description>
+  	</description>
+  	<display-name>ShowReporter</display-name>
+  	<servlet-name>ShowReporter</servlet-name>
+  	<servlet-class>next.wildgoose.web.ShowReporter</servlet-class>
+  </servlet>
   
   <!-- SERVLET NAME-URL MAPPINGS -->
   <servlet-mapping>
@@ -801,6 +813,10 @@ standard deployment descriptor.
   <servlet-mapping>
     <servlet-name>SearchReporter</servlet-name>
     <url-pattern>/SearchReporter</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ShowReporter</servlet-name>
+  	<url-pattern>/reporters/*</url-pattern>
   </servlet-mapping>
   
   <!-- CONTEXT PARAMETERS -->
