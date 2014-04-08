@@ -1,12 +1,8 @@
 package next.wildgoose.web;
 
 import java.io.IOException;
-// DB 연결을 위한 라이브러리
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -14,9 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import next.wildgoose.model.DatabaseConnector;
 import next.wildgoose.model.Reporter;
 import next.wildgoose.model.VerifySearchQuery;
 import next.wildgoose.model.WebError;
+// DB 연결을 위한 라이브러리
 
 //HTML entity로 encoding된 한글을 다루기 위한 라이브러
 //import org.apache.commons.lang.StringEscapeUtils;
@@ -57,17 +55,9 @@ public class SearchReporter extends HttpServlet {
 				request.setAttribute("webError", webError);
 			}
 			else if (searchQuery != null) {
-				String dbURL = "jdbc:mysql://10.73.45.134:3306/wildgoose?useUnicode=true&characterEncoding=UTF8";
-//				String dbURL = "jdbc:mysql://127.0.0.1:3306/wildgoose?useUnicode=true&characterEncoding=UTF8";
-
-				String username = "root";
-				String password = "wildgoose";
-//				String password = "kimi5423";
-				Connection dbCon = null;
-				Statement stmt = null;
-				ResultSet rs = null;
 				String mysqlQuery = null;
-		
+				ResultSet rs = null;
+				
 				//// 이메일이 존재하는 기사 중 검색어가 title content section URL 에 포함되는 기사를 
 				//// 기자당 1개씩 뽑아 JOIN한 결과를 얻는다
 				mysqlQuery = "SELECT * FROM(SELECT * FROM(";
@@ -80,11 +70,8 @@ public class SearchReporter extends HttpServlet {
 				mysqlQuery += "ON result.press_id = press.id GROUP BY email ORDER BY email";
 				
 						
-				//// article_author 테이블에서 기사의 작성자가 존재한다면 다 
-				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-				dbCon = DriverManager.getConnection(dbURL, username, password);
-				stmt = dbCon.prepareStatement(mysqlQuery);
-				rs = stmt.executeQuery(mysqlQuery);
+				rs = DatabaseConnector.select(mysqlQuery);
+				
 				while (rs.next()) {
 					Reporter reporter = new Reporter();
 					reporter.setEmail(rs.getString("email"));
