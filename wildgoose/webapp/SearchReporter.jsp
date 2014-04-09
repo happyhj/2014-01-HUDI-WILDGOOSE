@@ -3,8 +3,8 @@
 
 <!DOCTYPE html>
 <meta charset="UTF-8" />
-<link type="text/css" rel="stylesheet" href="stylesheet/reset.css" />
-<link type="text/css" rel="stylesheet" href="stylesheet/main.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/reset.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/main.css" />
 <title>Search Reporter</title>
 <!--  
 <form action="/HelloServlet" method="get">
@@ -33,8 +33,8 @@
 				<c:when test="${ empty requestScope.webError }">
 					<ul>
 						<c:forEach var="reporter" items="${ requestScope.reporters }">
-							<li class="card" >
-								<h3 class="email">${ reporter.email }</h3>
+							<li class="card">
+								<h3 class="email"><a href="/reporters/${ reporter.email }">${ reporter.email }</a></h3>
 								<p class="sub-email">${ reporter.authorInfo }</p>
 								<h4 class="press-name">${ reporter.pressName }</h4>			
 								<div class="article-container">
@@ -54,6 +54,7 @@
 	<footer class="footer"></footer>
 </div>
 <script>
+
 var inputEl = document.getElementById("query-entry");
 //var linkEl = document.getElementById("search-action");
 inputEl.focus();
