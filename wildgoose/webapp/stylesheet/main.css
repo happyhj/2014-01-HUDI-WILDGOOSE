@@ -1,4 +1,8 @@
 @charset "UTF-8";
+/* TEST CSS */
+.test-outline {
+	border:1px solid #ccc;
+}
 
 /* WHOLE CHUNK */
 .wrap {
