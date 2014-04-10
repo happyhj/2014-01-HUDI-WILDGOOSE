@@ -47,12 +47,7 @@ holder.
   </welcome-file-list>
   
   <!-- SERVLET NAME-CLASS MAPPINGS -->
-  <servlet>
-    <description></description>
-    <display-name>SearchArticles</display-name>
-    <servlet-name>SearchArticles</servlet-name>
-    <servlet-class>next.wildgoose.web.SearchArticles</servlet-class>
-  </servlet>
+  
   <servlet>
     <description></description>
     <display-name>SearchReporter</display-name>
@@ -68,10 +63,7 @@ holder.
   </servlet>
   
   <!-- SERVLET NAME-URL MAPPINGS -->
-  <servlet-mapping>
-    <servlet-name>SearchArticles</servlet-name>
-    <url-pattern>/SearchArticles</url-pattern>
-  </servlet-mapping>
+ 
   <servlet-mapping>
     <servlet-name>SearchReporter</servlet-name>
     <url-pattern>/SearchReporter</url-pattern>
