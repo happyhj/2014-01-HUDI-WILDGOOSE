@@ -3,6 +3,7 @@
 
 <!DOCTYPE html>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-zoom=1, user-scalable=no">
 <link type="text/css" rel="stylesheet" href="/stylesheet/reset.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/main.css" />
 <title>Search Reporter</title>
@@ -12,7 +13,7 @@
 <input type="submit" value="SEARCH" onclick="test()")/>
 </form>
 -->
-<div class="wrap viewport">
+<div class="wrap">
 	<header class="header"></header>
 	<div class="container">
 		<div class="logo-container">
@@ -21,7 +22,7 @@
 		<div class="search-container">
 			<form action="./SearchReporter" method="get" >
 				<div class="search-entry column">
-					<input type="search" id="query-entry" class="text-entry query-entry" name="q" placeholder="기자를 검색어로 찾아보세요." value="${ requestScope.searchQuery }" />
+					<input type="search" id="query-entry" class="text-entry query-entry" name="q" placeholder="기자검색" value="${ requestScope.searchQuery }" />
 				</div>
 				<div class="search-button column">
 					<input type="submit" id="search-action" value ="Search"/>
@@ -32,13 +33,17 @@
 			<c:choose>
 				<c:when test="${ empty requestScope.webError }">
 					<ul>
-						<c:forEach var="reporter" items="${ requestScope.reporters }">
+						<c:forEach var="reporter" items="${ requestScope.reporters }">				
 							<li class="card">
-								<h3 class="email"><a href="/reporters/${ reporter.email }">${ reporter.email }</a></h3>
-								<p class="sub-email">${ reporter.authorInfo }</p>
-								<h4 class="press-name">${ reporter.pressName }</h4>			
+								<div class="email-container">
+									<h3 class="email">
+										<a href="/reporters/${ reporter.email }">${ reporter.email }</a>
+									</h3>
+									<p class="sub-email">${ reporter.authorInfo }</p>
+									<div class="${ reporter.pressName } press-tag"></div>
+								</div>
 								<div class="article-container">
-									<a href="${ reporter.articleURL }" target="_blank">${ reporter.articleTitle }</a>
+									${ reporter.articleTitle }
 								</div>
 							</li>
 						</c:forEach>
