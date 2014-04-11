@@ -18,8 +18,10 @@
 # 3단계 리팩토링: 예정
 # main.py를 만들어 각 신문사별 crawler를 통합관리 및 실행할 수 있는 프로그램 제작필요
 #
+# 4단계 리팩토링: 예정
+# real paragraph단위로 구분 로직 
+#
 # class단위로 parser를 만들어 각 신문사별 output이 다른 함수만 overriding하여 사용
-# contents를 real paragraph 단위로 구분하여 문장과 비문장을 구분하는 로직 구현
 # 마지막 4문장에서 어떤 author정보도 찾지 못한 경우 문장의 첫부분을 재확인하는 로직 구현
 # 
 #
@@ -172,11 +174,31 @@ def _filter_out_useless_paragraphs(html_doc) :
 		if procedure_state == "break" : break
 		elif procedure_state == "continue" : continue
 
+		real_paragraph = _devide_real_paragraph(dom.string)
 		### 만약 위 문단의 if문을 실행시키지 않았다면 paragraphs list에 dom의 string을 추가
-		paragraphs.append(dom.string)
+		paragraphs.extend(real_paragraph)
 			
-
 	return paragraphs
+
+
+def _devide_real_paragraph(string) :
+	real_paragraph = []
+	period_pattern = "(\. )"
+
+	strings = re.split(period_pattern, string)
+	half_len = len(strings)/2
+
+	for i in range(0, half_len+1) :
+		if i != half_len :
+			temp = (strings[2*i].strip() + strings[2*i+1].strip())
+			real_paragraph.append(temp)
+		else :
+			temp = strings[2*i].strip()
+			real_paragraph.append(temp)
+
+	return real_paragraph
+
+
 
 def _extract_emails (paragraph) :
 	email_pattern = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}"
@@ -191,8 +213,11 @@ def _extract_email_existance(author_info):
 	return len(emails)
 	
 def _has_period(paragraph):
-	paragraph = paragraph.strip()
-	if paragraph[len(paragraph)-1 ] == "." :
+	trimmed_paragraph = paragraph.strip()
+	trimmed_paragraph_len = len(trimmed_paragraph)
+	last_char = trimmed_paragraph[trimmed_paragraph_len-1:trimmed_paragraph_len]
+
+	if last_char == "." :
 		return True
 	return False
 
@@ -225,7 +250,7 @@ def _has_meaningful_word (paragraph, author_code) :
 	####################################################
 	private_keywords = [ u"기자", u"특파원", u"통신원", u"위원" ]
 	public_keywords = [ u"한경닷컴", u"뉴스팀", u"제보", u"뉴스", u"연구소" ]
-	special_keywords = [ u"원장", u"회장", u"위원" ]
+	special_keywords = [ u"원장", u"회장", u"위원", u"제공", u"연구원", u"교수" ]
 	# keyword
 	keywords = { "private" : private_keywords, "public" : public_keywords, "special" : special_keywords }
 	####################################################
@@ -258,17 +283,27 @@ def _select_procedure_for_contents(i, paragraph) :
 		return "break"
 
 	complete_paragraph = _has_period(paragraph)
-	if i == 0 and complete_paragraph :
-		return "break"
+
+	# 마침표일 경우 종료
+	if complete_paragraph :
+		# 마지막 문단 마지막이 마침표가 있는 경우 기자 정보가 없는 문단
+		if i is 0 :
+			return "break"
+		# 그렇지 않는 경우 다음으로 넘김
+		else :
+			return "continue"
+
+
 
 def _select_author_code(paragraph_status) :
 
 	if paragraph_status["private"]["email"] or paragraph_status["private"]["keyword"] :
 		return "private"
 
+	if paragraph_status["special"]["email"] or paragraph_status["special"]["keyword"] :
+		return "special"
+
 	if paragraph_status["public"]["email"] or paragraph_status["public"]["keyword"] :
-		if paragraph_status["special"]["email"] or paragraph_status["special"]["keyword"] :
-			return "special"
 		return "public"
 
 	return "anonymous"
