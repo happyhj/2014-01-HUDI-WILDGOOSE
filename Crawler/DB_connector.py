@@ -4,18 +4,51 @@
 
 import mysql.connector
 import re
+from contextlib import closing
 
 
-def connect() :
+def connect_dev() :
     config = {  "host":"10.73.45.134",
-#    config = {  "host":"127.0.0.1",
                 "user":"root",
                 "password":"wildgoose",
-                "database":"wildgoose",
+                "database":"wildgoose_dev",
                 "charset" :'utf8'}
 
     con = mysql.connector.connect(**config)
     return con
+
+def connect_raw() :
+    config = {  'host': '10.73.45.134',
+                'user': 'root',
+                'password': 'wildgoose',
+                'database': 'wildgoose',
+            #    'database': 'wildgoose_raw',
+                'charset' : 'utf8'}
+
+    con = mysql.connector.connect(**config)
+    return con
+
+# return is query worked
+def do_insert(con, query) :
+    with closing(con.cursor()) as cur :
+        try :
+            cur.execute(query)
+            con.commit()
+            return True
+        except :
+            print "Insert Error - " + query[:50] + "..."
+            return False
+
+# return Selected rows
+def do_select(con, query) :
+    with closing(con.cursor()) as cur :
+        try :
+            cur.execute(query)
+            result = cur.fetchall()
+        except :
+            print "Select Error - " + query[:50] + "..."
+
+    return result
 
 def make_insert_query(table_name, data) :
     # ORDERING DATA
@@ -96,13 +129,6 @@ def make_list_insert_query(table_name, data_list, const_data=None) :
         return None
 
     return QUERY
-    
-def make_insert_into_author_table_query(author_info) :
-	emails = _extract_emails(author_info)
-	QUERY = "INSERT INTO author VALUES "
-	for email in emails :
-		QUERY += "('"+email+"'),"
-	return QUERY[:-1]	
 	
 def make_insert_into_article_author_table_query(url, author_info) :
 	emails = _extract_emails(author_info)
@@ -110,11 +136,6 @@ def make_insert_into_article_author_table_query(url, author_info) :
 	for email in emails :
 		QUERY += "('"+email+"','"+url+"'),"
 	return QUERY[:-1]
-	
-def _extract_emails (paragraph) :
-	email_pattern = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}"	
-	emails = re.findall(email_pattern, paragraph)
-	return emails	
 
 def handle_apostrophe(string) :
     splited = string.split("'")
