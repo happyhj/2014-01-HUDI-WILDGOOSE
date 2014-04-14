@@ -41,6 +41,7 @@ def main(argv) :
 		print "page: " + str(i)
 
 		for url in url_list :
+			print url
 			article = press.parse_article_with_url(url)
 			
 			query = db.make_insert_query("article", article)
