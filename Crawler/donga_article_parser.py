@@ -57,8 +57,8 @@ def parse_article_with_url(URL):
 	article["section"] = _extract_section(html_doc)						
 	article["content"] = _extract_contents(html_doc)
 	article["author_info"] = _extract_author_info(html_doc)
-	article["press_id"] = 3
-	article["is_email_exist"] = _extract_email_existance(article["author_info"])
+	# article["press_id"] = 3
+	# article["is_email_exist"] = _extract_email_existance(article["author_info"])
 
 	# 기자이름을 발견하지 못할 시 관련 정보 콘솔에 출력
 	if(article["author_info"] == "") :

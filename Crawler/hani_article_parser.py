@@ -33,7 +33,7 @@ def parse_article_with_url(url):
 	article = dict()
 	html_doc = urllib.urlopen(url).read() # 간단한 get요청
 	
-	article["press_id"] = 4
+	# article["press_id"] = 4
 	article['URL'] = url
 	article['section'] = _extract_section(html_doc) # section 추출 차후에 특정 섹션(만화 등)은 파싱하지 않도록 조치 필요
 	article['title'] = _extract_title(html_doc)
@@ -41,7 +41,7 @@ def parse_article_with_url(url):
 	article['content'] = _extract_content(html_doc)
 	try :
 		article['author_info'] = _extract_author_info(html_doc)
-		article['is_email_exist'] = _extract_email_existance(article['author_info'])
+		# article['is_email_exist'] = _extract_email_existance(article['author_info'])
 		
 		# print article['content']
 		# print article['URL']

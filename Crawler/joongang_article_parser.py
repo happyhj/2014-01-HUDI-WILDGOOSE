@@ -31,11 +31,11 @@ def parse_article_with_url(article_url) :
 	article_info['datetime'] = _extract_datetime(article)
 	article_info['content'] = _extract_content(article)
 	#article_info['provider'] = _extract_provider(article)
-	article_info['press_id'] = 2
+	# article_info['press_id'] = 2
 
 	article_info['section'] = _extract_section(article)
 	article_info['author_info'] = _extract_author(article)
-	article_info['is_email_exist'] = _extract_email_existance(article_info['author_info'])
+	# article_info['is_email_exist'] = _extract_email_existance(article_info['author_info'])
 
 	return article_info
 
