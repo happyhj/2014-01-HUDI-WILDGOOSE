@@ -8,21 +8,20 @@ from contextlib import closing
 
 
 def connect_dev() :
-    config = {  "host":"10.73.45.134",
-                "user":"root",
-                "password":"wildgoose",
-                "database":"wildgoose_dev",
-                "charset" :'utf8'}
+    config = {  'host':'125.209.198.141',
+                'user':'python',
+                'password':'wildgoose',
+                'database':'wildgoose_dev',
+                'charset' :'utf8'}
 
     con = mysql.connector.connect(**config)
     return con
 
 def connect_raw() :
-    config = {  'host': '10.73.45.134',
-                'user': 'root',
+    config = {  'host':'125.209.198.141',
+                'user':'python',
                 'password': 'wildgoose',
-                'database': 'wildgoose',
-            #    'database': 'wildgoose_raw',
+                'database': 'wildgoose_raw',
                 'charset' : 'utf8'}
 
     con = mysql.connector.connect(**config)

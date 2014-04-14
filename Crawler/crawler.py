@@ -46,3 +46,5 @@ def main(argv) :
 			result = db.do_insert(con, query)
 	con.close()
 
+if __name__ == "__main__" :
+	main(sys.argv)

@@ -109,7 +109,7 @@ def _extract_section(html_doc) :
 		section = article_section.contents[0].strip()		
 		#print("*** SECTION *** " + article_section.contents[0] )	
 	section = section[5:]
-	section = section.split(u' > ', 1 )[0];
+	# section = section.split(u' > ', 1 )[0];
 	return section.encode('utf-8')
 
 def _extract_title(html_doc) :

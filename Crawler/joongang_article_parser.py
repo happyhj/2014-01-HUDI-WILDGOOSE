@@ -40,13 +40,13 @@ def parse_article_with_url(article_url) :
 	return article_info
 
 def print_article_info(article_info) :
-	print article_info['URL'].encode('utf-8')
+	print article_info['URL']
 	print article_info['title']
 	# print article_info['datetime']
 	# print article_info['content']
 	# print article_info['provider']
-	# print article_info['section']
-	print article_info['author']
+	print article_info['section']
+	# print article_info['author']
 	print ''
 
 def _extract_title(article) :
@@ -67,7 +67,13 @@ def _extract_section(article) :
 	small_code = ctg_code[2:4]
 
 	large_ctg = CTG_CODE[large_code]['k']
-	return large_ctg
+	if small_code == '00' :
+		small_ctg = '일반'
+	else :
+		small_ctg = CTG_CODE[large_code]['s'+small_code]['k']
+
+	section = large_ctg + ' > ' + small_ctg
+	return section
 
 def _extract_datetime(article) :
 	article_soup = BeautifulSoup(article)
