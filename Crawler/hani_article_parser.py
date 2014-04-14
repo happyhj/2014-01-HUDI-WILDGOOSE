@@ -54,6 +54,8 @@ def parse_article_with_url(url):
 def _extract_section(html_doc):
 	soup = BeautifulSoup(html_doc)
 	section = soup.find("div","article-category-title").table.tr.h3.img['alt']
+	subsection = soup.find("div","article-category-title").table.tr.strong.findAll(text=True)[0]
+	section = section +" > " + subsection
 	return section.encode("utf-8")
 
 def _extract_title(html_doc):
