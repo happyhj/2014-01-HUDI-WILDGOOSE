@@ -14,6 +14,7 @@ import DB_connector as db
 
 # Python Libraries
 import sys
+import time
 from contextlib import closing
 
 # NEEDS MANUAL HANDLING
@@ -44,6 +45,8 @@ def main(argv) :
 			
 			query = db.make_insert_query("article", article)
 			result = db.do_insert(con, query)
+			time.sleep(1.5)
+		time.sleep(5)
 	con.close()
 
 if __name__ == "__main__" :
