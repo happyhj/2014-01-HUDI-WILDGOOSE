@@ -35,19 +35,11 @@ only if the new code is made subject to such option by the copyright
 holder.
 -->
 <!--web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"-->
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
-                        http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-                        version="3.0">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
   <display-name>Archetype Created Web Application</display-name>
-  
   <welcome-file-list>
-  	<welcome-file>SearchReporter</welcome-file>
+    <welcome-file>SearchReporter</welcome-file>
   </welcome-file-list>
-  
-  <!-- SERVLET NAME-CLASS MAPPINGS -->
-  
   <servlet>
     <description></description>
     <display-name>SearchReporter</display-name>
@@ -55,40 +47,33 @@ holder.
     <servlet-class>next.wildgoose.web.SearchReporter</servlet-class>
   </servlet>
   <servlet>
-  	<description>
+    <description>
   	</description>
-  	<display-name>ShowReporter</display-name>
-  	<servlet-name>ShowReporter</servlet-name>
-  	<servlet-class>next.wildgoose.web.ShowReporter</servlet-class>
+    <display-name>ShowReporter</display-name>
+    <servlet-name>ShowReporter</servlet-name>
+    <servlet-class>next.wildgoose.web.ShowReporter</servlet-class>
   </servlet>
-  
-  <!-- SERVLET NAME-URL MAPPINGS -->
- 
   <servlet-mapping>
     <servlet-name>SearchReporter</servlet-name>
     <url-pattern>/SearchReporter</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>ShowReporter</servlet-name>
-  	<url-pattern>/reporters/*</url-pattern>
+    <servlet-name>ShowReporter</servlet-name>
+    <url-pattern>/reporters/*</url-pattern>
   </servlet-mapping>
-  
-  <!-- CONTEXT PARAMETERS -->
   <context-param>
-  	<param-name>dbURL</param-name>
-  	<param-value>jdbc:mysql://10.73.45.134:3306/wildgoose</param-value>
+    <param-name>dbURL</param-name>
+    <param-value>jdbc:mysql://10.73.45.134:3306/wildgoose</param-value>
   </context-param>
   <context-param>
-  	<param-name>userName</param-name>
-  	<param-value>viewer</param-value>
+    <param-name>userName</param-name>
+    <param-value>viewer</param-value>
   </context-param>
   <context-param>
-  	<param-name>userPassword</param-name>
-  	<param-value></param-value>
+    <param-name>userPassword</param-name>
+    <param-value></param-value>
   </context-param>
-  
-  <!-- LISTENERS -->
   <listener>
-  	<listener-class>next.wildgoose.listener.DatabaseContextListener</listener-class>
+    <listener-class>next.wildgoose.listener.DatabaseContextListener</listener-class>
   </listener>
 </web-app>
