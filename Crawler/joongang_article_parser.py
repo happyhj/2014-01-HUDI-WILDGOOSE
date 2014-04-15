@@ -89,6 +89,8 @@ def _extract_author(article) :
 	content_div = article_soup.find('div', 'article_content');
 	jname = __get_journalist_name(content_div)
 	jemail = __get_email(content_div)
+	email_span = article_soup.find('span', 'email');
+	jemail += __get_email2(email_span)
 	return (jname + ' ' + jemail).encode('utf-8')
 
 def _extract_content(article) :
@@ -126,6 +128,11 @@ def __get_email(content_div) :
 	if (len(email_list) != 0) :
 		return ','.join(email_list)
 	return 'None'
+
+def __get_email2(email_span) :
+	if email_span != None :
+		return email_span.a.get_text()
+	return ""
 
 # 이메일 갯수로 저장	-> 단순 BOOL 값 이상의 정보를 가진다.
 def _extract_email_existance(author_info):

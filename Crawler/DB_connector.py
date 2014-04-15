@@ -8,7 +8,7 @@ from contextlib import closing
 
 
 def connect_dev() :
-    config = {  'host':'125.209.198.141',
+    config = {  'host':'10.73.45.134',
                 'user':'python',
                 'password':'wildgoose',
                 'database':'wildgoose_dev',
@@ -18,7 +18,7 @@ def connect_dev() :
     return con
 
 def connect_raw() :
-    config = {  'host':'125.209.198.141',
+    config = {  'host':'10.73.45.134',
                 'user':'python',
                 'password': 'wildgoose',
                 'database': 'wildgoose_raw',
