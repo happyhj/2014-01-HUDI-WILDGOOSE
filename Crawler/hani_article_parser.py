@@ -54,8 +54,10 @@ def parse_article_with_url(url):
 def _extract_section(html_doc):
 	soup = BeautifulSoup(html_doc)
 	section = soup.find("div","article-category-title").table.tr.h3.img['alt']
-	subsection = soup.find("div","article-category-title").table.tr.strong.findAll(text=True)[0]
-	section = section +" > " + subsection
+	subsection = soup.find("div","article-category-title").table.tr.strong
+	if(subsection) :
+		subsection = subsection.findAll(text=True)[0]
+		section = section +" > " + subsection 
 	return section.encode("utf-8")
 
 def _extract_title(html_doc):
@@ -139,7 +141,7 @@ def _extract_email_existance(author_info):
 
 
 # parse_article_with_url test
-# parse_article_with_url('http://www.hani.co.kr/arti/politics/politics_general/631205.html')
+# parse_article_with_url('http://www.hani.co.kr/arti/infographic/info_society/632733.html')
 
 
 
