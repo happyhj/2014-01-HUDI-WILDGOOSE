@@ -50,8 +50,8 @@
 					</ul>
 				</c:when>
 				<c:otherwise>
-						${ requestScope.webError.cause }
-						${ requestScope.webError.notice }
+						<p class="error">${ requestScope.webError.cause }</p><br>
+						<p class="error">${ requestScope.webError.notice }</p>
 				</c:otherwise>
 			</c:choose>
 		</div>

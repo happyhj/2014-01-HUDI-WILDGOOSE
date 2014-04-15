@@ -22,17 +22,26 @@
 			</div>
 			
 			<c:if test="${ empty requestScope.webError }">
-			<div class="form">
-				<h1>${ requestScope.name }기자의 최신기사</h1>
-				<ul class="latest">
-					<c:forEach var="article" items="${ requestScope.articles }">
-						<li class="list">
-							<h2 class="title"><a href="${ article.url } target="_blank">[${ article.section_id }]${ article.title }</a></h2>
-							<div class="date">${ article.datetime }</div>
-							<div class="content">${ article.content }</div>
-						</li>
-					</c:forEach>
-				</ul>
+				<div class="form">
+					<h1>${ requestScope.name }기자의 최신기사</h1>
+					<ul class="latest">
+						<c:forEach var="article" items="${ requestScope.articles }">
+							<%-- <li class="list">
+								<h2 class="title"><a href="${ article.url } target="_blank">[${ article.section_id }]${ article.title }</a></h2>
+								<div class="date">${ article.datetime }</div>
+								<div class="content">${ article.content }</div>
+							</li> --%>
+							<li class="list">
+								<div class="article_title">
+									<h2 class="title"><a href="${ article.url } target="_blank">[${ article.section_id }]${ article.title }</a></h2>
+								</div>
+								<div class="article_datetime">
+									<div class="date">${ article.datetime }</div>
+								</div>
+							</li>
+						</c:forEach>
+					</ul>
+				</div>
 			</c:if>
 		</div>
 		<footer class="footer"></footer>

@@ -221,6 +221,11 @@
 	margin-top: 5px;	
 }
 
+.error{
+	text-align: center;
+	color: gray;
+}
+
 
 /* ipad */
 @media only screen 
