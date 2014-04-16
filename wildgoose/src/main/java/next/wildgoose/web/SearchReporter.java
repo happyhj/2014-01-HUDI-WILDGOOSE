@@ -49,7 +49,7 @@ public class SearchReporter extends HttpServlet {
 			// 이름으로 검색하기
 			mysqlQuery = "SELECT result.id as id, result.name as name, result.email as email, article.title as title, press.name as press_name ";
 			mysqlQuery += "FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ";
-			mysqlQuery += "WHERE author.name LIKE '%" + searchQuery + "%' GROUP BY author.id) as result ";
+			mysqlQuery += "WHERE author.name LIKE '%" + searchQuery + "%' GROUP BY author.id ORDER BY author.name) as result ";
 			mysqlQuery += "JOIN article ON article.URL = result.article_URL ";
 			mysqlQuery += "JOIN press ON result.press_id = press.id";
 			//// 이메일이 존재하는 기사 중 검색어가 title content section URL 에 포함되는 기사를 
