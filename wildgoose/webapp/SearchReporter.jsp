@@ -33,17 +33,17 @@
 			<c:choose>
 				<c:when test="${ empty requestScope.webError }">
 					<ul>
-						<c:forEach var="reporter" items="${ requestScope.reporters }">				
+						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }">				
 							<li class="card">
 								<div class="email-container">
 									<h3 class="email">
-										<a href="/reporters/${ reporter.email }">${ reporter.email }</a>
+										<a href="/reporters/${ reporterCard.id }">${ reporterCard.name }</a>
 									</h3>
-									<p class="sub-email">${ reporter.authorInfo }</p>
-									<div class="${ reporter.pressName } press-tag"></div>
+									<p class="sub-email">${ reporterCard.email }</p>
+									<div class="${ reporterCard.pressName } press-tag"></div>
 								</div>
 								<div class="article-container">
-									${ reporter.articleTitle }
+									${ reporterCard.articleTitle }
 								</div>
 							</li>
 						</c:forEach>

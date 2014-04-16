@@ -15,15 +15,14 @@
 		<header class="header"></header>
 		<div class="container test-outline">
 			<div class="card" >
-				<h2 class="reporter-name">${ requestScope.name }</h2>
+				<h2 class="reporter-name">${ requestScope.reporter.name }</h2>
 				<h3 class="email">${ requestScope.reporter.email }</h3>
-				<p class="sub-email">${ requestScope.reporter.authorInfo }</p>
 				<h4 class="press-name">${ requestScope.reporter.pressName }</h4>
 			</div>
 			
 			<c:if test="${ empty requestScope.webError }">
 				<div class="form">
-					<h1>${ requestScope.name }기자의 최신기사</h1>
+					<h1>${ requestScope.reporter.name }기자의 최신기사</h1>
 					<ul class="latest">
 						<c:forEach var="article" items="${ requestScope.articles }">
 							<%-- <li class="list">
@@ -33,7 +32,7 @@
 							</li> --%>
 							<li class="list">
 								<div class="article_title">
-									<h2 class="title"><a href="${ article.url } target="_blank">[${ article.section_id }]${ article.title }</a></h2>
+									<h2 class="title"><a href="${ article.url } target="_blank">[${ article.sectionId }]${ article.title }</a></h2>
 								</div>
 								<div class="article_datetime">
 									<div class="date">${ article.datetime }</div>

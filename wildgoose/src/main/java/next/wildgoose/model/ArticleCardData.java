@@ -1,10 +1,11 @@
 package next.wildgoose.model;
 
-public class Article {
+
+public class ArticleCardData {
 	private String url;
 	private String title;
 	private String content;
-	private int section_id;
+	private int sectionId;
 	private String datetime;
 	
 	public String getUrl() {
@@ -31,12 +32,12 @@ public class Article {
 		this.content = content;
 	}
 	
-	public int getSection_id() {
-		return section_id;
+	public int getSectionId() {
+		return sectionId;
 	}
 	
-	public void setSection_id(int section_id) {
-		this.section_id = section_id;
+	public void setSectionId(int sectionId) {
+		this.sectionId = sectionId;
 	}
 	
 	public String getDatetime() {
