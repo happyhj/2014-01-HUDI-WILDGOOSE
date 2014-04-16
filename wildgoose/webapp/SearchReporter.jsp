@@ -30,30 +30,22 @@
 			</form>
 		</div>
 		<div class="search-result">
-			<c:choose>
-				<c:when test="${ empty requestScope.webError }">
-					<ul>
-						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }">				
-							<li class="card">
-								<div class="email-container">
-									<h3 class="email">
-										<a href="/reporters/${ reporterCard.id }">${ reporterCard.name }</a>
-									</h3>
-									<p class="sub-email">${ reporterCard.email }</p>
-									<div class="${ reporterCard.pressName } press-tag"></div>
-								</div>
-								<div class="article-container">
-									${ reporterCard.articleTitle }
-								</div>
-							</li>
-						</c:forEach>
-					</ul>
-				</c:when>
-				<c:otherwise>
-						<p class="error">${ requestScope.webError.cause }</p><br>
-						<p class="error">${ requestScope.webError.notice }</p>
-				</c:otherwise>
-			</c:choose>
+			<ul>
+				<c:forEach var="reporterCard" items="${ requestScope.reporterCards }">				
+					<li class="card">
+						<div class="email-container">
+							<h3 class="email">
+								<a href="/reporters/${ reporterCard.id }">${ reporterCard.name }</a>
+							</h3>
+							<p class="sub-email">${ reporterCard.email }</p>
+							<div class="${ reporterCard.pressName } press-tag"></div>
+						</div>
+						<div class="article-container">
+							${ reporterCard.articleTitle }
+						</div>
+					</li>
+				</c:forEach>
+			</ul>
 		</div>
 	</div>
 	<footer class="footer"></footer>
