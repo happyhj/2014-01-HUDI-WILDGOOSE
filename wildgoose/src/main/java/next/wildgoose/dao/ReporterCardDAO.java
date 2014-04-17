@@ -8,13 +8,22 @@ import java.util.List;
 import next.wildgoose.model.DatabaseConnector;
 import next.wildgoose.model.ReporterCardData;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.util.StatusPrinter;
+
+
 public class ReporterCardDAO {
+	
+	static Logger logger = LoggerFactory.getLogger(ReporterCardDAO.class.getName());
 	
 	String mysqlQuery = null;
 	ResultSet rs = null;
 	List<ReporterCardData> reporterCards = null;
 	ReporterCardData reporterCard = null;
-
+	
 	
 	public List<ReporterCardData> findReportersByName (String name) {
 		// Actual logic goes here.
@@ -39,7 +48,6 @@ public class ReporterCardDAO {
 //		mysqlQuery += "ON article.URL = article_author.article_URL) AS result INNER JOIN wildgoose.press AS press ";
 //		mysqlQuery += "ON result.press_id = press.id GROUP BY email ORDER BY email";
 		
-				
 		try {
 			rs = DatabaseConnector.select(mysqlQuery);
 			
@@ -51,12 +59,10 @@ public class ReporterCardDAO {
 				reporterCard.setPressName(rs.getString("press_name"));
 				reporterCard.setArticleTitle(rs.getString("title"));
 				reporterCards.add(reporterCard);
-			
 			}
-		} catch (SQLException e) {
+		} catch (SQLException sqle) {
 			
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.debug(sqle.getMessage(),sqle);	
 		}
 		
 		return reporterCards;
