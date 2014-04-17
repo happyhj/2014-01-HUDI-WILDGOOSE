@@ -4,9 +4,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import next.wildgoose.model.DatabaseConnector;
 
 public class DatabaseContextListener implements ServletContextListener {
+	
 	public void contextInitialized(ServletContextEvent event) {
 		ServletContext sc = event.getServletContext();
 		String dbURL = sc.getInitParameter("dbURL");
