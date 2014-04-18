@@ -40,19 +40,26 @@ holder.
   <welcome-file-list>
     <welcome-file>SearchReporter</welcome-file>
   </welcome-file-list>
+  
+  <!-- Servlets -->
   <servlet>
-    <description></description>
+    <!-- description></description -->
     <display-name>SearchReporter</display-name>
     <servlet-name>SearchReporter</servlet-name>
     <servlet-class>next.wildgoose.web.SearchReporter</servlet-class>
   </servlet>
   <servlet>
-    <description>
-  	</description>
     <display-name>ShowReporter</display-name>
     <servlet-name>ShowReporter</servlet-name>
     <servlet-class>next.wildgoose.web.ShowReporter</servlet-class>
   </servlet>
+  <servlet>
+    <display-name>ApiMapper</display-name>
+    <servlet-name>ApiMapper</servlet-name>
+    <servlet-class>next.wildgoose.api.ApiMapper</servlet-class>
+  </servlet>
+  
+  <!-- Servlet Mapping -->
   <servlet-mapping>
     <servlet-name>SearchReporter</servlet-name>
     <url-pattern>/SearchReporter</url-pattern>
@@ -61,6 +68,12 @@ holder.
     <servlet-name>ShowReporter</servlet-name>
     <url-pattern>/reporters/*</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>ApiMapper</servlet-name>
+  	<url-pattern>/api/v1/*</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Context Parameters -->
   <context-param>
     <param-name>dbURL</param-name>
     <param-value>jdbc:mysql://10.73.45.134:3306/wildgoose_dev</param-value>
@@ -73,6 +86,8 @@ holder.
     <param-name>userPassword</param-name>
     <param-value></param-value>
   </context-param>
+  
+  <!-- Listeners -->
   <listener>
     <listener-class>next.wildgoose.listener.DatabaseContextListener</listener-class>
   </listener>
