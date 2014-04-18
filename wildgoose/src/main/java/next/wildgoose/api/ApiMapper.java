@@ -1,6 +1,7 @@
 package next.wildgoose.api;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +16,8 @@ public class ApiMapper extends HttpServlet {
 	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/json; charset=UTF-8");
+		PrintWriter out = response.getWriter();
 		String requestURI = request.getRequestURI();
 		// already mapped as "api/v1/"
 		String requestApi = requestURI.substring(8);
@@ -28,6 +31,7 @@ public class ApiMapper extends HttpServlet {
 			String apiName = requestApi.substring(requestApi.indexOf('/')+1);
 			if ("number_of_hook_keywords".equals(apiName)) {
 				JSONObject result = HookKeyword.getJson(reporterId);
+				out.println(result.toString());
 				logger.debug(result.toString());
 			}
 		}
