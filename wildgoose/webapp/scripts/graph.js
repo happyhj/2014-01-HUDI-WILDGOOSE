@@ -8,8 +8,9 @@ function initGraph() {
 	var condition = "section";
 	var url = "/api/v1/reporters/1/number_of_articles?by="+condition;
 	requestData(url, donutGraph);
-	
-	document.addEventListener("click", function() {
+
+	var refreshButton = document.getElementsByClassName("refresh-button")[0];
+	refreshButton.addEventListener("click", function() {
 		requestData(url, donutGraph);
 	}, false);
 }

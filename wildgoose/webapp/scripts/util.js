@@ -37,3 +37,10 @@ function responseData(e, func) {
 		}
 	}
 }
+
+
+//util
+
+
+
+
