@@ -1,12 +1,59 @@
-package next.wildgoose.web;
+package next.wildgoose.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import next.wildgoose.model.ArticleCardData;
 import next.wildgoose.model.ReporterCardData;
 
-public class TestDatas {
+public class DummyData {
+	
+	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	JSONObject result = null;
+	private JSONObject data = null;
+	private Random random = new Random();
+	
+	public JSONObject getJsonWithNumberOfArticlesBy(int i, String by) {
+		
+		if ("section".equals(by)) {
+			result = new JSONObject();
+			
+			data = new JSONObject().put("사회", random.nextInt(25));
+			result.append("data", data);
+			data = new JSONObject().put("경제", random.nextInt(25));
+			result.append("data", data);
+			data = new JSONObject().put("국제", random.nextInt(25));
+			result.append("data", data);
+			data = new JSONObject().put("교양", random.nextInt(25));
+			result.append("data", data);
+			data = new JSONObject().put("사설", random.nextInt(25));
+			result.append("data", data);
+		}
+		
+		return result;
+	}
+	
+	public JSONObject getJsonWithNumberOfHookKeywords(int reporterId) {
+		result = new JSONObject();
+		
+		data = new JSONObject().put("미모", random.nextInt(25));
+		result.append("data", data);
+		data = new JSONObject().put("충격", random.nextInt(25));
+		result.append("data", data);
+		data = new JSONObject().put("헉", random.nextInt(25));
+		result.append("data", data);
+		data = new JSONObject().put("경악", random.nextInt(25));
+		result.append("data", data);
+		data = new JSONObject().put("이럴수가", random.nextInt(25));
+		result.append("data", data);
+		
+		return result;
+	}
 	
 	ReporterCardData getReporter() {	
 		ReporterCardData reporter = new ReporterCardData();
