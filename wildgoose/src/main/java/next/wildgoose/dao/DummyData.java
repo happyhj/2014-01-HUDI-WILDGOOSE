@@ -35,7 +35,7 @@ public class DummyData {
 			for (int i=0; i<section.size(); i++) {
 				subJsonObj = new JSONObject();
 				
-				subJsonObj.put("label", section.get(reporterId));
+				subJsonObj.put("label", section.get(i));
 				subJsonObj.put("value", random.nextInt(25));
 				result.append("data", subJsonObj);
 			}
