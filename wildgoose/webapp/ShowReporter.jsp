@@ -13,6 +13,7 @@
 <script type="text/javascript" src="/webjars/d3js/3.4.4/d3.min.js"></script>
 
 <script type="text/javascript" src="/scripts/graph.js"></script>
+<script type="text/javascript" src="/scripts/BrokenLine.js"></script>
 
 <title>${ requestScope.name } 기자</title>
 </head>
@@ -34,8 +35,8 @@
 					<h1>section 비율</h1>
 					<svg id="svg-donut"></svg>
 				</div>
-				<div class="card stat-card">
-				그래프2
+				<div>
+					<svg id="svg-brokenLine"></svg>
 				</div>
 			</div>
 			
