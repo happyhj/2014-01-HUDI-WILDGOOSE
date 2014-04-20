@@ -18,21 +18,27 @@ public class DummyData {
 	private JSONObject data = null;
 	private Random random = new Random();
 	
-	public JSONObject getJsonWithNumberOfArticlesBy(int i, String by) {
+	public JSONObject getJsonWithNumberOfArticlesBy(int reporterId, String condition) {
 		
-		if ("section".equals(by)) {
-			result = new JSONObject();
+		logger.debug(this.getClass().getName() + condition);
+		if ("section".equals(condition)) {
+			List<String> section = new ArrayList<String>();
+			section.add("사회");
+			section.add("경제");
+			section.add("국제");
+			section.add("교양");
+			section.add("사설");
 			
-			data = new JSONObject().put("사회", random.nextInt(25));
-			result.append("data", data);
-			data = new JSONObject().put("경제", random.nextInt(25));
-			result.append("data", data);
-			data = new JSONObject().put("국제", random.nextInt(25));
-			result.append("data", data);
-			data = new JSONObject().put("교양", random.nextInt(25));
-			result.append("data", data);
-			data = new JSONObject().put("사설", random.nextInt(25));
-			result.append("data", data);
+			result = new JSONObject();
+			JSONObject subJsonObj = null;
+			
+			for (int i=0; i<section.size(); i++) {
+				subJsonObj = new JSONObject();
+				
+				subJsonObj.put("label", section.get(reporterId));
+				subJsonObj.put("value", random.nextInt(25));
+				result.append("data", subJsonObj);
+			}
 		}
 		
 		return result;

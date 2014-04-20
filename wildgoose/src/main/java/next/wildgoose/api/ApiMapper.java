@@ -57,6 +57,7 @@ public class ApiMapper extends HttpServlet {
 				
 				condition = new String (by.getBytes("8859_1"), "UTF-8");
 				if ("section".equals(condition)) {
+					logger.debug(condition);
 					result = dummy.getJsonWithNumberOfArticlesBy(reporterId, condition);
 				}
 				out.println(result.toString());
