@@ -50,6 +50,14 @@
 			<artifactId>json</artifactId>
 			<version>20140107</version>
 		</dependency>
+		
+		<!-- d3js -->
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>d3js</artifactId>
+		    <version>3.4.4-1</version>
+		</dependency>
+		
 	</dependencies>
 
 	<properties>
