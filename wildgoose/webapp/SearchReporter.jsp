@@ -32,7 +32,7 @@
 		<div class="search-result">
 			<ul>
 				<c:forEach var="reporterCard" items="${ requestScope.reporterCards }">				
-					<li class="card">
+					<li class="card reporter-card">
 						<div class="email-container">
 							<h3 class="email">
 								<a href="/reporters/${ reporterCard.id }">${ reporterCard.name }</a>
