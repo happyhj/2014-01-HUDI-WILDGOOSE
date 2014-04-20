@@ -9,9 +9,9 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/main.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/reporter.css" />
 
-<script type="text/javascript" src="/webjars/d3js/3.4.4/webjars-requirejs.js"></script>
 <script type="text/javascript" src="/webjars/d3js/3.4.4/d3.min.js"></script>
 
+<script type="text/javascript" src="/scripts/util.js"></script>
 <script type="text/javascript" src="/scripts/graph.js"></script>
 <script type="text/javascript" src="/scripts/BrokenLine.js"></script>
 
@@ -33,6 +33,7 @@
 			<div>
 				<div class="card stat-card">
 					<h1>section 비율</h1>
+					<div class="refresh">refresh</div>
 					<svg id="svg-donut"></svg>
 				</div>
 				<div>
