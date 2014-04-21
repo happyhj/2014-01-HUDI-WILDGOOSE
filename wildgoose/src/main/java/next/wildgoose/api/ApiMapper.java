@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import next.wildgoose.dao.ArticleCount;
 import next.wildgoose.dao.DummyData;
+import next.wildgoose.model.ArticleCardData;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -20,6 +22,7 @@ public class ApiMapper extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JSONObject result = null;
 		DummyData dummy = new DummyData();
+		ArticleCount date = new ArticleCount();
 		
 		response.setContentType("text/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();
@@ -57,9 +60,12 @@ public class ApiMapper extends HttpServlet {
 				
 				condition = new String (by.getBytes("8859_1"), "UTF-8");
 				if ("section".equals(condition)) {
-					logger.debug(condition);
 					result = dummy.getJsonWithNumberOfArticlesBy(reporterId, condition);
 				}
+				else if ("day".equals(condition)) {
+					result = date.countArticle(reporterId);
+				}
+				
 				out.println(result.toString());
 				logger.debug(result.toString());
 			}
