@@ -88,14 +88,14 @@ def parse_article_with_url (url) :
 
 	### article에 새로운 dict를 생성
 	article = {}
-	article["press_id"] = 11
+	# article["press_id"] = 11
 	article["URL"] = url.encode('utf-8')
 	article["author_info"] = _extract_author_info(html_doc)
 	article["section"] = _extract_section(html_doc)
 	article["title"] = _extract_title(html_doc)
 	article["datetime"] = _extract_datetime(html_doc)
 	article["content"] = _extract_contents(html_doc)
-	article['is_email_exist'] = _extract_email_existance(article['author_info'])
+	# article['is_email_exist'] = _extract_email_existance(article['author_info'])
 
 	return article
 

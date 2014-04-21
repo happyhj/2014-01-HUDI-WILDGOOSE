@@ -21,9 +21,14 @@ public class DatabaseConnector {
 		
 	}
 	
-	public static ResultSet select(String query) throws SQLException {
-		Statement stmt = connection.createStatement();
-		ResultSet rs = stmt.executeQuery(query);
+	public static ResultSet select(String query) {
+		ResultSet rs = null;
+		try {
+			Statement stmt = connection.createStatement();
+			rs = stmt.executeQuery(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return rs;
 	}
 	

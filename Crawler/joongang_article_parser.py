@@ -31,22 +31,22 @@ def parse_article_with_url(article_url) :
 	article_info['datetime'] = _extract_datetime(article)
 	article_info['content'] = _extract_content(article)
 	#article_info['provider'] = _extract_provider(article)
-	article_info['press_id'] = 2
+	# article_info['press_id'] = 2
 
 	article_info['section'] = _extract_section(article)
 	article_info['author_info'] = _extract_author(article)
-	article_info['is_email_exist'] = _extract_email_existance(article_info['author_info'])
+	# article_info['is_email_exist'] = _extract_email_existance(article_info['author_info'])
 
 	return article_info
 
 def print_article_info(article_info) :
-	print article_info['URL'].encode('utf-8')
+	print article_info['URL']
 	print article_info['title']
 	# print article_info['datetime']
 	# print article_info['content']
 	# print article_info['provider']
-	# print article_info['section']
-	print article_info['author']
+	print article_info['section']
+	# print article_info['author']
 	print ''
 
 def _extract_title(article) :
@@ -67,7 +67,13 @@ def _extract_section(article) :
 	small_code = ctg_code[2:4]
 
 	large_ctg = CTG_CODE[large_code]['k']
-	return large_ctg
+	if small_code == '00' :
+		small_ctg = '일반'
+	else :
+		small_ctg = CTG_CODE[large_code]['s'+small_code]['k']
+
+	section = large_ctg + ' > ' + small_ctg
+	return section
 
 def _extract_datetime(article) :
 	article_soup = BeautifulSoup(article)
@@ -83,6 +89,8 @@ def _extract_author(article) :
 	content_div = article_soup.find('div', 'article_content');
 	jname = __get_journalist_name(content_div)
 	jemail = __get_email(content_div)
+	email_span = article_soup.find('span', 'email');
+	jemail += __get_email2(email_span)
 	return (jname + ' ' + jemail).encode('utf-8')
 
 def _extract_content(article) :
@@ -120,6 +128,11 @@ def __get_email(content_div) :
 	if (len(email_list) != 0) :
 		return ','.join(email_list)
 	return 'None'
+
+def __get_email2(email_span) :
+	if email_span != None :
+		return email_span.a.get_text()
+	return ""
 
 # 이메일 갯수로 저장	-> 단순 BOOL 값 이상의 정보를 가진다.
 def _extract_email_existance(author_info):

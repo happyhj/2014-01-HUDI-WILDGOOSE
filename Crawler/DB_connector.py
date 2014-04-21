@@ -8,21 +8,20 @@ from contextlib import closing
 
 
 def connect_dev() :
-    config = {  "host":"10.73.45.134",
-                "user":"root",
-                "password":"wildgoose",
-                "database":"wildgoose_dev",
-                "charset" :'utf8'}
+    config = {  'host':'10.73.45.134',
+                'user':'python',
+                'password':'wildgoose',
+                'database':'wildgoose_dev',
+                'charset' :'utf8'}
 
     con = mysql.connector.connect(**config)
     return con
 
 def connect_raw() :
-    config = {  'host': '10.73.45.134',
-                'user': 'root',
+    config = {  'host':'10.73.45.134',
+                'user':'python',
                 'password': 'wildgoose',
-                'database': 'wildgoose',
-            #    'database': 'wildgoose_raw',
+                'database': 'wildgoose_raw',
                 'charset' : 'utf8'}
 
     con = mysql.connector.connect(**config)
@@ -35,8 +34,8 @@ def do_insert(con, query) :
             cur.execute(query)
             con.commit()
             return True
-        except :
-            print "Insert Error - " + query[:50] + "..."
+        except mysql.connector.Error as err :
+            print ("Insert Error -  {}".format(err))
             return False
 
 # return Selected rows
@@ -45,8 +44,8 @@ def do_select(con, query) :
         try :
             cur.execute(query)
             result = cur.fetchall()
-        except :
-            print "Select Error - " + query[:50] + "..."
+        except mysql.connector.Error as err :
+            print ("Select Error -  {}".format(err))
 
     return result
 
@@ -79,9 +78,9 @@ def make_insert_query(table_name, data) :
             QUERY += key_list[i] + "='" + str(value_list[i]) + "', "
         QUERY = QUERY[:-2]
 
-    except UnicodeError :
+    except UnicodeError as err :
         # print QUERY
-        print "Unicode Error at " + str(data)
+        print "Unicode Error at " + err.object
         return None
 
     return QUERY
@@ -123,9 +122,9 @@ def make_list_insert_query(table_name, data_list, const_data=None) :
             QUERY = QUERY[:-2] + "), "
         QUERY = QUERY[:-2]
 
-    except UnicodeError :
+    except UnicodeError as err :
         # print QUERY
-        print "Unicode Error at " + str(data)
+        print "Unicode Error at " + err.object
         return None
 
     return QUERY

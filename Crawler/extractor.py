@@ -6,6 +6,7 @@
 import DB_connector as db
 
 import re
+from datetime import datetime
 
 def main() :
 	result = _get_raw_data()
@@ -22,15 +23,21 @@ def main() :
 		expected_author_string = row[5]
 		author_list = _make_author_list(con, expected_author_string)
 
-		####### THIS IS PSUDO_CODE #######
-		# if author_info not in DB :
-		# 	query = db.make_insert_query('author', author_info)
-		# 	db.do_insert(con, query)
+		for author in author_list :
+			if not _is_author_exits(author['email']) :
+				query = db.make_insert_query('author', author)
+				db.do_insert(con, query)
+			# Get author_id
+			query = "SELECT id FROM author WHERE email=\'" + author['email'] + "\'"
+			author_id = db.do_select(con, query)
+			author_id = author_id[0][0]
+			print author_id, author['name'], author['email'], author['press_id']
+
 		# article_author table
-		# article_author = {'article_URL': article['URL'], 'author_id': author_info['id']}
-		# query = db.make_insert_query('article_author', article_author)
-		# db.do_insert(con, query)
-		####### THIS IS PSUDO_CODE #######
+			article_author = {'article_URL': article['URL'], 'author_id': author_id}
+			query = db.make_insert_query('article_author', article_author)
+			db.do_insert(con, query)
+
 
 def _get_raw_data() :
 	con_r = db.connect_raw()
@@ -41,16 +48,42 @@ def _get_raw_data() :
 
 def _make_article_info(con, row) :
 	article = {}
-	article['URL'] = row[0]
-	article['title'] = row[1]
-	article['content'] = __clip_content(row[2])
+	article['URL'] = row[0].encode('utf-8')
+	article['title'] = row[1].encode('utf-8')
+	article['content'] = __clip_content(row[2]).encode('utf-8')
 	article['section_id'] = __get_section_id(con, row[3])
-	article['datetime'] = row[4]
+	article['datetime'] = str(row[4]).encode('utf-8')
 
 	return article
 
 def __get_section_id(con, section_name) :
-	return 3
+	section_keywords = re.findall(u"[가-힣]+", section_name)
+	kwd_num = len(section_keywords)
+
+	# 일치하는 키워드가 전혀 없을 때
+	if kwd_num == 0 :
+		return 0
+	kwd_idx = kwd_num - 1
+
+	while True :
+		last_keyword = section_keywords[kwd_idx]
+		# 일반: 분류할 수 없음
+		if last_keyword == u'일반' :
+			kwd_idx -= 1
+			continue
+
+		# 키워드 탐색
+		query = "SELECT id FROM section WHERE name LIKE \'%" + last_keyword + "%\'"
+		result = db.do_select(con, query)
+
+		# 일치 키워드를 찾았을 때, 반환
+		if len(result) > 0 :
+			return result[0][0]
+		# 찾지 못했을 때, 상위 키워드로 이동
+		kwd_idx -= 1
+		# 일치하는 키워드가 전혀 없을 때
+		if kwd_idx < 0 :
+			return 0
 
 def _make_author_list(con, expected_string) :
 	author_list = []
@@ -59,11 +92,12 @@ def _make_author_list(con, expected_string) :
 	email_list = __extract_emails(expected_string)
 
 	for email in email_list :
-		author = __get_if_email_exits(con, email)
-		if (author == None) :
+		if _is_author_exits(email) :
+			author = __get_if_email_exits(con, email)
+		else :
 			author = __extract_author(con, email)
-		
-		author_list.append(author)
+		if author is not None :
+			author_list.append(author)
 	
 	return author_list
 
@@ -81,6 +115,7 @@ def __extract_author(con, email) :
 	con_r = db.connect_raw()
 	query = "SELECT URL, author_info FROM article WHERE author_info like \'%" + email + "%\'"
 	result = db.do_select(con_r, query)
+	url = result[0][0].split('/')[2]
 
 	# SUM ALL POSSIBLE NAME
 	possible_words = {}
@@ -98,12 +133,17 @@ def __extract_author(con, email) :
 				continue
 			name = key
 			max_value = value
-			
-	print max_value, name.encode('utf-8'), email
+
+	if max_value < 3 :
+		return None
+
+	author['name'] = name.encode('utf-8')
+	author['email'] = email.encode('utf-8')
+	author['press_id'] = __get_press_id_from(url)
+	author['added_date'] = str(__get_today()).encode('utf-8')
 	
-	# GET INSERTED DATA's ID
-	# query = "SELECT last_insert_id()"
-	# result = db.do_select(con, query)
+	return author		
+	# print max_value, name.encode('utf-8'), email
 
 def __get_if_email_exits(con, email) :
 	query = 'SELECT * from author WHERE email = \'' + email + '\''
@@ -111,7 +151,14 @@ def __get_if_email_exits(con, email) :
 	if len(result) == 0 :
 		return None
 	else :
-		return result[0]
+		author = {}
+		for row in result :
+			author['id'] = row[0]
+			author['name'] = row[1]
+			author['email'] = row[2]
+			author['press_id'] = row[3]
+			author['added_date'] = row[4]
+		return author
 
 def __clip_content(content) :
 	return content[:100]
@@ -136,9 +183,26 @@ def __extract_name(content) :
 			del keywords[word]
 	return keywords
 
+def __get_press_id_from(url) :
+	con_d = db.connect_dev()
+	query = 'SELECT id FROM press WHERE domain=\'' + url + '\''
+	result = db.do_select(con_d, query)
+	con_d.close()
+	return result[0][0]
 
-# if __name__ == "__main__":
-# 	main()
-email_list = ['3code@hankyung.com', 'abc@donga.com', 'abcd@hani.co.kr', 'ace@hankyung.com', 'acirfa@joongang.co.kr', 'adche@joongang.co.kr', 'adonis55@joongang.co.kr', 'africasun@joongang.co.kr', 'agatha77@hankyung.com', 'ahnjk@hankyung.com', 'ahnyinhay@hotmail.com', 'ahs@hankyung.com', 'aimhigh@donga.com', 'americano@joongang.co.kr', 'anaki@hani.co.kr', 'ansesi@joongang.co.kr', 'anzy@joongang.co.kr', 'apple@hankyung.com', 'appletree@hani.co.kr', 'argos@hankyung.com', 'askme@joongang.co.kr', 'azul@joongang.co.kr', 'bae2150@donga.com', 'balgun@donga.com', 'baltika7@donga.com', 'bebop@hankyung.com', 'beh@donga.com', 'being@joongang.co.kr', 'beje@hankyung.com', 'beneath@joongang.co.kr', 'benoist@joongang.co.kr', 'bepop@hankyung.com', 'best@donga.com', 'bestemployerskorea@aonhewitt.com', 'bhchoi@lgeri.com', 'bim@joongang.co.kr', 'bk11@hankyung.com', 'black0419@hankyung.com', 'blast@joongang.co.kr', 'bluedot@donga.com', 'bong@hani.co.kr', 'bong@koreadaily.com', 'bong9@hani.co.kr', 'bonggari@joongang.co.kr', 'bonhong@donga.com', 'bono@hankyung.com', 'boriam@donga.com', 'bradkim@joongang.co.kr', 'bright@donga.com', 'bsism@donga.com', 'byungjoo@joongang.co.kr', 'cano@hani.co.kr', 'catalunia@hani.co.kr', 'ccandori@hani.co.kr', 'ccat@hankyung.com', 'cdkang@hankyung.com', 'ceo@mson.co.kr', 'ceo@roadtest.kr', 'ceoseo@hankyung.com', 'chan@hani.co.kr', 'chang@donga.com', 'charisma@hani.co.kr', 'chazz@joongang.co.kr', 'chdck@joongang.co.kr', 'che@hani.co.kr', 'chihiro@hankyung.com', 'cho@hani.co.kr', 'choi.yun-mee@shinyoung.com', 'choigo@joongang.co.kr', 'choiji@joongang.co.kr', 'choissie@joongang.co.kr', 'chomg@joongang.co.kr', 'chsan@hankyung.com', 'chung@hani.co.kr', 'chyun3344@daum.net', 'cjhoon@hani.co.kr', 'cjs@donga.com', 'ckhaa@joongang.co.kr', 'clartee@naver.com', 'click@hankyung.com', 'cmjang@hankyung.com', 'comedy9@donga.com', 'comeon@hankyung.com', 'confetti@donga.com', 'cooly@hani.co.kr', 'cosmos@hankyung.com', 'crystal@donga.com', 'csw@hani.co.kr', 'cym2060@joongang.co.kr', 'dadad@hankyung.com', 'daedan@joongang.co.kr', 'daeha@hani.co.kr', 'daepun@hankyung.com', 'dalsarang@donga.com', 'dandy@hani.co.kr', 'dbpark@hri.co.kr', 'ddak@hankyung.com', 'demian@donga.com', 'destinybr@hankyung.com', 'dew@donga.com']
-for email in email_list :
-	__extract_author(None, email)
+def __get_today() :
+	i = datetime.now()
+	return i.strftime('%Y-%m-%d %H:%M:%S')
+
+def _is_author_exits(email) :
+	con_d = db.connect_dev()
+	query = 'SELECT id FROM author WHERE email=\'' + email + '\''
+	result = db.do_select(con_d, query)
+	con_d.close()
+	
+	if len(result) == 0 :
+		return False
+	return True
+
+if __name__ == "__main__":
+	main()

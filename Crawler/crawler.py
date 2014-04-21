@@ -14,6 +14,7 @@ import DB_connector as db
 
 # Python Libraries
 import sys
+import time
 from contextlib import closing
 
 # NEEDS MANUAL HANDLING
@@ -37,12 +38,22 @@ def main(argv) :
 	for i in range(start_page_index, end_page_index+1) :
 		# get 10-20 url and insert
 		url_list = press.get_article_urls_with_pagenum(i)
+
 		print "page: " + str(i)
 
 		for url in url_list :
-			article = press.parse_article_with_url(url)
+			print url
+			try :
+				article = press.parse_article_with_url(url)
+			except :
+				print 'retry parsing!'
+				article = press.parse_article_with_url(url)
 			
 			query = db.make_insert_query("article", article)
 			result = db.do_insert(con, query)
+			time.sleep(1.5)
+		time.sleep(5)
 	con.close()
 
+if __name__ == "__main__" :
+	main(sys.argv)

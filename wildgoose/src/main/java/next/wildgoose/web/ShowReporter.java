@@ -1,7 +1,6 @@
 package next.wildgoose.web;
 
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -10,27 +9,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import next.wildgoose.model.Article;
-import next.wildgoose.model.Reporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- * Servlet implementation class ShowReporter
- */
+import next.wildgoose.dao.ArticleCardDAO;
+import next.wildgoose.dao.ReporterCardDAO;
+import next.wildgoose.model.ArticleCard;
+import next.wildgoose.model.ReporterCard;
+import next.wildgoose.utility.Wildgoose;
+
+
 public class ShowReporter extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	static Logger logger = LoggerFactory.getLogger(ShowReporter.class.getName());
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ShowReporter() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		RequestDispatcher reqDispatcher = null;
+		
+		ReporterCard reporterCardData = null;
+		List<ArticleCard> articleCards = null;
+		ReporterCardDAO reporterCardDao = null;
+		ArticleCardDAO articleCardDao = null;
+		String rawReporterId = null;
 		
 		/* 
 		 * getRequestURI() : /reporters/HBKim1
@@ -38,31 +39,30 @@ public class ShowReporter extends HttpServlet {
 		 */
 		String uri = request.getRequestURI();
 		
-		/* 
-		 * 한글을 입력 받을 때 URI가 깨지는 문제를 해결하기 위해 사용했습니다
-		 * URLDecoder는 deprecated될 예정으로 다른 좋은 방법을 찾아야 하겠습니다
-		 */
-		String name = URLDecoder.decode(uri.substring("/reporters/".length()));
-		request.setAttribute("name", name);
+		// id가 입력되지 않은 경우 처리
+		if ("/reporters".equals(uri) || "/reporters/".equals(uri)) {
+			// error page
+			reqDispatcher = request.getRequestDispatcher("/" + Wildgoose.ERROR_PAGE);
+			reqDispatcher.forward(request, response);
+			return;
+		}
 		
-		/* 테스트를 위한 수동 데이터 하드코딩 */
-		TestDatas testData = new TestDatas();
-		Reporter reporter = testData.getReporter();
-		request.setAttribute("reporter", reporter);
+		rawReporterId = uri.substring("/reporters/".length());
+		int reporterId = Integer.parseInt(rawReporterId);
 		
-		List<Article> articles = testData.getArticles();
-		request.setAttribute("articles", articles);
+		// DB에서 id로 검색하여 reporterCardData 가져오기
+		reporterCardDao = new ReporterCardDAO();
+		reporterCardData = reporterCardDao.findReporterById(reporterId);
 		
+		// DB에서 id으로 검색하여 reporter의 최신 기사 리스트 가져오기
+		articleCardDao = new ArticleCardDAO();
+		articleCards = articleCardDao.findArticlesById(reporterId);
 		
+		request.setAttribute("reporter", reporterCardData);		
+		request.setAttribute("articles", articleCards);
 		
-		/* ******** !!IMPORTANT!! **********
-		 * dispatch 시, 절대경로를 사용할 것!!!
-		 * 상대경로로 dispatch할 경우, /reporters/ShowReporter로 전달됨
-		 * 따라서 web.xml의 "/reporters/*"패턴에 붙잡혀 다시  서블릿으로 전달됨
-		 * 즉, 무한루프를 돌게 됨!!!!
-		 */
-		RequestDispatcher rd = request.getRequestDispatcher("/ShowReporter.jsp");
-		rd.forward(request, response);
+		// ******** !!IMPORTANT!! **********
+		reqDispatcher = request.getRequestDispatcher("/" + Wildgoose.SHOW_PAGE);
+		reqDispatcher.forward(request, response);
 	}
-
 }
