@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import next.wildgoose.dao.ArticleCount;
 import next.wildgoose.dao.DummyData;
-import next.wildgoose.model.ArticleCardData;
+import next.wildgoose.model.ArticleCard;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;

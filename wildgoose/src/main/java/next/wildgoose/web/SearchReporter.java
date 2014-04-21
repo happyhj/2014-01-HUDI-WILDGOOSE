@@ -10,18 +10,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import next.wildgoose.dao.ReporterCardDAO;
-import next.wildgoose.model.ReporterCardData;
+import next.wildgoose.model.ReporterCard;
 import next.wildgoose.utility.Wildgoose;
 
 
 public class SearchReporter extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String searchQuery = null;
+		
 		RequestDispatcher reqDispatcher = null;
-		List<ReporterCardData> reporterCards = null;
+		
+		String searchQuery = null;
+		List<ReporterCard> reporterCards = null;
 		ReporterCardDAO reporterCardDao = null;
 		
 		// 첫 요청시, 'q'가 null인 경우

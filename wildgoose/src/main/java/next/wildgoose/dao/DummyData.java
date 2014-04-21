@@ -8,8 +8,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import next.wildgoose.model.ArticleCardData;
-import next.wildgoose.model.ReporterCardData;
+import next.wildgoose.model.ArticleCard;
+import next.wildgoose.model.ReporterCard;
 
 public class DummyData {
 	
@@ -61,8 +61,8 @@ public class DummyData {
 		return result;
 	}
 	
-	ReporterCardData getReporter() {	
-		ReporterCardData reporter = new ReporterCardData();
+	ReporterCard getReporter() {	
+		ReporterCard reporter = new ReporterCard();
 		
 		reporter.setEmail("fourwingsy@nhnnext.org");
 		reporter.setPressName("Nextian");
@@ -71,10 +71,10 @@ public class DummyData {
 		return reporter;		
 	}
 
-	List<ArticleCardData> getArticles() {
-		List<ArticleCardData> articles = new ArrayList<ArticleCardData>();
+	List<ArticleCard> getArticles() {
+		List<ArticleCard> articles = new ArrayList<ArticleCard>();
 		
-		ArticleCardData article1 = new ArticleCardData();
+		ArticleCard article1 = new ArticleCard();
 		article1.setUrl("http://www.hankyung.com/news/app/newsview.php?aid=2014040928348");
 		article1.setTitle("野 기초공천 투표·여론조사 종료…10일 오전 결과 발표");
 //		article1.setSection_id(1);
@@ -82,7 +82,7 @@ public class DummyData {
 		article1.setDatetime("2014-04-09 13:13:16");
 		articles.add(article1);
 		
-		ArticleCardData article2 = new ArticleCardData();
+		ArticleCard article2 = new ArticleCard();
 		article2.setUrl("http://www.hankyung.com/news/app/newsview.php?aid=2014040803161");
 		article2.setTitle("기通찬 원기찬…부르면 달려간다");
 //		article2.setSection_id(2);
@@ -90,7 +90,7 @@ public class DummyData {
 		article2.setDatetime("2014-04-08 21:12:04");
 		articles.add(article2);
 		
-		ArticleCardData article3 = new ArticleCardData();
+		ArticleCard article3 = new ArticleCard();
 		article3.setUrl("http://www.hankyung.com/news/app/newsview.php?aid=2014040943991");
 		article3.setTitle("산업단지에 규제 자유지역 만들자");
 //		article3.setSection_id(1);
@@ -98,7 +98,7 @@ public class DummyData {
 		article3.setDatetime("2014-04-09 20:34:49");
 		articles.add(article3);
 		
-		ArticleCardData article4 = new ArticleCardData();
+		ArticleCard article4 = new ArticleCard();
 		article4.setUrl("http://www.hankyung.com/news/app/newsview.php?aid=2014040801331");
 		article4.setTitle("상품만 팔면 끝?…기업 존재 이유에 물음표 던진 CEO");
 //		article4.setSection_id(2);
@@ -106,7 +106,7 @@ public class DummyData {
 		article4.setDatetime("2014-04-08 21:46:01");
 		articles.add(article4);
 		
-		ArticleCardData article5 = new ArticleCardData();
+		ArticleCard article5 = new ArticleCard();
 		article5.setUrl("http://www.hankyung.com/news/app/newsview.php?aid=2014040802271");
 		article5.setTitle("황우석, 홈캐스트와 손잡고 증시 입성한다");
 //		article5.setSection_id(3);
