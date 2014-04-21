@@ -1,7 +1,6 @@
 package next.wildgoose.model;
 
-
-public class ArticleCardData {
+public class ArticleCard {
 	private String url;
 	private String title;
 	private String content;
@@ -47,8 +46,5 @@ public class ArticleCardData {
 	public void setDatetime(String datetime) {
 		this.datetime = datetime;
 	}
-	
-	
-	
 	
 }

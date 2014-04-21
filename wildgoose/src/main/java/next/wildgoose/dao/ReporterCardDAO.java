@@ -5,8 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import next.wildgoose.model.ArticleCard;
 import next.wildgoose.model.DatabaseConnector;
-import next.wildgoose.model.ReporterCardData;
+import next.wildgoose.model.ReporterCard;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,15 +20,39 @@ public class ReporterCardDAO {
 	
 	static Logger logger = LoggerFactory.getLogger(ReporterCardDAO.class.getName());
 	
-	String mysqlQuery = null;
 	ResultSet rs = null;
-	List<ReporterCardData> reporterCards = null;
-	ReporterCardData reporterCard = null;
+	String mysqlQuery = null;
+	ReporterCard reporterCard = null;
+	List<ReporterCard> reporterCards = null;
 	
 	
-	public List<ReporterCardData> findReportersByName (String name) {
+	public ReporterCard findReporterById (int reporterId) {
+		
+		String getNameQuery = "SELECT author.id as id, author.email as email, author.name as name, press.name as pressName "
+				+ "from author JOIN press ON author.press_id = press.id WHERE author.id = " + reporterId + ";";
+		
+		try {
+			reporterCard = new ReporterCard();
+			rs = DatabaseConnector.select(getNameQuery);
+			
+			if (rs.first()) {
+				reporterCard.setId(rs.getInt("id"));
+				reporterCard.setEmail(rs.getString("email"));
+				reporterCard.setName(rs.getString("name"));
+				reporterCard.setPressName(rs.getString("pressName"));
+			}
+		}
+		catch (SQLException sqle) {
+			logger.debug(sqle.getMessage(),sqle);	
+		}
+		
+		return reporterCard;
+	}
+	
+	
+	public List<ReporterCard> findReportersByName (String name) {
 		// Actual logic goes here.
-		reporterCards = new ArrayList<ReporterCardData>();
+		reporterCards = new ArrayList<ReporterCard>();
 		
 		// getting database connection to MySQL server
 		// 이름으로 검색하기
@@ -52,7 +77,7 @@ public class ReporterCardDAO {
 			rs = DatabaseConnector.select(mysqlQuery);
 			
 			while (rs.next()) {
-				reporterCard = new ReporterCardData();
+				reporterCard = new ReporterCard();
 				reporterCard.setId(rs.getInt("id"));
 				reporterCard.setEmail(rs.getString("email"));
 				reporterCard.setName(rs.getString("name"));
@@ -60,8 +85,8 @@ public class ReporterCardDAO {
 				reporterCard.setArticleTitle(rs.getString("title"));
 				reporterCards.add(reporterCard);
 			}
-		} catch (SQLException sqle) {
-			
+		}
+		catch (SQLException sqle) {
 			logger.debug(sqle.getMessage(),sqle);	
 		}
 		
