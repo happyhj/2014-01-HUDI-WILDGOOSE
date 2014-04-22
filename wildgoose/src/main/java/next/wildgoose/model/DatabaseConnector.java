@@ -11,6 +11,10 @@ public class DatabaseConnector {
 
 	private static Connection connection;
 	
+	public static void connect() {
+		connect("jdbc:mysql://10.73.45.134:3306/wildgoose_dev", "viewer", "");
+	}
+	
 	public static void connect(String dbURL, String userName, String userPassword) {
 		try {
 			DriverManager.registerDriver(new com.mysql.jdbc.Driver());

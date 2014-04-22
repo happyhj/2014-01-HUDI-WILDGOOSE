@@ -21,6 +21,8 @@ public class ArticleCardDAO {
 	List<ArticleCard> articleCards = null;
 	
 	public List<ArticleCard> findArticlesById(int reporterId) {
+		DatabaseConnector.connect();
+		
 		String mysqlQuery = "SELECT article.URL as url, article.title as title, "
 				+ "article.section_id as section, article.content as content, article.datetime as datetime "
 				+ "FROM article_author JOIN article ON article.URL = article_author.article_URL "
@@ -44,6 +46,7 @@ public class ArticleCardDAO {
 			logger.debug(sqle.getMessage(),sqle);	
 		}
 		
+		DatabaseConnector.close();
 		return articleCards;
 	}
 }

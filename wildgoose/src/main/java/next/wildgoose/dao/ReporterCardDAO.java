@@ -27,7 +27,7 @@ public class ReporterCardDAO {
 	
 	
 	public ReporterCard findReporterById (int reporterId) {
-		
+		DatabaseConnector.connect();
 		String getNameQuery = "SELECT author.id as id, author.email as email, author.name as name, press.name as pressName "
 				+ "from author JOIN press ON author.press_id = press.id WHERE author.id = " + reporterId + ";";
 		
@@ -46,6 +46,7 @@ public class ReporterCardDAO {
 			logger.debug(sqle.getMessage(),sqle);	
 		}
 		
+		DatabaseConnector.close();
 		return reporterCard;
 	}
 	
@@ -72,7 +73,7 @@ public class ReporterCardDAO {
 //		mysqlQuery += "AS article INNER JOIN wildgoose.article_author AS article_author ";
 //		mysqlQuery += "ON article.URL = article_author.article_URL) AS result INNER JOIN wildgoose.press AS press ";
 //		mysqlQuery += "ON result.press_id = press.id GROUP BY email ORDER BY email";
-		
+		DatabaseConnector.connect();
 		try {
 			rs = DatabaseConnector.select(mysqlQuery);
 			
@@ -89,7 +90,7 @@ public class ReporterCardDAO {
 		catch (SQLException sqle) {
 			logger.debug(sqle.getMessage(),sqle);	
 		}
-		
+		DatabaseConnector.close();
 		return reporterCards;
 	}
 }
