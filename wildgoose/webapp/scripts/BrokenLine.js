@@ -2,8 +2,8 @@
 window.addEventListener("load", BrokenLine, false);
 
 function BrokenLine() {
-	var svgContainer = d3.select("#svg-brokenLine").append("svg:svg").attr(
-			"width", 500).attr("height", 320)
+	var svgContainer = d3.select("#svg-brokenLine").attr(
+			"width", "100%").attr("height", "100%")
 			.attr("id", "brokenLineGraph");
 	var backgroundColor = svgContainer.append("rect").attr("width", "100%").attr("height", "100%").attr("fill", "#26A88E");
 	var text = svgContainer.append("text").attr("x", 370).attr("y", 40).attr(

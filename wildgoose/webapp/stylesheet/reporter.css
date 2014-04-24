@@ -18,18 +18,18 @@
 .list{
 	list-style: none;
 	display: inline-block;
+	background-color: #F8DD40;
 	margin-right: 20px;
 	margin-bottom: 10px;
 }
 
 .list:hover{
-	border: 1px red solid;
+	background-color: #B89D20;
 }
 
 .article_title{
 	height: 120px;
 	width: 150px;
-	background-color: #F8DD40;
 	color: white;
 	font-size: 17px;
 	font-weight: bolder;
@@ -58,9 +58,8 @@ a:visited{
 	height: 350px;
 }
 
-.stat-card {
-	height:200px;
-	width:100%;
+.card {
+	height:300px;
+	width:40%;
 }
-
 
