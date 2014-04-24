@@ -1,7 +1,15 @@
 // basic setting
-window.addEventListener("load", BrokenLine, false);
+window.addEventListener("load", init2, false);
 
-function BrokenLine() {
+function init2() {
+	var condition = "day";
+	var url = "/api/v1/reporters/1/number_of_articles?by="+condition;
+	requestData(url, BrokenLine);
+
+}
+
+function BrokenLine(data) {
+	
 	var svgContainer = d3.select("#svg-brokenLine").append("svg:svg").attr(
 			"width", 500).attr("height", 320)
 			.attr("id", "brokenLineGraph");
@@ -52,18 +60,14 @@ function BrokenLine() {
 		4 : 85
 	} ];
 	graphPositionX = [ 30, 100, 170, 240, 310, 380, 450 ];
-
-	sampleData = [ {
-		'4/14' : 2,
-		'4/15' : 0,
-		'4/16' : 3,
-		'4/17' : 1,
-		'4/18' : 3,
-		'4/19' : 0,
-		'4/20' : 4
-	} ];
-	var keys = Object.keys(sampleData[0]);
-
+	
+	sampleData = JSON.parse(data)["data"];
+	
+	var keys = new Array();
+	for(i = 0; i<sampleData.length; i++){
+		keys.push(Object.keys(sampleData[i])[0]);
+	}
+	
 	// dateLabel
 	var labelDate1 = svgContainer.append("text").attr("x", 30).attr(
 			"font-size", "18px").attr("fill", "white").attr("y", 315).text(
@@ -87,28 +91,29 @@ function BrokenLine() {
 			"font-size", "18px").attr("fill", "white").attr("y", 315).text(
 			keys[6]);
 
+	
 	// graph
 	var graphData = [ {
 		"x" : graphPositionX[0],
 		"y" : matching[0][sampleData[0][keys[0]]]
 	}, {
 		"x" : graphPositionX[1],
-		"y" : matching[0][sampleData[0][keys[1]]]
+		"y" : matching[0][sampleData[1][keys[1]]]
 	}, {
 		"x" : graphPositionX[2],
-		"y" : matching[0][sampleData[0][keys[2]]]
+		"y" : matching[0][sampleData[2][keys[2]]]
 	}, {
 		"x" : graphPositionX[3],
-		"y" : matching[0][sampleData[0][keys[3]]]
+		"y" : matching[0][sampleData[3][keys[3]]]
 	}, {
 		"x" : graphPositionX[4],
-		"y" : matching[0][sampleData[0][keys[4]]]
+		"y" : matching[0][sampleData[4][keys[4]]]
 	}, {
 		"x" : graphPositionX[5],
-		"y" : matching[0][sampleData[0][keys[5]]]
+		"y" : matching[0][sampleData[5][keys[5]]]
 	}, {
 		"x" : graphPositionX[6],
-		"y" : matching[0][sampleData[0][keys[6]]]
+		"y" : matching[0][sampleData[6][keys[6]]]
 	} ]
 
 	var lineFunction = d3.svg.line().x(function(d) {

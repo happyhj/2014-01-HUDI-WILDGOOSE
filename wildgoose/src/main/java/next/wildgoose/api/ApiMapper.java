@@ -63,7 +63,7 @@ public class ApiMapper extends HttpServlet {
 					result = dummy.getJsonWithNumberOfArticlesBy(reporterId, condition);
 				}
 				else if ("day".equals(condition)) {
-					result = date.countArticle(reporterId);
+					result = dummy.getJsonWithNumberOfArticleByDay(reporterId);
 				}
 				
 				out.println(result.toString());

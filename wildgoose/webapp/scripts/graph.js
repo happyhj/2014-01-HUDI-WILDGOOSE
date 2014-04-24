@@ -1,19 +1,19 @@
 /**
  * using D3.js
  */
-window.addEventListener("load", initGraph, false);
+window.addEventListener("load", donutGraph, false);
 
 
-function initGraph() {
-	var condition = "section";
-	var url = "/api/v1/reporters/1/number_of_articles?by="+condition;
-	requestData(url, donutGraph);
-
-	var refreshButton = document.getElementsByClassName("refresh-button")[0];
-	refreshButton.addEventListener("click", function() {
-		requestData(url, donutGraph);
-	}, false);
-}
+//function initGraph() {
+//	var condition = "section";
+//	var url = "/api/v1/reporters/1/number_of_articles?by="+condition;
+//	requestData(url, donutGraph);
+//
+//	var refreshButton = document.getElementsByClassName("refresh-button")[0];
+//	refreshButton.addEventListener("click", function() {
+//		requestData(url, donutGraph);
+//	}, false);
+//}
 
 function donutGraph (d) {
 	console.log(d);

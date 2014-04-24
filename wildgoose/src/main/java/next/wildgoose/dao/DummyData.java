@@ -61,6 +61,27 @@ public class DummyData {
 		return result;
 	}
 	
+	public JSONObject getJsonWithNumberOfArticleByDay(int reporterId) {
+		result = new JSONObject();
+				
+		data = new JSONObject().put("04/18", random.nextInt(4));
+		result.append("data", data);
+		data = new JSONObject().put("04/19", random.nextInt(4));
+		result.append("data", data);
+		data = new JSONObject().put("04/20", random.nextInt(4));
+		result.append("data", data);
+		data = new JSONObject().put("04/21", random.nextInt(4));
+		result.append("data", data);
+		data = new JSONObject().put("04/22", random.nextInt(4));
+		result.append("data", data);
+		data = new JSONObject().put("04/23", random.nextInt(4));
+		result.append("data", data);
+		data = new JSONObject().put("04/24", random.nextInt(4));
+		result.append("data", data);
+		
+		return result;
+	}
+	
 	ReporterCard getReporter() {	
 		ReporterCard reporter = new ReporterCard();
 		
