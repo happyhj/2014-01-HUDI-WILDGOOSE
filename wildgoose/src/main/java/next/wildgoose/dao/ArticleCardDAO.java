@@ -50,6 +50,8 @@ public class ArticleCardDAO {
 				articleCard.setDatetime(rs.getTimestamp("datetime").toString());
 				articleCards.add(articleCard);
 			}
+			rs.close();
+			psmt.close();
 		}
 		catch (SQLException sqle) {
 			logger.debug(sqle.getMessage(),sqle);

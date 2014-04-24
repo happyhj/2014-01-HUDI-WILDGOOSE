@@ -31,6 +31,11 @@
 		</div>
 		<div class="search-result">
 			<ul>
+				<c:if test="${ not empty requestScope.searchQuery }">
+					<c:if test="${ empty requestScope.reporterCards }">
+						<span>${ requestScope.searchQuery }에 대한 검색 결과가 없습니다.</span>
+					</c:if>
+				</c:if>
 				<c:forEach var="reporterCard" items="${ requestScope.reporterCards }">				
 					<li class="card reporter-card">
 						<div class="email-container">
