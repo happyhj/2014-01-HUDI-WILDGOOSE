@@ -1,49 +1,33 @@
 /**
  * using D3.js
  */
-window.addEventListener("load", donutGraph, false);
+window.addEventListener("load", initGraph, false);
 
 
-//function initGraph() {
-//	var condition = "section";
-//	var url = "/api/v1/reporters/1/number_of_articles?by="+condition;
-//	requestData(url, donutGraph);
-//
-//	var refreshButton = document.getElementsByClassName("refresh-button")[0];
-//	refreshButton.addEventListener("click", function() {
-//		requestData(url, donutGraph);
-//	}, false);
-//}
+function initGraph() {
+	var url = "/api/v1/reporters/1/number_of_articles?by=";
+	var functionsConditional = {"section":"donutGraph", "day":"BrokenLine"};
+	var conditions =Object.keys(functionsConditional); 
+	
+	for (var condition in functionsConditional) {
+		Ajax.requestData(url+condition, window[functionsConditional[condition]]);
+	}
+	
+	var refreshButton = document.getElementsByClassName("refresh-button")[0];
+	refreshButton.addEventListener("click", function() {
+		Ajax.requestData(url+"section", donutGraph);
+	}, false);
+}
 
 function donutGraph (d) {
-	console.log(d);
-	realData = JSON.parse(d);
-	console.log(realData["data"]);
+	var realData = JSON.parse(d);
+	var data = realData["data"];
 	
-	data = realData["data"];
-	
-	var w = 300, //width
-	h = 300, //height
-	r = 100, //radius
-	color = d3.scale.category20c(); //builtin range of colors
-//	
-//	data = [ {
-//		"label" : "사회",
-//		"value" : 20
-//	}, {
-//		"label" : "경제",
-//		"value" : 50
-//	}, {
-//		"label" : "국제",
-//		"value" : 15
-//	}, {
-//		"label" : "교양",
-//		"value" : 60
-//	}, {
-//		"label" : "사설",
-//		"value" : 30
-//	} ];
-	
+	var w = 300 //width
+	var h = 300 //height
+	var r = 100 //radius
+	var color = d3.scale.category20c(); //builtin range of colors
+
 	var vis = d3.select("#svg-donut").append("svg:svg") //create the SVG element inside the <body>
 	.data([ data ]) //associate our data with the document
 	.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
@@ -80,4 +64,8 @@ function donutGraph (d) {
 		return data[i].label;
 	}); //get the label from our original data array
 }
+
+
+
+
 

@@ -1,12 +1,12 @@
 // basic setting
-window.addEventListener("load", init2, false);
-
-function init2() {
-	var condition = "day";
-	var url = "/api/v1/reporters/1/number_of_articles?by="+condition;
-	requestData(url, BrokenLine);
-
-}
+//window.addEventListener("load", init2, false);
+//
+//function init2() {
+//	var condition = "day";
+//	var url = "/api/v1/reporters/1/number_of_articles?by="+condition;
+//	requestData(url, BrokenLine);
+//
+//}
 
 function BrokenLine(data) {
 	
