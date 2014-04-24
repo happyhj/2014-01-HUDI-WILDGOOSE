@@ -1,7 +1,8 @@
 package next.wildgoose.model;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,10 +29,15 @@ public class DatabaseConnector {
 	
 	public static void connect(String dbURL, String userName, String userPassword) {
 		try {
-			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-			connection = DriverManager.getConnection(dbURL, userName, userPassword);
+			connection = DataSource.getInstance().getConnection();
+//			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+//			connection = DriverManager.getConnection(dbURL, userName, userPassword);
 		} catch (SQLException sqle) {
 			logger.debug(sqle.getMessage(),sqle);	
+		} catch (IOException e) {
+			logger.debug(e.getMessage(),e);	
+		} catch (PropertyVetoException e) {
+			logger.debug(e.getMessage(),e);	
 		}
 	}
 	
