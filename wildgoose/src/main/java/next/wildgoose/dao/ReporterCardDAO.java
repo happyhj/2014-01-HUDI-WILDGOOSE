@@ -47,6 +47,8 @@ public class ReporterCardDAO {
 				reporterCard.setName(rs.getString("name"));
 				reporterCard.setPressName(rs.getString("pressName"));
 			}
+			rs.close();
+			psmt.close();
 		}
 		catch (SQLException sqle) {
 			logger.debug(sqle.getMessage(),sqle);
@@ -113,6 +115,8 @@ public class ReporterCardDAO {
 				reporterCard.setArticleTitle(rs.getString("title"));
 				reporterCards.add(reporterCard);
 			}
+			rs.close();
+			psmt.close();
 		}
 		catch (SQLException sqle) {
 			logger.debug(sqle.getMessage(),sqle);
