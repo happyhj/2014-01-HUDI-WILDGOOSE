@@ -23,6 +23,7 @@
 	margin: 0 auto;
 	width: 960px;
 	top: 50px; /* header height */
+	padding-bottom: 70px;
 }
 
 .footer {
