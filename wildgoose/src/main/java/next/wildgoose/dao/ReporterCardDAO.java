@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import next.wildgoose.model.DatabaseConnector;
+import next.wildgoose.model.DataSource;
 import next.wildgoose.model.ReporterCard;
 
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class ReporterCardDAO {
 		
 		try {
 			// getting database connection to MySQL server
-			conn = DatabaseConnector.getConnection();
+			conn = DataSource.getInstance().getConnection();
 			
 			StringBuffer query = new StringBuffer();
 			query.append("SELECT author.id as id, author.email as email, author.name as name, press.name as pressName ");
@@ -49,15 +49,11 @@ public class ReporterCardDAO {
 			}
 			rs.close();
 			psmt.close();
+			conn.close();
 		}
 		catch (SQLException sqle) {
 			logger.debug(sqle.getMessage(),sqle);
 			reporterCard = null;
-		}
-		finally {
-			// DatabaseUtil 만들필요 있음.
-			// rs.close();
-			DatabaseConnector.close();
 		}
 		
 		
@@ -89,7 +85,7 @@ public class ReporterCardDAO {
 		// Actual logic goes here.
 		try {
 			// getting database connection to MySQL server
-			conn = DatabaseConnector.getConnection();
+			conn = DataSource.getInstance().getConnection();
 			
 			StringBuffer query = new StringBuffer();
 			// 이름으로 검색하기
@@ -117,15 +113,11 @@ public class ReporterCardDAO {
 			}
 			rs.close();
 			psmt.close();
+			conn.close();
 		}
 		catch (SQLException sqle) {
 			logger.debug(sqle.getMessage(),sqle);
 			reporterCards = null;
-		}
-		finally {
-			// DatabaseUtil 만들필요 있음.
-			// rs.close()
-			DatabaseConnector.close();
 		}
 		
 		return reporterCards;

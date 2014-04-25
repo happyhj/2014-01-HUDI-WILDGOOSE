@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import next.wildgoose.model.ArticleCard;
-import next.wildgoose.model.DatabaseConnector;
+import next.wildgoose.model.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class ArticleCardDAO {
 		
 		try {
 			// getting database connection to MySQL server
-			conn = DatabaseConnector.getConnection();
+			conn = DataSource.getInstance().getConnection();
 			
 			StringBuffer query = new StringBuffer();
 			query.append("SELECT article.URL as url, article.title as title, ");
@@ -52,16 +52,13 @@ public class ArticleCardDAO {
 			}
 			rs.close();
 			psmt.close();
+			conn.close();
 		}
 		catch (SQLException sqle) {
 			logger.debug(sqle.getMessage(),sqle);
 			articleCards = null;
 		}
-		finally {
-			// DatabaseUtil 만들필요 있음.
-			// rs.close();
-			DatabaseConnector.close();
-		}
+		
 		return articleCards;
 	}
 }
