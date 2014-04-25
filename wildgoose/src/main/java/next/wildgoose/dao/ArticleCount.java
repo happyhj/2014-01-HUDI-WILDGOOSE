@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ArticleCount {
-	static Logger logger = LoggerFactory.getLogger(ReporterCardDAO.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(ReporterCardDAO.class.getName());
 
 	
 
@@ -32,7 +32,7 @@ public class ArticleCount {
 		// 날짜 구하기
 		for (int i = -6; i < 1; i++) {
 			String date = getDate(new Date(), i);
-			StringBuffer query = new StringBuffer();
+			StringBuilder query = new StringBuilder();
 			query.append("SELECT count(*) as count from article where URL ");
 			query.append("IN (select article_URL from article_author where author_id=? ");
 			query.append(") and datetime like ?;");

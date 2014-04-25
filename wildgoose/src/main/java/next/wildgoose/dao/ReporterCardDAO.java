@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 public class ReporterCardDAO {
 	
-	static Logger logger = LoggerFactory.getLogger(ReporterCardDAO.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(ReporterCardDAO.class.getName());
 	
 
 	public ReporterCard findReporterById (int reporterId) {
@@ -30,7 +30,7 @@ public class ReporterCardDAO {
 			// getting database connection to MySQL server
 			conn = DataSource.getInstance().getConnection();
 			
-			StringBuffer query = new StringBuffer();
+			StringBuilder query = new StringBuilder();
 			query.append("SELECT author.id as id, author.email as email, author.name as name, press.name as pressName ");
 			query.append("from author JOIN press ON author.press_id = press.id WHERE author.id = ?;");
 			
@@ -50,10 +50,8 @@ public class ReporterCardDAO {
 			rs.close();
 			psmt.close();
 			conn.close();
-		}
-		catch (SQLException sqle) {
+		} catch (SQLException sqle) {
 			logger.debug(sqle.getMessage(),sqle);
-			reporterCard = null;
 		}
 		
 		
@@ -84,10 +82,9 @@ public class ReporterCardDAO {
 
 		// Actual logic goes here.
 		try {
-			// getting database connection to MySQL server
 			conn = DataSource.getInstance().getConnection();
 			
-			StringBuffer query = new StringBuffer();
+			StringBuilder query = new StringBuilder();
 			// 이름으로 검색하기
 			query.append("SELECT result.id as id, result.name as name, result.email as email, article.title as title, press.name as press_name ");
 			query.append("FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
@@ -114,8 +111,7 @@ public class ReporterCardDAO {
 			rs.close();
 			psmt.close();
 			conn.close();
-		}
-		catch (SQLException sqle) {
+		} catch (SQLException sqle) {
 			logger.debug(sqle.getMessage(),sqle);
 			reporterCards = null;
 		}

@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 public class DataSource {
 	private static DataSource dataSource;
 	private BasicDataSource bds;
-	private static Logger logger = LoggerFactory.getLogger(ArticleCardDAO.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(ArticleCardDAO.class.getName());
 	
 	// CALLED BY DatabaseContextListener
 	public static void init(String driver, String userName, String userPw, String dbUrl) {

@@ -21,7 +21,7 @@ import next.wildgoose.utility.Wildgoose;
 
 public class ShowReporter extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	static Logger logger = LoggerFactory.getLogger(ShowReporter.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(ShowReporter.class.getName());
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		

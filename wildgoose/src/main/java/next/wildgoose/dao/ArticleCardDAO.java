@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 public class ArticleCardDAO {
 	
-	static Logger logger = LoggerFactory.getLogger(ArticleCardDAO.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(ArticleCardDAO.class.getName());
 	
 	public List<ArticleCard> findArticlesById(int reporterId) {
 		Connection conn = null;
@@ -28,7 +28,7 @@ public class ArticleCardDAO {
 			// getting database connection to MySQL server
 			conn = DataSource.getInstance().getConnection();
 			
-			StringBuffer query = new StringBuffer();
+			StringBuilder query = new StringBuilder();
 			query.append("SELECT article.URL as url, article.title as title, ");
 			query.append("article.section_id as section, article.content as content, article.datetime as datetime ");
 			query.append("FROM article_author JOIN article ON article.URL = article_author.article_URL ");
@@ -53,8 +53,7 @@ public class ArticleCardDAO {
 			rs.close();
 			psmt.close();
 			conn.close();
-		}
-		catch (SQLException sqle) {
+		} catch (SQLException sqle) {
 			logger.debug(sqle.getMessage(),sqle);
 			articleCards = null;
 		}

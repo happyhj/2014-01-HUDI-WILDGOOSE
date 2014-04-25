@@ -8,49 +8,45 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import next.wildgoose.dao.ArticleCount;
 import next.wildgoose.dao.DummyData;
-import next.wildgoose.model.ArticleCard;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ApiMapper extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JSONObject result = null;
 		DummyData dummy = new DummyData();
-		ArticleCount date = new ArticleCount();
+		// ArticleCount date = new ArticleCount();
 		
 		response.setContentType("text/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		String requestURI = request.getRequestURI();
 		
-		// already mapped as "api/v1/"
-		String requestApi = requestURI.substring(8);
-		logger.debug(requestApi);
 
-		String apiCategory = requestApi.substring(0, requestApi.indexOf('/'));
-		logger.debug(apiCategory);
+		String[] splitUri = requestURI.split("/");
+		// ""/"api"/"v1"/"reporters"/<rep_ID>/"number_of_articles?by=something"
+		
+		if (splitUri.length < 4) {
+			logger.error("WRONG REQUEST");
+			return;
+		}
+		String apiCategory = splitUri[3];
 		
 		if ("reporters".equals(apiCategory)) {
-			requestApi = requestApi.substring(10);
-			int reporterId = Integer.parseInt(requestApi.substring(0, requestApi.indexOf('/')));
-			String apiName = requestApi.substring(requestApi.indexOf('/')+1);
+			int reporterId = Integer.parseInt(splitUri[4]);
+			String apiName = splitUri[5];
 			
 			if ("number_of_hook_keywords".equals(apiName)) {
 				result = dummy.getJsonWithNumberOfHookKeywords(reporterId);
-				
-				out.println(result.toString());
-				logger.debug(result.toString());
 			}
-			
-			else if ("number_of_articles".equals(apiName)) {
+			if ("number_of_articles".equals(apiName)) {
 				String by = request.getParameter("by");
-				String condition = null;
-				
+
 				// when by is null
 				if (by == null) {
 					// by = "I am not null any more";
@@ -58,17 +54,14 @@ public class ApiMapper extends HttpServlet {
 					by = "section";
 				}
 				
-				condition = new String (by.getBytes("8859_1"), "UTF-8");
-				if ("section".equals(condition)) {
-					result = dummy.getJsonWithNumberOfArticlesBy(reporterId, condition);
-				}
-				else if ("day".equals(condition)) {
+				if ("section".equals(by)) {
+					result = dummy.getJsonWithNumberOfArticlesBy(reporterId, by);
+				} else if ("day".equals(by)) {
 					result = dummy.getJsonWithNumberOfArticleByDay(reporterId);
 				}
-				
-				out.println(result.toString());
-				logger.debug(result.toString());
 			}
 		}
+		out.println(result.toString());
+		logger.debug(result.toString());
 	}
 }
