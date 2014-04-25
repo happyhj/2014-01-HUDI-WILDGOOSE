@@ -1,4 +1,4 @@
-package next.wildgoose.dao;
+package next.wildgoose.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +10,14 @@ import org.slf4j.LoggerFactory;
 
 public class DummyData {
 	
-	private static final Logger logger = LoggerFactory.getLogger(DummyData.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(DummyData.class.getName());
 	JSONObject result = null;
 	private JSONObject data = null;
 	private Random random = new Random();
 	
 	public JSONObject getJsonWithNumberOfArticlesBy(int reporterId, String condition) {
 		
-		logger.debug(this.getClass().getName() + condition);
+		LOGGER.debug(this.getClass().getName() + condition);
 		if ("section".equals(condition)) {
 			List<String> section = new ArrayList<String>();
 			section.add("사회");

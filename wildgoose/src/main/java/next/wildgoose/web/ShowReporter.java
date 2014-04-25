@@ -1,6 +1,7 @@
 package next.wildgoose.web;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -21,7 +22,7 @@ import next.wildgoose.utility.Wildgoose;
 
 public class ShowReporter extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LoggerFactory.getLogger(ShowReporter.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ShowReporter.class.getName());
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -52,7 +53,11 @@ public class ShowReporter extends HttpServlet {
 		
 		// DB에서 id로 검색하여 reporterCardData 가져오기
 		reporterCardDao = new ReporterCardDAO();
-		reporterCardData = reporterCardDao.findReporterById(reporterId);
+		try {
+			reporterCardData = reporterCardDao.findReporterById(reporterId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		// DB에서 id으로 검색하여 reporter의 최신 기사 리스트 가져오기
 		articleCardDao = new ArticleCardDAO();

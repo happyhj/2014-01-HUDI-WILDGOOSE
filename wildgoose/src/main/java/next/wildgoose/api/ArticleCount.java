@@ -1,4 +1,4 @@
-package next.wildgoose.dao;
+package next.wildgoose.api;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ArticleCount {
-	private static final Logger logger = LoggerFactory.getLogger(ReporterCardDAO.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCount.class.getName());
 
 	
 
@@ -56,7 +56,7 @@ public class ArticleCount {
 
 			} catch (SQLException sqle) {
 
-				logger.debug(sqle.getMessage(), sqle);
+				LOGGER.debug(sqle.getMessage(), sqle);
 			}
 		}
 

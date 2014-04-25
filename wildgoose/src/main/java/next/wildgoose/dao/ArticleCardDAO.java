@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 public class ArticleCardDAO {
 	
-	private static final Logger logger = LoggerFactory.getLogger(ArticleCardDAO.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCardDAO.class.getName());
 	
 	public List<ArticleCard> findArticlesById(int reporterId) {
 		Connection conn = null;
@@ -54,7 +54,7 @@ public class ArticleCardDAO {
 			psmt.close();
 			conn.close();
 		} catch (SQLException sqle) {
-			logger.debug(sqle.getMessage(),sqle);
+			LOGGER.debug(sqle.getMessage(),sqle);
 			articleCards = null;
 		}
 		

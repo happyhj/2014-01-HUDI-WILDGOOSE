@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory;
 
 public class ReporterCardDAO {
 	
-	private static final Logger logger = LoggerFactory.getLogger(ReporterCardDAO.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReporterCardDAO.class.getName());
 	
 
-	public ReporterCard findReporterById (int reporterId) {
+	public ReporterCard findReporterById (int reporterId) throws SQLException {
 		
 		Connection conn = null;
 		PreparedStatement psmt = null;
@@ -47,11 +47,12 @@ public class ReporterCardDAO {
 				reporterCard.setName(rs.getString("name"));
 				reporterCard.setPressName(rs.getString("pressName"));
 			}
-			rs.close();
-			psmt.close();
-			conn.close();
 		} catch (SQLException sqle) {
-			logger.debug(sqle.getMessage(),sqle);
+			LOGGER.debug(sqle.getMessage(),sqle);
+		} finally {
+			if (rs != null) rs.close();
+			if (psmt != null) psmt.close();
+			if (conn != null) conn.close();
 		}
 		
 		
@@ -59,7 +60,7 @@ public class ReporterCardDAO {
 	}
 	
 	
-	public List<ReporterCard> findReportersByName (String name) {
+	public List<ReporterCard> findReportersByName (String name) throws SQLException {
 		
 		Connection conn = null;
 		PreparedStatement psmt = null;
@@ -108,12 +109,13 @@ public class ReporterCardDAO {
 				reporterCard.setArticleTitle(rs.getString("title"));
 				reporterCards.add(reporterCard);
 			}
-			rs.close();
-			psmt.close();
-			conn.close();
 		} catch (SQLException sqle) {
-			logger.debug(sqle.getMessage(),sqle);
+			LOGGER.debug(sqle.getMessage(),sqle);
 			reporterCards = null;
+		} finally {
+			if (rs != null) rs.close();
+			if (psmt != null) psmt.close();
+			if (conn != null) conn.close();
 		}
 		
 		return reporterCards;

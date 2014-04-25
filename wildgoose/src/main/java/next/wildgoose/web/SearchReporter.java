@@ -1,6 +1,7 @@
 package next.wildgoose.web;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -46,7 +47,11 @@ public class SearchReporter extends HttpServlet {
 		
 		// DB에서 이름으로 검색하여 reporterCard 리스트 가져오기
 		reporterCardDao = new ReporterCardDAO();
-		reporterCards = reporterCardDao.findReportersByName(searchQuery.toString());
+		try {
+			reporterCards = reporterCardDao.findReportersByName(searchQuery.toString());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		request.setAttribute("reporterCards", reporterCards);
 		request.setAttribute("searchQuery", searchQuery);

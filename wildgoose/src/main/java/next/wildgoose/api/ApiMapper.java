@@ -8,15 +8,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import next.wildgoose.dao.DummyData;
-
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ApiMapper extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ApiMapper.class.getName());
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		JSONObject result = null;
@@ -32,7 +30,7 @@ public class ApiMapper extends HttpServlet {
 		// ""/"api"/"v1"/"reporters"/<rep_ID>/"number_of_articles?by=something"
 		
 		if (splitUri.length < 4) {
-			logger.error("WRONG REQUEST");
+			LOGGER.error("WRONG REQUEST");
 			return;
 		}
 		String apiCategory = splitUri[3];
@@ -62,6 +60,6 @@ public class ApiMapper extends HttpServlet {
 			}
 		}
 		out.println(result.toString());
-		logger.debug(result.toString());
+		LOGGER.debug(result.toString());
 	}
 }
