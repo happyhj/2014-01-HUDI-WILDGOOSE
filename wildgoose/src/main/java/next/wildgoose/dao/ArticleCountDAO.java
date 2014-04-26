@@ -1,4 +1,4 @@
-package next.wildgoose.api;
+package next.wildgoose.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,8 +15,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ArticleCount {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCount.class.getName());
+public class ArticleCountDAO {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCountDAO.class.getName());
 
 	
 

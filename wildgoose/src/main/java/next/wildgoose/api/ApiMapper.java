@@ -17,49 +17,37 @@ public class ApiMapper extends HttpServlet {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApiMapper.class.getName());
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String version = this.getServletConfig().getInitParameter("version");
 		JSONObject result = null;
-		DummyData dummy = new DummyData();
 		// ArticleCount date = new ArticleCount();
 		
 		response.setContentType("text/json; charset=UTF-8");
 		PrintWriter out = response.getWriter();
+		
 		String requestURI = request.getRequestURI();
+		LOGGER.debug(requestURI);
 		
-
-		String[] splitUri = requestURI.split("/");
 		// ""/"api"/"v1"/"reporters"/<rep_ID>/"number_of_articles?by=something"
+		RestfulURI restful = new RestfulURI (requestURI, version);
+		ReporterData reporter = new ReporterData();
 		
-		if (splitUri.length < 4) {
-			LOGGER.error("WRONG REQUEST");
-			return;
-		}
-		String apiCategory = splitUri[3];
-		
-		if ("reporters".equals(apiCategory)) {
-			int reporterId = Integer.parseInt(splitUri[4]);
-			String apiName = splitUri[5];
-			
-			if ("number_of_hook_keywords".equals(apiName)) {
-				result = dummy.getJsonWithNumberOfHookKeywords(reporterId);
-			}
-			if ("number_of_articles".equals(apiName)) {
-				String by = request.getParameter("by");
-
-				// when by is null
-				if (by == null) {
-					// by = "I am not null any more";
-					// default값 수정 필요
-					by = "section";
-				}
+		try {
+			if (restful.check(0, "reporters")) {
 				
-				if ("section".equals(by)) {
-					result = dummy.getJsonWithNumberOfArticlesBy(reporterId, by);
-				} else if ("day".equals(by)) {
-					result = dummy.getJsonWithNumberOfArticleByDay(reporterId);
-				}
+				int reporterId = Integer.parseInt(restful.get(1));
+				String apiName = restful.get(2);
+				String by = request.getParameter("by");
+				
+				result = reporter.getJSON(reporterId, apiName, by);
 			}
+			
+			LOGGER.debug(result.toString());
+			out.println(result.toString());
 		}
-		out.println(result.toString());
-		LOGGER.debug(result.toString());
+		catch (Exception e) {
+			LOGGER.debug(e.getMessage(), e);
+			out.println("error");
+		}
 	}
 }
