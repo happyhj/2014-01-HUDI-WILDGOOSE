@@ -42,7 +42,7 @@ function BrokenLine(data) {
 		4 : 85
 	} ];
 	
-	graphPositionX = [ 30, 100, 170, 240, 310, 380, 450 ];
+	graphPositionX = [ 50, 120, 190, 260, 330, 400, 470 ];
 	
 	sampleData = JSON.parse(data)["data"];
 	
@@ -80,6 +80,8 @@ function BrokenLine(data) {
 		"x" : graphPositionX[6],
 		"y" : matching[0][sampleData[6][keys[6]]]
 	} ]
+	
+	
 
 	var lineFunction = d3.svg.line().x(function(d) {return d.x;})
 			.y(function(d) {return d.y;}).interpolate("linear");
