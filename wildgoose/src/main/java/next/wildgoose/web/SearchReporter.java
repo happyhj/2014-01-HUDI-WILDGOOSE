@@ -34,8 +34,7 @@ public class SearchReporter extends HttpServlet {
 			return;	
 		}
 		
-		// encoding 'utf-8'
-		searchQuery = new String(searchQuery.getBytes("8859_1"), "UTF-8");
+		// query의 앞뒤 공백제거
 		searchQuery = searchQuery.trim();
 		
 		// 유효하지 않은 'q'
