@@ -36,7 +36,7 @@
 					<div class="refresh-button">refresh</div>
 					<svg id="svg-donut"></svg>
 				</div>
-				<div class="card article-brkline-card">
+				<div class="article-brkline-card">
 					<svg id="svg-brokenLine" viewport="0 0 1000 740"></svg>
 				</div>
 			</div>
