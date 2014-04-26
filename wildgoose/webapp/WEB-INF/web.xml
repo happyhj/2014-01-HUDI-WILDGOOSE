@@ -23,69 +23,79 @@
 	provided above. However, if you add GPL Version 2 code and therefore, elected 
 	the GPL Version 2 license, then the option applies only if the new code is 
 	made subject to such option by the copyright holder. -->
-<!--web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"-->
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
-  <display-name>Archetype Created Web Application</display-name>
-  <welcome-file-list>
-    <welcome-file>SearchReporter</welcome-file>
-  </welcome-file-list>
-  
-  <!-- Servlets -->
-  <servlet>
-    <!-- description></description -->
-    <display-name>SearchReporter</display-name>
-    <servlet-name>SearchReporter</servlet-name>
-    <servlet-class>next.wildgoose.web.SearchReporter</servlet-class>
-  </servlet>
-  <servlet>
-    <display-name>ShowReporter</display-name>
-    <servlet-name>ShowReporter</servlet-name>
-    <servlet-class>next.wildgoose.web.ShowReporter</servlet-class>
-  </servlet>
-  <servlet>
-    <display-name>ApiMapper</display-name>
-    <servlet-name>ApiMapper</servlet-name>
-    <servlet-class>next.wildgoose.api.ApiMapper</servlet-class>
-  </servlet>
-  
-  <!-- Servlet Mapping -->
-  <servlet-mapping>
-    <servlet-name>SearchReporter</servlet-name>
-    <url-pattern>/SearchReporter</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>ShowReporter</servlet-name>
-    <url-pattern>/reporters/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>ApiMapper</servlet-name>
-  	<url-pattern>/api/v1/*</url-pattern>
-  </servlet-mapping>
-  
-  <!-- Context Parameters -->
-  <context-param>
-    <param-name>driverClassName</param-name>
-    <param-value>com.mysql.jdbc.Driver</param-value>
-  </context-param>
-  <context-param>
-    <param-name>dbUrl</param-name>
-    <param-value>jdbc:mysql://10.73.45.134:3306/wildgoose_dev</param-value>
-  </context-param>
-  <context-param>
-    <param-name>userName</param-name>
-    <param-value>viewer</param-value>
-  </context-param>
-  <context-param>
-    <param-name>userPassword</param-name>
-    <param-value></param-value>
-  </context-param>
-  
-  <!-- Listeners -->
-  <listener>
-    <listener-class>next.wildgoose.listener.DatabaseContextListener</listener-class>
-  </listener>
+<!--web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" 
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" -->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>Archetype Created Web Application</display-name>
+	<welcome-file-list>
+		<welcome-file>SearchReporter</welcome-file>
+	</welcome-file-list>
+
+	<!-- Servlets -->
+	<servlet>
+		<!-- description></description -->
+		<display-name>SearchReporter</display-name>
+		<servlet-name>SearchReporter</servlet-name>
+		<servlet-class>next.wildgoose.web.SearchReporter</servlet-class>
+	</servlet>
+	<servlet>
+		<display-name>ShowReporter</display-name>
+		<servlet-name>ShowReporter</servlet-name>
+		<servlet-class>next.wildgoose.web.ShowReporter</servlet-class>
+	</servlet>
+	<servlet>
+		<display-name>ApiMapper</display-name>
+		<servlet-name>ApiMapper</servlet-name>
+		<servlet-class>next.wildgoose.api.ApiMapper</servlet-class>
+		<init-param>
+			<param-name>version</param-name>
+			<param-value>api/v1</param-value>
+		</init-param>
+	</servlet>
+
+	<!-- Servlet Mapping -->
+	<servlet-mapping>
+		<servlet-name>SearchReporter</servlet-name>
+		<url-pattern>/SearchReporter</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ShowReporter</servlet-name>
+		<url-pattern>/reporters/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ApiMapper</servlet-name>
+		<url-pattern>/api/v1/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Context Parameters -->
+	<context-param>
+		<param-name>driverClassName</param-name>
+		<param-value>com.mysql.jdbc.Driver</param-value>
+	</context-param>
+	<context-param>
+		<param-name>dbUrl</param-name>
+		<param-value>jdbc:mysql://10.73.45.134:3306/wildgoose_dev</param-value>
+	</context-param>
+	<context-param>
+		<param-name>userName</param-name>
+		<param-value>viewer</param-value>
+	</context-param>
+	<context-param>
+		<param-name>userPassword</param-name>
+		<param-value></param-value>
+	</context-param>
+
+	<!-- Listeners -->
+	<listener>
+		<listener-class>next.wildgoose.listener.DatabaseContextListener</listener-class>
+	</listener>
+	
 	<!-- Filter -->
 	<filter>
+		<display-name>EncodingFilter</display-name>
 		<filter-name>EncodingFilter</filter-name>
 		<filter-class>next.wildgoose.filter.EncodingFilter</filter-class>
 		<init-param>
@@ -93,7 +103,8 @@
 			<param-value>utf-8</param-value>
 		</init-param>
 	</filter>
-
+	
+	<!-- Filter Mapping -->
 	<filter-mapping>
 		<filter-name>EncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>

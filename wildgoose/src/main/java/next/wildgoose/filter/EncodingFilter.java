@@ -18,13 +18,12 @@ public class EncodingFilter implements Filter {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EncodingFilter.class.getName());
 	
-	protected String encoding = null;
+	protected String encodingType = null;
 	protected FilterConfig filterConfig = null;
-	protected boolean ignore = true;
 	
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
-		this.encoding = filterConfig.getInitParameter("encoding");
+		this.encodingType = filterConfig.getInitParameter("encoding");
 	}
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -34,16 +33,17 @@ public class EncodingFilter implements Filter {
 		
 		// post
 		if (request.getCharacterEncoding() == null) {
-	        request.setCharacterEncoding(encoding);
+	        request.setCharacterEncoding(encodingType);
 	    }
 		
-		EncodingRequestWrapper wrappedRequest = new EncodingRequestWrapper(request, encoding);
+		// get
+		EncodingRequestWrapper wrappedRequest = new EncodingRequestWrapper(request, encodingType);
 		
 		chain.doFilter(wrappedRequest, response);
 	}
 	
 	public void destroy() {
-		this.encoding = null;
+		this.encodingType = null;
 		this.filterConfig = null;
 	}
 }
