@@ -30,45 +30,42 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
 	<display-name>Archetype Created Web Application</display-name>
-	<welcome-file-list>
-		<welcome-file>SearchReporter</welcome-file>
-	</welcome-file-list>
 
 	<!-- Servlets -->
 	<servlet>
-		<!-- description></description -->
-		<display-name>SearchReporter</display-name>
-		<servlet-name>SearchReporter</servlet-name>
-		<servlet-class>next.wildgoose.web.SearchReporter</servlet-class>
-	</servlet>
-	<servlet>
-		<display-name>ShowReporter</display-name>
-		<servlet-name>ShowReporter</servlet-name>
-		<servlet-class>next.wildgoose.web.ShowReporter</servlet-class>
+		<display-name>FrontController</display-name>
+		<servlet-name>FrontController</servlet-name>
+		<servlet-class>next.wildgoose.web.FrontController</servlet-class>
 	</servlet>
 	<servlet>
 		<display-name>ApiMapper</display-name>
 		<servlet-name>ApiMapper</servlet-name>
 		<servlet-class>next.wildgoose.api.ApiMapper</servlet-class>
-		<init-param>
-			<param-name>version</param-name>
-			<param-value>api/v1</param-value>
-		</init-param>
 	</servlet>
+	
 
 	<!-- Servlet Mapping -->
 	<servlet-mapping>
-		<servlet-name>SearchReporter</servlet-name>
-		<url-pattern>/SearchReporter</url-pattern>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.css</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>ShowReporter</servlet-name>
-		<url-pattern>/reporters/*</url-pattern>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.js</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.png</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FrontController</servlet-name>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>ApiMapper</servlet-name>
 		<url-pattern>/api/v1/*</url-pattern>
 	</servlet-mapping>
+	
 
 	<!-- Context Parameters -->
 	<context-param>

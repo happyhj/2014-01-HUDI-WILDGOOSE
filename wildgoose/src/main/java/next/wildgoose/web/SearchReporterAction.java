@@ -1,12 +1,8 @@
 package next.wildgoose.web;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,13 +10,16 @@ import next.wildgoose.dao.ReporterCardDAO;
 import next.wildgoose.model.ReporterCard;
 import next.wildgoose.utility.Wildgoose;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class SearchReporter extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		RequestDispatcher reqDispatcher = null;
+public class SearchReporterAction implements Action {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(SearchReporterAction.class.getName());
+	
+	@Override
+	public ActionForward execute(HttpServletRequest request, HttpServletResponse response, RestfulURI restful) throws Exception {
+		ActionForward forward = new ActionForward();
 		
 		String searchQuery = null;
 		List<ReporterCard> reporterCards = null;
@@ -29,9 +28,8 @@ public class SearchReporter extends HttpServlet {
 		// 첫 요청시, 'q'가 null인 경우
 		searchQuery = request.getParameter("q");
 		if (searchQuery == null) {
-			reqDispatcher = request.getRequestDispatcher(Wildgoose.SUCCESS_PAGE);
-			reqDispatcher.forward(request, response);
-			return;	
+			forward.setPath(Wildgoose.PAGE_SEARCH_REPORTER);
+			return forward;	
 		}
 		
 		// query의 앞뒤 공백제거
@@ -39,9 +37,8 @@ public class SearchReporter extends HttpServlet {
 		
 		// 유효하지 않은 'q'
 		if (searchQuery.equals("")) {
-			reqDispatcher = request.getRequestDispatcher(Wildgoose.ERROR_PAGE);
-			reqDispatcher.forward(request, response);
-			return;
+			forward.setPath(Wildgoose.PAGE_ERROR);
+			return forward;	
 		}
 		
 		// DB에서 이름으로 검색하여 reporterCard 리스트 가져오기
@@ -55,7 +52,9 @@ public class SearchReporter extends HttpServlet {
 		request.setAttribute("reporterCards", reporterCards);
 		request.setAttribute("searchQuery", searchQuery);
 		
-		reqDispatcher = request.getRequestDispatcher(Wildgoose.SUCCESS_PAGE);
-		reqDispatcher.forward(request, response);
+		forward.setPath(Wildgoose.PAGE_SEARCH_REPORTER);
+		return forward;	
+		
 	}
+
 }
