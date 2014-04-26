@@ -1,4 +1,5 @@
-var Ajax = {
+var Ajax = (function(){
+	return {
 		createRequest : function () {
 			try {
 				var request = new XMLHttpRequest();
@@ -15,9 +16,14 @@ var Ajax = {
 			}
 			return request;
 		},
-		
+		responseData : function(e, request, func) {
+			if (request.readyState == 4) {
+				if (request.status == 200) {
+					func(request.responseText);
+				}
+			}
+		},
 		requestData : function (url, func) {
-			
 			var request = this.createRequest();
 			if (request == null) {
 				console.log("Unable to create request");
@@ -28,16 +34,6 @@ var Ajax = {
 				Ajax.responseData(e, request, func);
 			}, false); 
 			request.send(null);
-		},
-
-		responseData : function(e, request, func) {
-			if (request.readyState == 4) {
-				if (request.status == 200) {
-					func(request.responseText);
-				}
-			}
 		}
-}
-
-
-
+	}
+}());
