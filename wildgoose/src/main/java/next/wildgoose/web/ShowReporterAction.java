@@ -28,11 +28,12 @@ public class ShowReporterAction implements Action {
 		ReporterCardDAO reporterCardDao = null;
 		ArticleCardDAO articleCardDao = null;
 		
+		LOGGER.debug(restful.toString());
 		
 		// id가 입력되지 않은 경우 처리
 		if (restful.size() <= 1 || restful.get(1).equals("")) {
 			forward.setRedirect(true);
-			forward.setPath(Wildgoose.PAGE_ERROR);
+			forward.setPath(Wildgoose.RESOURCE_ERROR);
 			return forward;
 		}
 		
@@ -47,6 +48,7 @@ public class ShowReporterAction implements Action {
 		articleCardDao = new ArticleCardDAO();
 		articleCards = articleCardDao.findArticlesById(reporterId);
 		
+		request.setAttribute("reporter_id", reporterId);
 		request.setAttribute("reporter", reporterCardData);		
 		request.setAttribute("articles", articleCards);
 		

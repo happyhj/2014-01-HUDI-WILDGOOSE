@@ -5,6 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
@@ -64,6 +68,14 @@ public class Utility {
 				LOGGER.debug(sqle.getMessage(),sqle);
 			}
 		}
+	}
+
+	public static String getDate(Date date, int addDate) {
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd");
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DATE, addDate);
+		return dateFormat.format(cal.getTime());
 	}
 
 }

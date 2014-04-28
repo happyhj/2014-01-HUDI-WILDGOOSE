@@ -27,6 +27,7 @@
 				<h2 class="reporter-name">${ requestScope.reporter.name }</h2>
 				<h3 class="email">${ requestScope.reporter.email }</h3>
 				<h4 class="press-name">${ requestScope.reporter.pressName }</h4>
+				<div class="reporter-id hidden">${ requestScope.reporter_id }</div>
 			</div>
 			
 			<!-- 통계 정보 -->

@@ -9,5 +9,6 @@ public final class Wildgoose {
 	
 	public static final String RESOURCE_INDEX = "";
 	public static final String RESOURCE_REPORTERS = "reporters";
+	public static final String RESOURCE_ERROR = "error";
 	
 }
