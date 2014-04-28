@@ -99,6 +99,11 @@
 
 .card-section-headline > .headline {
 	font-weight: 400;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	overflow:hidden;
+	-webkit-box-orient:vertical;
+	-webkit-line-clamp:1;
 }
 
 /* Press Color */
