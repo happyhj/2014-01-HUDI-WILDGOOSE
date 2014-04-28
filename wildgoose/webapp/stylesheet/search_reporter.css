@@ -1,0 +1,132 @@
+@CHARSET "UTF-8";
+
+/* Base rules */
+html, 
+body,
+div,
+h1, h2, h3, h4, h5, h6, 
+p {
+	margin: 0;
+	padding: 0;	
+	font-family: Apple SD Gothic Neo;
+}
+
+/** Stop Safari Mobile from giving input buttons rounded corners **/
+/** Text wont center in a button **/
+input, textarea {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  padding: 0px;
+}
+
+ul,
+h1, h2, h3, h4, h5 ,h6 {
+	-webkit-margin-before: 0;
+	-webkit-margin-after: 0;
+	-webkit-padding-start: 0;
+	-moz-padding-start: 0;
+}
+
+/* Layout rules */
+html, 
+body {
+	height: 100%;
+}
+
+.wrap {
+	position: relative;
+	width: 100%;
+	min-height: 100%;	
+}
+
+.header {
+	width: 100%;
+	height: 50px;
+}
+
+.container {
+	width: 960px;
+	margin: 0 auto;	
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 50px;
+}
+
+.search-result {
+	padding-bottom: 70px;
+}
+
+/* Module rules */
+.logo {
+	margin-top: 40px;
+	text-align: center;
+}
+
+.logo-image {
+	height: 210px;
+	opacity: .4;
+}
+
+
+/* Theme rules */
+.wrap {
+	background-color: rgba(0,0,0,.1);
+}
+
+.header {
+	-webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,.15);
+	box-shadow: 0 2px 4px 0 rgba(0,0,0,.15);
+	background: #f5f5f5;
+}
+
+.footer {
+	background: #f2f2f2;
+	border-top: 1px solid #CFCFCF;
+}
+
+
+/* 뷰포트 별 레이아웃 요소 분기 */
+
+/** ipad **/
+@media only screen 
+/* and (min-width : 768px) */
+and (min-width : 650px)
+and (max-width : 1024px)  {
+	.container {
+		width: 640px;
+	}
+}
+
+
+/** pablet **/
+@media only screen 
+/* and (min-width : 511px) */
+/* and (max-width : 767px)  { */
+and (max-width : 650px)  
+and (min-width : 490px) {
+	.container {
+		width: 475px;
+	}
+}
+
+/** iphone **/
+@media only screen 
+and (max-width : 490px)  {
+	.header {
+		display: none;
+	}
+	.container {
+		width:95%;
+	}
+	.logo {
+		margin-top: 0px;
+	}
+	.logo-image {
+		height: 120px;
+		margin: 15px;
+	}
+}
