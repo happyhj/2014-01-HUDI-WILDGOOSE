@@ -10,9 +10,8 @@
 
 function BrokenLine(data) {
 	
-	var svgContainer = d3.select("#svg-brokenLine").append("svg:svg")
-	.attr("width", 500).attr("height", 320)
-	.attr("id", "brokenLineGraph");
+	var svgContainer = d3.select(".article-brkline-card").append("svg")
+	.style("width", "100%").attr("id", "brokenLineGraph").attr("viewBox", "0 0 500 377");
 	
 	var backgroundColor = svgContainer.append("rect").attr("width", "100%").attr("height", "100%").attr("fill", "#26A88E");
 	
@@ -54,7 +53,7 @@ function BrokenLine(data) {
 	// date label
 	for(labelIndex = 0; labelIndex < keys.length; labelIndex++){
 		svgContainer.append("text").attr("font-size", "18").attr("fill", "white").attr("y", 315)
-		.attr("x", 30 + (70 * labelIndex)).text(keys[labelIndex]);
+		.attr("x", 20 + (70 * labelIndex)).text(keys[labelIndex]);
 	}
 
 	// graph

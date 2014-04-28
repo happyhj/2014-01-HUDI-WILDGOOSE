@@ -5,9 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link type="text/css" rel="stylesheet" href="/stylesheet/reset.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/main.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/reporter.css" />
+<link type="text/css" rel="stylesheet" href="./stylesheet/card.css" />
 
 <script type="text/javascript" src="/webjars/d3js/3.4.4/d3.min.js"></script>
 
@@ -36,8 +34,7 @@
 					<div class="refresh-button">refresh</div>
 					<svg id="svg-donut"></svg>
 				</div>
-				<div class="article-brkline-card">
-					<svg id="svg-brokenLine" viewport="0 0 1000 740"></svg>
+				<div class="card article-brkline-card">
 				</div>
 			</div>
 			
