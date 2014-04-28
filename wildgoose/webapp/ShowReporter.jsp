@@ -54,7 +54,7 @@
 				<c:forEach var="article" items="${ requestScope.articles }">
 					<li class="article">
 						<div class="article-title">
-							<h2 class="title"><a href="${ article.url } target="_blank">
+							<h2 class="title"><a href="${ article.url }" target="_blank">
 							<span style="display:none">[${ article.sectionId }]</span>${ article.title }</a></h2>
 						</div>
 						<div class="article-datetime">
