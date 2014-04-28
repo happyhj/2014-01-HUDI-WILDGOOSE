@@ -31,11 +31,13 @@ public class ApiMapper extends HttpServlet {
 		
 		// ""/"api"/"v1"/"reporters"/<rep_ID>/"number_of_articles?by=something"
 		RestfulURI restful = new RestfulURI (requestURI);
+		LOGGER.debug(restful.toString());
+		
 		ReporterData reporter = new ReporterData();
 		
 		try {
 			if (restful.check(2, Wildgoose.RESOURCE_REPORTERS)) {
-				
+				LOGGER.debug(restful.get(3));
 				int reporterId = Integer.parseInt(restful.get(3));
 				String apiName = restful.get(4);
 				String by = request.getParameter("by");

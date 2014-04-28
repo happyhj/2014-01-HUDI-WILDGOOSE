@@ -5,7 +5,8 @@ window.addEventListener("load", initGraph, false);
 
 
 function initGraph() {
-	var url = "/api/v1/reporters/1/number_of_articles?by=";
+	var reporterId = document.querySelector(".reporter-profile > .reporter-id");
+	var url = "/api/v1/reporters/" + reporterId.innerText + "/number_of_articles?by=";
 	var functionsConditional = {"section":"donutGraph", "day":"BrokenLine"};
 	var conditions =Object.keys(functionsConditional); 
 	

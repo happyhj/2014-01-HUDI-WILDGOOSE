@@ -1,6 +1,5 @@
 package next.wildgoose.web;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +38,7 @@ public class SearchReporterAction implements Action {
 		// 유효하지 않은 'q'
 		if (searchQuery.equals("")) {
 			forward.setRedirect(true);
-			forward.setPath(Wildgoose.PAGE_ERROR);
+			forward.setPath(Wildgoose.RESOURCE_ERROR);
 			return forward;	
 		}
 		
