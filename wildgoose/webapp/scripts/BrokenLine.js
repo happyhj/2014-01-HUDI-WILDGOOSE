@@ -11,8 +11,8 @@
 function BrokenLine(data) {
 	
 	var svgContainer = d3.select("#brokenline-graph > .graph").append("svg")
-	.style("width", "100%").style("height", 350).attr("id", "brokenLineGraph")
-	.attr("viewBox", "0 0 520 377");
+	.style("width", "100%").style("height", 300).attr("id", "brokenLineGraph")
+	.attr("viewBox", "0 0 520 360");
 	
 	var backgroundColor = svgContainer.append("rect").attr("width", "100%").attr("height", "100%").attr("fill", "#26A88E");
 	

@@ -20,7 +20,7 @@ public class ArticleCountDAO {
 
 	
 
-	public JSONObject countArticle(int reporterId) {
+	public JSONObject countArticle(int reporterId) throws SQLException {
 		JSONObject result = new JSONObject();
 		PreparedStatement psmt = null;
 		Connection conn = null;
@@ -57,6 +57,10 @@ public class ArticleCountDAO {
 			} catch (SQLException sqle) {
 
 				LOGGER.debug(sqle.getMessage(), sqle);
+			} finally {
+				if (rs != null) rs.close();
+				if (psmt != null) psmt.close();
+				if (conn != null) conn.close();
 			}
 		}
 
@@ -65,7 +69,7 @@ public class ArticleCountDAO {
 	}
 
 	public static String getDate(Date date, int addDate) {
-		DateFormat dateFormat = new SimpleDateFormat("MM-dd");
+		DateFormat dateFormat = new SimpleDateFormat("MM/dd");
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.add(Calendar.DATE, addDate);
