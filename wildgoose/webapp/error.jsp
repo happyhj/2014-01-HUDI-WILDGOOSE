@@ -4,29 +4,45 @@
 <!DOCTYPE html>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-zoom=1, user-scalable=no">
-<link type="text/css" rel="stylesheet" href="/stylesheet/reset.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/main.css" />
-<title>Error Page</title>
+<link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/search_reporter.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/search.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
+<title>Wildgoose</title>
 
 <div class="wrap">
 	<header class="header"></header>
 	<div class="container">
-		<div class="logo-container">
-			<a href="/SearchReporter"><img src="image/logo.png" alt="wildgoose logo" class="logo-image"/></a>
+		<div class="logo">
+			<a href="/"><img src="image/logo.png" alt="wildgoose logo" class="logo-image"/></a>
 		</div>
-		<div class="search-container">
-			<form action="./SearchReporter" method="get" >
-				<div class="search-entry column">
-					<input type="search" id="query-entry" class="text-entry query-entry" name="q" placeholder="기자검색" value="${ requestScope.searchQuery }" />
-				</div>
-				<div class="search-button column">
+		<div class="search search-column">
+			<form action="./" method="get" >
+				<li class="search-query-entry">
+					<input type="search" id="query-entry" name="q" placeholder="기자,URL검색" value="" />
+				</li>
+				<li class="search-button">
 					<input type="submit" id="search-action" value ="Search"/>
-				</div>
+				</li>
 			</form>
 		</div>
 		<div class="search-result">
-			error page
+			ERROR, 예상치 못한 문제가 발생했습니다.
 		</div>
 	</div>
 	<footer class="footer"></footer>
 </div>
+<script>
+
+var inputEl = document.getElementById("query-entry");
+//var linkEl = document.getElementById("search-action");
+inputEl.focus();
+/*
+inputEl.addEventListener("keyup",function(e) {	
+	if(document.activeElement === this && e.keyCode === 13) {
+		linkEl.click();
+	}
+},false);
+*/
+</script>

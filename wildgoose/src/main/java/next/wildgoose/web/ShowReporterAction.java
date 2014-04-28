@@ -31,6 +31,7 @@ public class ShowReporterAction implements Action {
 		
 		// id가 입력되지 않은 경우 처리
 		if (restful.size() <= 1 || restful.get(1).equals("")) {
+			forward.setRedirect(true);
 			forward.setPath(Wildgoose.PAGE_ERROR);
 			return forward;
 		}
@@ -50,7 +51,6 @@ public class ShowReporterAction implements Action {
 		request.setAttribute("articles", articleCards);
 		
 		forward.setPath(Wildgoose.PAGE_SHOW_REPORTER);
-		LOGGER.debug("in hrer");
 		return forward;
 		
 	}
