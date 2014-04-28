@@ -19,8 +19,8 @@ function initGraph() {
 //	}, false);
 }
 
-function donutGraph (d) {
-	var realData = JSON.parse(d);
+function donutGraph (rawD) {
+	var realData = JSON.parse(rawD);
 	var data = realData["data"];
 	
 	var w = 300 //width
@@ -31,8 +31,9 @@ function donutGraph (d) {
 	var vis = d3.select("#donut-graph > .graph").append("svg") //create the SVG element inside the <body>
 
 	.data([ data ]) //associate our data with the document
-	.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
-	.attr("height", h).append("svg:g") //make a group to hold our pie chart
+	.attr("viewBox", "0 0 210 210")
+	.attr("style", "width: 100%; height: 300px;")
+	.append("svg:g")
 	.attr("transform", "translate(" + r + "," + r + ")") //move the center of the pie chart from 0, 0 to radius, radius
 	
 	var arc = d3.svg.arc() //this will create <path> elements for us using arc data
