@@ -32,7 +32,6 @@
 				<div class="card stat-card">
 					<h1>section 비율</h1>
 					<div class="refresh-button">refresh</div>
-					<svg id="svg-donut"></svg>
 				</div>
 				<div class="card article-brkline-card">
 				</div>
