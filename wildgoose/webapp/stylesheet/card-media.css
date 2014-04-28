@@ -1,0 +1,28 @@
+/* ipad */
+@media only screen 
+/* and (min-width : 768px) */
+and (min-width : 650px)
+and (max-width : 1024px)  {
+	.card {
+		margin: 6px 3px;
+	}	
+}
+
+
+/* pablet */
+@media only screen 
+/* and (min-width : 511px) */
+/* and (max-width : 767px)  { */
+	and (max-width : 650px)  {
+	.card {
+		display: block;
+		width: 100%;
+		margin: 14px auto;
+	}	
+}
+
+/* iphone */
+@media only screen 
+and (max-width : 490px)  {
+
+}
