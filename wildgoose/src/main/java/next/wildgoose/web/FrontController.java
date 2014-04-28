@@ -33,25 +33,32 @@ public class FrontController extends HttpServlet {
 		ActionForward forward = null;
 		
 		try {
-			if (restful.check(0, "")) {
+			if (restful.check(0, Wildgoose.RESOURCE_INDEX)) {
 				action = new SearchReporterAction();
 				forward = action.execute(request, response, restful);
 			}
-			else if (restful.check(0, "reporters")) {
+			else if (restful.check(0, Wildgoose.RESOURCE_REPORTERS)) {
 				action = new ShowReporterAction();
 				forward = action.execute(request, response, restful);
 			}
 		}
 		catch (Exception e) {
+			LOGGER.debug(e.getMessage(), e);
+			
+			forward.setRedirect(true);
 			forward.setPath(Wildgoose.PAGE_ERROR);
 		}
-		finally {
-			LOGGER.debug(forward.getPath());
-			
-			reqDispatcher = request.getRequestDispatcher("/" + forward.getPath());
-			reqDispatcher.forward(request, response);
+		LOGGER.debug(forward.toString());
+		
+		// redirect
+		if (forward.isRedirect()) {
+			response.sendRedirect(forward.getPath());
+			return;
 		}
 		
+		// forward
+		reqDispatcher = request.getRequestDispatcher(forward.getPath());
+		reqDispatcher.forward(request, response);
 		
 	}
 

@@ -9,25 +9,18 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/search.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
-<title>Search Reporter</title>
-<!--  
-<form action="/HelloServlet" method="get">
-<input type="search" id="query" name="query" value="${ requestScope.search_query }"/>
-<input type="submit" value="SEARCH" onclick="test()")/>
-</form>
--->
+<title>Wildgoose</title>
+
 <div class="wrap">
 	<header class="header"></header>
 	<div class="container">
 		<div class="logo">
 			<a href="/"><img src="image/logo.png" alt="wildgoose logo" class="logo-image"/></a>
-			<!-- <a href="/SearchReporter"><img src="image/logo.png" alt="wildgoose logo" class="logo-image"/></a> -->
 		</div>
 		<div class="search search-column">
-			<!-- <form action="./SearchReporter" method="get" > -->
 			<form action="./" method="get" >
 				<li class="search-query-entry">
-					<input type="search" id="query-entry" name="q" placeholder="기자검색" value="" />
+					<input type="search" id="query-entry" name="q" placeholder="기자,URL검색" value="" />
 				</li>
 				<li class="search-button">
 					<input type="submit" id="search-action" value ="Search"/>

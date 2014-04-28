@@ -9,6 +9,7 @@ import java.util.List;
 
 import next.wildgoose.model.ArticleCard;
 import next.wildgoose.model.DataSource;
+import next.wildgoose.utility.Utility;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,12 +51,13 @@ public class ArticleCardDAO {
 				articleCard.setDatetime(rs.getTimestamp("datetime").toString());
 				articleCards.add(articleCard);
 			}
-			rs.close();
-			psmt.close();
-			conn.close();
 		} catch (SQLException sqle) {
 			LOGGER.debug(sqle.getMessage(),sqle);
 			articleCards = null;
+		} finally {
+			Utility.closePrepStatement(psmt);
+			Utility.closeResultSet(rs);
+			Utility.closeConnection(conn);
 		}
 		
 		return articleCards;

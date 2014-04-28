@@ -34,7 +34,7 @@ public class ApiMapper extends HttpServlet {
 		ReporterData reporter = new ReporterData();
 		
 		try {
-			if (restful.check(2, Wildgoose.API_REPORTERS)) {
+			if (restful.check(2, Wildgoose.RESOURCE_REPORTERS)) {
 				
 				int reporterId = Integer.parseInt(restful.get(3));
 				String apiName = restful.get(4);

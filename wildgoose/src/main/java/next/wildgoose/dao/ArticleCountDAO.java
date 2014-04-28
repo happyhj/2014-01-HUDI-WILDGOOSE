@@ -18,8 +18,6 @@ import org.slf4j.LoggerFactory;
 public class ArticleCountDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCountDAO.class.getName());
 
-	
-
 	public JSONObject countArticle(int reporterId) throws SQLException {
 		JSONObject result = new JSONObject();
 		PreparedStatement psmt = null;

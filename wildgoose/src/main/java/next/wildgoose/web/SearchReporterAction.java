@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import next.wildgoose.dao.ReporterCardDAO;
 import next.wildgoose.model.ReporterCard;
+import next.wildgoose.utility.Utility;
 import next.wildgoose.utility.Wildgoose;
 
 import org.slf4j.Logger;
@@ -37,16 +38,21 @@ public class SearchReporterAction implements Action {
 		
 		// 유효하지 않은 'q'
 		if (searchQuery.equals("")) {
+			forward.setRedirect(true);
 			forward.setPath(Wildgoose.PAGE_ERROR);
 			return forward;	
 		}
 		
-		// DB에서 이름으로 검색하여 reporterCard 리스트 가져오기
+
 		reporterCardDao = new ReporterCardDAO();
-		try {
-			reporterCards = reporterCardDao.findReportersByName(searchQuery.toString());
-		} catch (SQLException e) {
-			e.printStackTrace();
+		// DB에서 검색하여 reporterCard 리스트 가져오기
+		// URL로 검색
+		if (Utility.isURL(searchQuery)) {
+			reporterCards = reporterCardDao.findReportersByURL(searchQuery);
+		}
+		// 이름 검색
+		else {
+			reporterCards = reporterCardDao.findReportersByName(searchQuery);
 		}
 		
 		request.setAttribute("reporterCards", reporterCards);
