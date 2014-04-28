@@ -10,7 +10,7 @@
 
 function BrokenLine(data) {
 	
-	var svgContainer = d3.select("#svg-brokenLine").append("svg:svg")
+	var svgContainer = d3.select("#brokenline-graph > .graph").append("svg:svg")
 	.attr("width", 500).attr("height", 320)
 	.attr("id", "brokenLineGraph");
 	

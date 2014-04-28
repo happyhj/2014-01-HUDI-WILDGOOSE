@@ -5,9 +5,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link type="text/css" rel="stylesheet" href="/stylesheet/reset.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/main.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/reporter.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/show_reporter.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 
 <script type="text/javascript" src="/webjars/d3js/3.4.4/d3.min.js"></script>
 
@@ -23,44 +23,44 @@
 		<div class="container test-outline">
 		
 			<!-- 기자 정보 -->
-			<div class="card reporter-card" >
+			<div class="reporter-profile" >
 				<h2 class="reporter-name">${ requestScope.reporter.name }</h2>
 				<h3 class="email">${ requestScope.reporter.email }</h3>
 				<h4 class="press-name">${ requestScope.reporter.pressName }</h4>
 			</div>
 			
 			<!-- 통계 정보 -->
-			<div>
-				<div class="card stat-card">
-					<h1>section 비율</h1>
-					<div class="refresh-button">refresh</div>
-					<svg id="svg-donut"></svg>
-				</div>
-				<div class="article-brkline-card">
-					<svg id="svg-brokenLine" viewport="0 0 1000 740"></svg>
-				</div>
+			<div id="donut-graph" class="card card-graph">
+				<span class="graph-title">섹션 비율</span>
+				<div class="graph"></div>
+			</div>
+			<div id="brokenline-graph" class="card card-graph">
+				<span class="graph-title">날짜별 기사 작성 </span>
+				<div class="graph"></div>
+			</div>
+			<div id="bar-graph" class="card card-graph" style="height:200px">
+				<span class="graph-title">낚시 단어 수</span>
+				<div class="graph"></div>
+			</div>
+			<div id="radar-graph" class="card card-graph" style="height:200px">
+				<span class="graph-title">기자의 특성</span>
+				<div class="graph"></div>
 			</div>
 			
-			<!-- 최신기사 리스트  -->
-			<div class="form">
+			<!-- 최신기사 리스트 카드 -->
+			<div class="card card-article-list">
 				<h1>${ requestScope.reporter.name }기자의 최신기사</h1>
-				<ul class="latest">
-					<c:forEach var="article" items="${ requestScope.articles }">
-						<%-- <li class="list">
-							<h2 class="title"><a href="${ article.url } target="_blank">[${ article.section_id }]${ article.title }</a></h2>
+				<c:forEach var="article" items="${ requestScope.articles }">
+					<li class="article">
+						<div class="article-title">
+							<h2 class="title"><a href="${ article.url } target="_blank">
+							<span style="display:none">[${ article.sectionId }]</span>${ article.title }</a></h2>
+						</div>
+						<div class="article-datetime">
 							<div class="date">${ article.datetime }</div>
-							<div class="content">${ article.content }</div>
-						</li> --%>
-						<li class="list">
-							<div class="article_title">
-								<h2 class="title"><a href="${ article.url } target="_blank">[${ article.sectionId }]${ article.title }</a></h2>
-							</div>
-							<div class="article_datetime">
-								<div class="date">${ article.datetime }</div>
-							</div>
-						</li>
-					</c:forEach>
-				</ul>
+						</div>
+					</li>
+				</c:forEach>
 			</div>
 		</div>
 		<footer class="footer"></footer>

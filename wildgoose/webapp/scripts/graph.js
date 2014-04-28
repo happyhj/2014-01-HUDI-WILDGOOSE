@@ -13,10 +13,10 @@ function initGraph() {
 		Ajax.requestData(url+condition, window[functionsConditional[condition]]);
 	}
 	
-	var refreshButton = document.getElementsByClassName("refresh-button")[0];
-	refreshButton.addEventListener("click", function() {
-		Ajax.requestData(url+"section", donutGraph);
-	}, false);
+//	var refreshButton = document.getElementsByClassName("refresh-button")[0];
+//	refreshButton.addEventListener("click", function() {
+//		Ajax.requestData(url+"section", donutGraph);
+//	}, false);
 }
 
 function donutGraph (d) {
@@ -28,7 +28,7 @@ function donutGraph (d) {
 	var r = 100 //radius
 	var color = d3.scale.category20c(); //builtin range of colors
 
-	var vis = d3.select("#svg-donut").append("svg:svg") //create the SVG element inside the <body>
+	var vis = d3.select("#donut-graph > .graph").append("svg") //create the SVG element inside the <body>
 	.data([ data ]) //associate our data with the document
 	.attr("width", w) //set the width and height of our visualization (these will be attributes of the <svg> tag
 	.attr("height", h).append("svg:g") //make a group to hold our pie chart
