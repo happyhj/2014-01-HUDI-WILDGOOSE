@@ -10,9 +10,9 @@
 
 function BrokenLine(data) {
 	
-	var svgContainer = d3.select("#brokenline-graph > .graph").append("svg:svg")
-	.attr("width", 500).attr("height", 320)
-	.attr("id", "brokenLineGraph");
+	var svgContainer = d3.select("#brokenline-graph > .graph").append("svg")
+	.style("width", "100%").style("height", 350).attr("id", "brokenLineGraph")
+	.attr("viewBox", "0 0 520 377");
 	
 	var backgroundColor = svgContainer.append("rect").attr("width", "100%").attr("height", "100%").attr("fill", "#26A88E");
 	
@@ -25,7 +25,7 @@ function BrokenLine(data) {
 	numberIndexes.attr("x", 7).attr("font-size","18").attr("fill", "white").attr("y", function (d) {return d.y_pos;}).text(function(d) {return d.num;});
 
 	// guidanceLine
-	guidanceLinePosition = [ "M 45 85 H580", "M 45 135 H580", "M 45 185 H580", "M 45 235 H580", "M 45 285 H580" ];
+	guidanceLinePosition = [ "M 45 85 H520", "M 45 135 H520", "M 45 185 H520", "M 45 235 H520", "M 45 285 H520" ];
 	
 	var guidLines = svgContainer.selectAll("path").data(guidanceLinePosition).enter().append("path")
 	
@@ -54,7 +54,7 @@ function BrokenLine(data) {
 	// date label
 	for(labelIndex = 0; labelIndex < keys.length; labelIndex++){
 		svgContainer.append("text").attr("font-size", "18").attr("fill", "white").attr("y", 315)
-		.attr("x", 30 + (70 * labelIndex)).text(keys[labelIndex]);
+		.attr("x", 20 + (70 * labelIndex)).text(keys[labelIndex]);
 	}
 
 	// graph
