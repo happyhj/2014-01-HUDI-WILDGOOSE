@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -57,19 +58,11 @@
 				<span>${ requestScope.reporter.name }기자의최신기사</span>
 				<div class="articles">
 					<c:forEach var="article" items="${ requestScope.articles }">
-						<%-- <li class="article">
-						<div class="article-title">
-							<h2 class="title"><a href="${ article.url }" target="_blank">
-							<span style="display:none">[${ article.sectionId }]</span>${ article.title }</a></h2>
-						</div>
-						<div class="article-datetime">
-							<div class="date">${ article.datetime }</div>
-						</div>
-					</li> --%>
 						<div class="article">
-							<a href="${ article.url }" target="_blank"> <span
-								class="article_title">${ article.title }</span> <span
-								class="datetime">${ article.datetime }</span>
+							<a href="${ article.url }" target="_blank"> 
+							<span class="article_title">${ article.title }</span> 
+							<c:set var="date" value="${fn:split(article.datetime, ' ')}" />
+							<span class="datetime">${ date[0] }</span>
 							</a>
 						</div>
 					</c:forEach>
