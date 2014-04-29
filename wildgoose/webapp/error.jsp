@@ -28,7 +28,7 @@
 			</form>
 		</div>
 		<div class="search-result">
-			ERROR, 예상치 못한 문제가 발생했습니다.
+			
 		</div>
 	</div>
 	<footer class="footer"></footer>

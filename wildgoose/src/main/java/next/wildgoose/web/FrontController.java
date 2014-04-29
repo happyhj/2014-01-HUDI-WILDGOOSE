@@ -42,7 +42,11 @@ public class FrontController extends HttpServlet {
 				forward = action.execute(request, response, restful);
 			}
 			else if (restful.check(0, Wildgoose.RESOURCE_ERROR)) {
-				action = new ErrorAction();
+				action = new ErrorAction(Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_ERROR);
+				forward = action.execute(request, response, restful);
+			}
+			else {
+				action = new ErrorAction(Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_WENT_WRONG);
 				forward = action.execute(request, response, restful);
 			}
 		}
