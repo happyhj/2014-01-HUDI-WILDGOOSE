@@ -12,7 +12,7 @@ public class ActionForward {
 	
 	// 절대경로로 출력
 	public String getPath() {
-		return Wildgoose.PAGE_ROOT + this.path;
+		return Wildgoose.RESOURCE_ROOT + this.path;
 	}
 	
 	public void setRedirect(boolean flag) {

@@ -11,12 +11,26 @@ import org.slf4j.LoggerFactory;
 public class ErrorAction implements Action {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ErrorAction.class.getName());
+
+	private String path;
+	private String message;
 	
+	public ErrorAction(String message) {
+		this(Wildgoose.PAGE_ERROR, message);
+	}
+
+	public ErrorAction(String forwardingPath, String message) {
+		this.path = forwardingPath;
+		this.message = message;
+	}
+
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response, RestfulURI restful) throws Exception {
 		
 		ActionForward forward = new ActionForward();
-		forward.setPath(Wildgoose.PAGE_ERROR);
+		forward.setPath(this.path);
+		
+		request.setAttribute(Wildgoose.KEYWORD_MSG, this.message);
 		
 		return forward;
 	}
