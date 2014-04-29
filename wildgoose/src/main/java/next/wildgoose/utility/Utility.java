@@ -71,7 +71,7 @@ public class Utility {
 	}
 
 	public static String getDate(Date date, int addDate) {
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd");
+		DateFormat dateFormat = new SimpleDateFormat("MM-dd");
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.add(Calendar.DATE, addDate);
