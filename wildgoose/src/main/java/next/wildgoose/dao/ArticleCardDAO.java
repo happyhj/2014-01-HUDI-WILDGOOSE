@@ -49,7 +49,9 @@ public class ArticleCardDAO {
 				articleCard.setSectionId(rs.getInt("section"));
 				articleCard.setContent(rs.getString("content"));
 				articleCard.setDatetime(rs.getTimestamp("datetime").toString());
-				articleCards.add(articleCard);
+				if(articleCards.size() < 5){
+					articleCards.add(articleCard);
+				}
 			}
 		} catch (SQLException sqle) {
 			LOGGER.debug(sqle.getMessage(),sqle);
