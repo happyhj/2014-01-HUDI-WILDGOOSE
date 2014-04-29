@@ -19,6 +19,14 @@ def main() :
 		query = db.make_insert_query('article', article)
 		db.do_insert(con, query)
 
+		# hooking keyword table
+		raw_content = row[2]
+		hook_words = _extract_hook_word(raw_content.encode('utf-8'))
+		for word in hook_words.keys() :
+			words_in_article = {'article_URL': article['URL'], 'hooking_keyword_id': word, 'count': hook_words[word]}
+			query = db.make_insert_query('article_hooking_keyword', words_in_article)
+			db.do_insert(con, query)
+		
 		# author table
 		expected_author_string = row[5]
 		author_list = _make_author_list(con, expected_author_string)
@@ -37,6 +45,7 @@ def main() :
 			article_author = {'article_URL': article['URL'], 'author_id': author_id}
 			query = db.make_insert_query('article_author', article_author)
 			db.do_insert(con, query)
+		
 
 
 def _get_raw_data() :
@@ -204,5 +213,32 @@ def _is_author_exits(email) :
 		return False
 	return True
 
+def __get_hook_word_dict() :
+	con = db.connect_dev()
+	keyword_dict = {}
+	query = "SELECT * FROM hooking_keyword"
+	result = db.do_select(con, query)
+	
+	con.close()
+
+	for (id, word) in result :
+		keyword_dict[word.encode('utf-8')] = id
+	return keyword_dict
+
+def _extract_hook_word(content) :
+	result = {}
+	global hook_word_dict
+	if (hook_word_dict == None) :
+		hook_word_dict = __get_hook_word_dict()
+	for word in hook_word_dict.keys() :
+		id = hook_word_dict[word]
+		pattern = re.compile(word)
+		how_many = len(pattern.findall(content))
+		if how_many == 0 :
+			continue
+		result[id] = how_many
+	return result
+
+hook_word_dict = None
 if __name__ == "__main__":
 	main()
