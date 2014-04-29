@@ -15,7 +15,9 @@
 
 <script type="text/javascript" src="/scripts/util.js"></script>
 <script type="text/javascript" src="/scripts/graph.js"></script>
-<script type="text/javascript" src="/scripts/BrokenLine.js"></script>
+<script type="text/javascript" src="/scripts/graph-donut.js"></script>
+<script type="text/javascript" src="/scripts/graph-brokenline.js"></script>
+<script type="text/javascript" src="/scripts/graph-bar.js"></script>
 
 <title>${ requestScope.name }기자</title>
 </head>
@@ -41,14 +43,13 @@
 				<span class="graph-title">날짜별 기사 작성 </span>
 				<div class="graph"></div>
 			</div>
-			<div id="bar-graph" class="card card-graph" style="height: 200px">
+			<div id="bar-graph" class="card card-graph">
 				<span class="graph-title">낚시 단어 수</span>
 				<div class="graph"></div>
 			</div>
 			<div id="radar-graph" class="card card-graph" style="height: 200px">
 				<span class="graph-title">기자의 특성</span>
 				<div class="graph"></div>
-
 			</div>
 
 			<!-- 최신기사 리스트 카드 -->
