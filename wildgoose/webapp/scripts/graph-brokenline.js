@@ -50,12 +50,6 @@ function brokenLineGraph(data) {
 	for(i = 0; i<sampleData.length; i++){
 		keys.push(Object.keys(sampleData[i])[0]);
 	}
-	
-	// date label
-	for(labelIndex = 0; labelIndex < keys.length; labelIndex++){
-		svgContainer.append("text").attr("font-size", "18").attr("fill", "white").attr("y", 315)
-		.attr("x", 20 + (70 * labelIndex)).text(keys[labelIndex]);
-	}
 
 	// graph
 	var graphData = [ {
@@ -92,4 +86,14 @@ function brokenLineGraph(data) {
 
 	var text = svgContainer.append("text").attr("x", 370).attr("y", 40)
 	.attr("font-size", "20").attr("fill", "white").text("기사송고추이");
+	
+	for(var i in keys) { 
+		keys[i] = keys[i].replace("-", "/"); 
+	}
+	
+	// date label
+	for(labelIndex = 0; labelIndex < keys.length; labelIndex++){
+		svgContainer.append("text").attr("font-size", "18").attr("fill", "white").attr("y", 315)
+		.attr("x", 20 + (70 * labelIndex)).text(keys[labelIndex]);
+	}
 }
