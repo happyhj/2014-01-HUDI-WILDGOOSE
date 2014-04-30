@@ -28,6 +28,9 @@ public class ReporterData {
 				result = numberOfArticlesDao.byDay(reporterId);
 			}
 		}
+		if ("stat_points".equals(apiName)) {
+			result = dummy.getJsonWithStatPoints(reporterId);
+		}
 		
 		return result;
 	}

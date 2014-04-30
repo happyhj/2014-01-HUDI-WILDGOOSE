@@ -19,6 +19,7 @@
 <script type="text/javascript" src="/scripts/graph-donut.js"></script>
 <script type="text/javascript" src="/scripts/graph-brokenline.js"></script>
 <script type="text/javascript" src="/scripts/graph-bar.js"></script>
+<script type="text/javascript" src="/scripts/graph-radar.js"></script>
 
 <title>${ requestScope.name }기자</title>
 </head>
@@ -32,7 +33,6 @@
 				<h2 class="reporter-name">${ requestScope.reporter.name }</h2>
 				<h3 class="email">${ requestScope.reporter.email }</h3>
 				<h4 class="press-name">${ requestScope.reporter.pressName }</h4>
-				<div class="reporter-id hidden">${ requestScope.reporter_id }</div>
 			</div>
 
 			<!-- 통계 정보 -->
@@ -48,7 +48,7 @@
 				<span class="graph-title">낚시 단어 수</span>
 				<div class="graph"></div>
 			</div>
-			<div id="radar-graph" class="card card-graph" style="height: 200px">
+			<div id="radar-graph" class="card card-graph">
 				<span class="graph-title">기자의 특성</span>
 				<div class="graph"></div>
 			</div>
