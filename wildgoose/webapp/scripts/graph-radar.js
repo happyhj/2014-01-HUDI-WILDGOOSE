@@ -16,7 +16,7 @@ function radarGraph(data) {
 	};
 
 	var svgContainer = d3.select("#radar-graph > .graph").append("svg")
-	.style("width", "100%").style("height", "100%").attr("id", "radarGraph")
+	.style("width", "100%").style("height", "300px").attr("id", "radarGraph")
 	.attr("viewBox", "0 0 400 400");
 
 	var backgroundColor = svgContainer.append("rect").attr("width", "100%").attr("height", "100%").attr("fill", "#FFF");
