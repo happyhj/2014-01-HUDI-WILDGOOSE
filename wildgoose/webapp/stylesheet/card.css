@@ -26,6 +26,10 @@
 	border-bottom-width: 1px;
 }
 
+.card-graph {
+	vertical-align: top;
+}
+
 .card-section.card-tail {
 	border-bottom: none;
 }

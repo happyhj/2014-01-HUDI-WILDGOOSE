@@ -1,7 +1,11 @@
 function barGraph(jsonString) {
-	var data = JSON.parse(jsonString)['data'];
-	
 	var div = document.querySelector("#bar-graph > .graph");
+
+	if (jsonString == "") {
+		div.innerText = "CLEAN REPORTER";
+		return;
+	}
+	var data = JSON.parse(jsonString)['data'];
 	var graph = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 	graph.setAttribute('style', 'width:100%; height:300px;');
 	graph.setAttribute('viewBox', "0 0 400 400");

@@ -40,13 +40,14 @@ public class ApiMapper extends HttpServlet {
 				LOGGER.debug(restful.get(3));
 				int reporterId = Integer.parseInt(restful.get(3));
 				String apiName = restful.get(4);
-				String by = request.getParameter("by");
 				
+				String by = request.getParameter("by");
 				result = reporter.getJSON(reporterId, apiName, by);
 			}
-			
-			LOGGER.debug(result.toString());
-			out.println(result.toString());
+			if (result != null) {
+				LOGGER.debug(result.toString());
+				out.println(result.toString());
+			}
 		}
 		catch (Exception e) {
 			LOGGER.debug(e.getMessage(), e);

@@ -1,5 +1,6 @@
 package next.wildgoose.api;
 
+import next.wildgoose.dao.HookingKeywordDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
 
 import org.json.JSONObject;
@@ -10,10 +11,14 @@ public class ReporterData {
 	
 	public JSONObject getJSON(int reporterId, String apiName, String condition) {
 		NumberOfArticlesDAO numberOfArticlesDao = new NumberOfArticlesDAO();
+		HookingKeywordDAO hkDao = new HookingKeywordDAO();
 		JSONObject result = null;
 		
 		if ("number_of_hook_keywords".equals(apiName)) {
-			result = dummy.getJsonWithNumberOfHookKeywords(reporterId);
+			result = hkDao.getHookingKeywordsCount(reporterId);
+			if (result == null) {
+				// DO Something...
+			}
 		}
 		if ("number_of_articles".equals(apiName)) {
 			// when by is null, day is default value
