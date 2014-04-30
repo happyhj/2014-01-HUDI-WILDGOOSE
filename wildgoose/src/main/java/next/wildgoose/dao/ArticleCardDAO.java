@@ -33,7 +33,7 @@ public class ArticleCardDAO {
 			query.append("SELECT article.URL as url, article.title as title, ");
 			query.append("article.section_id as section, article.content as content, article.datetime as datetime ");
 			query.append("FROM article_author JOIN article ON article.URL = article_author.article_URL ");
-			query.append("WHERE article_author.author_id = ? limit 5;");
+			query.append("WHERE article_author.author_id = ? ORDER BY datetime DESC limit 5;");
 			
 			psmt = conn.prepareStatement(query.toString());
 			psmt.setInt(1, reporterId);

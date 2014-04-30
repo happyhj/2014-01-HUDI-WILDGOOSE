@@ -24,14 +24,30 @@
 .card-section { 
 	width: 100%;
 	border-bottom-width: 1px;
+	box-sizing: border-box;	
 }
 
 .card-graph {
 	vertical-align: top;
 }
 
-.card-section.card-tail {
+#brokenline-graph {
+	background-color: #26A88E;
+}
+
+.card > .card-section:last-child {
 	border-bottom: none;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+
+.card > .card-section:last-child  div {
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+}
+
+.card-section-header {
+	padding: 12px;
 }
 
 .card-section-identity  {
@@ -72,7 +88,7 @@
 	-moz-box-shadow:    0px 2px 2px 0px rgba(50, 50, 50, 0.25);
 	box-shadow:         0px 2px 2px 0px rgba(50, 50, 50, 0.25);
 	border-style: solid;
-	border-color: #DDD;
+	border-color: rgba(255,255,255,.1);
 	border-radius: 3px;
 	background: #fff;
 }

@@ -49,7 +49,7 @@
 									<p class="email">${ reporterCard.email }</p>
 									<div class="${ reporterCard.pressName } press-tag"></div>
 								</div>
-								<div class="card-section card-section-headline card-tail">
+								<div class="card-section card-section-headline">
 									<h4 class="headline">${ reporterCard.articleTitle }</h4>
 								</div>
 							</li>
