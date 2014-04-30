@@ -47,32 +47,44 @@ function brokenLineGraph(data) {
 	sampleData = JSON.parse(data)["data"];
 	
 	var keys = new Array();
-	for(i = 0; i<sampleData.length; i++){
-		keys.push(Object.keys(sampleData[i])[0]);
+	var now = new Date();
+	now.setDate(now.getDate() - 7);
+	for(var i = 0; i<7; i++){
+		now.setDate(now.getDate() + 1);
+		var month = now.getMonth() + 1;
+		if (month < 10) { month = '0' + month; }
+		keys.push(month + "/" + now.getDate());
 	}
 
+	var getValue = function(date) {
+		var result = sampleData[date];
+		if (result == null) {
+			return 0;
+		}
+		return result;
+	}
 	// graph
 	var graphData = [ {
 		"x" : graphPositionX[0],
-		"y" : matching[0][sampleData[0][keys[0]]]
+		"y" : matching[0][getValue(keys[0])]
 	}, {
 		"x" : graphPositionX[1],
-		"y" : matching[0][sampleData[1][keys[1]]]
+		"y" : matching[0][getValue(keys[1])]
 	}, {
 		"x" : graphPositionX[2],
-		"y" : matching[0][sampleData[2][keys[2]]]
+		"y" : matching[0][getValue(keys[2])]
 	}, {
 		"x" : graphPositionX[3],
-		"y" : matching[0][sampleData[3][keys[3]]]
+		"y" : matching[0][getValue(keys[3])]
 	}, {
 		"x" : graphPositionX[4],
-		"y" : matching[0][sampleData[4][keys[4]]]
+		"y" : matching[0][getValue(keys[4])]
 	}, {
 		"x" : graphPositionX[5],
-		"y" : matching[0][sampleData[5][keys[5]]]
+		"y" : matching[0][getValue(keys[5])]
 	}, {
 		"x" : graphPositionX[6],
-		"y" : matching[0][sampleData[6][keys[6]]]
+		"y" : matching[0][getValue(keys[6])]
 	} ]
 	
 	

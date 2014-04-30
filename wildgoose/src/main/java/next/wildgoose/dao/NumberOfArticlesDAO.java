@@ -18,44 +18,37 @@ public class NumberOfArticlesDAO {
 
 	public JSONObject byDay(int reporterId) {
 		JSONObject result = new JSONObject();
+		JSONObject data = new JSONObject();
 		PreparedStatement psmt = null;
 		Connection conn = null;
 		ResultSet rs = null;
 		
-		
+		StringBuilder query = new StringBuilder();
 		// getting database connection to MySQL server
+		query.append("select date_format(datetime, '%m/%d') as date, count(URL) as count from article ");
+		query.append("WHERE URL in (Select article_URL as url from article_author where author_id = ?) ");
+		query.append("and DATEDIFF(now(), article.datetime) < 7 ");
+		query.append("group by date_format(datetime, '%m/%d');");
 		
-		// 날짜 구하기
-		for (int i = -6; i < 1; i++) {
-			String date = Utility.getDate(new Date(), i);
-			StringBuilder query = new StringBuilder();
-			query.append("SELECT count(*) as count from article where URL ");
-			query.append("IN (select article_URL from article_author where author_id=? ");
-			query.append(") and datetime like ?;");
+		try {
+			conn = DataSource.getInstance().getConnection();
+			psmt = conn.prepareStatement(query.toString());
+			psmt.setInt(1, reporterId);
 			
-			LOGGER.debug(query.toString());
+			rs = psmt.executeQuery();
 
-			try {
-				conn = DataSource.getInstance().getConnection();
-				psmt = conn.prepareStatement(query.toString());
-				psmt.setInt(1, reporterId);
-				psmt.setString(2, "%" + date + "%");
-				
-				rs = psmt.executeQuery();
-
-				while (rs.next()) {
-					JSONObject data = new JSONObject().put(date, rs.getInt("count"));
-					result.append("data", data);
-				}
-
-			} catch (SQLException sqle) {
-				LOGGER.debug(sqle.getMessage(), sqle);
-				
-			} finally {
-				Utility.closePrepStatement(psmt);
-				Utility.closeResultSet(rs);
-				Utility.closeConnection(conn);
+			while (rs.next()) {
+				data.accumulate(rs.getString("date"), rs.getInt("count"));	
 			}
+			result.put("data", data);
+			
+		} catch (SQLException sqle) {
+			LOGGER.debug(sqle.getMessage(), sqle);
+			
+		} finally {
+			Utility.closePrepStatement(psmt);
+			Utility.closeResultSet(rs);
+			Utility.closeConnection(conn);
 		}
 
 		// return DateForCounts;
