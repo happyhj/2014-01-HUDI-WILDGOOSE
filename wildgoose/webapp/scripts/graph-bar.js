@@ -2,7 +2,8 @@ function barGraph(jsonString) {
 	var div = document.querySelector("#bar-graph > .graph");
 
 	if (jsonString == "") {
-		div.innerText = "CLEAN REPORTER";
+		div = document.querySelector("#bar-graph");
+		div.parentNode.removeChild(div);
 		return;
 	}
 	var data = JSON.parse(jsonString)['data'];
