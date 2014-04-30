@@ -4,7 +4,7 @@
 and (min-width : 650px)
 and (max-width : 1024px)  {
 	.card {
-		margin: 6px 3px;
+		margin: 6px auto;
 	}	
 }
 
@@ -17,7 +17,7 @@ and (max-width : 1024px)  {
 	.card {
 		display: block;
 		width: 100%;
-		margin: 14px auto;
+		margin: 6px auto;
 	}	
 }
 

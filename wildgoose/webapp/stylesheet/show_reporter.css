@@ -72,6 +72,15 @@ body {
 	background: #fff;
 }
 
+
+.container {
+	text-align: center;	
+}
+.card-section-identity > .name > a {
+	font-size: 50px;
+}
+
+
 /* Desktop */
 @media only screen 
 and (min-width : 980px) {

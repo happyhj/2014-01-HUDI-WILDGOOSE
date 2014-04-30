@@ -24,12 +24,13 @@ function barGraph(jsonString) {
 		bar.setAttribute('width', width);
 		bar.setAttribute('height', bardata[key] * 20);
 		bar.setAttribute('fill', getRandomColor());
+		bar.setAttribute('fill-opacity', .5);
 
 		var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-		text.setAttribute('x', x);
+		text.setAttribute('x', x+18);
 		text.setAttribute('y', 300);
-		text.setAttribute('font-size', 40);
-		text.setAttribute('fill', '#000000');
+		text.setAttribute('font-size', 30);
+		text.setAttribute('fill', '#666');
 		text.setAttribute('transform', 'translate(0, 400) scale(1, -1)');
 		
 		var textNode = document.createTextNode(key);

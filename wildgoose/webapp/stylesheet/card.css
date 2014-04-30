@@ -41,13 +41,15 @@
 	border-bottom-left-radius: 3px;
 }
 
-.card > .card-section:last-child  div {
+.card.card-graph > .card-section:last-child  div {
 	border-bottom-right-radius: 3px;
 	border-bottom-left-radius: 3px;
 }
 
+
 .card-section-header {
 	padding: 12px;
+	color: #666;
 }
 
 .card-section-identity  {
