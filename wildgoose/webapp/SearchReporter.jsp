@@ -41,6 +41,7 @@
 							<span>${ requestScope.searchQuery }에 대한 검색 결과가 없습니다.</span>
 						</c:if>
 						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }">				
+							<div class=".col-md-4">
 							<li class="card card-reporter">
 								<div class="card-section card-section-identity">
 									<h3 class="name">
@@ -53,6 +54,7 @@
 									<h4 class="headline">${ reporterCard.articleTitle }</h4>
 								</div>
 							</li>
+							</div>
 						</c:forEach>
 					</c:when>
 				</c:choose>

@@ -30,3 +30,23 @@ h1, h2, h3, h4, h5 ,h6 {
 ul, li {
 	list-style: none;
 }
+
+/* Grid Layout */
+.col-md-1 {
+	width: 8.3333333333333333333%;
+}
+.col-md-2 {
+	width: 16.6666666666666666666%;
+}
+.col-md-3 {
+	width: 25%;
+}
+.col-md-4 {
+	width: 33.33333333333333333333%;
+}
+.col-md-6 {
+	width: 50%;
+}
+.col-md-8 {
+	width: 66.66666666666666666666%;
+}
