@@ -20,7 +20,7 @@
 		<div class="search search-column">
 			<form action="./" method="get" >
 				<li class="search-query-entry">
-					<input type="search" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.message }" />
+					<input type="search" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.searchQuery }" />
 				</li>
 				<li class="search-button">
 					<input type="submit" id="search-action" value ="Search"/>
