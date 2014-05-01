@@ -1,66 +1,95 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link type="text/css" rel="stylesheet" href="/stylesheet/reset.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/main.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/reporter.css" />
+<meta name="viewport" content="width=device-width, initial-zoom=1, user-scalable=no">
+<link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/articles.css" />
 
+<link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
+<link type="text/css" rel="stylesheet"
+	href="/stylesheet/show_reporter.css" />
 <script type="text/javascript" src="/webjars/d3js/3.4.4/d3.min.js"></script>
 
 <script type="text/javascript" src="/scripts/util.js"></script>
 <script type="text/javascript" src="/scripts/graph.js"></script>
-<script type="text/javascript" src="/scripts/BrokenLine.js"></script>
+<script type="text/javascript" src="/scripts/graph-donut.js"></script>
+<script type="text/javascript" src="/scripts/graph-brokenline.js"></script>
+<script type="text/javascript" src="/scripts/graph-bar.js"></script>
+<script type="text/javascript" src="/scripts/graph-radar.js"></script>
 
-<title>${ requestScope.name } 기자</title>
+<title>${ requestScope.name }기자</title>
 </head>
 <body>
 	<div class="wrap viewport">
 		<header class="header"></header>
 		<div class="container test-outline">
-		
+
 			<!-- 기자 정보 -->
-			<div class="card reporter-card" >
-				<h2 class="reporter-name">${ requestScope.reporter.name }</h2>
-				<h3 class="email">${ requestScope.reporter.email }</h3>
-				<h4 class="press-name">${ requestScope.reporter.pressName }</h4>
+			<div class="card">
+				<div class="card-section card-section-identity">
+					<h3 class="name">
+						<a href="/reporters/${ requestScope.reporter.id }">${ requestScope.reporter.name }</a>
+					</h3>
+					<p class="email">${ requestScope.reporter.email }</p>
+					<div class="${ requestScope.reporter.pressName } press-tag"></div>
+				</div>
 			</div>
-			
+			<br/>
 			<!-- 통계 정보 -->
-			<div>
-				<div class="card stat-card">
-					<h1>section 비율</h1>
-					<div class="refresh-button">refresh</div>
-					<svg id="svg-donut"></svg>
+			<div class="card card-graph">
+				<div class="card-section card-section-header">
+					<h3 class="title">섹션 비율</h3>
 				</div>
-				<div>
-					<svg id="svg-brokenLine"></svg>
+				<div id="donut-graph" class="card-section">
+					<div class="graph"></div>
 				</div>
 			</div>
-			
-			<!-- 최신기사 리스트  -->
-			<div class="form">
-				<h1>${ requestScope.reporter.name }기자의 최신기사</h1>
-				<ul class="latest">
+			<div class="card card-graph">
+				<div class="card-section card-section-header">
+					<h3 class="title">날짜별 기사 작성</h3>
+				</div>
+				<div id="brokenline-graph" class="card-section">
+					<div class="graph"></div>
+				</div>
+			</div>
+			<div class="card card-graph">
+				<div class="card-section card-section-header">
+					<h3 class="title">낚시 단어 수</h3>
+				</div>
+				<div id="bar-graph" class="card-section">
+					<div class="graph"></div>
+				</div>
+			</div>
+			<div class="card card-graph">
+				<div class="card-section card-section-header">
+					<h3 class="title">기자의 특성</h3>
+				</div>
+				<div id="radar-graph" class="card-section">
+					<div class="graph"></div>
+				</div>
+			</div>
+
+			<!-- 최신기사 리스트 카드 -->
+			<div class="card card-article-list">
+				<div class="card-section card-section-header">
+					<h3 class="title">${ requestScope.reporter.name }기자의최신기사</h3>
+				</div>
+				<div class="card-section card-section-recent-headlines">
 					<c:forEach var="article" items="${ requestScope.articles }">
-						<%-- <li class="list">
-							<h2 class="title"><a href="${ article.url } target="_blank">[${ article.section_id }]${ article.title }</a></h2>
-							<div class="date">${ article.datetime }</div>
-							<div class="content">${ article.content }</div>
-						</li> --%>
-						<li class="list">
-							<div class="article_title">
-								<h2 class="title"><a href="${ article.url } target="_blank">[${ article.sectionId }]${ article.title }</a></h2>
-							</div>
-							<div class="article_datetime">
-								<div class="date">${ article.datetime }</div>
-							</div>
-						</li>
+						<div class="article">
+							<a href="${ article.url }" target="_blank"> <span
+								class="article_title">${ article.title }</span> <c:set
+									var="date" value="${fn:split(article.datetime, ' ')}" /> <span
+								class="datetime">${ date[0] }</span>
+							</a>
+						</div>
 					</c:forEach>
-				</ul>
+				</div>
 			</div>
 		</div>
 		<footer class="footer"></footer>

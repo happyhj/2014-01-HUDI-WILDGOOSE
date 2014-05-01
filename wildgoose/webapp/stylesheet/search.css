@@ -1,0 +1,102 @@
+@CHARSET "UTF-8";
+/* Search Module */
+
+/** Layout rules **/
+
+/*** container ***/
+.search {
+	max-width: 400px;
+	height: 38px;  /* search height */
+	margin: 20px auto;
+	
+	border-width: 2px;
+	padding-right: 66px;  /* search button width */
+	padding-left: 5px;  /* query entry margin left */
+}
+
+/*** column layout sub module ***/
+.search-column {
+	list-style-type: none;
+}
+.search-column li {
+	float: left;
+	height: 100%;
+}
+
+/*** query entry ***/ 
+.search-query-entry  {
+    width: 100%;
+}
+.search-query-entry > input[type="search"] { 
+	border: 0;
+	height: 38px;  /* search height */
+	width: 100% !important;
+
+	outline: none;
+}
+
+/*** search button ***/
+.search-button {
+	width: 66px;          /* search button width */
+  	margin-right: -66px;  /* search button width */
+}
+
+.search-button > input[type='submit'] {
+	margin: 0;
+	width: 100%;
+	height: 38px;  /* Search Component height */
+
+	outline: none;
+	border: 0 none;
+}
+
+
+/** Theme rules **/
+
+.search {
+	border-style: solid;	
+	border-color: #D8D8D8;
+    background-color: white;
+}
+
+.search:hover {
+	border-color: #B3B3B3;
+}
+
+.search-query-entry > input[type="search"] { 
+	font-size: 22px;
+	color: #777;
+}
+
+.search-button > input[type='submit'] {
+	font-size: .9em;
+	font-weight: 400;
+	color: #fff;
+	background-color: #4882FD;
+}
+
+.search-button > input[type='submit']:hover {
+	-webkit-box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
+	-moz-box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
+	box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
+}
+
+.search-button > input[type='submit']:active {
+	background-color: #3872DD;
+	-webkit-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+	-moz-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+	box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+}
+
+.search ::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #999;
+}
+.search :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #999;
+}
+.search ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #999;
+}
+.search :-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #999;
+}
