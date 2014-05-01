@@ -12,7 +12,9 @@
 <title>Wildgoose</title>
 
 <div class="wrap">
-	<header class="header"></header>
+	<header class="header">
+		<button class="account">${ requestScope.accountStatus }</button>
+	</header>
 	<div class="container">
 		<div class="logo">
 			<a href="/"><img src="image/logo.png" alt="wildgoose logo" class="logo-image"/></a>
@@ -61,16 +63,9 @@
 	</div>
 	<footer class="footer"></footer>
 </div>
+<div id="mask"></div>
 <script>
-
 var inputEl = document.getElementById("query-entry");
-//var linkEl = document.getElementById("search-action");
 inputEl.focus();
-/*
-inputEl.addEventListener("keyup",function(e) {	
-	if(document.activeElement === this && e.keyCode === 13) {
-		linkEl.click();
-	}
-},false);
-*/
 </script>
+<script type="text/javascript" src="/scripts/account.js"></script>
