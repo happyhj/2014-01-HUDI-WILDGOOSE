@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import next.wildgoose.model.PartialHtml;
 import next.wildgoose.utility.Wildgoose;
 import next.wildgoose.web.RestfulURI;
 
@@ -27,18 +28,13 @@ public class ApiMapper extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		String requestURI = request.getRequestURI();
-		LOGGER.debug(requestURI);
-		
-		// ""/"api"/"v1"/"reporters"/<rep_ID>/"number_of_articles?by=something"
 		RestfulURI restful = new RestfulURI (requestURI);
-		LOGGER.debug(restful.toString());
 		
 		ReporterData reporter = new ReporterData();
-		DummyData ddata = new DummyData();
 		
 		try {
 			if (restful.check(2, Wildgoose.RESOURCE_REPORTERS)) {
-				LOGGER.debug(restful.get(3));
+				LOGGER.debug("reporter id request: " + restful.get(3));
 				int reporterId = Integer.parseInt(restful.get(3));
 				String apiName = restful.get(4);
 				
@@ -46,8 +42,9 @@ public class ApiMapper extends HttpServlet {
 				result = reporter.getJSON(reporterId, apiName, by).toString();
 			}
 			if (restful.check(2,  Wildgoose.RESOURCE_HTML)) {
-				result = ddata.getCreateAccountHtml();
-				LOGGER.debug(result);
+				String path = request.getServletContext().getRealPath("/");
+				PartialHtml phtml = new PartialHtml(path + "account.html");
+				result = phtml.read();
 			}
 			if (result != null) {
 				LOGGER.debug(result.toString());

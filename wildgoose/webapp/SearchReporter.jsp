@@ -13,7 +13,7 @@
 
 <div class="wrap">
 	<header class="header">
-		<button class="account">${ requestScope.accountStatus }</button>
+		<button class="account">가입하기${ requestScope.accountStatus }</button>
 	</header>
 	<div class="container">
 		<div class="logo">
