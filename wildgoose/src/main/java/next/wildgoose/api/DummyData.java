@@ -13,15 +13,6 @@ public class DummyData {
 	private JSONObject data = null;
 	private Random random = new Random();
 	
-	public String getCreateAccountHtml() {
-		StringBuilder account_page = new StringBuilder();
-		account_page.append("<form method='post'>");
-		account_page.append("<input type='email' id='email' name='email' placeholder='이메일을 입력하세요' />");
-		account_page.append("<input type='password' id='password' placeholder='비밀번호를 입력하세요' />");
-		account_page.append("<input type='submit' id='create' />");
-		account_page.append("</form>");
-		return account_page.toString();
-	}
 	
 	public JSONObject getJsonWithStatPoints(int reporterId) {
 		result = new JSONObject();
