@@ -14,8 +14,17 @@ function createMask() {
 function createModal() {
 	var modal = document.createElement("div");
 	modal.setAttribute("class", "modal");
+	var url = "/api/v1/subhtml/create_account";
+	Ajax.requestData(url, putHtmlInModal);
 	return modal;
 }
+
+function putHtmlInModal(htmlDoc) {
+	var modal = document.querySelector(".modal");
+	console.log(htmlDoc);
+	modal.innerHTML = htmlDoc;
+}
+
 function removeModal(event) {
 	if (event.target == this) {
 		var mask = event.target;

@@ -63,9 +63,9 @@
 	</div>
 	<footer class="footer"></footer>
 </div>
-<div id="mask"></div>
 <script>
 var inputEl = document.getElementById("query-entry");
 inputEl.focus();
 </script>
+<script type="text/javascript" src="/scripts/util.js"></script>
 <script type="text/javascript" src="/scripts/account.js"></script>

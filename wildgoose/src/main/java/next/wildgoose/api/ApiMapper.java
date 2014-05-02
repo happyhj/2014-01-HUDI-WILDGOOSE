@@ -20,7 +20,7 @@ public class ApiMapper extends HttpServlet {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApiMapper.class.getName());
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		JSONObject result = null;
+		String result = null;
 		// ArticleCount date = new ArticleCount();
 		
 		response.setContentType("text/json; charset=UTF-8");
@@ -34,6 +34,7 @@ public class ApiMapper extends HttpServlet {
 		LOGGER.debug(restful.toString());
 		
 		ReporterData reporter = new ReporterData();
+		DummyData ddata = new DummyData();
 		
 		try {
 			if (restful.check(2, Wildgoose.RESOURCE_REPORTERS)) {
@@ -42,7 +43,11 @@ public class ApiMapper extends HttpServlet {
 				String apiName = restful.get(4);
 				
 				String by = request.getParameter("by");
-				result = reporter.getJSON(reporterId, apiName, by);
+				result = reporter.getJSON(reporterId, apiName, by).toString();
+			}
+			if (restful.check(2,  Wildgoose.RESOURCE_HTML)) {
+				result = ddata.getCreateAccountHtml();
+				LOGGER.debug(result);
 			}
 			if (result != null) {
 				LOGGER.debug(result.toString());
