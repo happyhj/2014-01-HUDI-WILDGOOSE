@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import next.wildgoose.model.PartialHtml;
+import next.wildgoose.utility.UriHandler;
 import next.wildgoose.utility.Wildgoose;
-import next.wildgoose.web.UriHandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
