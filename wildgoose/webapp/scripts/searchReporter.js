@@ -14,8 +14,11 @@ window.addEventListener("load", function(e) {
 				template = t;
 			});
 			
+			var totalNum = document.querySelector(".search-more .state-search-total").innerText;
+			var requestNum = 24;
+			
 			// search
-			var url = "/api/v1/reporters?q=" + searchQuery;
+			var url = "/api/v1/reporters?q=" + searchQuery + "&last=" + totalNum + "&req=" + requestNum;
 			Ajax.requestData(url, function(rawD) {
 				clickSearchMoreBtn(rawD, template);
 			});
@@ -28,10 +31,20 @@ window.addEventListener("load", function(e) {
 
 function clickSearchMoreBtn(rawD, template) {
 	
+	var hasMoreCards = rawD.indexOf(0);
+	var searchMore = document.querySelector(".search-more");
+	searchMore.setAttribute("style", "display: none;");
+	if (hasMoreCards != "0") {
+		searchMore.setAttribute("style", "");
+	}
+	
+	rawD = rawD.substring(1, rawD.length);
+	console.log(rawD);
 	
 	var searchResult = document.querySelector(".search-result > ul");
 	var reporterCards = JSON.parse(rawD);
 	var sizeOfCards = reporterCards.length;
+	console.log(reporterCards);
 	
 	(function(cards) {
 		for (var i=0; i<sizeOfCards; i++) {
@@ -57,6 +70,14 @@ function clickSearchMoreBtn(rawD, template) {
 			)
 		}
 	}(reporterCards));;
+	
+	var total = document.querySelector(".search-more .state-search-total").innerText;
+	var total = parseInt(total);
+	
+	document.querySelector(".search-more .state-search-total").innerText = total + sizeOfCards;
+	
+//	console.log(total + sizeOfCards);
+//	console.log(document.querySelector(".search-more .state-search-total"));
 }
 
 

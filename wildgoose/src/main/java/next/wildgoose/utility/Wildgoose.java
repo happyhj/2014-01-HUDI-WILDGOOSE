@@ -23,5 +23,6 @@ public final class Wildgoose {
 	
 	public static final String KEYWORD_MSG = "message";
 	
+	public static final int NUM_OF_CARDS = 24;
 	
 }

@@ -64,8 +64,8 @@
 			<div class="search-more">
 				<div class="search-button search-button-ajax">더보기</div>
 				<div class="search-state search-state-hidden">
-				<div class="state-search-query">${ requestScope.searchQuery }</div>
-				<div class="state-search-last">10</div>
+				<div class="state-search-query hidden">${ requestScope.searchQuery }</div>
+				<div class="state-search-total hidden">${ requestScope.totalNum }</div>
 				</div>
 			</div>
 		</c:if>

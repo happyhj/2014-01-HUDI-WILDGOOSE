@@ -25,11 +25,10 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 		super(request);
 	}
 
-
 	/*
 	 *  특정 DAO에 접근하여 SearchReporter에 적합한 데이터 반환
 	 */
-	private List<ReporterCard> getCards(String searchQuery) {
+	private List<ReporterCard> getCards(String searchQuery, int start, int end) {
 		LOGGER.debug("valid search: " + searchQuery);
 
 		List<ReporterCard> reporterCards = null;
@@ -38,11 +37,11 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 		// DB에서 검색하여 reporterCard 리스트 가져오기
 		// URL로 검색
 		if (Utility.isURL(searchQuery)) {
-			reporterCards = reporterCardDao.findReportersByURL(searchQuery);
+			reporterCards = reporterCardDao.findReportersByURL(searchQuery, start, end);
 		}
 		// 이름 검색
 		else {
-			reporterCards = reporterCardDao.findReportersByName(searchQuery);
+			reporterCards = reporterCardDao.findReportersByName(searchQuery, start, end);
 		}
 
 		return reporterCards;
@@ -82,10 +81,17 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 		}
 
 		// 자료 가져오기
-		reporterCards = this.getCards(searchQuery);
+		reporterCards = this.getCards(searchQuery, 0, Wildgoose.NUM_OF_CARDS + 1);
+		
+		// 더보기 버튼 보여줄지 여부 확
+		if (reporterCards.size() >= Wildgoose.NUM_OF_CARDS + 1) {
+			hasMoreCards = true;
+			reporterCards.remove(Wildgoose.NUM_OF_CARDS);
+		}
 		
 		// request 객체에 attribute 설정하기
-		super.request.setAttribute("hasMoreCards", !hasMoreCards);
+		super.request.setAttribute("totalNum", Wildgoose.NUM_OF_CARDS);
+		super.request.setAttribute("hasMoreCards", hasMoreCards);
 		super.request.setAttribute("reporterCards", reporterCards);
 		super.request.setAttribute("searchQuery", searchQuery);
 
@@ -102,12 +108,26 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 	public String toJsonString() throws Exception {
 		
 		Gson gson = new Gson();
+		
+		int hasMoreCards = 0;
 		List<ReporterCard> reporterCards = null;
+		
 		String searchQuery = super.request.getParameter("q");
+		int lastNum = Integer.parseInt(super.request.getParameter("last"));
+		int requestNum = Integer.parseInt(super.request.getParameter("req"));
+		
+		LOGGER.debug("lastNum: " + lastNum);
+		LOGGER.debug("requestNum: " + requestNum);
 		
 		// 자료 가져오기
-		reporterCards = this.getCards(searchQuery);
+		reporterCards = this.getCards(searchQuery, lastNum, requestNum + 1);
 		
-		return gson.toJson(reporterCards).toString();
+		// 더보기 버튼 보여줄지 여부 확인
+		if (reporterCards.size() >= Wildgoose.NUM_OF_CARDS + 1) {
+			hasMoreCards = 1;
+			reporterCards.remove(Wildgoose.NUM_OF_CARDS);
+		}
+		
+		return hasMoreCards + gson.toJson(reporterCards).toString();
 	}
 }
