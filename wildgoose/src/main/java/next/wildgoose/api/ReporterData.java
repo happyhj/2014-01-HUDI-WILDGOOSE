@@ -12,7 +12,6 @@ import org.json.JSONObject;
 public class ReporterData {
 	
 	public JSONObject getJSON(HttpServletRequest request, int reporterId, String apiName, String condition) {
-		JSONObject result = null;
 		
 		// sevlet context
 		ServletContext context = request.getSession().getServletContext();
@@ -21,28 +20,32 @@ public class ReporterData {
 		NumberOfArticlesDAO numberOfArticlesDao = (NumberOfArticlesDAO) context.getAttribute("numberOfArticlesDAO");
 		HookingKeywordDAO hkDao = (HookingKeywordDAO) context.getAttribute("hookingKeywordDAO");
 		
+		/*
+		 * 이하 graph
+		 */
 		if ("number_of_hook_keywords".equals(apiName)) {
-			result = hkDao.getHookingKeywordsCount(reporterId);
-			if (result == null) {
-				// DO Something...
-			}
+			return hkDao.getHookingKeywordsCount(reporterId);
 		}
-		else if ("number_of_articles".equals(apiName)) {
+		
+		if ("number_of_articles".equals(apiName)) {
 			// when by is null, day is default value
 			if (condition == null) {
 				condition = "day";
 			}
 			
 			if ("section".equals(condition)) {
-				result = numberOfArticlesDao.bySection(reporterId);
-			} else if ("day".equals(condition)) {
-				result = numberOfArticlesDao.byDay(reporterId);
+				return numberOfArticlesDao.bySection(reporterId);
+			}
+			
+			if ("day".equals(condition)) {
+				return numberOfArticlesDao.byDay(reporterId);
 			}
 		}
-		else if ("stat_points".equals(apiName)) {
-			result = dummy.getJsonWithStatPoints(reporterId);
+		
+		if ("stat_points".equals(apiName)) {
+			return dummy.getJsonWithStatPoints(reporterId);
 		}
 		
-		return result;
+		return null;
 	}
 }

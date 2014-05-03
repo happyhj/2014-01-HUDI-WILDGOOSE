@@ -13,7 +13,16 @@ public abstract class DaoManager {
 	protected HttpServletResponse response;
 	protected UriHandler uriHandler;
 	protected ServletContext context;
-		
+	
+	protected DaoManager (HttpServletRequest request) {
+		this (request, null, null);
+	}
+	
+	protected DaoManager (HttpServletRequest request, UriHandler uriHandler) {
+		this (request, null, uriHandler);
+	}
+	
+	
 	protected DaoManager (HttpServletRequest request, HttpServletResponse response, UriHandler uriHandler) {
 		this.request = request;
 		this.response = response;

@@ -36,7 +36,6 @@
 					<c:when test="${ not empty requestScope.message }">
 						<span>${ requestScope.message }</span>
 					</c:when>
-					
 					<%-- searchQuery 존재시 --%>
 					<c:when test="${ not empty requestScope.searchQuery }">
 						<c:if test="${ empty requestScope.reporterCards }">
@@ -60,6 +59,16 @@
 				</c:choose>
 			</ul>
 		</div>
+		<%-- searchQuery 존재시 and 검색 결과가 더 많을 때 --%>
+		<c:if test="${ not empty requestScope.searchQuery and requestScope.hasMoreCards == true }">
+			<div class="search-more">
+				<div class="search-button search-button-ajax">더보기</div>
+				<div class="search-state search-state-hidden">
+				<div class="state-search-query">${ requestScope.searchQuery }</div>
+				<div class="state-search-last">10</div>
+				</div>
+			</div>
+		</c:if>
 	</div>
 	<footer class="footer"></footer>
 </div>
@@ -69,3 +78,4 @@ inputEl.focus();
 </script>
 <script type="text/javascript" src="/scripts/util.js"></script>
 <script type="text/javascript" src="/scripts/account.js"></script>
+<script type="text/javascript" src="/scripts/searchReporter.js"></script>

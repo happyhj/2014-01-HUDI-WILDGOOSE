@@ -37,7 +37,7 @@ public class FrontController extends HttpServlet {
 		
 		try {
 			if (uriHandler.check(0, Wildgoose.RESOURCE_INDEX)) {
-				action = new SearchReporter(request, response, uriHandler);
+				action = new SearchReporter(request);
 				forward = action.execute();
 			}
 			else if (uriHandler.check(0, Wildgoose.RESOURCE_REPORTERS)) {
