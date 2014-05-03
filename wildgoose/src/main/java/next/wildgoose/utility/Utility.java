@@ -77,5 +77,4 @@ public class Utility {
 		cal.add(Calendar.DATE, addDate);
 		return dateFormat.format(cal.getTime());
 	}
-
 }

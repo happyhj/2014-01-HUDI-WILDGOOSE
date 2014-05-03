@@ -1,4 +1,4 @@
-package next.wildgoose.web;
+package next.wildgoose.utility;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -48,17 +48,22 @@ public class UriHandler {
 	
 
 	public String get (int position) {
+		if (position < 0 || position >= this.resources.size() ) {
+			return null;
+		}
+		
 		return this.resources.get(position);
 	}
 	
 	public boolean check (int position, Object obj) {
 		
-		if (position < 0 || position > this.resources.size() ) {
+		if (this.get(position).equals(null)) {
 			return false;
 		}
-
+		
 		return this.resources.get(position).equals((String)obj);
 	}
+	
 	public int size() {
 		return this.resources.size();
 	}

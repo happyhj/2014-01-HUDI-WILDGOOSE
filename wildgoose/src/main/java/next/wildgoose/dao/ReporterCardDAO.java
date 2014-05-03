@@ -59,7 +59,7 @@ public class ReporterCardDAO {
 		return reporterCard;
 	}
 	
-	public List<ReporterCard> findReportersByURL(String URL) {
+	public List<ReporterCard> findReportersByURL(String URL, int start, int end) {
 		Connection conn = null;
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
@@ -73,13 +73,18 @@ public class ReporterCardDAO {
 			StringBuilder query = new StringBuilder();
 			// 이름으로 검색하기
 			query.append("SELECT result.id as id, result.name as name, result.email as email, article.title as title, press.name as press_name ");
-			query.append("FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
-			query.append("WHERE aa.article_URL LIKE ? GROUP BY author.id ORDER BY author.name) as result ");
+			query.append("FROM (");
+			query.append("SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
+			query.append("WHERE aa.article_URL LIKE ? GROUP BY author.id ORDER BY author.name ");
+			query.append("LIMIT ?, ?");
+			query.append(") as result ");
 			query.append("JOIN article ON article.URL = result.article_URL ");
 			query.append("JOIN press ON result.press_id = press.id");
 			
 			psmt = conn.prepareStatement(query.toString());
 			psmt.setString(1, "%" + URL + "%");
+			psmt.setInt(2, start);
+			psmt.setInt(3, end);
 			
 			// sql에 query 요청
 			rs = psmt.executeQuery();
@@ -107,7 +112,7 @@ public class ReporterCardDAO {
 	}
 	
 	
-	public List<ReporterCard> findReportersByName (String name) {
+	public List<ReporterCard> findReportersByName (String name, int start, int end) {
 		
 		Connection conn = null;
 		PreparedStatement psmt = null;
@@ -122,13 +127,18 @@ public class ReporterCardDAO {
 			StringBuilder query = new StringBuilder();
 			// 이름으로 검색하기
 			query.append("SELECT result.id as id, result.name as name, result.email as email, article.title as title, press.name as press_name ");
-			query.append("FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
-			query.append("WHERE author.name LIKE ? GROUP BY author.id ORDER BY author.name) as result ");
+			query.append("FROM (");
+			query.append("SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
+			query.append("WHERE author.name LIKE ? GROUP BY author.id ORDER BY author.name ");
+			query.append("LIMIT ?, ?");
+			query.append(") as result ");
 			query.append("JOIN article ON article.URL = result.article_URL ");
 			query.append("JOIN press ON result.press_id = press.id");
 			
 			psmt = conn.prepareStatement(query.toString());
 			psmt.setString(1, "%" + name + "%");
+			psmt.setInt(2, start);
+			psmt.setInt(3, end);
 			
 			// sql에 query 요청
 			rs = psmt.executeQuery();
@@ -143,6 +153,7 @@ public class ReporterCardDAO {
 				reporterCard.setArticleTitle(rs.getString("title"));
 				reporterCards.add(reporterCard);
 			}
+			
 		} catch (SQLException sqle) {
 			LOGGER.debug(sqle.getMessage(),sqle);
 			reporterCards = null;
