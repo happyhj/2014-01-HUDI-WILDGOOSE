@@ -2,6 +2,7 @@ package next.wildgoose.web;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,14 +20,14 @@ public class ShowReporterAction implements Action {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ShowReporterAction.class.getName());
 	
 	@Override
-	public ActionForward execute(HttpServletRequest request, HttpServletResponse response, RestfulURI restful) throws Exception {
-		
-		ActionForward forward = new ActionForward();
-		
+	public ActionForward execute(HttpServletRequest request, HttpServletResponse response, UriHandler restful) throws Exception {
 		ReporterCard reporterCardData = null;
 		List<ArticleCard> articleCards = null;
-		ReporterCardDAO reporterCardDao = null;
-		ArticleCardDAO articleCardDao = null;
+		
+		ActionForward forward = new ActionForward();
+		ServletContext context = request.getSession().getServletContext();
+		ReporterCardDAO reporterCardDao = (ReporterCardDAO) context.getAttribute("reporterCardDAO");
+		ArticleCardDAO articleCardDao =  (ArticleCardDAO) context.getAttribute("articleCardDAO");
 		
 		LOGGER.debug(restful.toString());
 		
@@ -40,12 +41,9 @@ public class ShowReporterAction implements Action {
 		int reporterId = Integer.parseInt(restful.get(1));
 		
 		// DB에서 id로 검색하여 reporterCardData 가져오기
-		reporterCardDao = new ReporterCardDAO();
 		reporterCardData = reporterCardDao.findReporterById(reporterId);
 		
-		
 		// DB에서 id으로 검색하여 reporter의 최신 기사 리스트 가져오기
-		articleCardDao = new ArticleCardDAO();
 		articleCards = articleCardDao.findArticlesById(reporterId);
 		
 		request.setAttribute("reporter_id", reporterId);

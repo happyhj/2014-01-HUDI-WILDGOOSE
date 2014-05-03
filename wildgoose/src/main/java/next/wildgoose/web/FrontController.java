@@ -26,28 +26,28 @@ public class FrontController extends HttpServlet {
 		RequestDispatcher reqDispatcher = null;
 		String requestURI = request.getRequestURI();
 					
-		RestfulURI restful = new RestfulURI (requestURI);
-		LOGGER.debug(restful.toString());
+		UriHandler uriHandler = new UriHandler (requestURI);
+		LOGGER.debug(uriHandler.toString());
 
 		Action action = null;
 		ActionForward forward = null;
 		
 		try {
-			if (restful.check(0, Wildgoose.RESOURCE_INDEX)) {
+			if (uriHandler.check(0, Wildgoose.RESOURCE_INDEX)) {
 				action = new SearchReporterAction();
-				forward = action.execute(request, response, restful);
+				forward = action.execute(request, response, uriHandler);
 			}
-			else if (restful.check(0, Wildgoose.RESOURCE_REPORTERS)) {
+			else if (uriHandler.check(0, Wildgoose.RESOURCE_REPORTERS)) {
 				action = new ShowReporterAction();
-				forward = action.execute(request, response, restful);
+				forward = action.execute(request, response, uriHandler);
 			}
-			else if (restful.check(0, Wildgoose.RESOURCE_ERROR)) {
+			else if (uriHandler.check(0, Wildgoose.RESOURCE_ERROR)) {
 				action = new ErrorAction(Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_ERROR);
-				forward = action.execute(request, response, restful);
+				forward = action.execute(request, response, uriHandler);
 			}
 			else {
 				action = new ErrorAction(Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_WENT_WRONG);
-				forward = action.execute(request, response, restful);
+				forward = action.execute(request, response, uriHandler);
 			}
 		}
 		catch (Exception e) {

@@ -23,7 +23,7 @@ public class EncodingFilter implements Filter {
 	
 	public void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
-		this.encodingType = filterConfig.getInitParameter("encoding");
+		this.encodingType = filterConfig.getServletContext().getInitParameter("encoding");
 	}
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {

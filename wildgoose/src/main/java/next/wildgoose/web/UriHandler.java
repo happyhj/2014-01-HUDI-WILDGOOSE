@@ -7,13 +7,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RestfulURI {
+public class UriHandler {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(RestfulURI.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(UriHandler.class.getName());
 	
 	private List<String> resources;
 
-	public RestfulURI (String requestURI) {
+	public UriHandler (String requestURI) {
 		this.resources = separateResource(requestURI);
 	}
 	

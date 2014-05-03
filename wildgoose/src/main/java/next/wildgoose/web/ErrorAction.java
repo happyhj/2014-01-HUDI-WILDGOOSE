@@ -25,7 +25,7 @@ public class ErrorAction implements Action {
 	}
 
 	@Override
-	public ActionForward execute(HttpServletRequest request, HttpServletResponse response, RestfulURI restful) throws Exception {
+	public ActionForward execute(HttpServletRequest request, HttpServletResponse response, UriHandler restful) throws Exception {
 		
 		ActionForward forward = new ActionForward();
 		forward.setPath(this.path);

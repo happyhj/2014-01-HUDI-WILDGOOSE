@@ -2,6 +2,7 @@ package next.wildgoose.web;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,12 +19,13 @@ public class SearchReporterAction implements Action {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearchReporterAction.class.getName());
 	
 	@Override
-	public ActionForward execute(HttpServletRequest request, HttpServletResponse response, RestfulURI restful) throws Exception {
-		ActionForward forward = new ActionForward();
-		
+	public ActionForward execute(HttpServletRequest request, HttpServletResponse response, UriHandler restful) throws Exception {
 		String searchQuery = null;
 		List<ReporterCard> reporterCards = null;
-		ReporterCardDAO reporterCardDao = null;
+		
+		ActionForward forward = new ActionForward();
+		ServletContext context = request.getSession().getServletContext();
+		ReporterCardDAO reporterCardDao = (ReporterCardDAO) context.getAttribute("reporterCardDAO");
 		
 		// 첫 요청시, 'q'가 null인 경우
 		searchQuery = request.getParameter("q");
@@ -42,8 +44,6 @@ public class SearchReporterAction implements Action {
 			return forward;	
 		}
 		
-
-		reporterCardDao = new ReporterCardDAO();
 		// DB에서 검색하여 reporterCard 리스트 가져오기
 		// URL로 검색
 		if (Utility.isURL(searchQuery)) {

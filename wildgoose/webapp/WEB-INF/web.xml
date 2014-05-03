@@ -88,10 +88,15 @@
 		<param-name>userPassword</param-name>
 		<param-value></param-value>
 	</context-param>
+	<context-param>
+		<param-name>encoding</param-name>
+		<param-value>UTF-8</param-value>
+	
+	</context-param>
 
 	<!-- Listeners -->
 	<listener>
-		<listener-class>next.wildgoose.listener.DatabaseContextListener</listener-class>
+		<listener-class>next.wildgoose.listener.WildgooseContextListener</listener-class>
 	</listener>
 	
 	<!-- Filter -->
@@ -99,10 +104,6 @@
 		<display-name>EncodingFilter</display-name>
 		<filter-name>EncodingFilter</filter-name>
 		<filter-class>next.wildgoose.filter.EncodingFilter</filter-class>
-		<init-param>
-			<param-name>encoding</param-name>
-			<param-value>utf-8</param-value>
-		</init-param>
 	</filter>
 	
 	<!-- Filter Mapping -->
