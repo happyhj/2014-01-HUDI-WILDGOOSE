@@ -67,15 +67,31 @@ public class ApiMapper extends HttpServlet {
 			// HTML 자원을 요청시
 			if (uriHandler.check(2,  Wildgoose.RESOURCE_HTML)) {
 				response.setContentType(Wildgoose.HEADER_CON_TYPE_HTML);
-				
 				String path = context.getRealPath(Wildgoose.RESOURCE_ROOT);
-				PartialHtml phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_ACCOUNT);
-				result = phtml.read();
-				LOGGER.debug(result);
+				PartialHtml phtml = null;
+				String resourceName = uriHandler.get(3);
+				LOGGER.debug("resourceName: " + resourceName);
 				
-				// response to client
-				out.println(result);
-				return;
+				if ("create_account".equals(resourceName)) {
+					phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_ACCOUNT);
+					result = phtml.read();
+					LOGGER.debug(result);
+					
+					// response to client
+					out.println(result);
+					return;
+				}
+				
+				if ("create_reporter_card".equals(resourceName)) {
+					phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_REPORTER_CARD);
+					result = phtml.read();
+					LOGGER.debug(result);
+					
+					// response to client
+					out.println(result);
+					return;
+					
+				}
 			}
 
 		}

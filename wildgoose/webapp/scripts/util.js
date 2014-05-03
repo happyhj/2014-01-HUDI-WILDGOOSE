@@ -23,13 +23,17 @@ var Ajax = (function(){
 				}
 			}
 		},
-		requestData : function (url, func) {
+		requestData : function (url, func, async) {
+			if (async == null) {
+				async = true;
+			}
+			
 			var request = this.createRequest();
 			if (request == null) {
 				console.log("Unable to create request");
 				return;
 			}
-			request.open("GET", url, true);
+			request.open("GET", url, async);
 			request.addEventListener("readystatechange", function (e) {
 				Ajax.responseData(e, request, func);
 			}, false); 

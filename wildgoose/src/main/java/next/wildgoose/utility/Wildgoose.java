@@ -10,6 +10,7 @@ public final class Wildgoose {
 	public static final String PAGE_SEARCH_REPORTER = "SearchReporter.jsp";
 	public static final String PAGE_SHOW_REPORTER = "ShowReporter.jsp";
 	public static final String PAGE_STATIC_ACCOUNT = "account.html";
+	public static final String PAGE_STATIC_REPORTER_CARD = "reporterCard.html";
 	
 	public static final String RESOURCE_ROOT = "/";
 	public static final String RESOURCE_INDEX = "";
@@ -21,5 +22,6 @@ public final class Wildgoose {
 	public static final String MSG_ERROR = "예상치 못한 문제 발생";
 	
 	public static final String KEYWORD_MSG = "message";
+	
 	
 }
