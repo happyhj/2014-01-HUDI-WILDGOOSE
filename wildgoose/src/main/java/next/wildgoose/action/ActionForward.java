@@ -1,4 +1,4 @@
-package next.wildgoose.model;
+package next.wildgoose.action;
 
 import next.wildgoose.utility.Wildgoose;
 

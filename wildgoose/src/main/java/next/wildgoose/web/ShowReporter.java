@@ -5,14 +5,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import next.wildgoose.action.Action;
+import next.wildgoose.action.ActionForward;
 import next.wildgoose.dao.ArticleCardDAO;
 import next.wildgoose.dao.ReporterCardDAO;
-import next.wildgoose.model.Action;
-import next.wildgoose.model.ActionForward;
 import next.wildgoose.model.ArticleCard;
-import next.wildgoose.model.DaoManager;
 import next.wildgoose.model.ReporterCard;
-import next.wildgoose.utility.UriHandler;
 import next.wildgoose.utility.Wildgoose;
 
 import org.slf4j.Logger;

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import next.wildgoose.model.JsonConverter;
 import next.wildgoose.model.PartialHtml;
-import next.wildgoose.utility.UriHandler;
 import next.wildgoose.utility.Wildgoose;
 
 import org.slf4j.Logger;

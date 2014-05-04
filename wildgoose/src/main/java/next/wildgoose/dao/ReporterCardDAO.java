@@ -50,9 +50,9 @@ public class ReporterCardDAO {
 		} catch (SQLException sqle) {
 			LOGGER.debug(sqle.getMessage(),sqle);
 		} finally {
-			Utility.closePrepStatement(psmt);
-			Utility.closeResultSet(rs);
-			Utility.closeConnection(conn);
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closeConnection(conn);
 		}
 		
 		return reporterCard;
@@ -102,9 +102,9 @@ public class ReporterCardDAO {
 			LOGGER.debug(sqle.getMessage(),sqle);
 			reporterCards = null;
 		} finally {
-			Utility.closePrepStatement(psmt);
-			Utility.closeResultSet(rs);
-			Utility.closeConnection(conn);
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closeConnection(conn);
 		}
 		
 		return reporterCards;
@@ -157,9 +157,9 @@ public class ReporterCardDAO {
 			LOGGER.debug(sqle.getMessage(),sqle);
 			reporterCards = null;
 		} finally {
-			Utility.closePrepStatement(psmt);
-			Utility.closeResultSet(rs);
-			Utility.closeConnection(conn);
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closeConnection(conn);
 		}
 		
 		return reporterCards;

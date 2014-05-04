@@ -5,8 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import next.wildgoose.utility.Utility;
-
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,9 +49,9 @@ public class HookingKeywordDAO {
 		} catch (SQLException sqle) {
 			LOGGER.debug(sqle.getMessage(),sqle);
 		} finally {
-			Utility.closePrepStatement(psmt);
-			Utility.closeResultSet(rs);
-			Utility.closeConnection(conn);
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closeConnection(conn);
 		}
 		
 		return result;

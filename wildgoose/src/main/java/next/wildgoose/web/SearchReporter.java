@@ -1,13 +1,13 @@
 package next.wildgoose.web;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import next.wildgoose.action.Action;
+import next.wildgoose.action.ActionForward;
 import next.wildgoose.dao.ReporterCardDAO;
-import next.wildgoose.model.Action;
-import next.wildgoose.model.ActionForward;
-import next.wildgoose.model.DaoManager;
 import next.wildgoose.model.JsonConverter;
 import next.wildgoose.model.ReporterCard;
 import next.wildgoose.utility.Utility;
@@ -36,7 +36,7 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 
 		// DB에서 검색하여 reporterCard 리스트 가져오기
 		// URL로 검색
-		if (Utility.isURL(searchQuery)) {
+		if (isURL(searchQuery)) {
 			reporterCards = reporterCardDao.findReportersByURL(searchQuery, start, end);
 		} else {
 			reporterCards = reporterCardDao.findReportersByName(searchQuery, start, end);
@@ -44,7 +44,14 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 
 		return reporterCards;
 	}
+	
+	public static boolean isURL(String URL) {
 
+		String regex = "(?i)^(http://)?(www.)?[a-z0-9-_]+.[a-z]{2,3}(.[a-z]{2,3})?.*";
+
+		return Pattern.matches(regex, URL);
+	}
+	
 	/*
 	 *  Action 인터페이스의 구현체, 상황에 맞는 View를 선택해서 ActionForward 객체로 반환
 	 *  (non-Javadoc)

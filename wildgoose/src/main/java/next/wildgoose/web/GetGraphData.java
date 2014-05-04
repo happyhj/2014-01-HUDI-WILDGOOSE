@@ -20,29 +20,21 @@ public class GetGraphData {
 		NumberOfArticlesDAO numberOfArticlesDao = (NumberOfArticlesDAO) context.getAttribute("numberOfArticlesDAO");
 		HookingKeywordDAO hkDao = (HookingKeywordDAO) context.getAttribute("hookingKeywordDAO");
 		
+		if (condition == null) {
+			condition = "day";
+		}
 		/*
 		 * 이하 graph
 		 */
 		if ("number_of_hook_keywords".equals(apiName)) {
 			return hkDao.getHookingKeywordsCount(reporterId);
-		}
-		
-		if ("number_of_articles".equals(apiName)) {
-			// when by is null, day is default value
-			if (condition == null) {
-				condition = "day";
-			}
-			
+		} else if ("number_of_articles".equals(apiName)) {
 			if ("section".equals(condition)) {
 				return numberOfArticlesDao.bySection(reporterId);
-			}
-			
-			if ("day".equals(condition)) {
+			} else if ("day".equals(condition)) {
 				return numberOfArticlesDao.byDay(reporterId);
 			}
-		}
-		
-		if ("stat_points".equals(apiName)) {
+		} else if ("stat_points".equals(apiName)) {
 			return dummy.getJsonWithStatPoints(reporterId);
 		}
 		

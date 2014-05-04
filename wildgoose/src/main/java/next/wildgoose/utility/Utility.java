@@ -31,44 +31,6 @@ public class Utility {
 		return encoded;
 	}
 
-	public static boolean isURL(String URL) {
-
-		String regex = "(?i)^(http://)?(www.)?[a-z0-9-_]+.[a-z]{2,3}(.[a-z]{2,3})?.*";
-
-		return Pattern.matches(regex, URL);
-	}
-
-	// database
-	public static void closeConnection(final Connection conn) {
-		if (conn != null) {
-			try {
-				conn.close();
-			} catch (SQLException sqle) {
-				LOGGER.debug(sqle.getMessage(),sqle);
-			}
-		}
-	}
-
-	public static void closePrepStatement(final PreparedStatement psmt) {
-		if (psmt != null) {
-			try {
-				psmt.close();
-			} catch (SQLException sqle) {
-				LOGGER.debug(sqle.getMessage(),sqle);
-			}
-		}
-	}
-
-	public static void closeResultSet(final ResultSet rs) {
-		if (rs != null) {
-			try {
-				rs.close();
-			} catch (SQLException sqle) {
-				LOGGER.debug(sqle.getMessage(),sqle);
-			}
-		}
-	}
-
 	public static String getDate(Date date, int addDate) {
 		DateFormat dateFormat = new SimpleDateFormat("MM-dd");
 		Calendar cal = Calendar.getInstance();

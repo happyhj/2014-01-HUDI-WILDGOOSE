@@ -1,6 +1,7 @@
-package next.wildgoose.model;
+package next.wildgoose.action;
 
 import javax.servlet.http.HttpServletRequest;
+
 import next.wildgoose.utility.Wildgoose;
 
 import org.slf4j.Logger;

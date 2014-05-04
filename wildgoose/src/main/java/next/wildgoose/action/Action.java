@@ -1,4 +1,5 @@
-package next.wildgoose.model;
+package next.wildgoose.action;
+
 
 public interface Action {
 	public ActionForward execute ();
