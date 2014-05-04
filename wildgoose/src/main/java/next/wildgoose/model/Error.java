@@ -24,7 +24,7 @@ public class Error implements Action {
 	}
 
 	@Override
-	public ActionForward execute() throws Exception {
+	public ActionForward execute() {
 		
 		ActionForward forward = new ActionForward();
 		forward.setPath(this.path);

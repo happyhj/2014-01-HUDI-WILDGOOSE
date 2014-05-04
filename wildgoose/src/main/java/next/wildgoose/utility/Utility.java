@@ -25,8 +25,7 @@ public class Utility {
 		try {
 			encoded = new String(original.getBytes("8859_1"), encodingType);
 		} catch (UnsupportedEncodingException e) {
-			// nothing
-			encoded = null;
+			LOGGER.debug("Utility error" + e.getMessage());
 		}
 
 		return encoded;

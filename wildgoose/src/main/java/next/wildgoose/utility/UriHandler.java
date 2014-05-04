@@ -34,12 +34,12 @@ public class UriHandler {
 		}
 		
 		// uri 시작할 때 "/" 존재시 startIdx 변경
-		if (requestURI.indexOf("/") == 0) {
+		if (requestURI.indexOf('/') == 0) {
 			startIdx++;
 		}
 
 		// uri 마지막에 "/" 존재시 endIdx 변경
-		if (requestURI.lastIndexOf("/") == endIdx-1) {
+		if (requestURI.lastIndexOf('/') == endIdx-1) {
 			endIdx--;
 		}
 		
@@ -57,7 +57,7 @@ public class UriHandler {
 	
 	public boolean check (int position, Object obj) {
 		
-		if (this.get(position).equals(null)) {
+		if (this.get(position) == null) {
 			return false;
 		}
 		

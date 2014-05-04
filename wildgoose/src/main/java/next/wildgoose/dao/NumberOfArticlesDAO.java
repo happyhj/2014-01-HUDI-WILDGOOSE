@@ -49,7 +49,6 @@ public class NumberOfArticlesDAO {
 			Utility.closeConnection(conn);
 		}
 
-		// return DateForCounts;
 		return result;
 	}
 	

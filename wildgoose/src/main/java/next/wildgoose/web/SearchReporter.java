@@ -38,9 +38,7 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 		// URL로 검색
 		if (Utility.isURL(searchQuery)) {
 			reporterCards = reporterCardDao.findReportersByURL(searchQuery, start, end);
-		}
-		// 이름 검색
-		else {
+		} else {
 			reporterCards = reporterCardDao.findReportersByName(searchQuery, start, end);
 		}
 
@@ -53,7 +51,7 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 	 * @see next.wildgoose.model.Action#execute()
 	 */
 	@Override
-	public ActionForward execute() throws Exception {
+	public ActionForward execute() {
 		List<ReporterCard> reporterCards = null;
 		String searchQuery = null;
 		boolean hasMoreCards = false;

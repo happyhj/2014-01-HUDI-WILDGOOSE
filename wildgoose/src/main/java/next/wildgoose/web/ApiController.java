@@ -93,8 +93,7 @@ public class ApiController extends HttpServlet {
 				}
 			}
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			LOGGER.debug(e.getMessage(), e);
 			out.println("error");
 		}
