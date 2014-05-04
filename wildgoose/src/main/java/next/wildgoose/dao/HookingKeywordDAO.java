@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import next.wildgoose.model.DataSource;
 import next.wildgoose.utility.Utility;
 
 import org.json.JSONObject;
@@ -42,7 +41,7 @@ public class HookingKeywordDAO {
 				String keyword = rs.getString("word");
 				LOGGER.debug(keyword);
 				if (keyword == null) {
-					return null;
+					break;
 				}
 				int count = rs.getInt("count");
 				JSONObject data = new JSONObject().put(keyword, count);

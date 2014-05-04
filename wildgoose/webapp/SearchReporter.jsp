@@ -77,5 +77,6 @@ var inputEl = document.getElementById("query-entry");
 inputEl.focus();
 </script>
 <script type="text/javascript" src="/scripts/util.js"></script>
+<script type="text/javascript" src="/scripts/modal.js"></script>
 <script type="text/javascript" src="/scripts/account.js"></script>
 <script type="text/javascript" src="/scripts/searchReporter.js"></script>

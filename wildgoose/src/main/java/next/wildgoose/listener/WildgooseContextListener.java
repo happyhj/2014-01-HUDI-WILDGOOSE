@@ -5,11 +5,11 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import next.wildgoose.dao.ArticleCardDAO;
+import next.wildgoose.dao.DataSource;
 import next.wildgoose.dao.HookingKeywordDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
 import next.wildgoose.dao.ReporterCardDAO;
-import next.wildgoose.dummy.DummyData;
-import next.wildgoose.model.DataSource;
+import next.wildgoose.model.DummyData;
 
 public class WildgooseContextListener implements ServletContextListener {
 	

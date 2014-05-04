@@ -38,9 +38,9 @@
 		<servlet-class>next.wildgoose.web.FrontController</servlet-class>
 	</servlet>
 	<servlet>
-		<display-name>ApiMapper</display-name>
-		<servlet-name>ApiMapper</servlet-name>
-		<servlet-class>next.wildgoose.api.ApiMapper</servlet-class>
+		<display-name>ApiController</display-name>
+		<servlet-name>ApiController</servlet-name>
+		<servlet-class>next.wildgoose.web.ApiController</servlet-class>
 	</servlet>
 	
 
@@ -66,7 +66,7 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>ApiMapper</servlet-name>
+		<servlet-name>ApiController</servlet-name>
 		<url-pattern>/api/v1/*</url-pattern>
 	</servlet-mapping>
 	

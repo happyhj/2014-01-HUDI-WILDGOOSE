@@ -32,7 +32,7 @@ public class ShowReporter extends DaoManager implements Action {
 	 */
 	
 	@Override
-	public ActionForward execute() throws Exception {
+	public ActionForward execute() {
 		ReporterCard reporterCard = null;
 		List<ArticleCard> articleCards = null;
 		

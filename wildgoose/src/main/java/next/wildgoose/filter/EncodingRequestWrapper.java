@@ -41,8 +41,7 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 		try {
 			encodedURI = URLDecoder.decode(requestURI, this.encodingType);
 		} catch (UnsupportedEncodingException e) {
-			// nothing
-			encodedURI = null;
+			LOGGER.debug("Encoding Wrapper Error" + e.getMessage());
 		}
 		
 		return encodedURI;

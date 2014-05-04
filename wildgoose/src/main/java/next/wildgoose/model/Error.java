@@ -1,11 +1,6 @@
-package next.wildgoose.web;
+package next.wildgoose.model;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import next.wildgoose.model.Action;
-import next.wildgoose.model.ActionForward;
-import next.wildgoose.utility.UriHandler;
 import next.wildgoose.utility.Wildgoose;
 
 import org.slf4j.Logger;
@@ -29,7 +24,7 @@ public class Error implements Action {
 	}
 
 	@Override
-	public ActionForward execute() throws Exception {
+	public ActionForward execute() {
 		
 		ActionForward forward = new ActionForward();
 		forward.setPath(this.path);

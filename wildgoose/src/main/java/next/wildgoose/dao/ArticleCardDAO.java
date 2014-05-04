@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import next.wildgoose.model.ArticleCard;
-import next.wildgoose.model.DataSource;
 import next.wildgoose.utility.Utility;
 
 import org.slf4j.Logger;
