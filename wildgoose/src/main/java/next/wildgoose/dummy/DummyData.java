@@ -34,5 +34,9 @@ public class DummyData {
 		
 		return result;
 	}
+	
+	public String getEmail () {
+		return "hello@world.com";
+	}
 
 }

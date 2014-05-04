@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import next.wildgoose.dao.SignatureDAO;
 import next.wildgoose.model.JsonConverter;
 import next.wildgoose.model.PartialHtml;
 import next.wildgoose.utility.UriHandler;
@@ -92,6 +93,33 @@ public class ApiMapper extends HttpServlet {
 					return;
 					
 				}
+			}
+			
+			// check 자원 요청시
+			if (uriHandler.check(2, Wildgoose.RESOURCE_CHECK)) {
+				String target = uriHandler.get(3);
+				SignatureDAO signatureDAO = (SignatureDAO) context.getAttribute("signatureDAO");
+				
+				LOGGER.debug("target: " + target);
+				
+				// email 자원 요청시
+				if (Wildgoose.RESOURCE_SIGN_EMAIL.equals(target)) {
+					String email = uriHandler.get(4);
+					LOGGER.debug("email: " + email);
+					result = "OK";
+					
+					boolean hasEmail = signatureDAO.findEmail(email);
+					if (hasEmail) {
+						result = "";
+					}
+					
+					LOGGER.debug("result: " + result);
+					
+					// response to client
+					out.println(result);
+					return;
+				}
+				
 			}
 
 		}

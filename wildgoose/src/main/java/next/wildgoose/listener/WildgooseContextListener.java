@@ -8,6 +8,7 @@ import next.wildgoose.dao.ArticleCardDAO;
 import next.wildgoose.dao.HookingKeywordDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
 import next.wildgoose.dao.ReporterCardDAO;
+import next.wildgoose.dao.SignatureDAO;
 import next.wildgoose.dummy.DummyData;
 import next.wildgoose.model.DataSource;
 
@@ -31,6 +32,7 @@ public class WildgooseContextListener implements ServletContextListener {
 		sc.setAttribute("hookingKeywordDAO", new HookingKeywordDAO());
 		sc.setAttribute("numberOfArticlesDAO", new NumberOfArticlesDAO());
 		sc.setAttribute("reporterCardDAO", new ReporterCardDAO());
+		sc.setAttribute("signatureDAO", new SignatureDAO());
 		
 		// DUMMY DATA
 		sc.setAttribute("dummy", new DummyData());
