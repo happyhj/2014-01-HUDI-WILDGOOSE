@@ -1,4 +1,4 @@
-package next.wildgoose.api;
+package next.wildgoose.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,14 +13,13 @@ import next.wildgoose.model.JsonConverter;
 import next.wildgoose.model.PartialHtml;
 import next.wildgoose.utility.UriHandler;
 import next.wildgoose.utility.Wildgoose;
-import next.wildgoose.web.SearchReporter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ApiMapper extends HttpServlet {
+public class ApiController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = LoggerFactory.getLogger(ApiMapper.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ApiController.class.getName());
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String result = null;
@@ -32,7 +31,7 @@ public class ApiMapper extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		String requestURI = request.getRequestURI();
 		UriHandler uriHandler = new UriHandler (requestURI);
-		ReporterData reporter = new ReporterData();
+		GetGraphData reporter = new GetGraphData();
 		
 		try {
 			// reporters 자원으로 요청시

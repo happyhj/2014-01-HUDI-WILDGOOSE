@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 
-import next.wildgoose.model.DataSource;
 import next.wildgoose.utility.Utility;
 
 import org.json.JSONObject;

@@ -1,15 +1,15 @@
-package next.wildgoose.api;
+package next.wildgoose.web;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import next.wildgoose.dao.HookingKeywordDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
-import next.wildgoose.dummy.DummyData;
+import next.wildgoose.model.DummyData;
 
 import org.json.JSONObject;
 
-public class ReporterData {
+public class GetGraphData {
 	
 	public JSONObject getJSON(HttpServletRequest request, int reporterId, String apiName, String condition) {
 		

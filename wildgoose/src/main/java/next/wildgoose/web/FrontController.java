@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import next.wildgoose.model.Action;
 import next.wildgoose.model.ActionForward;
+import next.wildgoose.model.Error;
 import next.wildgoose.utility.UriHandler;
 import next.wildgoose.utility.Wildgoose;
 
