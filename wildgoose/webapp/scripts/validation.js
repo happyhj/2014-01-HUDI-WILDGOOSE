@@ -18,7 +18,7 @@ var warnings = {
 }
 
 function existInServer (me) {
-	var url = "api/v1/check/email/" + me.value;
+	var url = "api/v1/sign/email/" + me.value;
 	Ajax.GET(url, showEmailStatus);
 	Util.addClass(me, "isProgressing");
 }

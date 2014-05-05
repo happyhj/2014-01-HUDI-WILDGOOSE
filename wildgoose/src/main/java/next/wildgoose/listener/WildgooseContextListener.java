@@ -10,7 +10,7 @@ import next.wildgoose.dao.HookingKeywordDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
 import next.wildgoose.dao.ReporterCardDAO;
 
-import next.wildgoose.dao.SignatureDAO;
+import next.wildgoose.dao.SignDAO;
 
 public class WildgooseContextListener implements ServletContextListener {
 	
@@ -32,7 +32,7 @@ public class WildgooseContextListener implements ServletContextListener {
 		sc.setAttribute("hookingKeywordDAO", new HookingKeywordDAO());
 		sc.setAttribute("numberOfArticlesDAO", new NumberOfArticlesDAO());
 		sc.setAttribute("reporterCardDAO", new ReporterCardDAO());
-		sc.setAttribute("signatureDAO", new SignatureDAO());
+		sc.setAttribute("signDAO", new SignDAO());
 		
 		// DUMMY DATA
 		//	sc.setAttribute("dummy", new DummyData());

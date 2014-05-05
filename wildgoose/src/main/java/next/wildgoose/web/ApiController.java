@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import next.wildgoose.dao.SignatureDAO;
+import next.wildgoose.dao.SignDAO;
 import next.wildgoose.model.JsonConverter;
 import next.wildgoose.model.PartialHtml;
 import next.wildgoose.utility.Wildgoose;
@@ -103,7 +103,7 @@ public class ApiController extends HttpServlet {
 			if (uriHandler.check(2, Wildgoose.RESOURCE_SIGN)) {
 				String subResource = uriHandler.get(3);
 				
-				//up
+				// sign/up
 				if ("up".equals(subResource)) {
 					String email = request.getParameter("email");
 					String password = request.getParameter("password");
@@ -112,29 +112,17 @@ public class ApiController extends HttpServlet {
 					// response to client
 					out.println("success");
 					return;
-					
 				}
-			}
-			
-			// check 자원 요청시
-			if (uriHandler.check(2, Wildgoose.RESOURCE_CHECK)) {
-				String target = uriHandler.get(3);
-				SignatureDAO signatureDAO = (SignatureDAO) context.getAttribute("signatureDAO");
 				
-				LOGGER.debug("target: " + target);
-				
-				// email 자원 요청시
-				if (Wildgoose.RESOURCE_SIGN_EMAIL.equals(target)) {
+				// sign/email,  email 자원 요청시
+				if ("email".equals(subResource)) {
+					SignDAO signDAO = (SignDAO) context.getAttribute("signDAO");
 					String email = uriHandler.get(4);
-					LOGGER.debug("email: " + email);
-					result = "OK";
 					
-					boolean hasEmail = signatureDAO.findEmail(email);
-					if (hasEmail) {
+					result = "OK";
+					if (signDAO.findEmail(email)) {
 						result = "";
 					}
-					
-					LOGGER.debug("result: " + result);
 					
 					// response to client
 					out.println(result);
