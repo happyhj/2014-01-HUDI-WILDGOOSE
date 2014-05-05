@@ -118,6 +118,7 @@ public class ReporterCardDAO {
 		ResultSet rs = null;
 		List<ReporterCard> reporterCards = null;
 		ReporterCard reporterCard = null;
+		String someName = "%" + name + "%";
 
 		// Actual logic goes here.
 		try {
@@ -135,10 +136,10 @@ public class ReporterCardDAO {
 			query.append("JOIN press ON result.press_id = press.id");
 			
 			psmt = conn.prepareStatement(query.toString());
-			psmt.setString(1, "%" + name + "%");
+			psmt.setString(1, someName);
 			psmt.setInt(2, start);
 			psmt.setInt(3, end);
-			
+			LOGGER.debug(psmt.toString());
 			// sql에 query 요청
 			rs = psmt.executeQuery();
 			
