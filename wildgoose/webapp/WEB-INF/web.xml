@@ -78,18 +78,18 @@
 	</context-param>
 	<context-param>
 		<param-name>dbUrl</param-name>
-		<!-- <param-value>jdbc:mysql://10.73.45.134:3306/wildgoose_dev</param-value> -->
-		<param-value>jdbc:mysql://heej.net:3306/wildgoose_dev</param-value>
+		<param-value>jdbc:mysql://10.73.45.134:3306/wildgoose_dev</param-value>
+		<!-- <param-value>jdbc:mysql://heej.net:3306/wildgoose_dev</param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>userName</param-name>
-		<!-- <param-value>viewer</param-value> -->
-		<param-value>wildgoose</param-value>
+		<param-value>viewer</param-value>
+		<!-- <param-value>wildgoose</param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>userPassword</param-name>
-		<!-- <param-value></param-value> -->
-		<param-value>rlfjrl</param-value>
+		<param-value></param-value>
+		<!-- <param-value>rlfjrl</param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>encoding</param-name>
