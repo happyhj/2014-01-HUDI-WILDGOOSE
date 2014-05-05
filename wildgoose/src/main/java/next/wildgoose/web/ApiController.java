@@ -34,106 +34,77 @@ public class ApiController extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		String requestURI = request.getRequestURI();
-		UriHandler uriHandler = new UriHandler (requestURI);
-		GetGraphData reporter = new GetGraphData();
+		UriHandler uri = new UriHandler (requestURI);
 		
-		try {
+		if (uri.check(2, Wildgoose.RESOURCE_REPORTERS)) {
 			// reporters 자원으로 요청시
-			if (uriHandler.check(2, Wildgoose.RESOURCE_REPORTERS)) {
-				response.setContentType(Wildgoose.HEADER_CON_TYPE_JSON);
-				LOGGER.debug(uriHandler.get(3));
-				
-				// ~/reporters 요청시 ajax로 reporterCards 반환
-				if (uriHandler.get(3) == null) {
-					JsonConverter jsonConverter = new SearchReporter(request);
-					result = jsonConverter.toJsonString();
-					LOGGER.debug(result);
-					
-					// response to client
-					out.println(result);
-					return;
-				}
-				
-				LOGGER.debug("reporter id request: " + uriHandler.get(3));
-				int reporterId = Integer.parseInt(uriHandler.get(3));
-				
-				String apiName = uriHandler.get(4);
-				String by = request.getParameter("by");
-				result = reporter.getJSON(request, reporterId, apiName, by).toString();
-				LOGGER.debug(result);
-				
-				// response to client
-				out.println(result);
-				return;
-			}
-			
+			response.setContentType(Wildgoose.HEADER_CON_TYPE_JSON);
+			result = jsonRequest(request, uri);
+		} else if (uri.check(2,  Wildgoose.RESOURCE_HTML)) {
 			// HTML 자원을 요청시
-			if (uriHandler.check(2,  Wildgoose.RESOURCE_HTML)) {
-				response.setContentType(Wildgoose.HEADER_CON_TYPE_HTML);
-				String path = context.getRealPath(Wildgoose.RESOURCE_ROOT);
-				PartialHtml phtml = null;
-				String resourceName = uriHandler.get(3);
-				LOGGER.debug("resourceName: " + resourceName);
-				
-				// account.html			
-				if ("create_account".equals(resourceName)) {
-					phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_ACCOUNT);
-					result = phtml.read();
-					LOGGER.debug(result);
-					
-					// response to client
-					out.println(result);
-					return;
-				}
-				
-				// reporterCard.html
-				if ("create_reporter_card".equals(resourceName)) {
-					phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_REPORTER_CARD);
-					result = phtml.read();
-					LOGGER.debug(result);
-					
-					// response to client
-					out.println(result);
-					return;
-					
-				}
-			}
-			
+			response.setContentType(Wildgoose.HEADER_CON_TYPE_HTML);
+			String path = context.getRealPath(Wildgoose.RESOURCE_ROOT);
+			result = htmlRequest(request, uri, path);
+		} else if (uri.check(2, Wildgoose.RESOURCE_SIGN)) {
 			// Sign 자원 요청시
-			if (uriHandler.check(2, Wildgoose.RESOURCE_SIGN)) {
-				String subResource = uriHandler.get(3);
-				
-				// sign/up
-				if ("up".equals(subResource)) {
-					String email = request.getParameter("email");
-					String password = request.getParameter("password");
-					LOGGER.debug("email: " + email + ", password: " + password);
-
-					// response to client
-					out.println("success");
-					return;
-				}
-				
-				// sign/email,  email 자원 요청시
-				if ("email".equals(subResource)) {
-					SignDAO signDAO = (SignDAO) context.getAttribute("signDAO");
-					String email = uriHandler.get(4);
-					
-					result = "OK";
-					if (signDAO.findEmail(email)) {
-						result = "";
-					}
-					
-					// response to client
-					out.println(result);
-					return;
-				}
-				
-			}
-
-		} catch (Exception e) {
-			LOGGER.debug(e.getMessage(), e);
-			out.println("error");
+			SignDAO signDAO = (SignDAO) context.getAttribute("signDAO");
+			result = signRequest(request, uri, signDAO);
 		}
+		
+		out.println(result);
+	}
+	
+	private String jsonRequest(HttpServletRequest request, UriHandler uri) {
+		GetGraphData reporter = new GetGraphData();
+		String result = null;
+		// ~/reporters 요청시 ajax로 reporterCards 반환
+		if (uri.get(3) == null) {
+			JsonConverter jsonConverter = new SearchReporter(request);
+			result = jsonConverter.toJsonString();
+		} else {
+			int reporterId = Integer.parseInt(uri.get(3));
+			LOGGER.debug("reporter id request: " + reporterId);
+			
+			String apiName = uri.get(4);
+			String by = request.getParameter("by");
+			result = reporter.getJSON(request, reporterId, apiName, by).toString();
+		}
+		return result;
+	}
+	
+	private String htmlRequest(HttpServletRequest request, UriHandler uri, String path) {
+		String result = null;
+		PartialHtml phtml = null;
+		String resourceName = uri.get(3);
+		LOGGER.debug("resourceName: " + resourceName);
+		
+		if ("create_account".equals(resourceName)) {
+			phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_ACCOUNT);
+			result = phtml.read();
+		} else if ("create_reporter_card".equals(resourceName)) {
+			phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_REPORTER_CARD);
+			result = phtml.read();	
+		}
+		return result;
+	}
+	
+	private String signRequest(HttpServletRequest request, UriHandler uri, SignDAO signDAO) {
+		String subResource = uri.get(3);
+		String result = null;
+		// sign/up
+		if ("up".equals(subResource)) {
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
+			LOGGER.debug("email: " + email + ", password: " + password);
+			result = "success";
+		} else if ("email".equals(subResource)) {
+		// sign/email,  email 자원 요청시
+			String email = uri.get(4);
+			result = "OK";
+			if (signDAO.findEmail(email)) {
+				result = "";
+			}
+		}
+		return result;
 	}
 }

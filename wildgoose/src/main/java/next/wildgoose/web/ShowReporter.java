@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 public class ShowReporter extends DaoManager implements Action {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ShowReporter.class.getName());
 	
-	protected ShowReporter(HttpServletRequest request, UriHandler uriHandler) {
+	public ShowReporter(HttpServletRequest request, UriHandler uriHandler) {
 		super(request, uriHandler);
 	}
 	

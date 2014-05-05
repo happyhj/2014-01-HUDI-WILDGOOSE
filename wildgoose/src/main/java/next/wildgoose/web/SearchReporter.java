@@ -109,7 +109,7 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 	 * @see next.wildgoose.model.JsonConverter#toJsonString()
 	 */
 	@Override
-	public String toJsonString() throws Exception {
+	public String toJsonString() {
 		
 		Gson gson = new Gson();
 		

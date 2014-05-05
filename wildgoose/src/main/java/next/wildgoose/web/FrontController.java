@@ -35,26 +35,17 @@ public class FrontController extends HttpServlet {
 		Action action = null;
 		ActionForward forward = null;
 		
-		try {
-			if (uriHandler.check(0, Wildgoose.RESOURCE_INDEX)) {
-				action = new SearchReporter(request);
-			}
-			else if (uriHandler.check(0, Wildgoose.RESOURCE_REPORTERS)) {
-				action = new ShowReporter(request, uriHandler);
-			}
-			else if (uriHandler.check(0, Wildgoose.RESOURCE_ERROR)) {
-				action = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_ERROR);
-			}
-			else {
-				action = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_WENT_WRONG);
-			}
-			forward = action.execute();
-		} catch (Exception e) {
-			LOGGER.debug(e.getMessage(), e);
-			
-			forward.setRedirect(true);
-			forward.setPath(Wildgoose.RESOURCE_ERROR);
+		if (uriHandler.check(0, Wildgoose.RESOURCE_INDEX)) {
+			action = new SearchReporter(request);
+		} else if (uriHandler.check(0, Wildgoose.RESOURCE_REPORTERS)) {
+			action = new ShowReporter(request, uriHandler);
+		} else if (uriHandler.check(0, Wildgoose.RESOURCE_ERROR)) {
+			action = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_ERROR);
+		} else {
+			action = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_WENT_WRONG);
 		}
+		
+		forward = action.execute();
 		LOGGER.debug(forward.toString());
 		
 		// redirect
@@ -66,7 +57,5 @@ public class FrontController extends HttpServlet {
 		// forward
 		reqDispatcher = request.getRequestDispatcher(forward.getPath());
 		reqDispatcher.forward(request, response);
-		
 	}
-
 }

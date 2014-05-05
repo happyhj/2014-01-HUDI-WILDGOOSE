@@ -8,7 +8,7 @@ modal = {
 	"createModalWindow" : function(url) {
 		var modal = document.createElement("div");
 		modal.setAttribute("class", "modal");
-		Ajax.requestData(url, this.putHtmlInModal);
+		Ajax.GET(url, this.putHtmlInModal);
 		return modal;
 	},
 	"putHtmlInModal" : function(htmlDoc) {

@@ -30,8 +30,10 @@ public class PartialHtml {
 			result = sb.toString();
 		} catch (FileNotFoundException e) {
 			LOGGER.debug(e.getMessage(), e);
+			result = "request file is not exist";
 		} catch (IOException e) {
 			LOGGER.debug(e.getMessage(), e);
+			result = "can't read file";
 		}
 		
 		return result;
