@@ -21,6 +21,7 @@ public final class Wildgoose {
 	public static final String RESOURCE_SIGN_EMAIL = "email";
 	public static final String RESOURCE_SIGN_PW = "pw";
 	public static final String RESOURCE_SIGN_NAME = "name";
+	public static final Object RESOURCE_SIGN = "sign";
 	
 	
 	public static final String MSG_WENT_WRONG = "잘못된 접근";

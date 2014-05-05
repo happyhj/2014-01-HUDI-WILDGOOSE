@@ -20,7 +20,12 @@ var Ajax = (function(){
 		responseData : function(e, request, func) {
 			if (request.readyState == 4) {
 				if (request.status == 200) {
-					func(request.responseText);
+					
+					// responseText의 마지막에 포함된 개행문자 제거
+					var response = request.responseText;
+					response = response.substring(0, response.length - 1);
+					
+					func(response);
 				}
 			}
 		},
@@ -54,11 +59,12 @@ var Ajax = (function(){
 				console.log("Unable to create request");
 				return;
 			}
-			
+
 			request.open("POST", url, async);
 			request.addEventListener("readystatechange", function (e) {
 				Ajax.responseData(e, request, func);
 			}, false);
+			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			// send
 			request.send(payload);
 		}
@@ -67,15 +73,18 @@ var Ajax = (function(){
 
 var Util = (function() {
 	return {
-		addClass : function(DOM, className) {
-			console.log("original: " + DOM.className);
-			
+		hasClass : function(DOM, className) {
 			// DOM에 클래스 존재여부 확인
 			var pattern = new RegExp("^.*" + className + ".*$");
 			if (pattern.test(DOM.className)) {
-				console.log("modified: " + DOM.className);
-				return;
+				return true;
 			}
+			return false;
+		},
+		
+		addClass : function(DOM, className) {
+			// DOM에 클래스 존재여부 확인
+			if (this.hasClass(DOM, className)) return;
 			
 			// DOM에 class가 없는 경우
 			if (DOM.className == "") {
@@ -88,12 +97,8 @@ var Util = (function() {
 		},
 		
 		removeClass : function (DOM, className) {
-			
 			// DOM에 클래스 존재여부 확인
-			var pattern = new RegExp("^.*" + className + ".*$");
-			if (!pattern.test(DOM.className)) {
-				return;
-			}
+			if (!this.hasClass(DOM, className)) return;
 			
 			// DOM에 class가 한개만 존재시
 			if (DOM.className == className) {

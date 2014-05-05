@@ -3,7 +3,6 @@ package next.wildgoose.web;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import next.wildgoose.action.Action;
 import next.wildgoose.action.ActionForward;
@@ -19,8 +18,8 @@ import org.slf4j.LoggerFactory;
 public class ShowReporter extends DaoManager implements Action {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ShowReporter.class.getName());
 	
-	protected ShowReporter(HttpServletRequest request, HttpServletResponse response, UriHandler uriHandler) {
-		super(request, response, uriHandler);
+	protected ShowReporter(HttpServletRequest request, UriHandler uriHandler) {
+		super(request, uriHandler);
 	}
 	
 	/*

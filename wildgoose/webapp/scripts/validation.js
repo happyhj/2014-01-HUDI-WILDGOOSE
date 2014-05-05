@@ -20,6 +20,7 @@ var warnings = {
 function existInServer (me) {
 	var url = "api/v1/check/email/" + me.value;
 	Ajax.GET(url, showEmailStatus);
+	Util.addClass(me, "isProgressing");
 }
 
 function validEmail(me) {	
@@ -134,9 +135,7 @@ function ckeckEquality(me) {
  * OK: 이메일 사용가능
  *   : 이메일 사용불가
  */
-function showEmailStatus(response) {
-	// response에 포함된 개행문자 제거
-	response = response.substring(0, response.length - 1);
+function showEmailStatus(response) {	
 	var email = document.querySelector(".form-container > input[name=email]");
 	
 	/*
@@ -157,6 +156,9 @@ function showEmailStatus(response) {
 		warn(email, "usable");
 		blurEvent.valid = false;		
 	}
+	
+	// progressing 상태 해제
+	Util.removeClass(email, "isProgressing");
 	
 	// email에 blurEvent 발생시킴
 	email.dispatchEvent(blurEvent);
@@ -179,4 +181,3 @@ function unwarn(field, warningType) {
 	
 	target.innerText = "";
 }
-

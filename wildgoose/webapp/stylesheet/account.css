@@ -47,3 +47,31 @@
 	font-size:0.9em;
 	margin:0 auto;
 }
+
+.isProgressing {
+	background:url('/image/progress.gif');
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: right center;
+}
+
+.isValid {
+	background:url('/image/ok.png');
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: right center;
+}
+
+.isInvalid {
+	background:url('/image/no.png');
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: right center;
+}
+
+.form-container .hidden {
+	display: none !important;
+}
