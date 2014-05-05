@@ -17,6 +17,11 @@ public final class Wildgoose {
 	public static final String RESOURCE_REPORTERS = "reporters";
 	public static final String RESOURCE_ERROR = "error";
 	public static final String RESOURCE_HTML = "subhtml";
+	public static final String RESOURCE_CHECK = "check";
+	public static final String RESOURCE_SIGN_EMAIL = "email";
+	public static final String RESOURCE_SIGN_PW = "pw";
+	public static final String RESOURCE_SIGN_NAME = "name";
+	
 	
 	public static final String MSG_WENT_WRONG = "잘못된 접근";
 	public static final String MSG_ERROR = "예상치 못한 문제 발생";

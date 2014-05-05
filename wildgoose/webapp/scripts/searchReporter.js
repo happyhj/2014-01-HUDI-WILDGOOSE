@@ -10,7 +10,7 @@ window.addEventListener("load", function(e) {
 			// template
 			var url = "/api/v1/subhtml/create_reporter_card";
 			var template;
-			Ajax.requestData(url, function(t) {
+			Ajax.GET(url, function(t) {
 				template = t;
 			});
 			
@@ -19,7 +19,7 @@ window.addEventListener("load", function(e) {
 			
 			// search
 			var url = "/api/v1/reporters?q=" + searchQuery + "&last=" + totalNum + "&req=" + requestNum;
-			Ajax.requestData(url, function(rawD) {
+			Ajax.GET(url, function(rawD) {
 				clickSearchMoreBtn(rawD, template);
 			});
 			
