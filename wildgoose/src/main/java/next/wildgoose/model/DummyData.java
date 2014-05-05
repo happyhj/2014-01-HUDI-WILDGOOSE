@@ -1,4 +1,4 @@
-package next.wildgoose.dummy;
+package next.wildgoose.model;
 
 import java.util.Random;
 

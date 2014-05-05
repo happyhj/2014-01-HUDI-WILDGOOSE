@@ -1,10 +1,8 @@
-package next.wildgoose.model;
+package next.wildgoose.web;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import next.wildgoose.utility.UriHandler;
 
 
 public abstract class DaoManager {

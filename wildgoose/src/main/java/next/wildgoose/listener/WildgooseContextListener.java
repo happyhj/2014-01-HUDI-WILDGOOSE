@@ -5,9 +5,11 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import next.wildgoose.dao.ArticleCardDAO;
+import next.wildgoose.dao.DataSource;
 import next.wildgoose.dao.HookingKeywordDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
 import next.wildgoose.dao.ReporterCardDAO;
+
 import next.wildgoose.dao.SignatureDAO;
 import next.wildgoose.dummy.DummyData;
 import next.wildgoose.model.DataSource;
@@ -35,7 +37,7 @@ public class WildgooseContextListener implements ServletContextListener {
 		sc.setAttribute("signatureDAO", new SignatureDAO());
 		
 		// DUMMY DATA
-		sc.setAttribute("dummy", new DummyData());
+//		sc.setAttribute("dummy", new DummyData());
 	}
 
 	public void contextDestroyed(ServletContextEvent event) {

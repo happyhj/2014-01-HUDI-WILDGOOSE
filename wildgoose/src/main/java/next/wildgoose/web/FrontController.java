@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import next.wildgoose.model.Action;
-import next.wildgoose.model.ActionForward;
-import next.wildgoose.utility.UriHandler;
+import next.wildgoose.action.Action;
+import next.wildgoose.action.ActionForward;
+import next.wildgoose.action.Error;
 import next.wildgoose.utility.Wildgoose;
 
 public class FrontController extends HttpServlet {
@@ -39,21 +39,17 @@ public class FrontController extends HttpServlet {
 			if (uriHandler.check(0, Wildgoose.RESOURCE_INDEX)) {
 				action = new SearchReporter(request);
 				forward = action.execute();
-			}
-			else if (uriHandler.check(0, Wildgoose.RESOURCE_REPORTERS)) {
+			} else if (uriHandler.check(0, Wildgoose.RESOURCE_REPORTERS)) {
 				action = new ShowReporter(request, response, uriHandler);
 				forward = action.execute();
-			}
-			else if (uriHandler.check(0, Wildgoose.RESOURCE_ERROR)) {
+			} else if (uriHandler.check(0, Wildgoose.RESOURCE_ERROR)) {
 				action = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_ERROR);
 				forward = action.execute();
-			}
-			else {
+			} else {
 				action = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_WENT_WRONG);
 				forward = action.execute();
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			LOGGER.debug(e.getMessage(), e);
 			
 			forward.setRedirect(true);

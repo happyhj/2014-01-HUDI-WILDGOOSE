@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import next.wildgoose.model.DataSource;
 import next.wildgoose.model.ReporterCard;
 import next.wildgoose.utility.Utility;
 
@@ -51,9 +50,9 @@ public class ReporterCardDAO {
 		} catch (SQLException sqle) {
 			LOGGER.debug(sqle.getMessage(),sqle);
 		} finally {
-			Utility.closePrepStatement(psmt);
-			Utility.closeResultSet(rs);
-			Utility.closeConnection(conn);
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closeConnection(conn);
 		}
 		
 		return reporterCard;
@@ -103,9 +102,9 @@ public class ReporterCardDAO {
 			LOGGER.debug(sqle.getMessage(),sqle);
 			reporterCards = null;
 		} finally {
-			Utility.closePrepStatement(psmt);
-			Utility.closeResultSet(rs);
-			Utility.closeConnection(conn);
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closeConnection(conn);
 		}
 		
 		return reporterCards;
@@ -158,9 +157,9 @@ public class ReporterCardDAO {
 			LOGGER.debug(sqle.getMessage(),sqle);
 			reporterCards = null;
 		} finally {
-			Utility.closePrepStatement(psmt);
-			Utility.closeResultSet(rs);
-			Utility.closeConnection(conn);
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closeConnection(conn);
 		}
 		
 		return reporterCards;
