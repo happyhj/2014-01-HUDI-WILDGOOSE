@@ -2,6 +2,10 @@ package next.wildgoose.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -9,11 +13,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import next.wildgoose.dao.DataSource;
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.model.JsonConverter;
 import next.wildgoose.model.PartialHtml;
 import next.wildgoose.utility.Wildgoose;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +46,10 @@ public class ApiController extends HttpServlet {
 			// reporters 자원으로 요청시
 			response.setContentType(Wildgoose.HEADER_CON_TYPE_JSON);
 			result = jsonRequest(request, uri);
+		} else if (uri.check(2, "most_similar_names")) {
+			// ex) /api/v1/most_similar_names?name=김
+			String name = request.getParameter("name");
+			result = getSimilarNames(name);
 		} else if (uri.check(2,  Wildgoose.RESOURCE_HTML)) {
 			// HTML 자원을 요청시
 			response.setContentType(Wildgoose.HEADER_CON_TYPE_HTML);
@@ -72,6 +82,29 @@ public class ApiController extends HttpServlet {
 		return result;
 	}
 	
+	private String getSimilarNames(String name) {
+		JSONObject result = new JSONObject();
+		String query = "SELECT name FROM author WHERE name LIKE ? ORDER BY name LIMIT 0, 5 ";
+		PreparedStatement psmt = null;
+		Connection conn = null;
+		ResultSet rs = null;
+		conn = DataSource.getInstance().getConnection();
+		
+		try {
+			psmt = conn.prepareStatement(query.toString());
+			psmt.setString(1, name + "%");
+			LOGGER.debug(psmt.toString());
+			rs = psmt.executeQuery();
+			while (rs.next()) {
+				JSONObject data = new JSONObject().put("name", rs.getString("name"));
+				result.append("data", data);
+			}
+		} catch (SQLException e) {
+			LOGGER.debug(e.getMessage());
+		}
+		return result.toString();
+	}
+
 	private String htmlRequest(HttpServletRequest request, UriHandler uri, String path) {
 		String result = null;
 		PartialHtml phtml = null;
