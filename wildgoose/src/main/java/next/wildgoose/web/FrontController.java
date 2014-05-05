@@ -38,17 +38,17 @@ public class FrontController extends HttpServlet {
 		try {
 			if (uriHandler.check(0, Wildgoose.RESOURCE_INDEX)) {
 				action = new SearchReporter(request);
-				forward = action.execute();
-			} else if (uriHandler.check(0, Wildgoose.RESOURCE_REPORTERS)) {
-				action = new ShowReporter(request, response, uriHandler);
-				forward = action.execute();
-			} else if (uriHandler.check(0, Wildgoose.RESOURCE_ERROR)) {
-				action = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_ERROR);
-				forward = action.execute();
-			} else {
-				action = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_WENT_WRONG);
-				forward = action.execute();
 			}
+			else if (uriHandler.check(0, Wildgoose.RESOURCE_REPORTERS)) {
+				action = new ShowReporter(request, uriHandler);
+			}
+			else if (uriHandler.check(0, Wildgoose.RESOURCE_ERROR)) {
+				action = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_ERROR);
+			}
+			else {
+				action = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_WENT_WRONG);
+			}
+			forward = action.execute();
 		} catch (Exception e) {
 			LOGGER.debug(e.getMessage(), e);
 			

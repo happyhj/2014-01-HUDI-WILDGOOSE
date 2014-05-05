@@ -10,7 +10,6 @@ import next.wildgoose.action.ActionForward;
 import next.wildgoose.dao.ReporterCardDAO;
 import next.wildgoose.model.JsonConverter;
 import next.wildgoose.model.ReporterCard;
-import next.wildgoose.utility.Utility;
 import next.wildgoose.utility.Wildgoose;
 
 import org.slf4j.Logger;

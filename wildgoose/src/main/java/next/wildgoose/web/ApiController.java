@@ -22,6 +22,10 @@ public class ApiController extends HttpServlet {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApiController.class.getName());
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String result = null;
 		
 		// servlet context
@@ -71,6 +75,7 @@ public class ApiController extends HttpServlet {
 				String resourceName = uriHandler.get(3);
 				LOGGER.debug("resourceName: " + resourceName);
 				
+				// account.html			
 				if ("create_account".equals(resourceName)) {
 					phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_ACCOUNT);
 					result = phtml.read();
@@ -81,6 +86,7 @@ public class ApiController extends HttpServlet {
 					return;
 				}
 				
+				// reporterCard.html
 				if ("create_reporter_card".equals(resourceName)) {
 					phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_REPORTER_CARD);
 					result = phtml.read();
@@ -88,6 +94,23 @@ public class ApiController extends HttpServlet {
 					
 					// response to client
 					out.println(result);
+					return;
+					
+				}
+			}
+			
+			// Sign 자원 요청시
+			if (uriHandler.check(2, Wildgoose.RESOURCE_SIGN)) {
+				String subResource = uriHandler.get(3);
+				
+				//up
+				if ("up".equals(subResource)) {
+					String email = request.getParameter("email");
+					String password = request.getParameter("password");
+					LOGGER.debug("email: " + email + ", password: " + password);
+
+					// response to client
+					out.println("success");
 					return;
 					
 				}
