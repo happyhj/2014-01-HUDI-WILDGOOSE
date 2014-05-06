@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<title>touch?!</title>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	</head>	
+	<body>
+		<div id="jjtest" style="border: 1px solid red; height: 200px; width: 100%;">
+		</div>
+ 
+ 
+	<script>
+
+		var bStartEvent;
+
+		function startLongTapTimer() {
+				var self = this;
+				this.nLongTabTimer = setTimeout(function(){alert('롱탭'); delete self.nLongTabTimer;}, 500);
+		}
+
+		function deleteLongTabTimer() {
+			if(typeof this.nLongTabTimer !== 'undefined') {
+				clearTimeout(this.nLongTabTimer);
+				delete this.nLongTabTimer;
+			}
+		}
+
+		function touchStart_jjtest(e) {
+			startLongTapTimer();
+			bStartEvent = true;
+			testDiv.innerText = "START";
+		}
+		
+		function touchEnd_jjtest(e) {
+			if(!bStartEvent){
+					return;
+			}
+			deleteLongTabTimer();
+			bStartEvent = false;
+			testDiv.innerText = "END";
+		}
+		
+		var testDiv = document.getElementById('jjtest');
+		testDiv.addEventListener('touchstart', touchStart_jjtest);
+		testDiv.addEventListener('touchend', touchEnd_jjtest);
+	</script>
+	</body>
+</html>

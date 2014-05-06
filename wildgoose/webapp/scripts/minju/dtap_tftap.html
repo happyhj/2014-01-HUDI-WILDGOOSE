@@ -1,0 +1,88 @@
+<html>
+	<head>
+		<title>touch?!</title>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no" />
+	</head>	
+	<body>
+		<div id="jjtest" style="border: 1px solid red; height: 200px; width: 100%;">
+		</div>
+
+	<script>
+	var bStartEvent = false;
+	var bMoveEvent = false;
+	var count = false;
+	var htClickInfo = {
+	   sType : null,
+	   nX : -1,
+	   nY : -1,
+	   nTime: 0
+	}
+
+	var nDoubleTapDuration = 650; //단위는 ms
+	var nTapThreshold = 5;
+	var dTapThreshold = 100;
+
+	function initClearInfo() {
+	   htClickInfo.sType = null;
+	}
+
+	function onStart(e) {
+	   bStartEvent = true;
+	}
+
+	function onMove(e) {
+		if(e.touches.length == 2) {
+			// testDiv.insertAdjacentHTML('afterend', Math.abs(e.changedTouches[0].pageX - e.changedTouches[1].pageX)+"<br>" );
+			if(true) {
+				count = true;
+			}
+		}
+		if(!bStartEvent) {
+			return;
+		}
+		bMoveEvent = true;
+	}
+
+	function onEnd(e) {
+		var nX = e.changedTouches[0].pageX;
+		var nY = e.changedTouches[0].pageY;
+		var nTime = e.timeStamp;
+		var length = new Array();
+		length.push(e.touches.length);
+
+
+		if(bStartEvent && !bMoveEvent) {
+			if(htClickInfo.sType == 'click' && (nTime - htClickInfo.nTime) <= nDoubleTapDuration){ //전에 클릭하고 시간 내 클릭을 함
+				if( (Math.abs(htClickInfo.nX-nX) <= nTapThreshold) && (Math.abs(htClickInfo.nY-nY) <= nTapThreshold) ){ //같다고 볼 수 있는 범위 클릭
+					testDiv.innerText = "더블탭";
+				}
+	      } else {
+	         // 탭이벤트로 판단하여 정보 저장
+			testDiv.innerText = "탭";
+			htClickInfo.sType = 'click';
+			htClickInfo.nX = nX;
+			htClickInfo.nY = nY;
+			htClickInfo.nTime = nTime;
+	      }
+	   } else if(count) {
+			testDiv.innerText = "Two-finger Tap";
+	   } else {
+	   //탭 이벤트가 아니므로 탭 이벤트 정보 초기화
+	      initClearInfo();
+	   }
+
+	   //각 플래그 값을 초기값으로 세팅한다.
+		bStartEvent = false;
+		bMoveEvent = false;
+		count = false;
+	}
+
+	var testDiv = document.getElementById('jjtest');
+	testDiv.addEventListener('touchstart', onStart);
+	testDiv.addEventListener('touchend', onEnd);
+	testDiv.addEventListener('touchmove', onMove);
+
+	</script>
+	</body>
+</html>
