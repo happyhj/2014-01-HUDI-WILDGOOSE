@@ -17,6 +17,7 @@ import next.wildgoose.dao.DataSource;
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.model.JsonConverter;
 import next.wildgoose.model.PartialHtml;
+import next.wildgoose.utility.Validation;
 import next.wildgoose.utility.Wildgoose;
 
 import org.json.JSONObject;
@@ -57,8 +58,8 @@ public class ApiController extends HttpServlet {
 			result = htmlRequest(request, uri, path);
 		} else if (uri.check(2, Wildgoose.RESOURCE_SIGN)) {
 			// Sign 자원 요청시
-			SignDAO signDAO = (SignDAO) context.getAttribute("signDAO");
-			result = signRequest(request, uri, signDAO);
+			SignAccount signAccount = new SignAccount(request);
+			result = signRequest(request, uri, signAccount);
 		}
 		
 		out.println(result);
@@ -99,8 +100,8 @@ public class ApiController extends HttpServlet {
 				JSONObject data = new JSONObject().put("name", rs.getString("name"));
 				result.append("data", data);
 			}
-		} catch (SQLException e) {
-			LOGGER.debug(e.getMessage());
+		} catch (Exception e) {
+			LOGGER.debug(e.getMessage(), e);
 		}
 		return result.toString();
 	}
@@ -121,23 +122,23 @@ public class ApiController extends HttpServlet {
 		return result;
 	}
 	
-	private String signRequest(HttpServletRequest request, UriHandler uri, SignDAO signDAO) {
+	private String signRequest(HttpServletRequest request, UriHandler uri, SignAccount signAccount) {
 		String subResource = uri.get(3);
 		String result = null;
 		// sign/up
 		if ("up".equals(subResource)) {
-			String email = request.getParameter("email");
-			String password = request.getParameter("password");
-			LOGGER.debug("email: " + email + ", password: " + password);
-			result = "success";
+			result = "Validation Failure";
+			if (signAccount.up()) {
+				result = "Validation Success";
+			}
 		} else if ("email".equals(subResource)) {
 		// sign/email,  email 자원 요청시
 			String email = uri.get(4);
 			result = "OK";
-			if (signDAO.findEmail(email)) {
+			if (signAccount.hasEmail(email)) {
 				result = "";
 			}
-		}
+		}	
 		return result;
 	}
 }
