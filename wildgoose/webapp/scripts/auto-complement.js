@@ -6,7 +6,6 @@ searching.onkeyup = function() {
 	searched = searching.value;
 	url = url + searched;
 	Ajax.GET(url, drawBox);
-	console.log(url);
 }
 
 // 추천 검색어를 박스에 써 넣음
@@ -14,11 +13,12 @@ function drawBox(data) {
 	Data = JSON.parse(data)["data"];
 	var box = document.querySelector(".searched-box");
 	box.style.display = "table";
-	if(Data != "undefined" && Data.length != 0) {
+	if(typeof Data != "undefined" && Data.length != 0) {
 		var tr_pos = document.querySelector(".searched-box").lastElementChild.lastElementChild;
-		if(tr_pos.childElementCount != 0){
-			for(var i = 0 ; i < Data.length; i++){
-				tr_pos.removeChild(tr_pos.childNodes[i]);
+		var childCount = tr_pos.childElementCount;
+		if(childCount != 0){
+			for(var i = 0 ; i < childCount; i++){
+				tr_pos.removeChild(tr_pos.childNodes[0]);
 			}
 		}
 		
