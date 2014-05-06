@@ -1,4 +1,4 @@
-package next.wildgoose.dao;
+package next.wildgoose.refactoring;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,82 +13,76 @@ import next.wildgoose.pool.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class ReporterCardDAO {
-	
+	private static ReporterCardDAO rcardDao;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReporterCardDAO.class.getName());
 	
-
-	public ReporterCard findReporterById (int reporterId) {
+	private ReporterCardDAO() {
 		
-		Connection conn = null;
+	}
+	
+	public static ReporterCardDAO getInstance() {
+		if (rcardDao == null) {
+			rcardDao = new ReporterCardDAO();
+		}
+		return rcardDao;
+	}
+	
+	public ReporterCard findReporterById (int reporterId) {
+		Connection conn = DataSource.getInstance().getConnection();
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
 		ReporterCard reporterCard = null;
 		
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT author.id as id, author.email as email, author.name as name, press.name as pressName ");
+		query.append("from author JOIN press ON author.press_id = press.id WHERE author.id = ?;");
+		
 		try {
-			// getting database connection to MySQL server
-			conn = DataSource.getInstance().getConnection();
-			
-			StringBuilder query = new StringBuilder();
-			query.append("SELECT author.id as id, author.email as email, author.name as name, press.name as pressName ");
-			query.append("from author JOIN press ON author.press_id = press.id WHERE author.id = ?;");
-			
 			psmt = conn.prepareStatement(query.toString());
 			psmt.setInt(1, reporterId);
-			
-			// sql에 query 요청
 			rs = psmt.executeQuery();
 			
-			reporterCard = new ReporterCard();			
 			if (rs.first()) {
+				reporterCard = new ReporterCard();			
 				reporterCard.setId(rs.getInt("id"));
 				reporterCard.setEmail(rs.getString("email"));
 				reporterCard.setName(rs.getString("name"));
 				reporterCard.setPressName(rs.getString("pressName"));
+				// ID로 검색할 때에는 ArticleCard 사용 -> title이 필요하지 않음.
 			}
 		} catch (SQLException sqle) {
-			LOGGER.debug(sqle.getMessage(),sqle);
+			LOGGER.debug(sqle.getMessage(), sqle);
 		} finally {
 			SqlUtil.closePrepStatement(psmt);
 			SqlUtil.closeResultSet(rs);
 			SqlUtil.closeConnection(conn);
 		}
-		
 		return reporterCard;
 	}
 	
 	public List<ReporterCard> findReportersByURL(String URL, int start, int end) {
-		Connection conn = null;
+		Connection conn = DataSource.getInstance().getConnection();
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
-		List<ReporterCard> reporterCards = null;
+		List<ReporterCard> reporterCards = new ArrayList<ReporterCard>();
 		ReporterCard reporterCard = null;
 
-		// Actual logic goes here.
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT result.id as id, result.name as name, result.email as email, article.title as title, press.name as press_name ");
+		query.append("FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
+		query.append("WHERE aa.article_URL LIKE ? GROUP BY author.id ORDER BY author.name ");
+		query.append("LIMIT ?, ?) as result ");
+		query.append("JOIN article ON article.URL = result.article_URL ");
+		query.append("JOIN press ON result.press_id = press.id");
+		
 		try {
-			conn = DataSource.getInstance().getConnection();
-			
-			StringBuilder query = new StringBuilder();
-			// 이름으로 검색하기
-			query.append("SELECT result.id as id, result.name as name, result.email as email, article.title as title, press.name as press_name ");
-			query.append("FROM (");
-			query.append("SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
-			query.append("WHERE aa.article_URL LIKE ? GROUP BY author.id ORDER BY author.name ");
-			query.append("LIMIT ?, ?");
-			query.append(") as result ");
-			query.append("JOIN article ON article.URL = result.article_URL ");
-			query.append("JOIN press ON result.press_id = press.id");
-			
 			psmt = conn.prepareStatement(query.toString());
 			psmt.setString(1, "%" + URL + "%");
 			psmt.setInt(2, start);
 			psmt.setInt(3, end);
-			
-			// sql에 query 요청
 			rs = psmt.executeQuery();
 			
-			reporterCards = new ArrayList<ReporterCard>();
 			while (rs.next()) {
 				reporterCard = new ReporterCard();
 				reporterCard.setId(rs.getInt("id"));
@@ -106,44 +100,31 @@ public class ReporterCardDAO {
 			SqlUtil.closeResultSet(rs);
 			SqlUtil.closeConnection(conn);
 		}
-		
 		return reporterCards;
 	}
-	
 	
 	public List<ReporterCard> findReportersByName (String name, int start, int end) {
-		
-		Connection conn = null;
+		Connection conn = DataSource.getInstance().getConnection();
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
-		List<ReporterCard> reporterCards = null;
+		List<ReporterCard> reporterCards = new ArrayList<ReporterCard>();
 		ReporterCard reporterCard = null;
-		String someName = "%" + name + "%";
+		
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT result.id as id, result.name as name, result.email as email, article.title as title, press.name as press_name ");
+		query.append("FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
+		query.append("WHERE author.name LIKE ? GROUP BY author.id ORDER BY author.name ");
+		query.append("LIMIT ?, ?) as result ");
+		query.append("JOIN article ON article.URL = result.article_URL ");
+		query.append("JOIN press ON result.press_id = press.id");
 
-		// Actual logic goes here.
 		try {
-			conn = DataSource.getInstance().getConnection();
-			
-			StringBuilder query = new StringBuilder();
-			// 이름으로 검색하기
-			query.append("SELECT result.id as id, result.name as name, result.email as email, article.title as title, press.name as press_name ");
-			query.append("FROM (");
-			query.append("SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
-			query.append("WHERE author.name LIKE ? GROUP BY author.id ORDER BY author.name ");
-			query.append("LIMIT ?, ?");
-			query.append(") as result ");
-			query.append("JOIN article ON article.URL = result.article_URL ");
-			query.append("JOIN press ON result.press_id = press.id");
-			
 			psmt = conn.prepareStatement(query.toString());
-			psmt.setString(1, someName);
+			psmt.setString(1, "%" + name + "%");
 			psmt.setInt(2, start);
 			psmt.setInt(3, end);
-			LOGGER.debug(psmt.toString());
-			// sql에 query 요청
 			rs = psmt.executeQuery();
 			
-			reporterCards = new ArrayList<ReporterCard>();
 			while (rs.next()) {
 				reporterCard = new ReporterCard();
 				reporterCard.setId(rs.getInt("id"));
@@ -153,7 +134,6 @@ public class ReporterCardDAO {
 				reporterCard.setArticleTitle(rs.getString("title"));
 				reporterCards.add(reporterCard);
 			}
-			
 		} catch (SQLException sqle) {
 			LOGGER.debug(sqle.getMessage(),sqle);
 			reporterCards = null;
@@ -162,8 +142,6 @@ public class ReporterCardDAO {
 			SqlUtil.closeResultSet(rs);
 			SqlUtil.closeConnection(conn);
 		}
-		
 		return reporterCards;
 	}
-	
 }

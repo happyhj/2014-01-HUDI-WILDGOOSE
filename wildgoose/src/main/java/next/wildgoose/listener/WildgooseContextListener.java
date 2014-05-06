@@ -4,11 +4,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import next.wildgoose.dao.ArticleCardDAO;
-import next.wildgoose.dao.HookingKeywordDAO;
-import next.wildgoose.dao.NumberOfArticlesDAO;
-import next.wildgoose.dao.ReporterCardDAO;
-import next.wildgoose.dao.SignDAO;
 import next.wildgoose.pool.DataSource;
 
 public class WildgooseContextListener implements ServletContextListener {
@@ -25,13 +20,6 @@ public class WildgooseContextListener implements ServletContextListener {
 		
 		// DATASOURCE init
 		DataSource.init(dbDriver, userName, userPassword, dbUrl);
-		
-		// DAO
-		sc.setAttribute("articleCardDAO", new ArticleCardDAO());
-		sc.setAttribute("hookingKeywordDAO", new HookingKeywordDAO());
-		sc.setAttribute("numberOfArticlesDAO", new NumberOfArticlesDAO());
-		sc.setAttribute("reporterCardDAO", new ReporterCardDAO());
-		sc.setAttribute("signDAO", new SignDAO());
 		
 		// DUMMY DATA
 		//	sc.setAttribute("dummy", new DummyData());

@@ -1,15 +1,31 @@
 package next.wildgoose.refactoring;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class Uri {
 	private List<String> resources;
+	private Map<String, String> parameters;
 	
 	public Uri(String uri) {
 		String trimmedUri = trimUri(uri);
 		this.resources = Arrays.asList(trimmedUri.split("/"));
+		this.parameters = this.extractParameters(trimmedUri);
+	}
+	
+	private Map<String, String> extractParameters(String uri) {
+		Map<String, String> map = new HashMap<String, String>();  
+		String query = uri.split("?")[1];
+		String[] params = query.split("&");  
+	    for (String param : params) {  
+	        String name = param.split("=")[0];  
+	        String value = param.split("=")[1];  
+	        map.put(name, value);  
+	    }
+	    return map; 
 	}
 	
 	private String trimUri (String uri) {
@@ -37,6 +53,12 @@ public class Uri {
 	
 	public int size() {
 		return this.resources.size();
+	}
+	
+	public String getParameter(String param) {
+		if (this.parameters.containsKey(param))
+			return this.parameters.get(param);
+		return null;
 	}
 	
 	public String toString() {
