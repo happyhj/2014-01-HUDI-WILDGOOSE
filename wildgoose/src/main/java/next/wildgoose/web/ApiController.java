@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.model.JsonConverter;
 import next.wildgoose.model.PartialHtml;
+import next.wildgoose.utility.Validation;
 import next.wildgoose.utility.Wildgoose;
 
 import org.slf4j.Logger;
@@ -102,25 +103,26 @@ public class ApiController extends HttpServlet {
 			// Sign 자원 요청시
 			if (uriHandler.check(2, Wildgoose.RESOURCE_SIGN)) {
 				String subResource = uriHandler.get(3);
+				SignAccount signAccount = new SignAccount(request);
 				
 				// sign/up
 				if ("up".equals(subResource)) {
-					String email = request.getParameter("email");
-					String password = request.getParameter("password");
-					LOGGER.debug("email: " + email + ", password: " + password);
+					result = "Validation Failure";
+					
+					if (signAccount.up()) {
+						result = "Validation Success";
+					};
 
 					// response to client
-					out.println("success");
+					out.println(result);
 					return;
 				}
 				
 				// sign/email,  email 자원 요청시
 				if ("email".equals(subResource)) {
-					SignDAO signDAO = (SignDAO) context.getAttribute("signDAO");
 					String email = uriHandler.get(4);
-					
 					result = "OK";
-					if (signDAO.findEmail(email)) {
+					if (signAccount.hasEmail(email)) {
 						result = "";
 					}
 					
