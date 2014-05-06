@@ -1,4 +1,4 @@
-package next.wildgoose.web;
+package next.wildgoose.accessdao;
 
 import java.util.Arrays;
 import java.util.Iterator;

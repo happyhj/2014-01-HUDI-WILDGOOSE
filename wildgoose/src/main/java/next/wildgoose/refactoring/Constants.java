@@ -1,7 +1,6 @@
-package next.wildgoose.utility;
+package next.wildgoose.refactoring;
 
-public final class Wildgoose {
-	
+public class Constants {
 	public static final String HEADER_CON_TYPE_JSON = "application/json";
 	public static final String HEADER_CON_TYPE_HTML = "text/html";
 	
@@ -30,5 +29,4 @@ public final class Wildgoose {
 	public static final String KEYWORD_MSG = "message";
 	
 	public static final int NUM_OF_CARDS = 24;
-	
 }

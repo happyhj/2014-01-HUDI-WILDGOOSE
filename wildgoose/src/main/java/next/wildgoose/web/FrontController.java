@@ -8,13 +8,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import next.wildgoose.accessdao.ActionForward;
+import next.wildgoose.accessdao.Error;
+import next.wildgoose.accessdao.SearchReporter;
+import next.wildgoose.accessdao.ShowReporter;
+import next.wildgoose.accessdao.UriHandler;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import next.wildgoose.action.Action;
-import next.wildgoose.action.ActionForward;
-import next.wildgoose.action.Error;
-import next.wildgoose.utility.Wildgoose;
 
 public class FrontController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -32,20 +33,18 @@ public class FrontController extends HttpServlet {
 		UriHandler uriHandler = new UriHandler (requestURI);
 		LOGGER.debug(uriHandler.toString());
 
-		Action action = null;
 		ActionForward forward = null;
 		
 		if (uriHandler.check(0, Wildgoose.RESOURCE_INDEX)) {
-			action = new SearchReporter(request);
+			forward = new SearchReporter(request).execute();
 		} else if (uriHandler.check(0, Wildgoose.RESOURCE_REPORTERS)) {
-			action = new ShowReporter(request, uriHandler);
+			forward = new ShowReporter(request, uriHandler).execute();
 		} else if (uriHandler.check(0, Wildgoose.RESOURCE_ERROR)) {
-			action = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_ERROR);
+			forward = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_ERROR).execute();
 		} else {
-			action = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_WENT_WRONG);
+			forward = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_WENT_WRONG).execute();
 		}
 		
-		forward = action.execute();
 		LOGGER.debug(forward.toString());
 		
 		// redirect

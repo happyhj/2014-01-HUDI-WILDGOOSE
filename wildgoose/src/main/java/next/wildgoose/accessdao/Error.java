@@ -1,13 +1,13 @@
-package next.wildgoose.action;
+package next.wildgoose.accessdao;
 
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.utility.Wildgoose;
+import next.wildgoose.web.Wildgoose;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Error implements Action {
+public class Error {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Error.class.getName());
 	
 	private HttpServletRequest request;
@@ -24,7 +24,6 @@ public class Error implements Action {
 		this.message = message;
 	}
 
-	@Override
 	public ActionForward execute() {
 		
 		ActionForward forward = new ActionForward();

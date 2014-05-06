@@ -1,6 +1,7 @@
-package next.wildgoose.action;
+package next.wildgoose.accessdao;
 
-import next.wildgoose.utility.Wildgoose;
+import next.wildgoose.web.Wildgoose;
+
 
 public class ActionForward {
 	private boolean isRedirect = false;

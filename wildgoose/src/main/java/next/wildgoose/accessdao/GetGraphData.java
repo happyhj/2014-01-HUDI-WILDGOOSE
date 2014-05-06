@@ -1,11 +1,10 @@
-package next.wildgoose.web;
+package next.wildgoose.accessdao;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import next.wildgoose.dao.HookingKeywordDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
-import next.wildgoose.model.DummyData;
 
 import org.json.JSONObject;
 

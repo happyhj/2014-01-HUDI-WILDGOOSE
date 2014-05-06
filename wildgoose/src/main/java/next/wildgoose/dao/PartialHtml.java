@@ -1,4 +1,4 @@
-package next.wildgoose.model;
+package next.wildgoose.dao;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

@@ -1,18 +1,20 @@
-package next.wildgoose.web;
+package next.wildgoose.accessdao;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import next.wildgoose.dao.SignDAO;
-import next.wildgoose.model.Account;
 import next.wildgoose.utility.Validation;
 
-public class SignAccount extends DaoManager {
+public class SignAccount {
 	
 	private Account account;
+	private HttpServletRequest request;
+	private ServletContext context = request.getServletContext();
 	private SignDAO signDAO = (SignDAO) context.getAttribute("signDAO");
 
-	protected SignAccount(HttpServletRequest request) {
-		super(request);
+	public SignAccount(HttpServletRequest request) {
+		this.request = request;
 		this.account = new Account(request.getParameter("email"), request.getParameter("password"));
 		
 	}

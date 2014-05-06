@@ -1,27 +1,26 @@
-package next.wildgoose.web;
+package next.wildgoose.accessdao;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.action.Action;
-import next.wildgoose.action.ActionForward;
 import next.wildgoose.dao.ReporterCardDAO;
-import next.wildgoose.model.JsonConverter;
-import next.wildgoose.model.ReporterCard;
+import next.wildgoose.dto.ReporterCard;
 import next.wildgoose.utility.Validation;
-import next.wildgoose.utility.Wildgoose;
+import next.wildgoose.web.Wildgoose;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
-public class SearchReporter extends DaoManager implements Action, JsonConverter {
+public class SearchReporter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearchReporter.class.getName());
+	private HttpServletRequest request;
 
 	public SearchReporter(HttpServletRequest request) {
-		super(request);
+		this.request = request;
 	}
 
 	/*
@@ -29,7 +28,7 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 	 */
 	private List<ReporterCard> getCards(String searchQuery, int start, int end) {
 		LOGGER.debug("valid search: " + searchQuery);
-
+		ServletContext context = request.getServletContext();
 		List<ReporterCard> reporterCards = null;
 		ReporterCardDAO reporterCardDao = (ReporterCardDAO) context.getAttribute("reporterCardDAO");
 
@@ -49,7 +48,6 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 	 *  (non-Javadoc)
 	 * @see next.wildgoose.model.Action#execute()
 	 */
-	@Override
 	public ActionForward execute() {
 		List<ReporterCard> reporterCards = null;
 		String searchQuery = null;
@@ -87,10 +85,10 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 		}
 		
 		// request 객체에 attribute 설정하기
-		super.request.setAttribute("totalNum", Wildgoose.NUM_OF_CARDS);
-		super.request.setAttribute("hasMoreCards", hasMoreCards);
-		super.request.setAttribute("reporterCards", reporterCards);
-		super.request.setAttribute("searchQuery", searchQuery);
+		this.request.setAttribute("totalNum", Wildgoose.NUM_OF_CARDS);
+		this.request.setAttribute("hasMoreCards", hasMoreCards);
+		this.request.setAttribute("reporterCards", reporterCards);
+		this.request.setAttribute("searchQuery", searchQuery);
 
 		forward.setPath(Wildgoose.PAGE_SEARCH_REPORTER);
 		return forward;	
@@ -101,7 +99,6 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 	 * (non-Javadoc)
 	 * @see next.wildgoose.model.JsonConverter#toJsonString()
 	 */
-	@Override
 	public String toJsonString() {
 		
 		Gson gson = new Gson();
@@ -109,9 +106,9 @@ public class SearchReporter extends DaoManager implements Action, JsonConverter 
 		int hasMoreCards = 0;
 		List<ReporterCard> reporterCards = null;
 		
-		String searchQuery = super.request.getParameter("q");
-		int lastNum = Integer.parseInt(super.request.getParameter("last"));
-		int requestNum = Integer.parseInt(super.request.getParameter("req"));
+		String searchQuery = this.request.getParameter("q");
+		int lastNum = Integer.parseInt(this.request.getParameter("last"));
+		int requestNum = Integer.parseInt(this.request.getParameter("req"));
 		
 		LOGGER.debug("lastNum: " + lastNum);
 		LOGGER.debug("requestNum: " + requestNum);

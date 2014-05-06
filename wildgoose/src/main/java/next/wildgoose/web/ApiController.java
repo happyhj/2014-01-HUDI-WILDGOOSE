@@ -2,10 +2,6 @@ package next.wildgoose.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -13,14 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import next.wildgoose.dao.DataSource;
-import next.wildgoose.dao.SignDAO;
-import next.wildgoose.model.JsonConverter;
-import next.wildgoose.model.PartialHtml;
-import next.wildgoose.utility.Validation;
-import next.wildgoose.utility.Wildgoose;
+import next.wildgoose.accessdao.GetGraphData;
+import next.wildgoose.accessdao.GetTextData;
+import next.wildgoose.accessdao.SearchReporter;
+import next.wildgoose.accessdao.SignAccount;
+import next.wildgoose.accessdao.UriHandler;
+import next.wildgoose.dao.JsonDAO;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +45,8 @@ public class ApiController extends HttpServlet {
 		} else if (uri.check(2, "most_similar_names")) {
 			// ex) /api/v1/most_similar_names?name=김
 			String name = request.getParameter("name");
-			result = getSimilarNames(name);
+			GetTextData getText = new GetTextData(request);
+			result = getText.getJsonString(name);
 		} else if (uri.check(2,  Wildgoose.RESOURCE_HTML)) {
 			// HTML 자원을 요청시
 			response.setContentType(Wildgoose.HEADER_CON_TYPE_HTML);
@@ -70,8 +66,8 @@ public class ApiController extends HttpServlet {
 		String result = null;
 		// ~/reporters 요청시 ajax로 reporterCards 반환
 		if (uri.get(3) == null) {
-			JsonConverter jsonConverter = new SearchReporter(request);
-			result = jsonConverter.toJsonString();
+			SearchReporter sr = new SearchReporter(request);
+			result = sr.toJsonString();
 		} else {
 			int reporterId = Integer.parseInt(uri.get(3));
 			LOGGER.debug("reporter id request: " + reporterId);
@@ -82,43 +78,12 @@ public class ApiController extends HttpServlet {
 		}
 		return result;
 	}
-	
-	private String getSimilarNames(String name) {
-		JSONObject result = new JSONObject();
-		String query = "SELECT name FROM author WHERE name LIKE ? ORDER BY name LIMIT 0, 5 ";
-		PreparedStatement psmt = null;
-		Connection conn = null;
-		ResultSet rs = null;
-		conn = DataSource.getInstance().getConnection();
-		
-		try {
-			psmt = conn.prepareStatement(query.toString());
-			psmt.setString(1, name + "%");
-			LOGGER.debug(psmt.toString());
-			rs = psmt.executeQuery();
-			while (rs.next()) {
-				JSONObject data = new JSONObject().put("name", rs.getString("name"));
-				result.append("data", data);
-			}
-		} catch (Exception e) {
-			LOGGER.debug(e.getMessage(), e);
-		}
-		return result.toString();
-	}
 
 	private String htmlRequest(HttpServletRequest request, UriHandler uri, String path) {
 		String result = null;
-		PartialHtml phtml = null;
 		String resourceName = uri.get(3);
-		LOGGER.debug("resourceName: " + resourceName);
-		
-		if ("create_account".equals(resourceName)) {
-			phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_ACCOUNT);
-			result = phtml.read();
-		} else if ("create_reporter_card".equals(resourceName)) {
-			phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_REPORTER_CARD);
-			result = phtml.read();	
-		}
+		GetTextData getText = new GetTextData(request);
+		result = getText.getPartialHtml(resourceName);
 		return result;
 	}
 	

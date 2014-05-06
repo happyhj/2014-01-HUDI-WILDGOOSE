@@ -1,4 +1,4 @@
-package next.wildgoose.model;
+package next.wildgoose.accessdao;
 
 import java.util.Random;
 
