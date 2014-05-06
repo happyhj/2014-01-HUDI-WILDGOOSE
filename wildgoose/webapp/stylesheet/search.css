@@ -11,13 +11,17 @@
 	
 	border-width: 2px;
 	padding-right: 66px;  /* search button width */
-	padding-left: 5px;  /* query entry margin left */
 }
 
 /*** column layout sub module ***/
 .search-column {
 	list-style-type: none;
 }
+
+.search-column input{
+	padding-left: 5px; /* query entry margin left */
+}
+
 .search-column li {
 	float: left;
 	height: 100%;
