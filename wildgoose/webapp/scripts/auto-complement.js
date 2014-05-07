@@ -10,7 +10,7 @@ searching.onkeyup = function() {
 
 // 추천 검색어를 박스에 써 넣음
 function drawBox(data) {
-	Data = JSON.parse(data)["data"];
+	var Data = JSON.parse(data)["data"];
 	var box = document.querySelector(".searched-box");
 	box.style.display = "table";
 	if(typeof Data != "undefined" && Data.length != 0) {
