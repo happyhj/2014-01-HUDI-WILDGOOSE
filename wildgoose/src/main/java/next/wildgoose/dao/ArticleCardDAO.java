@@ -14,19 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ArticleCardDAO {
-	private static ArticleCardDAO acardDao;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCardDAO.class.getName());
-	
-	private ArticleCardDAO() {
-		
-	}
-	
-	public static ArticleCardDAO getInstance() {
-		if (acardDao == null) {
-			acardDao = new ArticleCardDAO();
-		}
-		return acardDao;
-	}
 	
 	public List<ArticleCard> findArticlesById(int reporterId) {
 		Connection conn = DataSource.getInstance().getConnection();

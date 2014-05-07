@@ -12,15 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class NumberOfArticlesDAO {
-	private static NumberOfArticlesDAO noaDao;
 	private static final Logger LOGGER = LoggerFactory.getLogger(NumberOfArticlesDAO.class.getName());
-	
-	public static NumberOfArticlesDAO getInstance() {
-		if (noaDao == null) {
-			noaDao = new NumberOfArticlesDAO();
-		}
-		return noaDao;
-	}
 	
 	public JSONObject byDay(int reporterId) {
 		JSONObject result = new JSONObject();

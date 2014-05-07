@@ -2,6 +2,8 @@ package next.wildgoose.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -9,14 +11,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import next.wildgoose.service.Daction;
+import next.wildgoose.service.DactionResult;
+import next.wildgoose.service.ErrorDaction;
 import next.wildgoose.service.GetGraphData;
 import next.wildgoose.service.GetJsonData;
+import next.wildgoose.service.HtmlReader;
 import next.wildgoose.service.SignAccount;
 import next.wildgoose.utility.Constants;
-import next.wildgoose.utility.HtmlReader;
 import next.wildgoose.utility.Uri;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,49 +33,46 @@ public class ApiController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ServletContext context = request.getServletContext();
-		Uri uri = new Uri(request);
-		String firstUri = uri.get(2);
-		JSONObject result = null;
-		
-		if (firstUri == null) {
-			uri = null;
-		}
-		
-		if (Constants.RESOURCE_REPORTERS.equals(firstUri)) {
-			// "api/vi/reporters/22/number_of_articles?by=section"
-			GetGraphData graphData = GetGraphData.getInstance();
-			result = graphData.getData(uri);
-		} else if (Constants.RESOURCE_SEARCH.equals(firstUri)) {
-			// "/api/v1/search/most_similar_names?name=김"
-			GetJsonData jsonData = GetJsonData.getInstance();
-			result = jsonData.getData(uri);
-		} else if (Constants.RESOURCE_HTML.equals(firstUri)) {
-			// "/api/v1/subhtml/account"
-			HtmlReader htmlReader = HtmlReader.getInstance();
-			String root = context.getRealPath(Constants.RESOURCE_ROOT);
-			String path = root + Constants.PAGE_STATIC_ACCOUNT;
-			result = htmlReader.read(path);
-		} else if (Constants.RESOURCE_SIGN.equals(firstUri)) {
-			// "api/v1/sign/in"
-			String email = request.getParameter("email");
-			String password = request.getParameter("password");
-			SignAccount signAccount = SignAccount.getInstance();
-			result = signAccount.isValid(uri, email, password);
-		}
+		Daction daction = getProperDaction(request);
+		DactionResult result = daction.execute(request);
 		send(response, result);
 	}
 	
-	private void send(HttpServletResponse response, JSONObject result) {
+	private void send(HttpServletResponse response, DactionResult result) {
 		PrintWriter out = null;
-		response.setContentType(Constants.HEADER_CON_TYPE_JSON);
+		
+		if ("json".equals(result.getDataType())) {
+			response.setContentType(Constants.HEADER_CON_TYPE_JSON);
+		} else if ("html".equals(result.getDataType())) {
+			response.setContentType(Constants.HEADER_CON_TYPE_HTML);
+		} else {
+			response.setContentType(Constants.HEADER_CON_TYPE_PLAIN_TEXT);
+		}
 
 		try {
 			out = response.getWriter();
-			out.println(result.toString());
+			out.println(result.getData());
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
 		out.close();
 	}
+	
+	private Daction getProperDaction(HttpServletRequest request) {
+		ServletContext context = request.getServletContext();
+		Uri uri = new Uri(request);
+		LOGGER.debug(uri.get(2));
+		
+		Daction defaultDaction = (ErrorDaction) context.getAttribute("ErrorDaction");
+		Map<String, Daction> dactionMap = new HashMap<String, Daction>();
+		dactionMap.put(Constants.RESOURCE_REPORTERS, (GetGraphData) context.getAttribute("GraphDataService"));
+		dactionMap.put(Constants.RESOURCE_SEARCH, (GetJsonData) context.getAttribute("JsonDataService"));
+		dactionMap.put(Constants.RESOURCE_MORE_RPT_CARD, (GetJsonData) context.getAttribute("JsonDataService"));
+		dactionMap.put(Constants.RESOURCE_HTML, (HtmlReader) context.getAttribute("HtmlReader"));
+		dactionMap.put(Constants.RESOURCE_SIGN, (SignAccount) context.getAttribute("AccountService"));
+		Daction result = dactionMap.getOrDefault(uri.get(2), defaultDaction);
+		return result;
+	}
 }
+
+

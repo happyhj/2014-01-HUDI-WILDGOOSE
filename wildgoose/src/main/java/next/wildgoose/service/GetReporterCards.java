@@ -2,10 +2,12 @@ package next.wildgoose.service;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+
 import next.wildgoose.dao.ReporterCardDAO;
 import next.wildgoose.dto.ReporterCard;
 import next.wildgoose.utility.Constants;
-import next.wildgoose.utility.Uri;
 import next.wildgoose.utility.Validation;
 
 import org.slf4j.Logger;
@@ -13,35 +15,30 @@ import org.slf4j.LoggerFactory;
 
 public class GetReporterCards implements Action {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GetReporterCards.class.getName());
-	private static GetReporterCards searchReporter;
 	
-	public static GetReporterCards getInstance() {
-		if (searchReporter == null) {
-			searchReporter = new GetReporterCards();
-		}
-		return searchReporter;
-	}
-	
-	public ActionResult execute(Uri uri) {
+	public ActionResult execute(HttpServletRequest request) {
+		ServletContext context = request.getServletContext();
 		ActionResult ar = new ActionResult();
-		String searchQuery = uri.getParameter("q");
-		LOGGER.debug("searchquery : " + searchQuery);
+		String searchQuery = request.getParameter("q");
 		boolean hasMoreCards = false;
 		List<ReporterCard> reporterCards = null;
 		
+		LOGGER.debug("searchquery : " + searchQuery);
+		
 		setForwardingOption(ar, searchQuery);
 		// 25개를 가져온 후, 마지막 카드를 지움.
-		reporterCards = this.getReporterCards(searchQuery, 0, Constants.NUM_OF_CARDS + 1);
+		ReporterCardDAO rcardDao = (ReporterCardDAO) context.getAttribute("ReporterCardDAO");
+		reporterCards = getReporterCards(rcardDao, searchQuery, 0, Constants.NUM_OF_CARDS + 1);
 		if (reporterCards.size() > Constants.NUM_OF_CARDS) {
 			hasMoreCards = true;
 			reporterCards.remove(Constants.NUM_OF_CARDS);
 		}
 
-		ar.setAttribute("totalNum", Constants.NUM_OF_CARDS);
-		ar.setAttribute("hasMoreCards", hasMoreCards);
-		ar.setAttribute("reporterCards", reporterCards);
-		ar.setAttribute("searchQuery", searchQuery);
-		LOGGER.debug(""+hasMoreCards);
+		request.setAttribute("totalNum", Constants.NUM_OF_CARDS);
+		request.setAttribute("hasMoreCards", hasMoreCards);
+		request.setAttribute("reporterCards", reporterCards);
+		request.setAttribute("searchQuery", searchQuery);
+
 		return ar;
 	}
 	
@@ -59,16 +56,15 @@ public class GetReporterCards implements Action {
 		}
 	}
 	
-	private List<ReporterCard> getReporterCards(String searchQuery, int start, int end) {
+	private List<ReporterCard> getReporterCards(ReporterCardDAO rcardDao, String searchQuery, int start, int end) {
 		List<ReporterCard> reporterCards = null;
-		ReporterCardDAO reporterCardDao = ReporterCardDAO.getInstance();
 
 		if (Validation.isURL(searchQuery)) {
 			// URL로 검색
-			reporterCards = reporterCardDao.findReportersByURL(searchQuery, start, end);
+			reporterCards = rcardDao.findReportersByURL(searchQuery, start, end);
 		} else {
 			// 이름으로 검색
-			reporterCards = reporterCardDao.findReportersByName(searchQuery, start, end);
+			reporterCards = rcardDao.findReportersByName(searchQuery, start, end);
 		}
 
 		return reporterCards;

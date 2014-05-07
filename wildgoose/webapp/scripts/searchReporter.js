@@ -18,7 +18,7 @@ window.addEventListener("load", function(e) {
 			var requestNum = 24;
 			
 			// search
-			var url = "/api/v1/reporters?q=" + searchQuery + "&last=" + totalNum + "&req=" + requestNum;
+			var url = "/api/v1/more_reporter_card?q=" + searchQuery + "&last=" + totalNum + "&req=" + requestNum;
 			Ajax.GET(url, function(rawD) {
 				clickSearchMoreBtn(rawD, template);
 			});
@@ -38,11 +38,11 @@ function clickSearchMoreBtn(rawD, template) {
 		searchMore.setAttribute("style", "");
 	}
 	
-	rawD = rawD.substring(1, rawD.length);
-	console.log(rawD);
+//	rawD = rawD.substring(1, rawD.length);
+//	console.log(rawD);
 	
 	var searchResult = document.querySelector(".search-result > ul");
-	var reporterCards = JSON.parse(rawD);
+	var reporterCards = JSON.parse(rawD)["data"];
 	var sizeOfCards = reporterCards.length;
 	console.log(reporterCards);
 	
@@ -53,7 +53,6 @@ function clickSearchMoreBtn(rawD, template) {
 					var newLi = document.createElement("li");
 					newLi.setAttribute("class", "card card-reporter");
 					newLi.innerHTML = template;
-					
 					// name of li
 					newLi.children[0].children[0].children[0].innerHTML = card.name;
 					// a_href of li

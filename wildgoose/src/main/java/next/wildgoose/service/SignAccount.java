@@ -1,5 +1,7 @@
 package next.wildgoose.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.JSONObject;
 
 import next.wildgoose.dao.SignDAO;
@@ -7,15 +9,7 @@ import next.wildgoose.dto.Account;
 import next.wildgoose.utility.Uri;
 import next.wildgoose.utility.Validation;
 
-public class SignAccount {
-	private static SignAccount signControll;
-
-	public static SignAccount getInstance() {
-		if (signControll == null) {
-			signControll = new SignAccount();
-		}
-		return signControll;
-	}
+public class SignAccount implements Daction {
 
 	public JSONObject isValid(Uri uri, String email, String password) {
 		JSONObject result = new JSONObject();
@@ -39,7 +33,7 @@ public class SignAccount {
 	}
 
 	public boolean up (Account account) {
-		SignDAO signDAO = SignDAO.getInstance();
+//		SignDAO signDAO = context.getAttribute("SignDAO");
 		// validation 성공시
 		if (Validation.isEmail(account.getEmail()) && Validation.isPassword(account.getPassword())) {
 			// signDao 에서 회원등록하는 부분 실행 
@@ -51,7 +45,7 @@ public class SignAccount {
 	}
 	
 	public boolean hasEmail(String email) {
-		SignDAO signDAO = SignDAO.getInstance();
+//		SignDAO signDAO = SignDAO.getInstance();
 		if (Validation.isEmail(email)) {
 			// signDao email을 검색하는 부분 실행
 			// result = singDao.findByEmail(email);
@@ -59,6 +53,12 @@ public class SignAccount {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public DactionResult execute(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

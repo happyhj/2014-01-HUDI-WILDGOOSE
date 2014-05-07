@@ -2,13 +2,16 @@ package next.wildgoose.web;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import next.wildgoose.service.Action;
 import next.wildgoose.service.ActionResult;
 import next.wildgoose.service.Error;
 import next.wildgoose.service.GetArticleCard;
@@ -27,41 +30,28 @@ public class FrontController extends HttpServlet {
 		doPost(request, response);
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Uri uri = new Uri(request);
-		String firstUri = uri.get(0);
-		ActionResult result = null;
-		RequestDispatcher reqDispatcher = null;
-		
-		if (firstUri == null) {
-			uri = null;
-		}
-		
-		if (firstUri.equals(Constants.RESOURCE_INDEX)) {
-			GetReporterCards searchReporter = GetReporterCards.getInstance();
-			result = searchReporter.execute(uri);
-		} else if (firstUri.equals(Constants.RESOURCE_REPORTERS)) {
-			GetArticleCard showReporter = GetArticleCard.getInstance();
-			result = showReporter.execute(uri);
-		} else {
-			Error error = Error.getInstance();
-			result = error.execute(uri);
-		}
+		Action action = getProperAction(request);
+		ActionResult result = action.execute(request);
 		
 		if (result.isRedirect()) {
 			response.sendRedirect(result.getPath());
 			return;
 		}
 		
-		setAttributeOnRequest(request, result);
-		reqDispatcher = request.getRequestDispatcher(result.getPath());
+		RequestDispatcher reqDispatcher = request.getRequestDispatcher(result.getPath());
 		reqDispatcher.forward(request, response);
-		
 	}
 	
-	private void setAttributeOnRequest(HttpServletRequest request, ActionResult result) {
-		HashMap<String, Object> map = result.getAttribute();
-		for (String key : map.keySet()) {
-			request.setAttribute(key, map.get(key));
-		}
+	private Action getProperAction(HttpServletRequest request) {
+		ServletContext context = request.getServletContext();
+		Uri uri = new Uri(request);
+		LOGGER.debug(uri.get(0));
+
+		Action defaultAction = (Error) context.getAttribute("Error");
+		Map<String, Action> actionMap = new HashMap<String, Action>();
+		actionMap.put(Constants.RESOURCE_INDEX, (GetReporterCards) context.getAttribute("ReporterCardService"));
+		actionMap.put(Constants.RESOURCE_REPORTERS, (GetArticleCard) context.getAttribute("ArticleCardService"));
+		Action result = actionMap.getOrDefault(uri.get(0), defaultAction);
+		return result;
 	}
 }

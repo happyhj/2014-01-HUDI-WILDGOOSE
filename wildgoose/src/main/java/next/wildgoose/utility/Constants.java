@@ -3,6 +3,7 @@ package next.wildgoose.utility;
 public class Constants {
 	public static final String HEADER_CON_TYPE_JSON = "application/json; charset=UTF-8";
 	public static final String HEADER_CON_TYPE_HTML = "text/html";
+	public static final String HEADER_CON_TYPE_PLAIN_TEXT = "text/plain";
 	
 	public static final String PAGE_ERROR = "error.jsp";
 	public static final String PAGE_ERROR_SEARCH_REPORTER = "SearchReporter.jsp";
@@ -21,7 +22,9 @@ public class Constants {
 	public static final String RESOURCE_SIGN_EMAIL = "email";
 	public static final String RESOURCE_SIGN_PW = "pw";
 	public static final String RESOURCE_SIGN_NAME = "name";
-	public static final Object RESOURCE_SIGN = "sign";
+	public static final String RESOURCE_SIGN = "sign";
+	public static final String RESOURCE_MORE_RPT_CARD = "more_reporter_card";
+	public static final String RESOURCE_MOST_SMR_NAME = "most_similar_name";
 	
 	
 	public static final String MSG_WENT_WRONG = "잘못된 접근";

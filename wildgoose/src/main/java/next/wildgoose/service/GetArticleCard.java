@@ -2,6 +2,9 @@ package next.wildgoose.service;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+
 import next.wildgoose.dao.ArticleCardDAO;
 import next.wildgoose.dao.ReporterCardDAO;
 import next.wildgoose.dto.ArticleCard;
@@ -14,33 +17,22 @@ import org.slf4j.LoggerFactory;
 
 public class GetArticleCard implements Action {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GetArticleCard.class.getName());
-	private static GetArticleCard showReporter;
-	private ActionResult ar;
-	
-	private GetArticleCard() {
-		
-	}
-	
-	public static GetArticleCard getInstance() {
-		if (showReporter == null) {
-			showReporter = new GetArticleCard();
-		}
-		return showReporter;
-	}
-	
-	public ActionResult execute(Uri uri) {
+
+	public ActionResult execute(HttpServletRequest request) {
+		ServletContext context = request.getServletContext();
+		Uri uri = new Uri(request);
+		ActionResult ar = new ActionResult();;
 		ReporterCard reporterCard = null;
 		List<ArticleCard> articleCards = null;
 		
-		ReporterCardDAO reporterCardDao = ReporterCardDAO.getInstance();
-		ArticleCardDAO articleCardDao =  ArticleCardDAO.getInstance();
-		this.ar = new ActionResult();
+		ReporterCardDAO reporterCardDao = (ReporterCardDAO) context.getAttribute("ReporterCardDAO");
+		ArticleCardDAO articleCardDao =  (ArticleCardDAO) context.getAttribute("ArticleCardDAO");
 		
 		// id가 입력되지 않은 경우 처리
 		if (uri.size() <= 1 || uri.get(1).equals("")) {
 			LOGGER.debug(uri.toString());
-			this.ar.setForwardingOption(true, Constants.RESOURCE_ERROR);
-			return this.ar;
+			ar.setForwardingOption(true, Constants.RESOURCE_ERROR);
+			return ar;
 		}
 		
 		int reporterId = Integer.parseInt(uri.get(1));
@@ -49,10 +41,11 @@ public class GetArticleCard implements Action {
 		reporterCard = reporterCardDao.findReporterById(reporterId);
 		articleCards = articleCardDao.findArticlesById(reporterId);		
 		
-		this.ar.setAttribute("reporter_id", reporterId);
-		this.ar.setAttribute("reporter", reporterCard);		
-		this.ar.setAttribute("articles", articleCards);
-		this.ar.setForwardingOption(false, Constants.PAGE_SHOW_REPORTER);
-		return this.ar;	
+		request.setAttribute("reporter_id", reporterId);
+		request.setAttribute("reporter", reporterCard);		
+		request.setAttribute("articles", articleCards);
+		
+		ar.setForwardingOption(false, Constants.PAGE_SHOW_REPORTER);
+		return ar;	
 	}
 }

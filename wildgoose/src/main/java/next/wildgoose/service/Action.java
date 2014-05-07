@@ -1,7 +1,7 @@
 package next.wildgoose.service;
 
-import next.wildgoose.utility.Uri;
+import javax.servlet.http.HttpServletRequest;
 
 public interface Action {
-	public ActionResult execute(Uri uri);
+	public ActionResult execute(HttpServletRequest request);
 }

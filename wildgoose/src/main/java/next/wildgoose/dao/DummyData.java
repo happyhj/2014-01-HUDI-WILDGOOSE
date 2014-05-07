@@ -7,15 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DummyData {
-	private static DummyData dummy;
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyData.class.getName());
-	
-	public static DummyData getInstance() {
-		if (dummy == null) {
-			dummy = new DummyData();
-		}
-		return dummy;
-	}
 	
 	public JSONObject getJsonWithStatPoints(int reporterId) {
 		JSONObject result = new JSONObject();

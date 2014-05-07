@@ -12,15 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HookingKeywordDAO {
-	private static HookingKeywordDAO hkDao;
 	private static final Logger LOGGER = LoggerFactory.getLogger(HookingKeywordDAO.class.getName());
-	
-	public static HookingKeywordDAO getInstance() {
-		if (hkDao == null) {
-			hkDao = new HookingKeywordDAO();
-		}
-		return hkDao;
-	}
 	
 	public JSONObject getHookingKeywordsCount(int reporterId) {
 		
