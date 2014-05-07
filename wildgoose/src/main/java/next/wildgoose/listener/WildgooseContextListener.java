@@ -14,12 +14,12 @@ import next.wildgoose.dao.SignDAO;
 import next.wildgoose.pool.DataSource;
 import next.wildgoose.service.Error;
 import next.wildgoose.service.ErrorDaction;
-import next.wildgoose.service.GetArticleCard;
-import next.wildgoose.service.GetGraphData;
-import next.wildgoose.service.GetJsonData;
-import next.wildgoose.service.GetReporterCards;
-import next.wildgoose.service.HtmlReader;
-import next.wildgoose.service.SignAccount;
+import next.wildgoose.service.ArticleCardService;
+import next.wildgoose.service.GraphDataService;
+import next.wildgoose.service.JsonDataService;
+import next.wildgoose.service.ReporterCardService;
+import next.wildgoose.service.HtmlDocService;
+import next.wildgoose.service.AccountService;
 
 public class WildgooseContextListener implements ServletContextListener {
 	
@@ -34,11 +34,12 @@ public class WildgooseContextListener implements ServletContextListener {
 		DataSource.init(dbDriver, userName, userPassword, dbUrl);
 		
 		// SERVICE
-		sc.setAttribute("ReporterCardService", new GetReporterCards());
-		sc.setAttribute("ArticleCardService", new GetArticleCard());
-		sc.setAttribute("GraphDataService", new GetGraphData());
-		sc.setAttribute("JsonDataService", new GetJsonData());
-		sc.setAttribute("AccountService", new SignAccount());
+		sc.setAttribute("ReporterCardService", new ReporterCardService());
+		sc.setAttribute("ArticleCardService", new ArticleCardService());
+		sc.setAttribute("GraphDataService", new GraphDataService());
+		sc.setAttribute("JsonDataService", new JsonDataService());
+		sc.setAttribute("AccountService", new AccountService());
+		sc.setAttribute("HtmlDocService", new HtmlDocService());
 		sc.setAttribute("Error", new Error());
 		sc.setAttribute("ErrorDaction", new ErrorDaction());
 		
@@ -50,10 +51,7 @@ public class WildgooseContextListener implements ServletContextListener {
 		sc.setAttribute("JsonDAO", new JsonDAO());
 		sc.setAttribute("SignDAO", new SignDAO());
 		sc.setAttribute("DummyData", new DummyData());
-		sc.setAttribute("HtmlReader", new HtmlReader());
 		
-		// DUMMY DATA
-		//	sc.setAttribute("dummy", new DummyData());
 	}
 
 	public void contextDestroyed(ServletContextEvent event) {

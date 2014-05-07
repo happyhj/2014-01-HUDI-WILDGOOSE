@@ -14,8 +14,8 @@ import next.wildgoose.utility.Uri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HtmlReader implements Daction {
-	private static final Logger LOGGER = LoggerFactory.getLogger(HtmlReader.class.getName());
+public class HtmlDocService implements Daction {
+	private static final Logger LOGGER = LoggerFactory.getLogger(HtmlDocService.class.getName());
 	
 	public DactionResult execute(HttpServletRequest request) {
 		ServletContext context = request.getServletContext();

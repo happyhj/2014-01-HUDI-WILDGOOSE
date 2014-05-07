@@ -13,8 +13,8 @@ import next.wildgoose.utility.Validation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GetReporterCards implements Action {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GetReporterCards.class.getName());
+public class ReporterCardService implements Action {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReporterCardService.class.getName());
 	
 	public ActionResult execute(HttpServletRequest request) {
 		ServletContext context = request.getServletContext();

@@ -9,7 +9,7 @@ import next.wildgoose.dto.Account;
 import next.wildgoose.utility.Uri;
 import next.wildgoose.utility.Validation;
 
-public class SignAccount implements Daction {
+public class AccountService implements Daction {
 
 	public JSONObject isValid(Uri uri, String email, String password) {
 		JSONObject result = new JSONObject();

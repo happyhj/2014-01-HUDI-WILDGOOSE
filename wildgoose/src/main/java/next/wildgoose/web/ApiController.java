@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import next.wildgoose.service.Daction;
 import next.wildgoose.service.DactionResult;
 import next.wildgoose.service.ErrorDaction;
-import next.wildgoose.service.GetGraphData;
-import next.wildgoose.service.GetJsonData;
-import next.wildgoose.service.HtmlReader;
-import next.wildgoose.service.SignAccount;
+import next.wildgoose.service.GraphDataService;
+import next.wildgoose.service.JsonDataService;
+import next.wildgoose.service.HtmlDocService;
+import next.wildgoose.service.AccountService;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
 
@@ -65,11 +65,11 @@ public class ApiController extends HttpServlet {
 		
 		Daction defaultDaction = (ErrorDaction) context.getAttribute("ErrorDaction");
 		Map<String, Daction> dactionMap = new HashMap<String, Daction>();
-		dactionMap.put(Constants.RESOURCE_REPORTERS, (GetGraphData) context.getAttribute("GraphDataService"));
-		dactionMap.put(Constants.RESOURCE_SEARCH, (GetJsonData) context.getAttribute("JsonDataService"));
-		dactionMap.put(Constants.RESOURCE_MORE_RPT_CARD, (GetJsonData) context.getAttribute("JsonDataService"));
-		dactionMap.put(Constants.RESOURCE_HTML, (HtmlReader) context.getAttribute("HtmlReader"));
-		dactionMap.put(Constants.RESOURCE_SIGN, (SignAccount) context.getAttribute("AccountService"));
+		dactionMap.put(Constants.RESOURCE_REPORTERS, (GraphDataService) context.getAttribute("GraphDataService"));
+		dactionMap.put(Constants.RESOURCE_SEARCH, (JsonDataService) context.getAttribute("JsonDataService"));
+		dactionMap.put(Constants.RESOURCE_MORE_RPT_CARD, (JsonDataService) context.getAttribute("JsonDataService"));
+		dactionMap.put(Constants.RESOURCE_HTML, (HtmlDocService) context.getAttribute("HtmlReader"));
+		dactionMap.put(Constants.RESOURCE_SIGN, (AccountService) context.getAttribute("AccountService"));
 		Daction result = dactionMap.getOrDefault(uri.get(2), defaultDaction);
 		return result;
 	}

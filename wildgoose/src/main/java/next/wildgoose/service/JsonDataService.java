@@ -11,8 +11,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GetJsonData implements Daction {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GetJsonData.class.getName());
+public class JsonDataService implements Daction {
+	private static final Logger LOGGER = LoggerFactory.getLogger(JsonDataService.class.getName());
 	public DactionResult execute(HttpServletRequest request) {
 		ServletContext context = request.getServletContext();
 		Uri uri = new Uri(request);

@@ -15,8 +15,8 @@ import next.wildgoose.utility.Uri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GetArticleCard implements Action {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GetArticleCard.class.getName());
+public class ArticleCardService implements Action {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCardService.class.getName());
 
 	public ActionResult execute(HttpServletRequest request) {
 		ServletContext context = request.getServletContext();

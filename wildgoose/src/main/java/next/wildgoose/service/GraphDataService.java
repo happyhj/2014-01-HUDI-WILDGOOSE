@@ -14,8 +14,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GetGraphData implements Daction {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GetGraphData.class.getName());
+public class GraphDataService implements Daction {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GraphDataService.class.getName());
 	public DactionResult execute(HttpServletRequest request) {
 		ServletContext context = request.getServletContext();
 		Uri uri = new Uri(request);
