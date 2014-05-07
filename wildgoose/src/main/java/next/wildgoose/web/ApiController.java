@@ -30,12 +30,12 @@ public class ApiController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletContext context = request.getServletContext();
-		Uri uri = new Uri(request.getRequestURI());
+		Uri uri = new Uri(request);
 		String firstUri = uri.get(2);
 		JSONObject result = null;
 		
 		if (firstUri == null) {
-			uri = new Uri(Constants.RESOURCE_ERROR);
+			uri = null;
 		}
 		
 		if (Constants.RESOURCE_REPORTERS.equals(firstUri)) {
@@ -49,7 +49,8 @@ public class ApiController extends HttpServlet {
 		} else if (Constants.RESOURCE_HTML.equals(firstUri)) {
 			// "/api/v1/subhtml/account"
 			HtmlReader htmlReader = HtmlReader.getInstance();
-			String path = context.getRealPath(Constants.RESOURCE_ROOT);
+			String root = context.getRealPath(Constants.RESOURCE_ROOT);
+			String path = root + Constants.PAGE_STATIC_ACCOUNT;
 			result = htmlReader.read(path);
 		} else if (Constants.RESOURCE_SIGN.equals(firstUri)) {
 			// "api/v1/sign/in"
@@ -58,15 +59,13 @@ public class ApiController extends HttpServlet {
 			SignAccount signAccount = SignAccount.getInstance();
 			result = signAccount.isValid(uri, email, password);
 		}
-		
 		send(response, result);
 	}
 	
 	private void send(HttpServletResponse response, JSONObject result) {
 		PrintWriter out = null;
 		response.setContentType(Constants.HEADER_CON_TYPE_JSON);
-		response.setContentType(Constants.HEADER_CON_TYPE_HTML);
-		
+
 		try {
 			out = response.getWriter();
 			out.println(result.toString());

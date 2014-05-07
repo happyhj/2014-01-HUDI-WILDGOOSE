@@ -34,6 +34,7 @@ public class GetArticleCard implements Action {
 		
 		ReporterCardDAO reporterCardDao = ReporterCardDAO.getInstance();
 		ArticleCardDAO articleCardDao =  ArticleCardDAO.getInstance();
+		this.ar = new ActionResult();
 		
 		// id가 입력되지 않은 경우 처리
 		if (uri.size() <= 1 || uri.get(1).equals("")) {

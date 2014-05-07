@@ -11,9 +11,10 @@ modal = {
 		Ajax.GET(url, this.putHtmlInModal);
 		return modal;
 	},
-	"putHtmlInModal" : function(htmlDoc) {
+	"putHtmlInModal" : function(json) {
 		var modal = document.querySelector(".modal");
-		console.log(htmlDoc);
+		var reaction = JSON.parse(json);
+		var htmlDoc = reaction["html"]
 		modal.innerHTML = htmlDoc;
 	},
 	"removeModal" : function(event) {

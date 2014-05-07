@@ -124,7 +124,7 @@ public class ReporterCardDAO {
 			psmt.setInt(2, start);
 			psmt.setInt(3, end);
 			rs = psmt.executeQuery();
-			
+			LOGGER.debug(psmt.toString());
 			while (rs.next()) {
 				reporterCard = new ReporterCard();
 				reporterCard.setId(rs.getInt("id"));
@@ -138,8 +138,8 @@ public class ReporterCardDAO {
 			LOGGER.debug(sqle.getMessage(),sqle);
 			reporterCards = null;
 		} finally {
-			SqlUtil.closePrepStatement(psmt);
 			SqlUtil.closeResultSet(rs);
+			SqlUtil.closePrepStatement(psmt);
 			SqlUtil.closeConnection(conn);
 		}
 		return reporterCards;

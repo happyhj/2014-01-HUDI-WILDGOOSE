@@ -11,53 +11,51 @@ import next.wildgoose.utility.Validation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GetReporterCard implements Action {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GetReporterCard.class.getName());
-	private static GetReporterCard searchReporter;
-	private ActionResult ar;
+public class GetReporterCards implements Action {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GetReporterCards.class.getName());
+	private static GetReporterCards searchReporter;
 	
-	private GetReporterCard() {
-		
-	}
-	
-	public static GetReporterCard getInstance() {
+	public static GetReporterCards getInstance() {
 		if (searchReporter == null) {
-			searchReporter = new GetReporterCard();
+			searchReporter = new GetReporterCards();
 		}
 		return searchReporter;
 	}
 	
 	public ActionResult execute(Uri uri) {
+		ActionResult ar = new ActionResult();
 		String searchQuery = uri.getParameter("q");
+		LOGGER.debug("searchquery : " + searchQuery);
 		boolean hasMoreCards = false;
 		List<ReporterCard> reporterCards = null;
 		
-		setForwardingOption(searchQuery);
-		reporterCards = this.getReporterCards(searchQuery, 0, Constants.NUM_OF_CARDS);
+		setForwardingOption(ar, searchQuery);
+		// 25개를 가져온 후, 마지막 카드를 지움.
+		reporterCards = this.getReporterCards(searchQuery, 0, Constants.NUM_OF_CARDS + 1);
 		if (reporterCards.size() > Constants.NUM_OF_CARDS) {
 			hasMoreCards = true;
+			reporterCards.remove(Constants.NUM_OF_CARDS);
 		}
-		
-		this.ar = new ActionResult();
-		this.ar.setAttribute("totalNum", Constants.NUM_OF_CARDS);
-		this.ar.setAttribute("hasMoreCards", hasMoreCards);
-		this.ar.setAttribute("reporterCards", reporterCards);
-		this.ar.setAttribute("searchQuery", searchQuery);
-		
-		return this.ar;
+
+		ar.setAttribute("totalNum", Constants.NUM_OF_CARDS);
+		ar.setAttribute("hasMoreCards", hasMoreCards);
+		ar.setAttribute("reporterCards", reporterCards);
+		ar.setAttribute("searchQuery", searchQuery);
+		LOGGER.debug(""+hasMoreCards);
+		return ar;
 	}
 	
-	private void setForwardingOption(String searchQuery) {
+	private void setForwardingOption(ActionResult ar, String searchQuery) {
 		if (searchQuery == null) {
-			this.ar.setForwardingOption(false, Constants.PAGE_SEARCH_REPORTER);
+			ar.setForwardingOption(false, Constants.PAGE_SEARCH_REPORTER);
 			return;
 		}
 		
 		String trimmedQuery = searchQuery.trim();
 		if ("".equals(trimmedQuery)) {
-			this.ar.setForwardingOption(true, Constants.RESOURCE_ERROR);
+			ar.setForwardingOption(true, Constants.RESOURCE_ERROR);
 		} else {
-			this.ar.setForwardingOption(false, Constants.PAGE_SEARCH_REPORTER);
+			ar.setForwardingOption(false, Constants.PAGE_SEARCH_REPORTER);
 		}
 	}
 	

@@ -68,10 +68,7 @@ public class NumberOfArticlesDAO {
 		query.append("ON URL = result.article_URL ");
 		query.append("JOIN section as sec ON section_id = sec.id ");
 		query.append("GROUP BY section_id ORDER BY section_id LIMIT 5;");
-		
-		LOGGER.debug(query.toString());
-		LOGGER.debug(Integer.toString(reporterId));
-		
+				
 		try {
 			psmt = conn.prepareStatement(query.toString());
 			psmt.setInt(1, reporterId);

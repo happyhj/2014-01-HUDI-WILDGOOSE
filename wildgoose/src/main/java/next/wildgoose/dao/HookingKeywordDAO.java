@@ -40,10 +40,13 @@ public class HookingKeywordDAO {
 			psmt = conn.prepareStatement(query.toString());
 			psmt.setInt(1, reporterId);
 			rs = psmt.executeQuery();
-			
+
 			while (rs.next()) {
 				JSONObject data = new JSONObject();
 				String keyword = rs.getString("word");
+				if (keyword == null) {
+					break;
+				}
 				int count = rs.getInt("count");
 				data.put(keyword, count);
 				result.append("data", data);

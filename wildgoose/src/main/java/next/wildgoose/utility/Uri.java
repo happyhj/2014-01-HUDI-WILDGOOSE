@@ -6,24 +6,37 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Uri {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Uri.class.getName());
 	private List<String> resources;
-	private Map<String, String> parameters;
+	private Map<String, String[]> parameters;
 	
-	public Uri(String uri) {
+	public Uri(HttpServletRequest request) {
+		String uri = request.getRequestURI();
 		String trimmedUri = trimUri(uri);
 		this.resources = Arrays.asList(trimmedUri.split("/"));
-		this.parameters = this.extractParameters(trimmedUri);
+		this.parameters = request.getParameterMap();
 	}
 	
-	private Map<String, String> extractParameters(String uri) {
-		Map<String, String> map = new HashMap<String, String>();  
+	private Map<String, String[]> extractParameters(String uri) {
+		LOGGER.debug("uri: " + uri);
+		Map<String, String[]> map = new HashMap<String, String[]>();
+		int queryPos = uri.indexOf('?');
+		if (queryPos == -1) {
+			return map;
+		}
 		String query = uri.split("?")[1];
-		String[] params = query.split("&");  
+		String[] params = query.split("&");
 	    for (String param : params) {  
 	        String name = param.split("=")[0];  
-	        String value = param.split("=")[1];  
-	        map.put(name, value);  
+	        String[] value = new String[] {};
+	        value[0] = param.split("=")[1];
+	        map.put(name, value);
 	    }
 	    return map; 
 	}
@@ -57,7 +70,7 @@ public class Uri {
 	
 	public String getParameter(String param) {
 		if (this.parameters.containsKey(param))
-			return this.parameters.get(param);
+			return this.parameters.get(param)[0];
 		return null;
 	}
 	

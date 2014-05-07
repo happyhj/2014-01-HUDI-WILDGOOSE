@@ -1,7 +1,7 @@
 package next.wildgoose.utility;
 
 public class Constants {
-	public static final String HEADER_CON_TYPE_JSON = "application/json";
+	public static final String HEADER_CON_TYPE_JSON = "application/json; charset=UTF-8";
 	public static final String HEADER_CON_TYPE_HTML = "text/html";
 	
 	public static final String PAGE_ERROR = "error.jsp";
