@@ -110,8 +110,12 @@ body {
 }
 
 .searched-box td {
-	margin-top: 10px;
+	padding: 10px;
 	display: block;
+}
+
+.searched-box td:hover {
+	background-color: #D8D8D8;
 }
 
 /* 뷰포트 별 레이아웃 요소 분기 */

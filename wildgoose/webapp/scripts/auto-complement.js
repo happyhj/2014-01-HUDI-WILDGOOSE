@@ -30,8 +30,13 @@ function drawBox(data) {
 	
 }
 
-// 검색창이 focus되어 있을 때만 추천 검색어 박스가 보임
-searching.onblur = function() {
+// 검색창이 클릭하면 추천 검색어 박스가 보였다 보이지 않았다 함
+searching.onclick = function() {
 	var box = document.querySelector(".searched-box");
-	box.style.display = "none";
+	if(getComputedStyle(box, null).display == "none"){
+		box.style.display = "table";
+	} else {
+		box.style.display = "none";
+	}
 }
+
