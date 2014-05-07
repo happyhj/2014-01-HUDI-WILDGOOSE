@@ -1,4 +1,4 @@
-package next.wildgoose.refactoring;
+package next.wildgoose.utility;
 
 import java.util.Arrays;
 import java.util.HashMap;

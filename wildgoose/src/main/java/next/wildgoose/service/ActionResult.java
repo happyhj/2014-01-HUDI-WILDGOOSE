@@ -1,6 +1,8 @@
-package next.wildgoose.refactoring;
+package next.wildgoose.service;
 
 import java.util.HashMap;
+
+import next.wildgoose.utility.Constants;
 
 public class ActionResult {
 	private boolean isRedirect = false;

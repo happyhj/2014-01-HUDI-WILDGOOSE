@@ -2,6 +2,7 @@ package next.wildgoose.utility;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import next.wildgoose.utility.Validation;
 
 import org.junit.Test;
 

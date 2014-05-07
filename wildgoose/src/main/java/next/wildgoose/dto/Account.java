@@ -1,4 +1,4 @@
-package next.wildgoose.accessdao;
+package next.wildgoose.dto;
 
 public class Account {
 	

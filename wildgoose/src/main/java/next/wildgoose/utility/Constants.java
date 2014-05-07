@@ -1,4 +1,4 @@
-package next.wildgoose.refactoring;
+package next.wildgoose.utility;
 
 public class Constants {
 	public static final String HEADER_CON_TYPE_JSON = "application/json";
@@ -14,6 +14,7 @@ public class Constants {
 	public static final String RESOURCE_ROOT = "/";
 	public static final String RESOURCE_INDEX = "";
 	public static final String RESOURCE_REPORTERS = "reporters";
+	public static final String RESOURCE_SEARCH = "search";
 	public static final String RESOURCE_ERROR = "error";
 	public static final String RESOURCE_HTML = "subhtml";
 	public static final String RESOURCE_CHECK = "check";

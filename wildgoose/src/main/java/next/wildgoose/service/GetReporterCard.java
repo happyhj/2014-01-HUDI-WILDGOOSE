@@ -1,25 +1,28 @@
-package next.wildgoose.refactoring;
+package next.wildgoose.service;
 
 import java.util.List;
 
+import next.wildgoose.dao.ReporterCardDAO;
 import next.wildgoose.dto.ReporterCard;
+import next.wildgoose.utility.Constants;
+import next.wildgoose.utility.Uri;
 import next.wildgoose.utility.Validation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SearchReporter implements Action {
-	private static final Logger LOGGER = LoggerFactory.getLogger(SearchReporter.class.getName());
-	private static SearchReporter searchReporter;
+public class GetReporterCard implements Action {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GetReporterCard.class.getName());
+	private static GetReporterCard searchReporter;
 	private ActionResult ar;
 	
-	private SearchReporter() {
+	private GetReporterCard() {
 		
 	}
 	
-	public static SearchReporter getInstance() {
+	public static GetReporterCard getInstance() {
 		if (searchReporter == null) {
-			searchReporter = new SearchReporter();
+			searchReporter = new GetReporterCard();
 		}
 		return searchReporter;
 	}

@@ -1,6 +1,7 @@
 package next.wildgoose.web;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,53 +9,59 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import next.wildgoose.accessdao.ActionForward;
-import next.wildgoose.accessdao.Error;
-import next.wildgoose.accessdao.SearchReporter;
-import next.wildgoose.accessdao.ShowReporter;
-import next.wildgoose.accessdao.UriHandler;
+import next.wildgoose.service.ActionResult;
+import next.wildgoose.service.Error;
+import next.wildgoose.service.GetArticleCard;
+import next.wildgoose.service.GetReporterCard;
+import next.wildgoose.utility.Constants;
+import next.wildgoose.utility.Uri;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FrontController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
 	private static final Logger LOGGER = LoggerFactory.getLogger(FrontController.class.getName());
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Uri uri = new Uri(request.getRequestURI());
+		String firstUri = uri.get(0);
+		ActionResult result = null;
 		RequestDispatcher reqDispatcher = null;
-		String requestURI = request.getRequestURI();
-					
-		UriHandler uriHandler = new UriHandler (requestURI);
-		LOGGER.debug(uriHandler.toString());
-
-		ActionForward forward = null;
 		
-		if (uriHandler.check(0, Wildgoose.RESOURCE_INDEX)) {
-			forward = new SearchReporter(request).execute();
-		} else if (uriHandler.check(0, Wildgoose.RESOURCE_REPORTERS)) {
-			forward = new ShowReporter(request, uriHandler).execute();
-		} else if (uriHandler.check(0, Wildgoose.RESOURCE_ERROR)) {
-			forward = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_ERROR).execute();
-		} else {
-			forward = new Error(request, Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_WENT_WRONG).execute();
+		if (firstUri == null) {
+			uri = new Uri(Constants.RESOURCE_ERROR);
 		}
 		
-		LOGGER.debug(forward.toString());
+		if (firstUri.equals(Constants.RESOURCE_INDEX)) {
+			GetReporterCard searchReporter = GetReporterCard.getInstance();
+			result = searchReporter.execute(uri);
+		} else if (firstUri.equals(Constants.RESOURCE_REPORTERS)) {
+			GetArticleCard showReporter = GetArticleCard.getInstance();
+			result = showReporter.execute(uri);
+		} else {
+			Error error = Error.getInstance();
+			result = error.execute(uri);
+		}
 		
-		// redirect
-		if (forward.isRedirect()) {
-			response.sendRedirect(forward.getPath());
+		if (result.isRedirect()) {
+			response.sendRedirect(result.getPath());
 			return;
 		}
 		
-		// forward
-		reqDispatcher = request.getRequestDispatcher(forward.getPath());
+		setAttributeOnRequest(request, result);
+		reqDispatcher = request.getRequestDispatcher(result.getPath());
 		reqDispatcher.forward(request, response);
+		
+	}
+	
+	private void setAttributeOnRequest(HttpServletRequest request, ActionResult result) {
+		HashMap<String, Object> map = result.getAttribute();
+		for (String key : map.keySet()) {
+			request.setAttribute(key, map.get(key));
+		}
 	}
 }
