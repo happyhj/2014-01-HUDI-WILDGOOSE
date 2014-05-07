@@ -101,6 +101,19 @@ body {
 	background: rgba(255, 255, 255, 1);
 }
 
+.searched-box {
+	display: none;
+	background-color: white;
+	width: 100%;
+	height: 100%;
+	border: 1px solid #D8D8D8;
+}
+
+.searched-box td {
+	margin-top: 10px;
+	display: block;
+}
+
 /* 뷰포트 별 레이아웃 요소 분기 */
 
 /** ipad **/

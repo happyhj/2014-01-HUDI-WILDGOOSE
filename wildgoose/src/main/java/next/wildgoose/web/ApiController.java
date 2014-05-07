@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import next.wildgoose.dao.DataSource;
 import next.wildgoose.dao.SignDAO;
+import next.wildgoose.dao.SqlUtil;
 import next.wildgoose.model.JsonConverter;
 import next.wildgoose.model.PartialHtml;
 import next.wildgoose.utility.Validation;
@@ -100,8 +101,12 @@ public class ApiController extends HttpServlet {
 				JSONObject data = new JSONObject().put("name", rs.getString("name"));
 				result.append("data", data);
 			}
-		} catch (Exception e) {
-			LOGGER.debug(e.getMessage(), e);
+		} catch (SQLException e) {
+			LOGGER.debug(e.getMessage());
+		} finally {
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closeConnection(conn);
 		}
 		return result.toString();
 	}

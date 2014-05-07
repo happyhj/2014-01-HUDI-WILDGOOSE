@@ -22,12 +22,19 @@
 		<div class="search search-column">
 			<form action="./" method="get" >
 				<li class="search-query-entry">
-					<input type="search" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.searchQuery }" />
+					<input type="search" autocomplete="off" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.searchQuery }" />
 				</li>
 				<li class="search-button">
 					<input type="submit" id="search-action" value ="Search"/>
 				</li>
 			</form>
+			<table class="searched-box">
+  				<tbody>
+    				<tr>
+				    </tr>
+  				</tbody>
+			</table>
+			
 		</div>
 		<div class="search-result">
 			<ul>
@@ -81,3 +88,4 @@ inputEl.focus();
 <script type="text/javascript" src="/scripts/validation.js"></script>
 <script type="text/javascript" src="/scripts/account.js"></script>
 <script type="text/javascript" src="/scripts/searchReporter.js"></script>
+<script type="text/javascript" src="/scripts/auto-complement.js"></script>
