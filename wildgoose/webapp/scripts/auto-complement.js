@@ -30,7 +30,7 @@ function drawBox(data) {
 	
 }
 
-// 검색창이 클릭하면 추천 검색어 박스가 보였다 보이지 않았다 함
+//검색창이 클릭하면 추천 검색어 박스가 보였다 보이지 않았다 함
 searching.onclick = function() {
 	var box = document.querySelector(".searched-box");
 	if(getComputedStyle(box, null).display == "none"){
@@ -40,3 +40,11 @@ searching.onclick = function() {
 	}
 }
 
+// !!!
+document.querySelector(".searched-box").addEventListener('click', insetText, false);
+function insetText(e) {
+	if(e.target.tagName == "TD") {
+		searching.value = e.target.textContent
+		document.querySelector(".searched-box").style.display = "none";
+	}
+}
