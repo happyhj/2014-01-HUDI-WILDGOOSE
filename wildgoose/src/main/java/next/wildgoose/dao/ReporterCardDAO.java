@@ -112,7 +112,6 @@ public class ReporterCardDAO {
 			psmt.setInt(2, start);
 			psmt.setInt(3, end);
 			rs = psmt.executeQuery();
-			LOGGER.debug(psmt.toString());
 			while (rs.next()) {
 				reporterCard = new ReporterCard();
 				reporterCard.setId(rs.getInt("id"));

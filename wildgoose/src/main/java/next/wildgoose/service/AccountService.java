@@ -2,12 +2,11 @@ package next.wildgoose.service;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.json.JSONObject;
-
-import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Account;
 import next.wildgoose.utility.Uri;
 import next.wildgoose.utility.Validation;
+
+import org.json.JSONObject;
 
 public class AccountService implements Daction {
 
@@ -28,7 +27,7 @@ public class AccountService implements Daction {
 				resultString = "";
 			}
 		}
-		result.put("result", resultString);
+		result.put("text", resultString);
 		return result;
 	}
 
@@ -55,10 +54,13 @@ public class AccountService implements Daction {
 		return false;
 	}
 
-	@Override
 	public DactionResult execute(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+		Uri uri = new Uri(request);
+		String email = uri.get(4);
+		String password = request.getParameter("password");
+		JSONObject json = isValid(uri, email, password);
+		DactionResult result = new DactionResult("text", json);
+		return result;
 	}
 	
 }

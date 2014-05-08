@@ -11,11 +11,14 @@ modal = {
 		Ajax.GET(url, this.putHtmlInModal);
 		return modal;
 	},
-	"putHtmlInModal" : function(json) {
+	"putHtmlInModal" : function(htmlDoc) {
 		var modal = document.querySelector(".modal");
-		var reaction = JSON.parse(json);
-		var htmlDoc = reaction["html"]
 		modal.innerHTML = htmlDoc;
+		
+		// add event for validation at input
+		addValidationEvent();
+		var btn = document.querySelector(".form-container input[type=button]");
+		btn.addEventListener("click", signUpAccout, false);
 	},
 	"removeModal" : function(event) {
 		if (event.target == this) {

@@ -65,14 +65,13 @@ public class ApiController extends HttpServlet {
 		ServletContext context = request.getServletContext();
 		Uri uri = new Uri(request);
 		String resourceName = uri.get(2);
-		LOGGER.debug(resourceName);
 		
 		Daction defaultDaction = (ErrorDaction) context.getAttribute("ErrorDaction");
 		Map<String, Daction> dactionMap = new HashMap<String, Daction>();
 		dactionMap.put(Constants.RESOURCE_REPORTERS, (GraphDataService) context.getAttribute("GraphDataService"));
 		dactionMap.put(Constants.RESOURCE_SEARCH, (JsonDataService) context.getAttribute("JsonDataService"));
 		dactionMap.put(Constants.RESOURCE_MORE_RPT_CARD, (JsonDataService) context.getAttribute("JsonDataService"));
-		dactionMap.put(Constants.RESOURCE_HTML, (HtmlDocService) context.getAttribute("HtmlReader"));
+		dactionMap.put(Constants.RESOURCE_HTML, (HtmlDocService) context.getAttribute("HtmlDocService"));
 		dactionMap.put(Constants.RESOURCE_SIGN, (AccountService) context.getAttribute("AccountService"));
 		Daction result = dactionMap.getOrDefault(resourceName, defaultDaction);
 		return result;

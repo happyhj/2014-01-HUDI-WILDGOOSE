@@ -1,13 +1,3 @@
-/*
- * attatch click event
- */
-function attatchAccountEvent() {
-	var accountBtn = document.querySelector(".account");
-	var url = "/api/v1/subhtml/create_account";
-	accountBtn.addEventListener("click", function() {modal.openModalWindow(url)}, false);
-}
-attatchAccountEvent();
-
 
 /*
  * validation action
@@ -28,7 +18,7 @@ function addValidationEvent() {
 function checkSignUpFrom(e) {
 	var me = e.target;
 	var valid = false;
-	
+	console.log("1123")
 	// email
 	// e.valid가 undefined라는 의미는 사용자 정의 이벤트가 아니라는 의미임.
 	if (me.name == "email" && e.valid === undefined) {
