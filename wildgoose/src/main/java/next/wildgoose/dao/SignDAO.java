@@ -7,8 +7,6 @@ public class SignDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SignDAO.class.getName());
 	
 	public boolean findEmail (String email) {
-		
 		return "hello@wildgoose.com".equals(email);
 	}
-	
 }

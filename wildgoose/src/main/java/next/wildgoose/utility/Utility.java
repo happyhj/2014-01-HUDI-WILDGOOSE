@@ -1,23 +1,17 @@
 package next.wildgoose.utility;
 
 import java.io.UnsupportedEncodingException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Utility {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Utility.class
-			.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(Utility.class.getName());
 
 	public static String encode(String original, String encodingType) {
 

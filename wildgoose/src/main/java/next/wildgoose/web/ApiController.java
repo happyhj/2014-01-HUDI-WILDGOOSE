@@ -2,10 +2,8 @@ package next.wildgoose.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -13,15 +11,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import next.wildgoose.dao.DataSource;
-import next.wildgoose.dao.SignDAO;
-import next.wildgoose.dao.SqlUtil;
-import next.wildgoose.model.JsonConverter;
-import next.wildgoose.model.PartialHtml;
-import next.wildgoose.utility.Validation;
-import next.wildgoose.utility.Wildgoose;
+import next.wildgoose.service.AccountService;
+import next.wildgoose.service.Daction;
+import next.wildgoose.service.DactionResult;
+import next.wildgoose.service.ErrorDaction;
+import next.wildgoose.service.GraphDataService;
+import next.wildgoose.service.HtmlDocService;
+import next.wildgoose.service.JsonDataService;
+import next.wildgoose.utility.Constants;
+import next.wildgoose.utility.Uri;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,116 +33,50 @@ public class ApiController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String result = null;
+		Daction daction = getProperDaction(request);
+		DactionResult result = daction.execute(request);
+		send(request, response, result);
+	}
+	
+	private void send(HttpServletRequest request, HttpServletResponse response, DactionResult result) {
+		ServletContext context = request.getServletContext();
+		String type = result.getDataType();
+		PrintWriter out = null;
 		
-		// servlet context
-		ServletContext context = request.getSession().getServletContext();
 		response.setCharacterEncoding(context.getInitParameter("encoding"));
-		
-		PrintWriter out = response.getWriter();
-		String requestURI = request.getRequestURI();
-		UriHandler uri = new UriHandler (requestURI);
-		
-		if (uri.check(2, Wildgoose.RESOURCE_REPORTERS)) {
-			// reporters 자원으로 요청시
-			response.setContentType(Wildgoose.HEADER_CON_TYPE_JSON);
-			result = jsonRequest(request, uri);
-		} else if (uri.check(2, "most_similar_names")) {
-			// ex) /api/v1/most_similar_names?name=김
-			String name = request.getParameter("name");
-			result = getSimilarNames(name);
-		} else if (uri.check(2,  Wildgoose.RESOURCE_HTML)) {
-			// HTML 자원을 요청시
-			response.setContentType(Wildgoose.HEADER_CON_TYPE_HTML);
-			String path = context.getRealPath(Wildgoose.RESOURCE_ROOT);
-			result = htmlRequest(request, uri, path);
-		} else if (uri.check(2, Wildgoose.RESOURCE_SIGN)) {
-			// Sign 자원 요청시
-			SignAccount signAccount = new SignAccount(request);
-			result = signRequest(request, uri, signAccount);
-		}
-		
-		out.println(result);
-	}
-	
-	private String jsonRequest(HttpServletRequest request, UriHandler uri) {
-		GetGraphData reporter = new GetGraphData();
-		String result = null;
-		// ~/reporters 요청시 ajax로 reporterCards 반환
-		if (uri.get(3) == null) {
-			JsonConverter jsonConverter = new SearchReporter(request);
-			result = jsonConverter.toJsonString();
+		if ("json".equals(type)) {
+			response.setContentType(Constants.HEADER_CON_TYPE_JSON);
+		} else if ("html".equals(type)) {
+			response.setContentType(Constants.HEADER_CON_TYPE_HTML);
 		} else {
-			int reporterId = Integer.parseInt(uri.get(3));
-			LOGGER.debug("reporter id request: " + reporterId);
-			
-			String apiName = uri.get(4);
-			String by = request.getParameter("by");
-			result = reporter.getJSON(request, reporterId, apiName, by).toString();
+			response.setContentType(Constants.HEADER_CON_TYPE_PLAIN_TEXT);
 		}
-		return result;
-	}
-	
-	private String getSimilarNames(String name) {
-		JSONObject result = new JSONObject();
-		String query = "SELECT name FROM author WHERE name LIKE ? ORDER BY name LIMIT 0, 5 ";
-		PreparedStatement psmt = null;
-		Connection conn = null;
-		ResultSet rs = null;
-		conn = DataSource.getInstance().getConnection();
 		
 		try {
-			psmt = conn.prepareStatement(query.toString());
-			psmt.setString(1, name + "%");
-			LOGGER.debug(psmt.toString());
-			rs = psmt.executeQuery();
-			while (rs.next()) {
-				JSONObject data = new JSONObject().put("name", rs.getString("name"));
-				result.append("data", data);
-			}
-		} catch (SQLException e) {
-			LOGGER.debug(e.getMessage());
-		} finally {
-			SqlUtil.closePrepStatement(psmt);
-			SqlUtil.closeResultSet(rs);
-			SqlUtil.closeConnection(conn);
+			out = response.getWriter();
+			out.println(result.getData());
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage(), e);
 		}
-		return result.toString();
-	}
-
-	private String htmlRequest(HttpServletRequest request, UriHandler uri, String path) {
-		String result = null;
-		PartialHtml phtml = null;
-		String resourceName = uri.get(3);
-		LOGGER.debug("resourceName: " + resourceName);
-		
-		if ("create_account".equals(resourceName)) {
-			phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_ACCOUNT);
-			result = phtml.read();
-		} else if ("create_reporter_card".equals(resourceName)) {
-			phtml = new PartialHtml(path + Wildgoose.PAGE_STATIC_REPORTER_CARD);
-			result = phtml.read();	
-		}
-		return result;
+		out.close();
 	}
 	
-	private String signRequest(HttpServletRequest request, UriHandler uri, SignAccount signAccount) {
-		String subResource = uri.get(3);
-		String result = null;
-		// sign/up
-		if ("up".equals(subResource)) {
-			result = "Validation Failure";
-			if (signAccount.up()) {
-				result = "Validation Success";
-			}
-		} else if ("email".equals(subResource)) {
-		// sign/email,  email 자원 요청시
-			String email = uri.get(4);
-			result = "OK";
-			if (signAccount.hasEmail(email)) {
-				result = "";
-			}
-		}	
+	private Daction getProperDaction(HttpServletRequest request) {
+		ServletContext context = request.getServletContext();
+		Uri uri = new Uri(request);
+		String resourceName = uri.get(2);
+		LOGGER.debug(resourceName);
+		
+		Daction defaultDaction = (ErrorDaction) context.getAttribute("ErrorDaction");
+		Map<String, Daction> dactionMap = new HashMap<String, Daction>();
+		dactionMap.put(Constants.RESOURCE_REPORTERS, (GraphDataService) context.getAttribute("GraphDataService"));
+		dactionMap.put(Constants.RESOURCE_SEARCH, (JsonDataService) context.getAttribute("JsonDataService"));
+		dactionMap.put(Constants.RESOURCE_MORE_RPT_CARD, (JsonDataService) context.getAttribute("JsonDataService"));
+		dactionMap.put(Constants.RESOURCE_HTML, (HtmlDocService) context.getAttribute("HtmlReader"));
+		dactionMap.put(Constants.RESOURCE_SIGN, (AccountService) context.getAttribute("AccountService"));
+		Daction result = dactionMap.getOrDefault(resourceName, defaultDaction);
 		return result;
 	}
 }
+
+

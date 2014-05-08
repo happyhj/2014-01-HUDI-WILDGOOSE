@@ -1,4 +1,4 @@
-package next.wildgoose.model;
+package next.wildgoose.dao;
 
 import java.util.Random;
 
@@ -7,15 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DummyData {
-	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DummyData.class.getName());
-	JSONObject result = null;
-	private JSONObject data = null;
-	private Random random = new Random();
-	
 	
 	public JSONObject getJsonWithStatPoints(int reporterId) {
-		result = new JSONObject();
+		JSONObject result = new JSONObject();
+		JSONObject data;
+		Random random = new Random();
 		
 		data = new JSONObject().put("꾸준함", random.nextInt(101)/10);
 		result.append("data", data);
@@ -38,5 +35,7 @@ public class DummyData {
 	public String getEmail () {
 		return "hello@world.com";
 	}
+
+	
 
 }

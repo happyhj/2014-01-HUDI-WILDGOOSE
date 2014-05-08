@@ -5,12 +5,21 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import next.wildgoose.dao.ArticleCardDAO;
-import next.wildgoose.dao.DataSource;
+import next.wildgoose.dao.DummyData;
 import next.wildgoose.dao.HookingKeywordDAO;
+import next.wildgoose.dao.JsonDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
 import next.wildgoose.dao.ReporterCardDAO;
-
 import next.wildgoose.dao.SignDAO;
+import next.wildgoose.pool.DataSource;
+import next.wildgoose.service.Error;
+import next.wildgoose.service.ErrorDaction;
+import next.wildgoose.service.ArticleCardService;
+import next.wildgoose.service.GraphDataService;
+import next.wildgoose.service.JsonDataService;
+import next.wildgoose.service.ReporterCardService;
+import next.wildgoose.service.HtmlDocService;
+import next.wildgoose.service.AccountService;
 
 public class WildgooseContextListener implements ServletContextListener {
 	
@@ -22,20 +31,27 @@ public class WildgooseContextListener implements ServletContextListener {
 		String dbUrl = sc.getInitParameter("dbUrl");
 		String userName = sc.getInitParameter("userName");
 		String userPassword = sc.getInitParameter("userPassword");
-		// Static한 정보는 Parameter에서 가져옴
-		
-		// DATASOURCE init
 		DataSource.init(dbDriver, userName, userPassword, dbUrl);
 		
-		// DAO
-		sc.setAttribute("articleCardDAO", new ArticleCardDAO());
-		sc.setAttribute("hookingKeywordDAO", new HookingKeywordDAO());
-		sc.setAttribute("numberOfArticlesDAO", new NumberOfArticlesDAO());
-		sc.setAttribute("reporterCardDAO", new ReporterCardDAO());
-		sc.setAttribute("signDAO", new SignDAO());
+		// SERVICE
+		sc.setAttribute("ReporterCardService", new ReporterCardService());
+		sc.setAttribute("ArticleCardService", new ArticleCardService());
+		sc.setAttribute("GraphDataService", new GraphDataService());
+		sc.setAttribute("JsonDataService", new JsonDataService());
+		sc.setAttribute("AccountService", new AccountService());
+		sc.setAttribute("HtmlDocService", new HtmlDocService());
+		sc.setAttribute("Error", new Error());
+		sc.setAttribute("ErrorDaction", new ErrorDaction());
 		
-		// DUMMY DATA
-		//	sc.setAttribute("dummy", new DummyData());
+		// DAO
+		sc.setAttribute("ArticleCardDAO", new ArticleCardDAO());
+		sc.setAttribute("HookingKeywordDAO", new HookingKeywordDAO());
+		sc.setAttribute("NumberOfArticlesDAO", new NumberOfArticlesDAO());
+		sc.setAttribute("ReporterCardDAO", new ReporterCardDAO());
+		sc.setAttribute("JsonDAO", new JsonDAO());
+		sc.setAttribute("SignDAO", new SignDAO());
+		sc.setAttribute("DummyData", new DummyData());
+		
 	}
 
 	public void contextDestroyed(ServletContextEvent event) {
