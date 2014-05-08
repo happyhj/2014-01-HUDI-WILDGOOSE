@@ -2,7 +2,7 @@
 var searching = document.querySelector('#query-entry');
 
 searching.onkeyup = function() {
-	var url = "/api/v1/most_similar_names?name=";
+	var url = "/api/v1/search/most_similar_names?name=";
 	var searched = searching.value;
 	url = url + searched;
 	Ajax.GET(url, drawBox);

@@ -19,8 +19,8 @@ public class JsonDataService implements Daction {
 		
 		JsonDAO jsonDao = (JsonDAO) context.getAttribute("JsonDAO");
 		JSONObject json = null;
-		
-		if (Constants.RESOURCE_MOST_SMR_NAME.equals(uri.get(2))) {
+		LOGGER.debug(uri.toString());
+		if (Constants.RESOURCE_MOST_SMR_NAME.equals(uri.get(3))) {
 			String name = request.getParameter("name");
 			json = jsonDao.getSimilarNames(name);
 		} else if (Constants.RESOURCE_MORE_RPT_CARD.equals(uri.get(2))) {

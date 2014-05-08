@@ -20,7 +20,7 @@ public class JsonDAO {
 		Connection conn = DataSource.getInstance().getConnection();
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
-		
+		LOGGER.debug(name);
 		try {
 			psmt = conn.prepareStatement(query.toString());
 			psmt.setString(1, name + "%");
