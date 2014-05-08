@@ -11,25 +11,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-<<<<<<< HEAD
+import next.wildgoose.service.AccountService;
 import next.wildgoose.service.Daction;
 import next.wildgoose.service.DactionResult;
 import next.wildgoose.service.ErrorDaction;
 import next.wildgoose.service.GraphDataService;
-import next.wildgoose.service.JsonDataService;
 import next.wildgoose.service.HtmlDocService;
-import next.wildgoose.service.AccountService;
+import next.wildgoose.service.JsonDataService;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
-=======
-import next.wildgoose.dao.DataSource;
-import next.wildgoose.dao.SignDAO;
-import next.wildgoose.dao.SqlUtil;
-import next.wildgoose.model.JsonConverter;
-import next.wildgoose.model.PartialHtml;
-import next.wildgoose.utility.Validation;
-import next.wildgoose.utility.Wildgoose;
->>>>>>> refs/heads/dev
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
