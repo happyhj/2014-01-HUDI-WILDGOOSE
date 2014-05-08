@@ -1,9 +1,9 @@
 // searched에 입력하고 있는 글자를 가져옴
 var searching = document.querySelector('#query-entry');
-var searched;
+
 searching.onkeyup = function() {
 	var url = "/api/v1/most_similar_names?name=";
-	searched = searching.value;
+	var searched = searching.value;
 	url = url + searched;
 	Ajax.GET(url, drawBox);
 }
@@ -40,7 +40,7 @@ searching.onclick = function() {
 	}
 }
 
-// !!!
+// 클릭하면 검색어 입력
 document.querySelector(".searched-box").addEventListener('click', insetText, false);
 function insetText(e) {
 	if(e.target.tagName == "TD") {
