@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import next.wildgoose.service.Action;
 import next.wildgoose.service.ActionResult;
+import next.wildgoose.service.Daction;
 import next.wildgoose.service.Error;
 import next.wildgoose.service.ArticleCardService;
 import next.wildgoose.service.ReporterCardService;
@@ -51,7 +52,10 @@ public class FrontController extends HttpServlet {
 		Map<String, Action> actionMap = new HashMap<String, Action>();
 		actionMap.put(Constants.RESOURCE_INDEX, (ReporterCardService) context.getAttribute("ReporterCardService"));
 		actionMap.put(Constants.RESOURCE_REPORTERS, (ArticleCardService) context.getAttribute("ArticleCardService"));
-		Action result = actionMap.getOrDefault(uri.get(0), defaultAction);
+		Action result = actionMap.get(uri.get(0));
+		if (result == null) {
+			result = defaultAction;
+		}
 		return result;
 	}
 }
