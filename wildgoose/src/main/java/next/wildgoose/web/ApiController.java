@@ -35,20 +35,23 @@ public class ApiController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Daction daction = getProperDaction(request);
 		DactionResult result = daction.execute(request);
-		send(response, result);
+		send(request, response, result);
 	}
 	
-	private void send(HttpServletResponse response, DactionResult result) {
+	private void send(HttpServletRequest request, HttpServletResponse response, DactionResult result) {
+		ServletContext context = request.getServletContext();
+		String type = result.getDataType();
 		PrintWriter out = null;
 		
-		if ("json".equals(result.getDataType())) {
+		response.setCharacterEncoding(context.getInitParameter("encoding"));
+		if ("json".equals(type)) {
 			response.setContentType(Constants.HEADER_CON_TYPE_JSON);
-		} else if ("html".equals(result.getDataType())) {
+		} else if ("html".equals(type)) {
 			response.setContentType(Constants.HEADER_CON_TYPE_HTML);
 		} else {
 			response.setContentType(Constants.HEADER_CON_TYPE_PLAIN_TEXT);
 		}
-
+		
 		try {
 			out = response.getWriter();
 			out.println(result.getData());
@@ -61,7 +64,8 @@ public class ApiController extends HttpServlet {
 	private Daction getProperDaction(HttpServletRequest request) {
 		ServletContext context = request.getServletContext();
 		Uri uri = new Uri(request);
-		LOGGER.debug(uri.get(2));
+		String resourceName = uri.get(2);
+		LOGGER.debug(resourceName);
 		
 		Daction defaultDaction = (ErrorDaction) context.getAttribute("ErrorDaction");
 		Map<String, Daction> dactionMap = new HashMap<String, Daction>();
@@ -70,7 +74,7 @@ public class ApiController extends HttpServlet {
 		dactionMap.put(Constants.RESOURCE_MORE_RPT_CARD, (JsonDataService) context.getAttribute("JsonDataService"));
 		dactionMap.put(Constants.RESOURCE_HTML, (HtmlDocService) context.getAttribute("HtmlReader"));
 		dactionMap.put(Constants.RESOURCE_SIGN, (AccountService) context.getAttribute("AccountService"));
-		Daction result = dactionMap.getOrDefault(uri.get(2), defaultDaction);
+		Daction result = dactionMap.getOrDefault(resourceName, defaultDaction);
 		return result;
 	}
 }
