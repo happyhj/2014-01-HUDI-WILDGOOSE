@@ -1,0 +1,77 @@
+.form-container {
+	padding: 20px;
+	height: 100%;
+}
+.input {
+	display: block;
+	width: 100%;
+	height: 30px;
+	margin: 20px auto;
+	padding-left: 5px;
+}
+
+.button {
+	display: block;
+	width: 90px;
+	height: 45px;
+	margin: 0 auto;
+}
+
+.form-container {
+	background: #DDD;
+}
+
+.input {
+	border: 0;
+	font-size: 20px;
+	color: #777;
+}
+
+.button {
+	outline: none;
+	border: 0 none;
+	font-size: 20px;
+}
+
+.status-approved {
+	color:green;
+}
+
+.status-denied {
+	color:red;
+}
+
+.form-msg {
+	width: 100%;
+	color: #777;
+	font-size:0.9em;
+	margin:0 auto;
+}
+
+.isProgressing {
+	background:url('/image/progress.gif');
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: right center;
+}
+
+.isValid {
+	background:url('/image/ok.png');
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: right center;
+}
+
+.isInvalid {
+	background:url('/image/no.png');
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: right center;
+}
+
+.form-container .hidden {
+	display: none !important;
+}

@@ -12,7 +12,9 @@
 <title>Wildgoose</title>
 
 <div class="wrap">
-	<header class="header"></header>
+	<header class="header">
+		<button class="account">가입하기${ requestScope.accountStatus }</button>
+	</header>
 	<div class="container">
 		<div class="logo">
 			<a href="/"><img src="image/logo.png" alt="wildgoose logo" class="logo-image"/></a>
@@ -20,12 +22,19 @@
 		<div class="search search-column">
 			<form action="./" method="get" >
 				<li class="search-query-entry">
-					<input type="search" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.searchQuery }" />
+					<input type="search" autocomplete="off" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.searchQuery }" />
 				</li>
 				<li class="search-button">
 					<input type="submit" id="search-action" value ="Search"/>
 				</li>
 			</form>
+			<table class="searched-box">
+  				<tbody>
+    				<tr>
+				    </tr>
+  				</tbody>
+			</table>
+			
 		</div>
 		<div class="search-result">
 			<ul>
@@ -34,7 +43,6 @@
 					<c:when test="${ not empty requestScope.message }">
 						<span>${ requestScope.message }</span>
 					</c:when>
-					
 					<%-- searchQuery 존재시 --%>
 					<c:when test="${ not empty requestScope.searchQuery }">
 						<c:if test="${ empty requestScope.reporterCards }">
@@ -58,19 +66,38 @@
 				</c:choose>
 			</ul>
 		</div>
+		<%-- searchQuery 존재시 and 검색 결과가 더 많을 때 --%>
+		<c:if test="${ not empty requestScope.searchQuery and requestScope.hasMoreCards == true }">
+			<div class="search-more">
+				<div class="search-button search-button-ajax">더보기</div>
+				<div class="search-state search-state-hidden">
+				<div class="state-search-query hidden">${ requestScope.searchQuery }</div>
+				<div class="state-search-total hidden">${ requestScope.totalNum }</div>
+				</div>
+			</div>
+		</c:if>
 	</div>
 	<footer class="footer"></footer>
 </div>
 <script>
-
 var inputEl = document.getElementById("query-entry");
-//var linkEl = document.getElementById("search-action");
 inputEl.focus();
+
 /*
-inputEl.addEventListener("keyup",function(e) {	
-	if(document.activeElement === this && e.keyCode === 13) {
-		linkEl.click();
-	}
-},false);
-*/
+ * attatch click event
+ */
+function attatchAccountEvent() {
+	var accountBtn = document.querySelector(".account");
+	var url = "/api/v1/subhtml/create_account";
+	accountBtn.addEventListener("click", function() {modal.openModalWindow(url)}, false);
+}
+attatchAccountEvent();
+
+
 </script>
+<script type="text/javascript" src="/scripts/util.js"></script>
+<script type="text/javascript" src="/scripts/modal.js"></script>
+<script type="text/javascript" src="/scripts/searchReporter.js"></script>
+<script type="text/javascript" src="/scripts/auto-complement.js"></script>
+<script type="text/javascript" src="/scripts/account.js"></script>
+<script type="text/javascript" src="/scripts/validation.js"></script>

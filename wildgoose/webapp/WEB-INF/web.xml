@@ -38,9 +38,9 @@
 		<servlet-class>next.wildgoose.web.FrontController</servlet-class>
 	</servlet>
 	<servlet>
-		<display-name>ApiMapper</display-name>
-		<servlet-name>ApiMapper</servlet-name>
-		<servlet-class>next.wildgoose.api.ApiMapper</servlet-class>
+		<display-name>ApiController</display-name>
+		<servlet-name>ApiController</servlet-name>
+		<servlet-class>next.wildgoose.web.ApiController</servlet-class>
 	</servlet>
 	
 
@@ -55,6 +55,10 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
+		<url-pattern>*.gif</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
 		<url-pattern>*.png</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
@@ -62,13 +66,14 @@
 		<url-pattern>*.ico</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
+		<servlet-name>ApiController</servlet-name>
+		<url-pattern>/api/v1/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>FrontController</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>ApiMapper</servlet-name>
-		<url-pattern>/api/v1/*</url-pattern>
-	</servlet-mapping>
+	
 	
 
 	<!-- Context Parameters -->
@@ -79,19 +84,27 @@
 	<context-param>
 		<param-name>dbUrl</param-name>
 		<param-value>jdbc:mysql://10.73.45.134:3306/wildgoose_dev</param-value>
+		<!-- <param-value>jdbc:mysql://heej.net:3306/wildgoose_dev</param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>userName</param-name>
 		<param-value>viewer</param-value>
+		<!-- <param-value>wildgoose</param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>userPassword</param-name>
 		<param-value></param-value>
+		<!-- <param-value>rlfjrl</param-value> -->
+	</context-param>
+	<context-param>
+		<param-name>encoding</param-name>
+		<param-value>UTF-8</param-value>
+	
 	</context-param>
 
 	<!-- Listeners -->
 	<listener>
-		<listener-class>next.wildgoose.listener.DatabaseContextListener</listener-class>
+		<listener-class>next.wildgoose.listener.WildgooseContextListener</listener-class>
 	</listener>
 	
 	<!-- Filter -->
@@ -99,10 +112,6 @@
 		<display-name>EncodingFilter</display-name>
 		<filter-name>EncodingFilter</filter-name>
 		<filter-class>next.wildgoose.filter.EncodingFilter</filter-class>
-		<init-param>
-			<param-name>encoding</param-name>
-			<param-value>utf-8</param-value>
-		</init-param>
 	</filter>
 	
 	<!-- Filter Mapping -->

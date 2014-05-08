@@ -28,7 +28,7 @@ function initGraph() {
 	for (var graphName in graphInfo) {
 		var graph = graphInfo[graphName];
 		var url = graph['url'].replace(":reporterId", reporterId);
-		Ajax.requestData(url, graph['function']);
+		Ajax.GET(url, graph['function']);
 	}
 }
 

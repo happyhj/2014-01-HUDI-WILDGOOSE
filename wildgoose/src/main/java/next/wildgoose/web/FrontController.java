@@ -1,73 +1,61 @@
 package next.wildgoose.web;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import next.wildgoose.service.Action;
+import next.wildgoose.service.ActionResult;
+import next.wildgoose.service.Daction;
+import next.wildgoose.service.Error;
+import next.wildgoose.service.ArticleCardService;
+import next.wildgoose.service.ReporterCardService;
+import next.wildgoose.utility.Constants;
+import next.wildgoose.utility.Uri;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import next.wildgoose.utility.Wildgoose;
-
 public class FrontController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
 	private static final Logger LOGGER = LoggerFactory.getLogger(FrontController.class.getName());
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher reqDispatcher = null;
-		String requestURI = request.getRequestURI();
-					
-		RestfulURI restful = new RestfulURI (requestURI);
-		LOGGER.debug(restful.toString());
-
-		Action action = null;
-		ActionForward forward = null;
+		Action action = getProperAction(request);
+		ActionResult result = action.execute(request);
 		
-		try {
-			if (restful.check(0, Wildgoose.RESOURCE_INDEX)) {
-				action = new SearchReporterAction();
-				forward = action.execute(request, response, restful);
-			}
-			else if (restful.check(0, Wildgoose.RESOURCE_REPORTERS)) {
-				action = new ShowReporterAction();
-				forward = action.execute(request, response, restful);
-			}
-			else if (restful.check(0, Wildgoose.RESOURCE_ERROR)) {
-				action = new ErrorAction(Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_ERROR);
-				forward = action.execute(request, response, restful);
-			}
-			else {
-				action = new ErrorAction(Wildgoose.PAGE_ERROR_SEARCH_REPORTER, Wildgoose.MSG_WENT_WRONG);
-				forward = action.execute(request, response, restful);
-			}
-		}
-		catch (Exception e) {
-			LOGGER.debug(e.getMessage(), e);
-			
-			forward.setRedirect(true);
-			forward.setPath(Wildgoose.RESOURCE_ERROR);
-		}
-		LOGGER.debug(forward.toString());
-		
-		// redirect
-		if (forward.isRedirect()) {
-			response.sendRedirect(forward.getPath());
+		if (result.isRedirect()) {
+			response.sendRedirect(result.getPath());
 			return;
 		}
 		
-		// forward
-		reqDispatcher = request.getRequestDispatcher(forward.getPath());
+		RequestDispatcher reqDispatcher = request.getRequestDispatcher(result.getPath());
 		reqDispatcher.forward(request, response);
-		
 	}
+	
+	private Action getProperAction(HttpServletRequest request) {
+		ServletContext context = request.getServletContext();
+		Uri uri = new Uri(request);
+		LOGGER.debug(uri.get(0));
 
+		Action defaultAction = (Error) context.getAttribute("Error");
+		Map<String, Action> actionMap = new HashMap<String, Action>();
+		actionMap.put(Constants.RESOURCE_INDEX, (ReporterCardService) context.getAttribute("ReporterCardService"));
+		actionMap.put(Constants.RESOURCE_REPORTERS, (ArticleCardService) context.getAttribute("ArticleCardService"));
+		Action result = actionMap.get(uri.get(0));
+		if (result == null) {
+			result = defaultAction;
+		}
+		return result;
+	}
 }

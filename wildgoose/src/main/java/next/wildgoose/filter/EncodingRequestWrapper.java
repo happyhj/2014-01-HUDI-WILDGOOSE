@@ -41,8 +41,7 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 		try {
 			encodedURI = URLDecoder.decode(requestURI, this.encodingType);
 		} catch (UnsupportedEncodingException e) {
-			// nothing
-			encodedURI = null;
+			LOGGER.debug("Encoding Wrapper Error" + e.getMessage());
 		}
 		
 		return encodedURI;
@@ -57,7 +56,6 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 		while (originalParamIr.hasNext()) {
 			String key = originalParamIr.next();
 			String[] values = originalParam.get(key);
-			LOGGER.debug(key);
 			encodedParam.put(key, encodeValues(values));
 		}
 		
@@ -74,7 +72,6 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 		while (valuesIr.hasNext()) {
 			encodedValues.add(Utility.encode(valuesIr.next(), encodingType));
 		}
-		LOGGER.debug(encodedValues.toString());
 		return encodedValues.toArray(new String[0]);
 	}
 

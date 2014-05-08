@@ -1,4 +1,4 @@
-package next.wildgoose.model;
+package next.wildgoose.pool;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -40,7 +40,13 @@ public class DataSource {
 	}
 
 	// static getConnection makes code thread-unsafe
-	public Connection getConnection() throws SQLException {
-		return this.bds.getConnection();
+	public Connection getConnection() {
+		Connection con = null;
+		try {
+			con = this.bds.getConnection();
+		} catch (SQLException e) {
+			LOGGER.debug(e.getMessage());
+		}
+		return con;
 	}
 }

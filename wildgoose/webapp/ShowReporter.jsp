@@ -13,14 +13,6 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet"
 	href="/stylesheet/show_reporter.css" />
-<script type="text/javascript" src="/webjars/d3js/3.4.4/d3.min.js"></script>
-
-<script type="text/javascript" src="/scripts/util.js"></script>
-<script type="text/javascript" src="/scripts/graph.js"></script>
-<script type="text/javascript" src="/scripts/graph-donut.js"></script>
-<script type="text/javascript" src="/scripts/graph-brokenline.js"></script>
-<script type="text/javascript" src="/scripts/graph-bar.js"></script>
-<script type="text/javascript" src="/scripts/graph-radar.js"></script>
 
 <title>${ requestScope.name }기자</title>
 </head>
@@ -94,5 +86,12 @@
 		</div>
 		<footer class="footer"></footer>
 	</div>
+	<script type="text/javascript" src="/webjars/d3js/3.4.4/d3.min.js"></script>
+	<script type="text/javascript" src="/scripts/util.js"></script>
+	<script type="text/javascript" src="/scripts/graph.js"></script>
+	<script type="text/javascript" src="/scripts/graph-donut.js"></script>
+	<script type="text/javascript" src="/scripts/graph-brokenline.js"></script>
+	<script type="text/javascript" src="/scripts/graph-bar.js"></script>
+	<script type="text/javascript" src="/scripts/graph-radar.js"></script>
 </body>
 </html>
