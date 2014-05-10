@@ -1,21 +1,16 @@
 package next.wildgoose.service;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import next.wildgoose.dao.DummyData;
 import next.wildgoose.dao.HookingKeywordDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
 import next.wildgoose.utility.Uri;
-import next.wildgoose.web.FrontController;
 
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GraphDataService implements Daction {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GraphDataService.class.getName());
 	public DactionResult execute(HttpServletRequest request) {
 		ServletContext context = request.getServletContext();
 		Uri uri = new Uri(request);

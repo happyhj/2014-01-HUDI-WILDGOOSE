@@ -5,12 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Error implements Action {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Error.class.getName());
-
 	public ActionResult execute(HttpServletRequest request) {
 		ActionResult ar = new ActionResult();
 		Uri uri = new Uri(request);

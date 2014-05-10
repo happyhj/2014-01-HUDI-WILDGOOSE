@@ -11,13 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class EncodingFilter implements Filter {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(EncodingFilter.class.getName());
-	
 	protected String encodingType = null;
 	protected FilterConfig filterConfig = null;
 	

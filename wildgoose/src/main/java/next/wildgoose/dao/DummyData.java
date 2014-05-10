@@ -3,12 +3,8 @@ package next.wildgoose.dao;
 import java.util.Random;
 
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class DummyData {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DummyData.class.getName());
-	
 	public JSONObject getJsonWithStatPoints(int reporterId) {
 		JSONObject result = new JSONObject();
 		JSONObject data;
@@ -35,7 +31,4 @@ public class DummyData {
 	public String getEmail () {
 		return "hello@world.com";
 	}
-
-	
-
 }
