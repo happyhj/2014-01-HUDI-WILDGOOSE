@@ -11,7 +11,7 @@ public class Error implements Action {
 		Uri uri = new Uri(request);
 		ar.setForwardingOption(false, Constants.PAGE_ERROR_SEARCH_REPORTER);
 		
-		if (Constants.RESOURCE_ERROR.equals(uri.get(0))) {
+		if (uri.check(0, Constants.RESOURCE_ERROR)) {
 			request.setAttribute(Constants.KEYWORD_MSG, Constants.MSG_ERROR);
 		} else {
 			request.setAttribute(Constants.KEYWORD_MSG, Constants.MSG_WENT_WRONG);

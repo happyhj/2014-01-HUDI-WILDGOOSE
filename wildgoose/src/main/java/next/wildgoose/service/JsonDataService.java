@@ -20,10 +20,10 @@ public class JsonDataService implements Daction {
 		JsonDAO jsonDao = (JsonDAO) context.getAttribute("JsonDAO");
 		JSONObject json = null;
 		LOGGER.debug(uri.toString());
-		if (Constants.RESOURCE_MOST_SMR_NAME.equals(uri.get(3))) {
+		if (uri.check(3, Constants.RESOURCE_MOST_SMR_NAME)) {
 			String name = request.getParameter("name");
 			json = jsonDao.getSimilarNames(name);
-		} else if (Constants.RESOURCE_MORE_RPT_CARD.equals(uri.get(2))) {
+		} else if (uri.check(2, Constants.RESOURCE_MORE_RPT_CARD)) {
 			String name = request.getParameter("q");
 			int start = Integer.parseInt(request.getParameter("last"));
 			int num = Integer.parseInt(request.getParameter("req"));

@@ -52,4 +52,13 @@ public class Uri {
 		}
 		return sb.toString();
 	}
+	
+	public boolean check (int position, String uri) {
+		String operand = this.get(position);
+		if (operand == null) {
+			return false;
+		}
+
+		return operand.equals(uri);
+	}
 }
