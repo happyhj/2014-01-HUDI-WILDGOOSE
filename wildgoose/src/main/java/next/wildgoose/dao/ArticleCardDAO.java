@@ -45,7 +45,6 @@ public class ArticleCardDAO {
 			}
 		} catch (SQLException sqle) {
 			LOGGER.debug(sqle.getMessage(),sqle);
-			articleCards = null;
 		} finally {
 			SqlUtil.closePrepStatement(psmt);
 			SqlUtil.closeResultSet(rs);
