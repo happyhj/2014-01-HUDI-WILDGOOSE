@@ -48,8 +48,7 @@
 						<c:if test="${ empty requestScope.reporterCards }">
 							<span>${ requestScope.searchQuery }에 대한 검색 결과가 없습니다.</span>
 						</c:if>
-						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }">				
-							<li class="card card-reporter">
+						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }"><li class="card card-reporter">
 								<div class="card-section card-section-identity">
 									<h3 class="name">
 										<a href="/reporters/${ reporterCard.id }">${ reporterCard.name }</a>
@@ -60,8 +59,7 @@
 								<div class="card-section card-section-headline">
 									<h4 class="headline">${ reporterCard.articleTitle }</h4>
 								</div>
-							</li>
-						</c:forEach>
+							</li></c:forEach>
 					</c:when>
 				</c:choose>
 			</ul>
@@ -84,14 +82,22 @@ var inputEl = document.getElementById("query-entry");
 inputEl.focus();
 
 /*
- * attatch click event
+ * attatch button click event
  */
-function attatchAccountEvent() {
+// 함수가 아무것도 리턴하지 않는 경우 사용할 수 있는
+// 즉시실행 함수 패턴 중 하나
+!function() {
 	var accountBtn = document.querySelector(".account");
 	var url = "/api/v1/subhtml/create_account";
-	accountBtn.addEventListener("click", function() {modal.openModalWindow(url)}, false);
-}
-attatchAccountEvent();
+	accountBtn.addEventListener("click", function() {
+		modal.openModalWindow(url, function() {
+			// add event for validation at input
+			addValidationEvent();
+			var btn = document.querySelector(".form-container input[type=button]");
+			btn.addEventListener("click", signUpAccout, false);
+		})
+	}, false);
+}();
 
 
 </script>

@@ -5,20 +5,16 @@ modal = {
 		mask.setAttribute("class", "mask mask-on");
 		return mask;
 	},
-	"createModalWindow" : function(url) {
+	"createModalWindow" : function(url, onloadCallback) {
 		var modal = document.createElement("div");
 		modal.setAttribute("class", "modal");
 		Ajax.GET(url, this.putHtmlInModal);
+		onloadCallback();
 		return modal;
 	},
 	"putHtmlInModal" : function(htmlDoc) {
 		var modal = document.querySelector(".modal");
-		modal.innerHTML = htmlDoc;
-		
-		// add event for validation at input
-		addValidationEvent();
-		var btn = document.querySelector(".form-container input[type=button]");
-		btn.addEventListener("click", signUpAccout, false);
+		modal.innerHTML = htmlDoc;		
 	},
 	"removeModal" : function(event) {
 		if (event.target == this) {
@@ -26,9 +22,9 @@ modal = {
 			mask.parentNode.removeChild(mask);
 		}
 	},
-	"openModalWindow" : function(url) {
+	"openModalWindow" : function(url, onloadCallback) {
 		var mask = this.createMask();
-		var modal = this.createModalWindow(url);
+		var modal = this.createModalWindow(url, onloadCallback);
 		mask.addEventListener("click", this.removeModal, false);
 		mask.appendChild(modal);
 		document.body.appendChild(mask);

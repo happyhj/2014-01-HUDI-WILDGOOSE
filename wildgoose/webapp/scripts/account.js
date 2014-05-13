@@ -5,10 +5,9 @@
 function addValidationEvent() {
 	var formContainer = document.querySelector(".modal .form-container");
 	
-	for (var i=formContainer.length-1; i>=0; --i) {
+	for (var i = formContainer.length - 1; i >= 0; --i) {
 		var input = formContainer[i];
 		if (input.type == "email" || input.type == "password") {
-			
 			// blur event
 			input.addEventListener("blur", checkSignUpFrom, false);
 		}

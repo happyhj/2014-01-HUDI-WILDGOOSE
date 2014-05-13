@@ -23,6 +23,9 @@ public class ReporterCardService implements Action {
 		boolean hasMoreCards = false;
 		List<ReporterCard> reporterCards = null;
 		
+		if ("%".equals(searchQuery)) {
+			searchQuery = null;
+		}
 		LOGGER.debug("searchquery : " + searchQuery);
 		
 		setForwardingOption(ar, searchQuery);
