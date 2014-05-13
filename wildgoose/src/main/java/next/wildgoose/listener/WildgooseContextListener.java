@@ -10,16 +10,17 @@ import next.wildgoose.dao.HookingKeywordDAO;
 import next.wildgoose.dao.JsonDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
 import next.wildgoose.dao.ReporterCardDAO;
+import next.wildgoose.dao.SearchKeywordDAO;
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.pool.DataSource;
+import next.wildgoose.service.AccountService;
+import next.wildgoose.service.ArticleCardService;
 import next.wildgoose.service.Error;
 import next.wildgoose.service.ErrorDaction;
-import next.wildgoose.service.ArticleCardService;
 import next.wildgoose.service.GraphDataService;
+import next.wildgoose.service.HtmlDocService;
 import next.wildgoose.service.JsonDataService;
 import next.wildgoose.service.ReporterCardService;
-import next.wildgoose.service.HtmlDocService;
-import next.wildgoose.service.AccountService;
 
 public class WildgooseContextListener implements ServletContextListener {
 	
@@ -50,7 +51,9 @@ public class WildgooseContextListener implements ServletContextListener {
 		sc.setAttribute("ReporterCardDAO", new ReporterCardDAO());
 		sc.setAttribute("JsonDAO", new JsonDAO());
 		sc.setAttribute("SignDAO", new SignDAO());
+		sc.setAttribute("SearchKeywordDAO", new SearchKeywordDAO());
 		sc.setAttribute("DummyData", new DummyData());
+		
 		
 	}
 

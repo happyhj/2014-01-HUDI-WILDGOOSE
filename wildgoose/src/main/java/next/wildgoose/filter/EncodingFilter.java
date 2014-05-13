@@ -13,10 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class EncodingFilter implements Filter {
 	protected String encodingType = null;
-	protected FilterConfig filterConfig = null;
 	
 	public void init(FilterConfig filterConfig) throws ServletException {
-		this.filterConfig = filterConfig;
 		this.encodingType = filterConfig.getServletContext().getInitParameter("encoding");
 	}
 
@@ -38,6 +36,5 @@ public class EncodingFilter implements Filter {
 	
 	public void destroy() {
 		this.encodingType = null;
-		this.filterConfig = null;
 	}
 }
