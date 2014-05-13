@@ -1,5 +1,6 @@
 // searched에 입력하고 있는 글자를 가져옴
 var searching = document.querySelector('#query-entry');
+var currentRow = 0;
 
 searching.onkeyup = function() {
 	var url = "/api/v1/search/most_similar_names?name=";
@@ -26,8 +27,6 @@ function drawBox(data) {
 			tr_pos.insertAdjacentHTML('beforeend', '<td>'+Data[i]["name"]+'</td>');
 		}
 	}
-	
-	
 }
 
 //검색창이 클릭하면 추천 검색어 박스가 보였다 보이지 않았다 함
