@@ -92,9 +92,7 @@ inputEl.focus();
 	accountBtn.addEventListener("click", function() {
 		modal.openModalWindow(url, function() {
 			// add event for validation at input
-			addValidationEvent();
-			var btn = document.querySelector(".form-container input[type=button]");
-			btn.addEventListener("click", signUpAccout, false);
+			
 		})
 	}, false);
 }();
