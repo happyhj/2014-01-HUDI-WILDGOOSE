@@ -2,9 +2,13 @@ package next.wildgoose.dao;
 
 import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
+
+import next.wildgoose.utility.Uri;
+
 import org.json.JSONObject;
 
-public class DummyData {
+public class DummyData implements ExtractDAO{
 	public JSONObject getJsonWithStatPoints(int reporterId) {
 		JSONObject result = new JSONObject();
 		JSONObject data;
@@ -30,5 +34,11 @@ public class DummyData {
 	
 	public String getEmail () {
 		return "hello@world.com";
+	}
+
+	@Override
+	public JSONObject getJson(HttpServletRequest request) {
+		Uri uri = new Uri(request);
+		return getJsonWithStatPoints(Integer.parseInt(uri.get(3)));
 	}
 }
