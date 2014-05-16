@@ -101,12 +101,12 @@ function signUpAccout() {
 	var url = "/api/v1/sign/up";
 	var form = document.querySelector(".form-container");
 	
-	var payload =
-		"email=" + escape(form[0].value) +
-		"&password=" + escape(form[1].value);
-	
+	var email = escape(form[0].value)
+	var password = escape(form[1].value);
+	var payload = "email=" + email + "&password=" + SHA256(password);
+	console.log(payload)
 	Ajax.POST(url, showSignUpResult, payload);
-	Util.addClass(form, "isProgressing");
+//	Util.addClass(form, "isProgressing");
 
 }
 

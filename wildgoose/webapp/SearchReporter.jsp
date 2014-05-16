@@ -90,16 +90,13 @@ inputEl.focus();
 	var accountBtn = document.querySelector(".account");
 	var url = "/api/v1/subhtml/create_account";
 	accountBtn.addEventListener("click", function() {
-		modal.openModalWindow(url, function() {
-			addValidationEvent();
-			var btn = document.querySelector(".form-container input[type=button]");
-			btn.addEventListener("click", signUpAccout, false);
-		})
+		modal.openModalWindow(url)
 	}, false);
 }();
 
 
 </script>
+<script type="text/javascript" src="/scripts/sha256.js"></script>
 <script type="text/javascript" src="/scripts/util.js"></script>
 <script type="text/javascript" src="/scripts/modal.js"></script>
 <script type="text/javascript" src="/scripts/searchReporter.js"></script>

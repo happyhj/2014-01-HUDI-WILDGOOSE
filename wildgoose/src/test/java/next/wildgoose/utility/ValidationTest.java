@@ -32,14 +32,5 @@ public class ValidationTest {
 		assertFalse(Validation.isURL("htp://www.hankyung.com/news/app/newsview.php?aid=2014040622521"));
 		assertTrue(Validation.isURL("http://w.hankyung.com/news/app/newsview.php?aid=2014040622521"));		
 	}
-	
-	@Test
-	public void testEmail() {
-		//true
-		assertTrue(Validation.isEmail("cocagola@gmail.com"));
-		//false
-		assertFalse(Validation.isEmail("cocagola_gmail.com"));
-	}
-	
 
 }
