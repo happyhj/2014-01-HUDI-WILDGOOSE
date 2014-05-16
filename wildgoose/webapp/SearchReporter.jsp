@@ -104,5 +104,5 @@ inputEl.focus();
 <script type="text/javascript" src="/scripts/modal.js"></script>
 <script type="text/javascript" src="/scripts/searchReporter.js"></script>
 <script type="text/javascript" src="/scripts/auto-complement.js"></script>
-<script type="text/javascript" src="/scripts/account.js"></script>
 <script type="text/javascript" src="/scripts/validation.js"></script>
+<script type="text/javascript" src="/scripts/account.js"></script>

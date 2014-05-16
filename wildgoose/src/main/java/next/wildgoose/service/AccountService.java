@@ -22,9 +22,9 @@ public class AccountService implements Daction {
 				resultString = "Validation Success";
 			}
 		} else if ("email".equals(option)) {
-			resultString = "OK";
+			resultString = "true";
 			if (hasEmail(email)) {
-				resultString = "";
+				resultString = "false";
 			}
 		}
 		result.put("text", resultString);
