@@ -13,10 +13,6 @@ modal = {
 	"putHtmlInModal" : function(htmlDoc) {
 		var modal = document.querySelector(".modal");
 		modal.innerHTML = htmlDoc;
-		
-		addValidationEvent();
-		var btn = document.querySelector(".form-container input[type=button]");
-		btn.addEventListener("click", signUpAccout, false);
 	},
 	"removeModal" : function(event) {
 		if (event.target == this) {
@@ -29,9 +25,12 @@ modal = {
 		var modal = this.createModalWindow(url);
 		mask.addEventListener("click", this.removeModal, false);
 		mask.appendChild(modal);
+		
+		
+		Ajax.GET(url, (function(htmlDoc) {
+			this.putHtmlInModal(htmlDoc);
+			onloadCallback();
+		}).bind(this));
 		document.body.appendChild(mask);
-		
-		Ajax.GET(url, this.putHtmlInModal)
-		
 	}
 }

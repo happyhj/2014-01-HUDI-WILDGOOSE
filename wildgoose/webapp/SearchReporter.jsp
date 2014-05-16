@@ -91,8 +91,9 @@ inputEl.focus();
 	var url = "/api/v1/subhtml/create_account";
 	accountBtn.addEventListener("click", function() {
 		modal.openModalWindow(url, function() {
-			// add event for validation at input
-			
+			addValidationEvent();
+			var btn = document.querySelector(".form-container input[type=button]");
+			btn.addEventListener("click", signUpAccout, false);
 		})
 	}, false);
 }();

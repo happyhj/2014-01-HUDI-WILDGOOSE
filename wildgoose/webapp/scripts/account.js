@@ -22,19 +22,19 @@ function checkSignUpFrom(e) {
 	// e.valid가 undefined라는 의미는 사용자 정의 이벤트가 아니라는 의미임.
 	if (me.name == "email" && e.valid === undefined) {
 		// email이 유효할 경우 서버에 존재하는지 확인
-		if (validEmail(me)) {
+		if (validCheck(me)) {
 			existInServer(me);
 		}
 	}
 	// passward
 	if (me.name == "password") {
-		if (validPassword(me)) {
+		if (validCheck(me)) {
 			valid = true;
 		}
 	}
 	// confirm
 	if (me.name == "confirm") {
-		if (validConfirm(me)) {
+		if (validCheck(me)) {
 			valid = true;
 		}
 	}
