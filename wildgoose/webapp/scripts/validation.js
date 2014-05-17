@@ -45,7 +45,10 @@
 	function existInServer(inputEl, callback) {
 		var url = "api/v1/sign/email/" + inputEl.value;
 		Ajax.GET(url, function(response) {
-			callback(JSON.parse(response), true);
+			console.log(response);
+			var validity = (response=="success")?true:false;
+			var isAjax = true;
+			callback(validity, isAjax);
 		});
 		Util.addClass(inputEl, "isProgressing");
 	}
@@ -64,8 +67,10 @@
 			if (checking_logic[0] instanceof RegExp
 					&& !checking_logic[0].test(fieldValue)) {
 				warn(inputEl, alert_message);
+				invalidStyle(inputEl);
 				return false;
-			} else if (checking_logic[0] instanceof Function) {
+			}
+			else if (checking_logic[0] instanceof Function) {
 				var valid_state = true; 
 				checking_logic[0](inputEl, function(validity, isAjax) {
 					if (isAjax) {
@@ -73,11 +78,7 @@
 					}
 					if (!validity) {
 						warn(inputEl, alert_message);
-						Util.removeClass(inputEl, "status-approved");
-						Util.removeClass(inputEl, "isValid");
-						Util.addClass(inputEl, "status-denied");
-						Util.addClass(inputEl, "isInvalid");
-						
+						invalidStyle(inputEl);
 						valid_state = false;
 						return false;
 					}
@@ -88,12 +89,26 @@
 			}
 		}
 		unwarn(inputEl);
+		validStyle(inputEl);
+		return true;
+	}
+	
+	
+	/*
+	 * 상태에 따른 변경될 style을 모음 
+	 */
+	function validStyle(inputEl) {
 		Util.removeClass(inputEl, "status-denied");
 		Util.removeClass(inputEl, "isInvalid");
 		Util.addClass(inputEl, "status-approved");
 		Util.addClass(inputEl, "isValid");
-
-		return true;
+	}
+	
+	function invalidStyle(inputEl) {
+		Util.removeClass(inputEl, "status-approved");
+		Util.removeClass(inputEl, "isValid");
+		Util.addClass(inputEl, "status-denied");
+		Util.addClass(inputEl, "isInvalid");
 	}
 
 	/*
