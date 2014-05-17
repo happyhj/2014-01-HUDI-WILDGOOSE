@@ -7,20 +7,17 @@
 	WILDGOOSE.ui.validation = WILDGOOSE.ui.validation || {};
 
 	var validation_logics = {
-		common : {
-			required : /.+/
-		},
 		email : {
 			sequence : [ "required", "format", "usable" ],
-			required : [ this.common.required, "email을 입력해주세요" ],
+			required : [ /.+/, "email을 입력해주세요" ],
 			format : [ /^[\w\.-_\+]+@[\w-]+(\.\w{2,4})+$/, "email형식을 지켜주세요" ],
 			usable : [ function(inputEl, callback) {
-				existInServer.call(this, inputEl, callback);
+				existInServer(inputEl, callback);
 			}, "이미 등록된 email입니다" ]
 		},
 		password : {
 			sequence : [ "required", "letter", "size", "ampleNumber", "ampleLetter" ],
-			required : [ this.common.required, "비밀번호를 입력해주세요" ],
+			required : [ /.+/, "비밀번호를 입력해주세요" ],
 			letter : [
 					/[a-zA-Z0-9\`\~\!\@\#\$\%\^\&|*\(\)\-\_\=\=\+\\\|\,\.\<\>\/\?\[\]\{\}\;\:\'\"]/,
 					"숫자, 영문자 대소문자, 특수문자만 사용해주세요" ],
@@ -30,7 +27,7 @@
 		},
 		confirm : {
 			sequence : [ "required", "equal" ],
-			required : [ this.common.required, "다시 입력해주세요" ],
+			required : [ /.+/, "다시 입력해주세요" ],
 			equal : [ function(inputEl, callback) {
 				ckeckEquality(inputEl, callback);
 			}, "다시 확인해주세요" ]
@@ -47,7 +44,9 @@
 
 	function existInServer(inputEl, callback) {
 		var url = "api/v1/sign/email/" + inputEl.value;
-		Ajax.GET(url, callback.bind(this, true));
+		Ajax.GET(url, function(response) {
+			callback(JSON.parse(response), true);
+		});
 		Util.addClass(inputEl, "isProgressing");
 	}
 	
@@ -67,19 +66,33 @@
 				warn(inputEl, alert_message);
 				return false;
 			} else if (checking_logic[0] instanceof Function) {
+				var valid_state = true; 
 				checking_logic[0](inputEl, function(validity, isAjax) {
 					if (isAjax) {
 						Util.removeClass(inputEl, "isProgressing");
 					}
-
 					if (!validity) {
 						warn(inputEl, alert_message);
+						Util.removeClass(inputEl, "status-approved");
+						Util.removeClass(inputEl, "isValid");
+						Util.addClass(inputEl, "status-denied");
+						Util.addClass(inputEl, "isInvalid");
+						
+						valid_state = false;
 						return false;
 					}
 				});
+				if (!valid_state) {
+					return false;
+				}
 			}
 		}
 		unwarn(inputEl);
+		Util.removeClass(inputEl, "status-denied");
+		Util.removeClass(inputEl, "isInvalid");
+		Util.addClass(inputEl, "status-approved");
+		Util.addClass(inputEl, "isValid");
+
 		return true;
 	}
 

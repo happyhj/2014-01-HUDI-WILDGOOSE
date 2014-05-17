@@ -7,8 +7,12 @@ import next.wildgoose.utility.Uri;
 import next.wildgoose.utility.Validation;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AccountService implements Daction {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class.getName());
 
 	public JSONObject isValid(Uri uri, String email, String password) {
 		JSONObject result = new JSONObject();
@@ -26,6 +30,7 @@ public class AccountService implements Daction {
 			if (hasEmail(email)) {
 				resultString = "false";
 			}
+			LOGGER.debug("request: " + email + ", response: " + resultString);
 		}
 		result.put("text", resultString);
 		return result;

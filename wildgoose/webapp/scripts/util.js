@@ -24,7 +24,6 @@ var Ajax = (function(){
 					// responseText의 마지막에 포함된 개행문자 제거
 					var response = request.responseText;
 					response = response.substring(0, response.length - 1);
-					
 					func(response);
 				}
 			}
