@@ -13,6 +13,10 @@ modal = {
 	"putHtmlInModal" : function(htmlDoc) {
 		var modal = document.querySelector(".modal");
 		modal.innerHTML = htmlDoc;
+		
+		addValidationEvent();
+		var btn = document.querySelector(".form-container input[type=button]");
+		btn.addEventListener("click", signUpAccout, false);
 	},
 	"removeModal" : function(event) {
 		if (event.target == this) {
