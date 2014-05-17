@@ -10,8 +10,12 @@ import next.wildgoose.dto.Account;
 import next.wildgoose.utility.Uri;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AccountService implements Daction {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class.getName());
 
 	public boolean isJoinedEmail(String email) {
 //		SignDAO signDAO = SignDAO.getInstance();
