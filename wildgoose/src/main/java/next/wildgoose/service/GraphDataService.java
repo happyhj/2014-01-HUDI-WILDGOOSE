@@ -27,10 +27,7 @@ public class GraphDataService implements Daction {
 			return null;
 		}
 		
-		Map<String, ExtractDAO> extractMap = new HashMap<String, ExtractDAO>();
-		extractMap.put("number_of_articles", (NumberOfArticlesDAO) context.getAttribute("NumberOfArticlesDAO"));
-		extractMap.put("number_of_hook_keywords", (HookingKeywordDAO) context.getAttribute("HookingKeywordDAO"));
-		extractMap.put("stat_points", (DummyData) context.getAttribute("DummyData"));
+		Map<String, ExtractDAO> extractMap = (HashMap<String, ExtractDAO>) context.getAttribute("ExtractMap");
 		ExtractDAO seledtedApi = extractMap.get(apiName);
 		json = seledtedApi.getJson(request);
 		
