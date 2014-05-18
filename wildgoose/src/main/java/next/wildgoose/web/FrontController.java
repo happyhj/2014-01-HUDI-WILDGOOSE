@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import next.wildgoose.service.Action;
 import next.wildgoose.service.ActionResult;
@@ -30,6 +31,8 @@ public class FrontController extends HttpServlet {
 		doPost(request, response);
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+//		session.setAttribute("userId", "hello@world.com");
 		Action action = getProperAction(request);
 		ActionResult result = action.execute(request);
 		

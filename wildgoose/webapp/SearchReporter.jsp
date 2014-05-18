@@ -13,7 +13,13 @@
 
 <div class="wrap">
 	<header class="header">
-		<button class="account">가입하기${ requestScope.accountStatus }</button>
+		<c:if test="${ empty sessionScope.userId }">
+			<button class="header-btn" id="join">가입하기</button>
+			<button class="header-btn" id="login">로그인하기</button>
+		</c:if>
+		<c:if test="${ not empty sessionScope.userId }">
+			<button class="header-btn">로그아웃</button>
+		</c:if>
 	</header>
 	<div class="container">
 		<div class="logo">
@@ -80,9 +86,14 @@ inputEl.focus();
 // 함수가 아무것도 리턴하지 않는 경우 사용할 수 있는
 // 즉시실행 함수 패턴 중 하나
 !function() {
-	var accountBtn = document.querySelector(".account");
-	var url = "/api/v1/subhtml/create_account";
-	accountBtn.addEventListener("click", function() {
+	var joinBtn = document.querySelector(".header-btn#join");
+	joinBtn.addEventListener("click", function() {
+		var url = "/api/v1/subhtml/create_account";
+		modal.openModalWindow(url)
+	}, false);
+	var loginBtn = document.querySelector(".header-btn#login");
+	loginBtn.addEventListener("click", function() {
+		var url = "/api/v1/subhtml/authenticate_user";	
 		modal.openModalWindow(url)
 	}, false);
 }();

@@ -10,6 +10,7 @@ public class Constants {
 	public static final String PAGE_SEARCH_REPORTER = "SearchReporter.jsp";
 	public static final String PAGE_SHOW_REPORTER = "ShowReporter.jsp";
 	public static final String PAGE_STATIC_ACCOUNT = "account.html";
+	public static final String PAGE_STATIC_LOGIN = "login.html";
 	public static final String PAGE_STATIC_REPORTER_CARD = "reporterCard.html";
 	
 	public static final String RESOURCE_ROOT = "/";

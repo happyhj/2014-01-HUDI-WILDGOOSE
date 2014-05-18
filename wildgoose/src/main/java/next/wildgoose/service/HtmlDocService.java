@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
@@ -26,6 +28,20 @@ public class HtmlDocService implements Daction {
 		
 		String path = root + requestResourceMapper(resourceName);
 		String htmlDoc = read(path);
+		
+		// IF login page, put random number
+		if ("authenticate_user".equals(resourceName)) {
+			HttpSession session = request.getSession();
+			Random random = new Random();
+			String rand = Double.toString(random.nextDouble());
+			rand = rand.replace("0.", "");
+			session.setAttribute("randNum", rand);
+
+			LOGGER.debug(""+htmlDoc.indexOf("{$}"));
+			htmlDoc = htmlDoc.replace("{$}", rand);
+			LOGGER.debug(htmlDoc);
+		}
+		
 		DactionResult result = new DactionResult("html", htmlDoc);
 		return result;
 	}
@@ -59,6 +75,8 @@ public class HtmlDocService implements Daction {
 			return Constants.ABSOLUTE_RESOURECE_TEMPLATE + Constants.PAGE_STATIC_REPORTER_CARD;
 		} else if ("create_account".equals(resourceName)) {
 			return Constants.ABSOLUTE_RESOURECE_TEMPLATE + Constants.PAGE_STATIC_ACCOUNT;
+		} else if ("authenticate_user".equals(resourceName)) {
+			return Constants.ABSOLUTE_RESOURECE_TEMPLATE + Constants.PAGE_STATIC_LOGIN;
 		}
 		return null;
 	}
