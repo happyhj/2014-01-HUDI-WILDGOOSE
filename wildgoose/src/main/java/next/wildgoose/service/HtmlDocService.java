@@ -23,6 +23,7 @@ public class HtmlDocService implements Daction {
 		
 		String resourceName = uri.get(3);
 		String root = context.getRealPath(Constants.RESOURCE_ROOT);
+		
 		String path = root + requestResourceMapper(resourceName);
 		String htmlDoc = read(path);
 		DactionResult result = new DactionResult("html", htmlDoc);
@@ -53,10 +54,11 @@ public class HtmlDocService implements Daction {
 	}
 	
 	private String requestResourceMapper(String resourceName) {
+		
 		if ("create_reporter_card".equals(resourceName)) {
-			return Constants.PAGE_STATIC_REPORTER_CARD;
+			return Constants.ABSOLUTE_RESOURECE_TEMPLATE + Constants.PAGE_STATIC_REPORTER_CARD;
 		} else if ("create_account".equals(resourceName)) {
-			return Constants.PAGE_STATIC_ACCOUNT;
+			return Constants.ABSOLUTE_RESOURECE_TEMPLATE + Constants.PAGE_STATIC_ACCOUNT;
 		}
 		return null;
 	}
