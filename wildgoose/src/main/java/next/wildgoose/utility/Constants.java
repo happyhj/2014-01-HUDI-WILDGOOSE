@@ -27,6 +27,9 @@ public class Constants {
 	public static final String RESOURCE_MOST_SMR_NAME = "most_similar_names";
 	
 	
+	public static final String ABSOLUTE_RESOURECE_TEMPLATE = "/template/";
+	
+	
 	public static final String MSG_WENT_WRONG = "잘못된 접근";
 	public static final String MSG_ERROR = "예상치 못한 문제 발생";
 	

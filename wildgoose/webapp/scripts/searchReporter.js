@@ -1,4 +1,6 @@
 
+var loaded_templates = {};
+
 window.addEventListener("load", function(e) {
 	
 	// 더보기 버튼 링크주소 설정
@@ -9,10 +11,11 @@ window.addEventListener("load", function(e) {
 			
 			// template
 			var url = "/api/v1/subhtml/create_reporter_card";
-			var template;
-			Ajax.GET(url, function(t) {
-				template = t;
-			});
+			if (loaded_templates.reporter_card === undefined) {
+				Ajax.GET(url, function(t) {
+					loaded_templates.reporter_card = t;
+				});
+			}
 			
 			var totalNum = document.querySelector(".search-more .state-search-total").innerText;
 			var requestNum = 24;
@@ -20,7 +23,7 @@ window.addEventListener("load", function(e) {
 			// search
 			var url = "/api/v1/more_reporter_card?q=" + searchQuery + "&last=" + totalNum + "&req=" + requestNum;
 			Ajax.GET(url, function(rawD) {
-				clickSearchMoreBtn(rawD, template);
+				clickSearchMoreBtn(rawD, loaded_templates.reporter_card);
 			});
 			
 		},false);

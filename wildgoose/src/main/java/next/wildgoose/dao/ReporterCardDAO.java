@@ -49,26 +49,34 @@ public class ReporterCardDAO {
 		return reporterCard;
 	}
 	
-	public List<ReporterCard> findReportersByURL(String URL, int start, int end) {
+	public List<ReporterCard> findReportersByType(String type, String searchQuery, int start, int num) {
 		Connection conn = DataSource.getInstance().getConnection();
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
 		List<ReporterCard> reporterCards = new ArrayList<ReporterCard>();
 		ReporterCard reporterCard = null;
+		
+		String where = null;
+		if ("name".equals(type)) {
+			where = "author.name";
+		}
+		else if ("url".equals(type)) {
+			where = "aa.article_URL";
+		}
 
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT result.id as id, result.name as name, result.email as email, article.title as title, press.name as press_name ");
 		query.append("FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
-		query.append("WHERE aa.article_URL LIKE ? GROUP BY author.id ORDER BY author.name ");
+		query.append("WHERE ").append(where).append(" LIKE ? GROUP BY author.id ORDER BY author.name ");
 		query.append("LIMIT ?, ?) as result ");
 		query.append("JOIN article ON article.URL = result.article_URL ");
 		query.append("JOIN press ON result.press_id = press.id");
 		
 		try {
 			psmt = conn.prepareStatement(query.toString());
-			psmt.setString(1, "%" + URL + "%");
+			psmt.setString(1, "%" + searchQuery + "%");
 			psmt.setInt(2, start);
-			psmt.setInt(3, end);
+			psmt.setInt(3, num);
 			rs = psmt.executeQuery();
 			
 			while (rs.next()) {
@@ -86,47 +94,6 @@ public class ReporterCardDAO {
 		} finally {
 			SqlUtil.closePrepStatement(psmt);
 			SqlUtil.closeResultSet(rs);
-			SqlUtil.closeConnection(conn);
-		}
-		return reporterCards;
-	}
-	
-	public List<ReporterCard> findReportersByName (String name, int start, int end) {
-		Connection conn = DataSource.getInstance().getConnection();
-		PreparedStatement psmt = null;
-		ResultSet rs = null;
-		List<ReporterCard> reporterCards = new ArrayList<ReporterCard>();
-		ReporterCard reporterCard = null;
-		
-		StringBuilder query = new StringBuilder();
-		query.append("SELECT result.id as id, result.name as name, result.email as email, article.title as title, press.name as press_name ");
-		query.append("FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
-		query.append("WHERE author.name LIKE ? GROUP BY author.id ORDER BY author.name ");
-		query.append("LIMIT ?, ?) as result ");
-		query.append("JOIN article ON article.URL = result.article_URL ");
-		query.append("JOIN press ON result.press_id = press.id");
-
-		try {
-			psmt = conn.prepareStatement(query.toString());
-			psmt.setString(1, "%" + name + "%");
-			psmt.setInt(2, start);
-			psmt.setInt(3, end);
-			rs = psmt.executeQuery();
-			while (rs.next()) {
-				reporterCard = new ReporterCard();
-				reporterCard.setId(rs.getInt("id"));
-				reporterCard.setEmail(rs.getString("email"));
-				reporterCard.setName(rs.getString("name"));
-				reporterCard.setPressName(rs.getString("press_name"));
-				reporterCard.setArticleTitle(rs.getString("title"));
-				reporterCards.add(reporterCard);
-			}
-		} catch (SQLException sqle) {
-			LOGGER.debug(sqle.getMessage(),sqle);
-			reporterCards = null;
-		} finally {
-			SqlUtil.closeResultSet(rs);
-			SqlUtil.closePrepStatement(psmt);
 			SqlUtil.closeConnection(conn);
 		}
 		return reporterCards;

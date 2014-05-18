@@ -40,27 +40,39 @@ public class JsonDAO {
 		return result;
 	}
 
-	public JSONObject moreReporterCard(String name, int start, int num) {
+	public JSONObject moreReporterCard(String type, String searchQuery, int start, int num) {
 		JSONObject result = new JSONObject();
 		Connection conn = DataSource.getInstance().getConnection();
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
 		
+		String where = null;
+		if ("name".equals(type)) {
+			where = "author.name";
+		}
+		else if ("url".equals(type)) {
+			where = "aa.article_URL";
+		}
+		
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT result.id as id, result.name as name, result.email as email, article.title as title, press.name as press_name ");
 		query.append("FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
-		query.append("WHERE author.name LIKE ? GROUP BY author.id ORDER BY author.name ");
+		query.append("WHERE ").append(where).append(" LIKE ? GROUP BY author.id ORDER BY author.name ");
 		query.append("LIMIT ?, ?) as result ");
 		query.append("JOIN article ON article.URL = result.article_URL ");
 		query.append("JOIN press ON result.press_id = press.id");
 		
 		try {
 			psmt = conn.prepareStatement(query.toString());
-			psmt.setString(1, "%" + name + "%");
+			psmt.setString(1, "%" + searchQuery + "%");
 			psmt.setInt(2, start);
 			psmt.setInt(3, num);
 			rs = psmt.executeQuery();
+			LOGGER.debug("query: " + query);
 			while (rs.next()) {
+				int idd = rs.getInt("id");
+				LOGGER.debug("id: " + idd);
+				
 				JSONObject data = new JSONObject();
 				data.put("id", rs.getInt("id"));
 				data.put("email", rs.getString("email"));
@@ -76,6 +88,9 @@ public class JsonDAO {
 			SqlUtil.closeResultSet(rs);
 			SqlUtil.closeConnection(conn);
 		}
+		
+		
+		LOGGER.debug(result.toString());
 		return result;
 	}
 }

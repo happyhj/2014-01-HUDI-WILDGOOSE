@@ -61,14 +61,11 @@ public class ReporterCardService implements Action {
 	
 	private List<ReporterCard> getReporterCards(ReporterCardDAO rcardDao, String searchQuery, int start, int end) {
 		List<ReporterCard> reporterCards = null;
-
-		if (Validation.isURL(searchQuery)) {
-			// URL로 검색
-			reporterCards = rcardDao.findReportersByURL(searchQuery, start, end);
-		} else {
-			// 이름으로 검색
-			reporterCards = rcardDao.findReportersByName(searchQuery, start, end);
-		}
+		String type = null;
+		
+		// searchQuery의 검색 type설정
+		type = (Validation.isURL(searchQuery))? "url" : "name";
+		reporterCards = rcardDao.findReportersByType(type, searchQuery, start, end);
 
 		return reporterCards;
 	}

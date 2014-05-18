@@ -48,18 +48,11 @@
 						<c:if test="${ empty requestScope.reporterCards }">
 							<span>${ requestScope.searchQuery }에 대한 검색 결과가 없습니다.</span>
 						</c:if>
-						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }"><li class="card card-reporter">
-								<div class="card-section card-section-identity">
-									<h3 class="name">
-										<a href="/reporters/${ reporterCard.id }">${ reporterCard.name }</a>
-									</h3>
-									<p class="email">${ reporterCard.email }</p>
-									<div class="${ reporterCard.pressName } press-tag"></div>
-								</div>
-								<div class="card-section card-section-headline">
-									<h4 class="headline">${ reporterCard.articleTitle }</h4>
-								</div>
-							</li></c:forEach>
+						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }">
+							<li class="card card-reporter">
+								<%@ include file = "template/reporterCard.html" %>
+							</li>
+						</c:forEach>
 					</c:when>
 				</c:choose>
 			</ul>
