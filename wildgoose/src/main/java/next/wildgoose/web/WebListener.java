@@ -18,25 +18,22 @@ import next.wildgoose.service.ReporterCardService;
 import next.wildgoose.utility.Constants;
 
 public class WebListener implements ServletContextListener {
-
+	
+	public static Map<String, Action> actionMap;
+	public static Map<String, Daction> dactionMap;
 	public void contextInitialized(ServletContextEvent e) {
 		ServletContext context = e.getServletContext();
 		
-		Map<String, Action> actionMap = new HashMap<String, Action>();
+		actionMap = new HashMap<String, Action>();
 		actionMap.put(Constants.RESOURCE_INDEX, (ReporterCardService) context.getAttribute("ReporterCardService"));
 		actionMap.put(Constants.RESOURCE_REPORTERS, (ArticleCardService) context.getAttribute("ArticleCardService"));
 		
-		context.setAttribute("ActionMap", actionMap);
-		
-		Map<String, Daction> dactionMap = new HashMap<String, Daction>();
+		dactionMap = new HashMap<String, Daction>();
 		dactionMap.put(Constants.RESOURCE_REPORTERS, (GraphDataService) context.getAttribute("GraphDataService"));
 		dactionMap.put(Constants.RESOURCE_SEARCH, (JsonDataService) context.getAttribute("JsonDataService"));
 		dactionMap.put(Constants.RESOURCE_MORE_RPT_CARD, (JsonDataService) context.getAttribute("JsonDataService"));
 		dactionMap.put(Constants.RESOURCE_HTML, (HtmlDocService) context.getAttribute("HtmlDocService"));
 		dactionMap.put(Constants.RESOURCE_ACCOUNT, (AccountService) context.getAttribute("AccountService"));
-		
-		context.setAttribute("DactionMap", dactionMap);
-
 	}
 	
 	public void contextDestroyed(ServletContextEvent e) {

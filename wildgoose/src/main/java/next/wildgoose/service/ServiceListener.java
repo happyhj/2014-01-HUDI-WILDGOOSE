@@ -13,7 +13,7 @@ import next.wildgoose.dao.HookingKeywordDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
 
 public class ServiceListener implements ServletContextListener {
-	
+	public static Map<String, ExtractDAO> extractMap;
 	public void contextInitialized(ServletContextEvent event) {
 		ServletContext sc = event.getServletContext();
 		
@@ -28,12 +28,10 @@ public class ServiceListener implements ServletContextListener {
 		sc.setAttribute("ErrorDaction", new ErrorDaction());
 		
 		// IN Service
-		Map<String, ExtractDAO> extractMap = new HashMap<String, ExtractDAO>();
+		extractMap = new HashMap<String, ExtractDAO>();
 		extractMap.put("number_of_articles", (NumberOfArticlesDAO) sc.getAttribute("NumberOfArticlesDAO"));
 		extractMap.put("number_of_hook_keywords", (HookingKeywordDAO) sc.getAttribute("HookingKeywordDAO"));
 		extractMap.put("stat_points", (DummyData) sc.getAttribute("DummyData"));
-		
-		sc.setAttribute("ExtractMap", extractMap);
 	}
 	
 	public void contextDestroyed(ServletContextEvent event) {

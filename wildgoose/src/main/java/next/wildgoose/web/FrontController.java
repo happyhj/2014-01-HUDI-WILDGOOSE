@@ -1,7 +1,6 @@
 package next.wildgoose.web;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
@@ -32,6 +31,7 @@ public class FrontController extends HttpServlet {
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+//		로그인 시 아래와 같은 형태로 처리
 //		session.setAttribute("userId", "hello@world.com");
 		Action action = getProperAction(request);
 		ActionResult result = action.execute(request);
@@ -51,7 +51,7 @@ public class FrontController extends HttpServlet {
 		LOGGER.debug(uri.get(0));
 
 		Action defaultAction = (Error) context.getAttribute("Error");
-		Map<String, Action> actionMap = (HashMap<String, Action>) context.getAttribute("ActionMap");
+		Map<String, Action> actionMap = WebListener.actionMap;
 		actionMap.put(Constants.RESOURCE_INDEX, (ReporterCardService) context.getAttribute("ReporterCardService"));
 		actionMap.put(Constants.RESOURCE_REPORTERS, (ArticleCardService) context.getAttribute("ArticleCardService"));
 		Action result = actionMap.get(uri.get(0));

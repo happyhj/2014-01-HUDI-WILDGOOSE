@@ -2,7 +2,6 @@ package next.wildgoose.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -11,14 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import next.wildgoose.service.AccountService;
-import next.wildgoose.service.Action;
 import next.wildgoose.service.Daction;
 import next.wildgoose.service.DactionResult;
 import next.wildgoose.service.ErrorDaction;
-import next.wildgoose.service.GraphDataService;
-import next.wildgoose.service.HtmlDocService;
-import next.wildgoose.service.JsonDataService;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
 
@@ -68,7 +62,7 @@ public class ApiController extends HttpServlet {
 		String resourceName = uri.get(2);
 		
 		Daction defaultDaction = (ErrorDaction) context.getAttribute("ErrorDaction");
-		Map<String, Daction> dactionMap = (Map<String, Daction>) context.getAttribute("DactionMap");
+		Map<String, Daction> dactionMap = WebListener.dactionMap;
 		Daction result = dactionMap.get(resourceName);
 		if (result == null) {
 			result = defaultDaction;
