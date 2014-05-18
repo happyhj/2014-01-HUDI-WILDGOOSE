@@ -59,7 +59,7 @@ function checkFormStatus(form) {
  */
 function signUpAccout() {
 	
-	var url = "/api/v1/sign/up";
+	var url = "/api/v1/accounts/new";
 	var form = document.querySelector(".form-container");
 	
 	var email = escape(form[0].value)

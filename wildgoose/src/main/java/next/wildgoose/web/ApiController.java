@@ -72,7 +72,7 @@ public class ApiController extends HttpServlet {
 		dactionMap.put(Constants.RESOURCE_SEARCH, (JsonDataService) context.getAttribute("JsonDataService"));
 		dactionMap.put(Constants.RESOURCE_MORE_RPT_CARD, (JsonDataService) context.getAttribute("JsonDataService"));
 		dactionMap.put(Constants.RESOURCE_HTML, (HtmlDocService) context.getAttribute("HtmlDocService"));
-		dactionMap.put(Constants.RESOURCE_SIGN, (AccountService) context.getAttribute("AccountService"));
+		dactionMap.put(Constants.RESOURCE_ACCOUNT, (AccountService) context.getAttribute("AccountService"));
 		Daction result = dactionMap.get(resourceName);
 		if (result == null) {
 			result = defaultDaction;

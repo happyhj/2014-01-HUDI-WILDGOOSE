@@ -16,7 +16,34 @@ public class SignDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SignDAO.class.getName());
 	
 	public boolean findEmail (String email) {
-		return "hello@wildgoose.com".equals(email);
+		boolean result = false;
+		Connection conn = DataSource.getInstance().getConnection();
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		int len = 0;
+		
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT count(email) as exist FROM user_account WHERE email = ?");
+		
+		try {
+			psmt = conn.prepareStatement(query.toString());
+			psmt.setString(1, email);
+			rs = psmt.executeQuery();
+			if (rs.next()) {
+				len = rs.getInt("exist");
+				if (len == 0) {
+					result = true;
+				}
+			}
+		} catch (SQLException sqle) {
+			LOGGER.debug(sqle.getMessage(), sqle);
+		} finally {
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closeConnection(conn);
+		}
+		
+		return result;
 	}
 
 	public boolean joinAccount (Account account) {

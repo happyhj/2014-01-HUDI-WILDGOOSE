@@ -17,12 +17,9 @@ public class AccountService implements Daction {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class.getName());
 
-	public boolean isJoinable(String email) {
-//		SignDAO signDAO = SignDAO.getInstance();
+	public boolean isJoinable(SignDAO signDao, String email) {
 		if (isValidEmail(email)) {
-			// signDao email을 검색하는 부분 실행
-			// result = singDao.findByEmail(email);
-			return !"hello@world.com".equals(email);
+			return signDao.findEmail(email);
 		}
 		return false;
 	}
@@ -60,20 +57,16 @@ public class AccountService implements Daction {
 		ServletContext context = request.getServletContext();
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
 		
-		if(uri.check(3, "up")){
-			if (isJoinable(email) == true && isHashedPassword(password) == true) {
+		if(uri.check(3, "new")){
+			if (isJoinable(signDao, email) == true && isHashedPassword(password) == true) {
 				if (signDao.joinAccount(account) == true) {
 					json = success();
 				}
 			}
-		} else if (uri.check(3, "email")) {
-			/*
-			 *  email을 get방식으로 보내기 때문에 임시로 추가할당
-			 *  validation 확인시 get으로 보낼지 post로 보낼지 선택 필요
-			 */
-			email = uri.get(4);
+		} else {
+			email = uri.get(3);
 			LOGGER.debug("email: " + email);
-			if(isJoinable(email)){
+			if(isJoinable(signDao, email)){
 				json = success();
 			}
 		}
