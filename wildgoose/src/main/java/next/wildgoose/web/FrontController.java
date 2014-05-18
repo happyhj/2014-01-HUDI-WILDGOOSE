@@ -51,7 +51,7 @@ public class FrontController extends HttpServlet {
 		LOGGER.debug(uri.get(0));
 
 		Action defaultAction = (Error) context.getAttribute("Error");
-		Map<String, Action> actionMap = new HashMap<String, Action>();
+		Map<String, Action> actionMap = (HashMap<String, Action>) context.getAttribute("ActionMap");
 		actionMap.put(Constants.RESOURCE_INDEX, (ReporterCardService) context.getAttribute("ReporterCardService"));
 		actionMap.put(Constants.RESOURCE_REPORTERS, (ArticleCardService) context.getAttribute("ArticleCardService"));
 		Action result = actionMap.get(uri.get(0));

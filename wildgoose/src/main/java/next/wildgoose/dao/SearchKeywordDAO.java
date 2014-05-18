@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import next.wildgoose.pool.DataSource;
+import next.wildgoose.database.DataSource;
 
 public class SearchKeywordDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearchKeywordDAO.class.getName());

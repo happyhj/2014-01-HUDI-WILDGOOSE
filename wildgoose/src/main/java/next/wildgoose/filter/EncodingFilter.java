@@ -34,6 +34,7 @@ public class EncodingFilter implements Filter {
 		chain.doFilter(wrappedRequest, response);
 	}
 	
+	
 	public void destroy() {
 		this.encodingType = null;
 	}

@@ -31,10 +31,6 @@ public class DummyData implements ExtractDAO{
 		
 		return result;
 	}
-	
-	public String getEmail () {
-		return "hello@world.com";
-	}
 
 	@Override
 	public JSONObject getJson(HttpServletRequest request) {

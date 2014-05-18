@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import next.wildgoose.database.DataSource;
 import next.wildgoose.dto.ReporterCard;
-import next.wildgoose.pool.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

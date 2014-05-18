@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import next.wildgoose.service.AccountService;
+import next.wildgoose.service.Action;
 import next.wildgoose.service.Daction;
 import next.wildgoose.service.DactionResult;
 import next.wildgoose.service.ErrorDaction;
@@ -67,12 +68,7 @@ public class ApiController extends HttpServlet {
 		String resourceName = uri.get(2);
 		
 		Daction defaultDaction = (ErrorDaction) context.getAttribute("ErrorDaction");
-		Map<String, Daction> dactionMap = new HashMap<String, Daction>();
-		dactionMap.put(Constants.RESOURCE_REPORTERS, (GraphDataService) context.getAttribute("GraphDataService"));
-		dactionMap.put(Constants.RESOURCE_SEARCH, (JsonDataService) context.getAttribute("JsonDataService"));
-		dactionMap.put(Constants.RESOURCE_MORE_RPT_CARD, (JsonDataService) context.getAttribute("JsonDataService"));
-		dactionMap.put(Constants.RESOURCE_HTML, (HtmlDocService) context.getAttribute("HtmlDocService"));
-		dactionMap.put(Constants.RESOURCE_ACCOUNT, (AccountService) context.getAttribute("AccountService"));
+		Map<String, Daction> dactionMap = (Map<String, Daction>) context.getAttribute("DactionMap");
 		Daction result = dactionMap.get(resourceName);
 		if (result == null) {
 			result = defaultDaction;

@@ -5,8 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import next.wildgoose.database.DataSource;
 import next.wildgoose.dto.Account;
-import next.wildgoose.pool.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

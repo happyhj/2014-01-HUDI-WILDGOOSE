@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.pool.DataSource;
+import next.wildgoose.database.DataSource;
 import next.wildgoose.utility.Uri;
 
 import org.json.JSONObject;
