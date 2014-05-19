@@ -90,22 +90,26 @@ inputEl.focus();
 	joinBtn.addEventListener("click", function() {
 		var url = "/api/v1/subhtml/create_account";
 		modal.openModalWindow(url, function() {
+			console.log(arguments);
+			var btn = arguments[0];
+			console.log(joinBtn);
 			addValidationEvent();
-			joinBtn.addEventListener("click", signUpAccout, false);
+			btn.addEventListener("click", signUpAccout, false);
 		})
 	}, false);
 	var loginBtn = document.querySelector(".header-btn#login");
 	loginBtn.addEventListener("click", function() {
 		var url = "/api/v1/subhtml/authenticate_user";	
 		modal.openModalWindow(url, function() {
-			loginBtn.addEventListener("click", loginAccount, false);
+			var btn = arguments[0];
+			btn.addEventListener("click", loginAccount, false);
 		})
 	}, false);
 }();
 
 
 </script>
-<script type="text/javascript" src="/scripts/sha256.js"></script>
+<script type="text/javascript" src="/scripts/lib/sha256.js"></script>
 <script type="text/javascript" src="/scripts/util.js"></script>
 <script type="text/javascript" src="/scripts/modal.js"></script>
 <script type="text/javascript" src="/scripts/searchReporter.js"></script>

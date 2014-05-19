@@ -58,7 +58,7 @@ function checkFormStatus(form) {
  * 모두 작성된 정보를 Ajax POST로 서버에 전달
  */
 function signUpAccout() {
-	
+	console.log("!!!!");
 	var url = "/api/v1/accounts/new";
 	var form = document.querySelector(".form-container");
 	

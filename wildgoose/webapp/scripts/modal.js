@@ -29,7 +29,9 @@ modal = {
 		
 		Ajax.GET(url, (function(htmlDoc) {
 			this.putHtmlInModal(htmlDoc);
-			onloadCallback();
+			console.log(onloadCallback);
+			var btn = document.querySelector(".form-container .button[type='button']")
+			onloadCallback(btn);
 		}).bind(this));
 		document.body.appendChild(mask);
 	}
