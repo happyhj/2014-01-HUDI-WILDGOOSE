@@ -20,10 +20,27 @@ window.addEventListener("load", function(e) {
 			var totalNum = document.querySelector(".search-more .state-search-total").innerText;
 			var requestNum = 24;
 			
+			
 			// search
 			var url = "/api/v1/more_reporter_card?q=" + searchQuery + "&last=" + totalNum + "&req=" + requestNum;
 			Ajax.GET(url, function(rawD) {
+				var pageInfo = {
+		            url: location.href
+		        }
+				
 				clickSearchMoreBtn(rawD, loaded_templates.reporter_card);
+				
+				history.pushState(pageInfo, null, pageInfo.url);
+//				history.pushState(pageInfo);
+//				document.title = oPageInfo.title = vMsg.page;
+//                document.getElementById(sTargetId).innerHTML = vMsg.content;
+//                if (bUpdateURL) {
+//                    history.pushState(oPageInfo, oPageInfo.title, oPageInfo.url);
+//                    bUpdateURL = false;
+//                }
+//                break;
+				
+				
 			});
 			
 		},false);
@@ -83,6 +100,12 @@ function clickSearchMoreBtn(rawD, template) {
 }
 
 
+window.addEventListener("popstate", historyHandler, false);
 
-
-
+function historyHandler(e) {
+//	e.preventDefault();
+	console.log("historyHandler");
+	if (e.state) {
+		location.load(e.state.url);
+	}
+}
