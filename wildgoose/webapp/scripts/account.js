@@ -87,3 +87,32 @@ function showSignUpResult(response) {
 	form.appendChild(responseDiv);
 	
 }
+
+
+function loginAccount() {
+		
+	var email = document.querySelector(".form-container input[name=email]").value;
+	var password = document.querySelector(".form-container input[name=password]").value;
+	
+	var hashedPassword = SHA256(password);	
+	var randomNumber = document.querySelector(".form-container input[name=randomNumber]").value;
+	
+	var finalPassword = SHA256(hashedPassword+randomNumber);
+	
+	console.log(finalPassword);
+	var url = "/sessions/new";
+	var payload = "email="+email+"&password="+finalPassword;
+	Ajax.POST(url, loginHandler, payload);
+}
+
+function loginHandler(response){
+	console.log("response: " + response);
+	
+	var form = document.querySelector(".form-container");
+	Util.removeClass(form, "isProgressing");
+	
+	var responseDiv = document.createElement("div");
+	responseDiv.innerHTML = response;
+	
+	form.appendChild(responseDiv);
+}
