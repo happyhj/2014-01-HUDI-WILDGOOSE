@@ -89,12 +89,17 @@ inputEl.focus();
 	var joinBtn = document.querySelector(".header-btn#join");
 	joinBtn.addEventListener("click", function() {
 		var url = "/api/v1/subhtml/create_account";
-		modal.openModalWindow(url)
+		modal.openModalWindow(url, function() {
+			addValidationEvent();
+			joinBtn.addEventListener("click", signUpAccout, false);
+		})
 	}, false);
 	var loginBtn = document.querySelector(".header-btn#login");
 	loginBtn.addEventListener("click", function() {
 		var url = "/api/v1/subhtml/authenticate_user";	
-		modal.openModalWindow(url)
+		modal.openModalWindow(url, function() {
+			loginBtn.addEventListener("click", loginAccount, false);
+		})
 	}, false);
 }();
 
