@@ -45,6 +45,33 @@ public class SignDAO {
 		
 		return result;
 	}
+	
+	public Account findAccount (String email) {
+		Connection conn = DataSource.getInstance().getConnection();
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		Account account = null;
+		
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT * FROM user_account WHERE email = ?");
+		
+		try {
+			psmt = conn.prepareStatement(query.toString());
+			psmt.setString(1, email);
+			rs = psmt.executeQuery();
+			if (rs.next()) {
+				account = new Account(rs.getString("email"), rs.getString("password"));
+			}
+		} catch (SQLException sqle) {
+			LOGGER.debug(sqle.getMessage(), sqle);
+		} finally {
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closeConnection(conn);
+		}
+		
+		return account;
+	}
 
 	public boolean joinAccount (Account account) {
 		boolean result = false;

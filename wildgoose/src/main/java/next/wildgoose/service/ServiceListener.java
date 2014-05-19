@@ -23,6 +23,7 @@ public class ServiceListener implements ServletContextListener {
 		sc.setAttribute("GraphDataService", new GraphDataService());
 		sc.setAttribute("JsonDataService", new JsonDataService());
 		sc.setAttribute("AccountService", new AccountService());
+		sc.setAttribute("SessionService", new SessionService());
 		sc.setAttribute("HtmlDocService", new HtmlDocService());
 		sc.setAttribute("Error", new Error());
 		sc.setAttribute("ErrorDaction", new ErrorDaction());

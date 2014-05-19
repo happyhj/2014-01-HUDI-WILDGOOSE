@@ -100,7 +100,7 @@ function loginAccount() {
 	var finalPassword = SHA256(hashedPassword+randomNumber);
 	
 	console.log(finalPassword);
-	var url = "/sessions/new";
+	var url = "/api/v1/session/new";
 	var payload = "email="+email+"&password="+finalPassword;
 	Ajax.POST(url, loginHandler, payload);
 }
