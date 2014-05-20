@@ -5,10 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import next.wildgoose.database.DataSource;
+
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import next.wildgoose.database.DataSource;
 
 public class FavoriteDAO {
 	private static final Logger LOGGER = LoggerFactory
@@ -54,6 +55,33 @@ public class FavoriteDAO {
 		} catch (SQLException sqle) {
 			LOGGER.debug(sqle.getMessage(), sqle);
 		} finally {
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeConnection(conn);
+		}
+		return result;
+	}
+
+	public JSONObject getFavorites(String email) {
+		JSONObject result = new JSONObject();
+		Connection conn = DataSource.getInstance().getConnection();
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT author_id FROM favorite WHERE user_email = ?");
+
+		try {
+			psmt = conn.prepareStatement(query.toString());
+			psmt.setString(1, email);
+			rs = psmt.executeQuery();
+			
+			while (rs.next()) {
+				result.append("data", rs.getInt("author_id"));
+			}
+		} catch (SQLException sqle) {
+			LOGGER.debug(sqle.getMessage(), sqle);
+		} finally {
+			SqlUtil.closeResultSet(rs);
 			SqlUtil.closePrepStatement(psmt);
 			SqlUtil.closeConnection(conn);
 		}

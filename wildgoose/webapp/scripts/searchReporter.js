@@ -69,16 +69,19 @@ function clickSearchMoreBtn(rawD, template) {
 					var newLi = document.createElement("li");
 					newLi.setAttribute("class", "card card-reporter");
 					newLi.innerHTML = template;
-					// name of li
-					newLi.children[0].children[0].children[0].innerHTML = card.name;
-					// a_href of li
-					newLi.children[0].children[0].children[0].setAttribute("href", "/reporters/" + card.id);
-					// email of li
-					newLi.children[0].children[1].innerHTML = card.email;
-					// pressTag_class of li
-					newLi.children[0].children[2].setAttribute("class", card.pressName += " press-tag");
-					// headline of li
-					newLi.children[1].children[0].innerHTML = card.articleTitle;
+					
+					var nameAnchor = newLi.querySelector(".name a");
+					nameAnchor.innerHTML = card.name;
+					nameAnchor.setAttribute("href", "/reporters/" + card.id);
+					
+					var email = newLi.querySelector(".email");
+					email.innerHTML = card.email;
+					
+					var pressTag = newLi.querySelector(".press-tag");
+					pressTag.className = card.pressName + " press-tag";
+
+					var headline = newLi.querySelector(".headline");
+					headline.innerHTML = card.articleTitle;
 					
 					return newLi;
 				}(reporterCards[i]))

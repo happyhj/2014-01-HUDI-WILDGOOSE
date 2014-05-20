@@ -4,8 +4,6 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.utility.Uri;
-
 import org.json.JSONObject;
 
 public class DummyData implements ExtractDAO{
@@ -33,8 +31,7 @@ public class DummyData implements ExtractDAO{
 	}
 
 	@Override
-	public JSONObject getJson(HttpServletRequest request) {
-		Uri uri = new Uri(request);
-		return getJsonWithStatPoints(Integer.parseInt(uri.get(3)));
+	public JSONObject getJson(int reporterId, HttpServletRequest request) {
+		return getJsonWithStatPoints(reporterId);
 	}
 }

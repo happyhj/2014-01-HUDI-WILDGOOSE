@@ -70,9 +70,6 @@ public class JsonDAO {
 			rs = psmt.executeQuery();
 			LOGGER.debug("query: " + query);
 			while (rs.next()) {
-				int idd = rs.getInt("id");
-				LOGGER.debug("id: " + idd);
-				
 				JSONObject data = new JSONObject();
 				data.put("id", rs.getInt("id"));
 				data.put("email", rs.getString("email"));

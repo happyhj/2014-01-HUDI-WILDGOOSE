@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 
 import next.wildgoose.database.DataSource;
-import next.wildgoose.utility.Uri;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -58,9 +57,8 @@ public class HookingKeywordDAO implements ExtractDAO{
 	}
 
 	@Override
-	public JSONObject getJson(HttpServletRequest request) {
-		Uri uri = new Uri(request);
-		return getHookingKeywordsCount(Integer.parseInt(uri.get(3)));
+	public JSONObject getJson(int reporterId, HttpServletRequest request) {
+		return getHookingKeywordsCount(reporterId);
 	}
 
 	

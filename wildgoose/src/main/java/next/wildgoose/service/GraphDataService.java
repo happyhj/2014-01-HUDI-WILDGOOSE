@@ -15,6 +15,7 @@ public class GraphDataService implements Daction {
 		
 		DactionResult result = null;
 		JSONObject json = null;
+		int reporterId = Integer.parseInt(uri.get(3));
 		String apiName = uri.get(4);
 		
 		if (apiName == null) {
@@ -23,7 +24,7 @@ public class GraphDataService implements Daction {
 		
 		Map<String, ExtractDAO> extractMap = ServiceListener.extractMap;
 		ExtractDAO seledtedApi = extractMap.get(apiName);
-		json = seledtedApi.getJson(request);
+		json = seledtedApi.getJson(reporterId, request);
 		
 		result = new DactionResult("json", json);
 		return result;

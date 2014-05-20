@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 
 import next.wildgoose.database.DataSource;
-import next.wildgoose.utility.Uri;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -86,13 +85,13 @@ public class NumberOfArticlesDAO implements ExtractDAO{
 	}
 
 	@Override
-	public JSONObject getJson(HttpServletRequest request) {
-		Uri uri = new Uri(request);
+	public JSONObject getJson(int reporterId, HttpServletRequest request) {
 		String condition = request.getParameter("by");
+		
 		if ("section".equals(condition)) {
-			return bySection(Integer.parseInt(uri.get(3)));
+			return bySection(reporterId);
 		} else if ("day".equals(condition)) {
-			return byDay(Integer.parseInt(uri.get(3)));
+			return byDay(reporterId);
 		}
 		return null;
 	}

@@ -14,11 +14,10 @@ import org.slf4j.LoggerFactory;
 public class UserService implements Daction {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class.getName());
 
-
 	@Override
 	public DactionResult execute(HttpServletRequest request) {
 		Uri uri = new Uri(request);
-		DactionResult result;
+		DactionResult result = null;
 		JSONObject json = new JSONObject();
 		json.put("text", "잘못된 접근입니다");
 		//uri = api/v1/user/reporters
@@ -29,33 +28,33 @@ public class UserService implements Daction {
 		
 		ServletContext context = request.getServletContext();
 		FavoriteDAO favDao = (FavoriteDAO) context.getAttribute("FavoriteDAO");
+		LOGGER.debug(methodType + ": " + request.getRequestURI() + ", " + email + ", " + reporterId); 
 
-		if(uri.check(3, "reporters")){
+		if (uri.check(3, "reporters")) {
 			//session 에서 user의 email을 확인함
 			if(email == null){
 				result = new DactionResult("text", json);
 				return result;
 			}
+			// Default
+			json.put("text", "failed");
 			
-			//methodType확인
-			if("POST".equals(methodType)){
+			if ("GET".equals(methodType)) {
+				json = favDao.getFavorites(email);
+				result = new DactionResult("json", json);
+			} else if ("POST".equals(methodType)) {
 				//필요한 파라미터: reporter_id, user_email
 				if (favDao.addFavorite(reporterId, email)) {
-					// 잘 들어감
 					json.put("text", "success");
-				} else {
-					json.put("text", "failed");
+					result = new DactionResult("text", json);
 				}
 			} else if ("DELETE".equals(methodType)) {
 				if (favDao.removeFavorite(reporterId, email)) {
-					// 잘 삭제 됨
 					json.put("text", "success");
-				} else {
-					json.put("text", "failed");
+					result = new DactionResult("text", json);
 				}
 			}
 		}
-		result = new DactionResult("text", json);
 		return result;
 	}
 

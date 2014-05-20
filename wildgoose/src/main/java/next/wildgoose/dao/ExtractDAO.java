@@ -5,5 +5,5 @@ import javax.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
 
 public interface ExtractDAO {
-	JSONObject getJson(HttpServletRequest request);
+	JSONObject getJson(int reporterId, HttpServletRequest request);
 }
