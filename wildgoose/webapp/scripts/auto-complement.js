@@ -1,12 +1,10 @@
 // searched에 입력하고 있는 글자를 가져옴
 var searching = document.querySelector('#query-entry');
 var searched = document.querySelector(".searched-box tr");
-console.log(searched)
 var currentRow = 0;
 
 searching.onkeyup = function(e) {
 	var keyID = e.keyCode; 
-    console.log(keyID)
     // UP/DOWN Key
     if (keyID == 38 || keyID == 40) {
         highlightRow(39 - keyID);

@@ -90,9 +90,7 @@ inputEl.focus();
 	joinBtn.addEventListener("click", function() {
 		var url = "/api/v1/subhtml/create_account";
 		modal.openModalWindow(url, function() {
-			console.log(arguments);
 			var btn = arguments[0];
-			console.log(joinBtn);
 			addValidationEvent();
 			btn.addEventListener("click", signUpAccout, false);
 		})
@@ -116,3 +114,4 @@ inputEl.focus();
 <script type="text/javascript" src="/scripts/auto-complement.js"></script>
 <script type="text/javascript" src="/scripts/validation.js"></script>
 <script type="text/javascript" src="/scripts/account.js"></script>
+<script type="text/javascript" src="/scripts/fav.js"></script>

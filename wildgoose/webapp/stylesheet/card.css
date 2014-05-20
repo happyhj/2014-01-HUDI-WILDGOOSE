@@ -67,7 +67,7 @@
 	padding-top: 0px;
 }
 
-.card-section-identity > .subscribe {
+.card-section-identity > .favorite {
 	position: absolute;
 	top: 8px;
 	right: 40px;
@@ -118,12 +118,17 @@
 	color: #BBB;
 }
 
-.card-section-identity > .subscribe {
+.card-section-identity > .favorite {
 	font-size: 24px;
 	color: #BBB;
 }
 
-.card-section-identity > .subscribe:hover {
+.card-section-identity > .favorite:hover {
+	font-size: 24px;
+	color: #ED9;
+}
+
+.card-section-identity > .favorite-on {
 	font-size: 24px;
 	color: #FD2;
 }

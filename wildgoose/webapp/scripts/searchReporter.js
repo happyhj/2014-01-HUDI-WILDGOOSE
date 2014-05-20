@@ -58,13 +58,9 @@ function clickSearchMoreBtn(rawD, template) {
 		searchMore.setAttribute("style", "");
 	}
 	
-//	rawD = rawD.substring(1, rawD.length);
-//	console.log(rawD);
-	
 	var searchResult = document.querySelector(".search-result > ul");
 	var reporterCards = JSON.parse(rawD)["data"];
 	var sizeOfCards = reporterCards.length;
-	console.log(reporterCards);
 	
 	(function(cards) {
 		for (var i=0; i<sizeOfCards; i++) {
@@ -95,8 +91,6 @@ function clickSearchMoreBtn(rawD, template) {
 	
 	document.querySelector(".search-more .state-search-total").innerText = total + sizeOfCards;
 	
-//	console.log(total + sizeOfCards);
-//	console.log(document.querySelector(".search-more .state-search-total"));
 }
 
 
@@ -104,7 +98,6 @@ window.addEventListener("popstate", historyHandler, false);
 
 function historyHandler(e) {
 //	e.preventDefault();
-	console.log("historyHandler");
 	if (e.state) {
 		location.load(e.state.url);
 	}
