@@ -66,6 +66,25 @@ var Ajax = (function(){
 			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			// send
 			request.send(payload);
+		},
+		
+		DELETE : function (url, func, async) {
+			if (async == null) {
+				async = true;
+			}
+			
+			var request = this.createRequest();
+			if (request == null) {
+				console.log("Unable to create request");
+				return;
+			}
+			
+			request.open("DELETE", url, async);
+			request.addEventListener("readystatechange", function (e) {
+				Ajax.responseData(e, request, func);
+			}, false);
+			// send
+			request.send(null);
 		}
 	}
 }());

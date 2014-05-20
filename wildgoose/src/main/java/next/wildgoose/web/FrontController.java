@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,8 +32,26 @@ public class FrontController extends HttpServlet {
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		
 //		로그인 시 아래와 같은 형태로 처리
 //		session.setAttribute("userId", "hello@world.com");
+		if (session.getAttribute("userId") != null) {
+			session.setMaxInactiveInterval(Constants.SESSION_EXPIRING_TIME);
+			Cookie[] cookies = request.getCookies();
+			Cookie jsessionid = null;
+
+			for (int i=0; i<cookies.length; i++) {
+				Cookie cookie = cookies[i];
+				if(cookie.getName().equals("JSESSIONID")) {
+					jsessionid = cookie;
+				}
+			}
+			if(jsessionid != null) {
+				jsessionid.setMaxAge(Constants.SESSION_EXPIRING_TIME);
+			}
+			response.addCookie(jsessionid);
+		}
+		
 		Action action = getProperAction(request);
 		ActionResult result = action.execute(request);
 		

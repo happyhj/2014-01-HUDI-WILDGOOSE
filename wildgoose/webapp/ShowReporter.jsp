@@ -8,8 +8,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-zoom=1, user-scalable=no">
 <link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/header.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/articles.css" />
-
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet"
 	href="/stylesheet/show_reporter.css" />
@@ -18,9 +18,10 @@
 </head>
 <body>
 	<div class="wrap viewport">
-		<header class="header"></header>
+		<header class="header"> 
+			<%@ include file="template/header.jsp" %> 
+		</header>
 		<div class="container test-outline">
-
 			<!-- 기자 정보 -->
 			<div class="card">
 				<div class="card-section card-section-identity">

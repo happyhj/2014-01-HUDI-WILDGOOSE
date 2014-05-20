@@ -38,4 +38,5 @@ public class Constants {
 	public static final String KEYWORD_MSG = "message";
 	
 	public static final int NUM_OF_CARDS = 24;
+	public static final int SESSION_EXPIRING_TIME = 3 * 24 * 60 * 60;
 }

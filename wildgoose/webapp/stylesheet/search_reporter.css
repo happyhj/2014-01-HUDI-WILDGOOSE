@@ -34,13 +34,6 @@ body {
 	padding-bottom: 45px;
 }
 
-.header-btn {
-	width: 100px;
-	height: 50px;
-	float: right;
-	margin-left: 4px;
-}
-
 /* Module rules */
 .logo {
 	margin-top: 40px;
@@ -84,13 +77,6 @@ body {
 .footer {
 	background: #f2f2f2;
 	border-top: 1px solid #CFCFCF;
-}
-
-.header-btn {
-	background: #4882FD;
-	color: #fff;
-	font-size: 1em;
-	border: 0;
 }
 
 .mask-on {

@@ -1,0 +1,16 @@
+/* header : 로그인 버튼이 존재하는 상단 바 */
+/* Layout rules */
+.header-btn {
+	width: 100px;
+	height: 50px;
+	float: right;
+	margin-left: 4px;
+}
+
+/* Theme rules */
+.header-btn {
+	background: #4882FD;
+	color: #fff;
+	font-size: 1em;
+	border: 0;
+}

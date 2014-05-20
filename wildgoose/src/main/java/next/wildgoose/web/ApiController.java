@@ -23,15 +23,15 @@ public class ApiController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApiController.class.getName());
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request, response);
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+	
+	@Override
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Daction daction = getProperDaction(request);
 		DactionResult result = daction.execute(request);
 		send(request, response, result);
 	}
+	
 	
 	private void send(HttpServletRequest request, HttpServletResponse response, DactionResult result) {
 		ServletContext context = request.getServletContext();

@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-zoom=1, user-scalable=no">
 <link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/search_reporter.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/header.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/search.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
@@ -13,13 +14,7 @@
 
 <div class="wrap">
 	<header class="header">
-		<c:if test="${ empty sessionScope.userId }">
-			<button class="header-btn" id="join">가입하기</button>
-			<button class="header-btn" id="login">로그인하기</button>
-		</c:if>
-		<c:if test="${ not empty sessionScope.userId }">
-			<button class="header-btn">로그아웃</button>
-		</c:if>
+		<%@ include file ="template/header.jsp" %>
 	</header>
 	<div class="container">
 		<div class="logo">
