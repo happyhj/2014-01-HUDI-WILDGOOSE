@@ -24,6 +24,7 @@ public class Constants {
 	public static final String RESOURCE_SIGN_NAME = "name";
 	public static final String RESOURCE_ACCOUNT = "accounts";
 	public static final String RESOURCE_SESSION = "session";
+	public static final String RESOURCE_USER = "user";
 	public static final String RESOURCE_NEW = "new";
 	public static final String RESOURCE_MORE_RPT_CARD = "more_reporter_card";
 	public static final String RESOURCE_MOST_SMR_NAME = "most_similar_names";

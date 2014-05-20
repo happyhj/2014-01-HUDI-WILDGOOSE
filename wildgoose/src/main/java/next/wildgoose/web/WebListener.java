@@ -16,6 +16,7 @@ import next.wildgoose.service.HtmlDocService;
 import next.wildgoose.service.JsonDataService;
 import next.wildgoose.service.ReporterCardService;
 import next.wildgoose.service.SessionService;
+import next.wildgoose.service.UserService;
 import next.wildgoose.utility.Constants;
 
 public class WebListener implements ServletContextListener {
@@ -36,6 +37,7 @@ public class WebListener implements ServletContextListener {
 		dactionMap.put(Constants.RESOURCE_HTML, (HtmlDocService) context.getAttribute("HtmlDocService"));
 		dactionMap.put(Constants.RESOURCE_ACCOUNT, (AccountService) context.getAttribute("AccountService"));
 		dactionMap.put(Constants.RESOURCE_SESSION, (SessionService) context.getAttribute("SessionService"));
+		dactionMap.put(Constants.RESOURCE_USER, (UserService) context.getAttribute("UserService"));
 	}
 	
 	public void contextDestroyed(ServletContextEvent e) {
