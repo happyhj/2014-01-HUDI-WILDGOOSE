@@ -16,6 +16,7 @@ public class DaoListener implements ServletContextListener {
 		sc.setAttribute("ReporterCardDAO", new ReporterCardDAO());
 		sc.setAttribute("JsonDAO", new JsonDAO());
 		sc.setAttribute("SignDAO", new SignDAO());
+		sc.setAttribute("FavoriteDAO", new FavoriteDAO());
 		sc.setAttribute("SearchKeywordDAO", new SearchKeywordDAO());
 		sc.setAttribute("DummyData", new DummyData());
 	}

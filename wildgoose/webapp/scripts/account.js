@@ -51,21 +51,18 @@ function checkFormStatus(form) {
 	else
 		Util.addClass(form[btn], "hidden");
 	
-	console.log(flag + " " + form[btn].className);
 }
 
 /*
  * 모두 작성된 정보를 Ajax POST로 서버에 전달
  */
 function signUpAccout() {
-	console.log("!!!!");
 	var url = "/api/v1/accounts/new";
 	var form = document.querySelector(".form-container");
 	
 	var email = escape(form[0].value)
 	var password = escape(form[1].value);
 	var payload = "email=" + email + "&password=" + SHA256(password);
-	console.log(payload)
 	Ajax.POST(url, showSignUpResult, payload);
 //	Util.addClass(form, "isProgressing");
 
@@ -76,8 +73,6 @@ function signUpAccout() {
  * 서버에서 전달된 결과값 확인
  */
 function showSignUpResult(response) {
-	console.log("response: " + response);
-	
 	var form = document.querySelector(".form-container");
 	Util.removeClass(form, "isProgressing");
 	
@@ -99,14 +94,12 @@ function loginAccount() {
 	
 	var finalPassword = SHA256(hashedPassword+randomNumber);
 	
-	console.log(finalPassword);
 	var url = "/api/v1/session/new";
 	var payload = "email="+email+"&password="+finalPassword;
 	Ajax.POST(url, loginHandler, payload);
 }
 
 function loginHandler(response){
-	console.log("response: " + response);
 	
 	var form = document.querySelector(".form-container");
 	Util.removeClass(form, "isProgressing");
