@@ -67,7 +67,7 @@ var Ajax = (function(){
 			// send
 			request.send(payload);
 		}, 
-		DELETE : function (url, func, payload, async) {
+		DELETE : function (url, func, async) {
 			if (async == null) {
 				async = true;
 			}
@@ -82,9 +82,8 @@ var Ajax = (function(){
 			request.addEventListener("readystatechange", function (e) {
 				Ajax.responseData(e, request, func);
 			}, false);
-			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			// send
-			request.send(payload);
+			request.send(null);
 		}
 	}
 }());
