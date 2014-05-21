@@ -81,14 +81,15 @@
 	</div>
 	<footer class="footer"></footer>
 </div>
-<script>
-var inputEl = document.getElementById("query-entry");
-inputEl.focus();
-
-
-</script>
 
 <script type="text/javascript" src="/scripts/util.js"></script>
 <script type="text/javascript" src="/scripts/searchReporter.js"></script>
 <script type="text/javascript" src="/scripts/auto-complement.js"></script>
 <script type="text/javascript" src="/scripts/fav.js"></script>
+<script>
+var inputEl = document.getElementById("query-entry");
+inputEl.focus();
+
+var favs = []
+getFavs();
+</script>
