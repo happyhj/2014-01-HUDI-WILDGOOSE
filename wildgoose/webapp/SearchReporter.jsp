@@ -16,7 +16,7 @@
 		<a href="/reporters/%= id %">%= name %</a>
 	</h3>
 	<p class="email">%= email %</p>
-	<h4 class="favorite">&#x2605;</h4>
+	<h4 class="favorite off">&#x2605;</h4>
 	<div class="%= pressName % press-tag"></div>
 </div>
 <div class="card-section card-section-headline">

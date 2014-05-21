@@ -4,6 +4,25 @@
 var searchResultContainer = document.querySelector(".search-result");
 searchResultContainer.addEventListener("DOMSubtreeModified", function() {
 //    alert("DOMSubtreeModified fired!");
+	var loginBtn = document.querySelector(".header-btn#login");
+	var stars = document.querySelectorAll(".card-reporter h4.favorite");
+	if(loginBtn) {
+		 [].forEach.call(
+				 stars, 
+				 function(el){
+					 Util.addClass(el,"invisible");
+				 }
+		 );
+	} else {
+		/*
+		 [].forEach.call(
+				 stars, 
+				 function(el){
+					 Util.addClass(el,"invisible");
+				 }
+		 );	
+		 */	
+	}
 }, false);
 
 
