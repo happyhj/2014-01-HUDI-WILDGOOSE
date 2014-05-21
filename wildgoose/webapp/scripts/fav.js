@@ -10,27 +10,29 @@ function toggleFav(e) {
 	var target = e.target;
 	var nephew = target.parentElement.firstElementChild.firstElementChild
 	var reporterId = nephew.getAttribute("href").split("reporters/")[1];
-	var url = "/api/v1/user/reporters";
-	var payload = "reporter_id="+reporterId;
-	if (Util.hasClass(target, "favorite-on")) {
-		url = url + "?" + payload;
+	var url = "/api/v1/users/reporters/"+reporterId;
+	//var payload = "reporter_id="+reporterId;
+	if (Util.hasClass(target, "on")) {
+		//url = url + "?" + payload;
 		Ajax.DELETE(url, function(data) {
-			console.log(data)
+			//console.log(data)
 			if (data == "success") {
-				Util.removeClass(target, "favorite-on");
+				Util.removeClass(target, "on");
+				Util.addClass(target, "off");
 			} else {
 				// react fail
 			}
 		});
 	} else {
 		Ajax.POST(url, function(data) {
-			console.log(data)
+			//console.log(data)
 			if (data == "success") {
-				Util.addClass(target, "favorite-on");
+				Util.removeClass(target, "off");
+				Util.addClass(target, "on");
 			} else {
 				// react fail
 			}
-		}, payload);
+		});
 	}
 	
 }

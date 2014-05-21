@@ -79,9 +79,12 @@ var Ajax = (function(){
 			}
 
 			request.open("DELETE", url, async);
-			request.addEventListener("readystatechange", function (e) {
-				Ajax.responseData(e, request, func);
-			}, false);
+			
+			if (func != null) {
+				request.addEventListener("readystatechange", function (e) {
+					Ajax.responseData(e, request, func);
+				}, false);
+			}
 			// send
 			request.send(null);
 		}
@@ -139,7 +142,18 @@ var Util = (function() {
 		ltrim: function (str) {
 			str.replace(/^\s*/, "");
 			return str;
-		}
-		
+		},
+		getTemplateCompiler: function(templateStr) {
+		    return function(dataObj) {
+		        var resultStr = Util.trim(templateStr);
+		        for (var variableName in dataObj)
+		        {
+		            if (dataObj[variableName]===0||dataObj[variableName]) {
+		                resultStr = resultStr.replace("%= "+variableName+" %", dataObj[variableName]);
+		            }
+		        }
+		        return resultStr;
+		    };
+		} 
 	};
 }());
