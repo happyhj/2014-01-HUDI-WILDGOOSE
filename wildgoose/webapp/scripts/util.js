@@ -79,9 +79,12 @@ var Ajax = (function(){
 			}
 
 			request.open("DELETE", url, async);
-			request.addEventListener("readystatechange", function (e) {
-				Ajax.responseData(e, request, func);
-			}, false);
+			
+			if (func != null) {
+				request.addEventListener("readystatechange", function (e) {
+					Ajax.responseData(e, request, func);
+				}, false);
+			}
 			// send
 			request.send(null);
 		}

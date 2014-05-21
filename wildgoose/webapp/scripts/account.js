@@ -96,7 +96,9 @@ function loginAccount() {
 	
 	var url = "/api/v1/session/new";
 	var payload = "email="+email+"&password="+finalPassword;
-	Ajax.POST(url, loginHandler, payload);
+	Ajax.POST(url, function(response) {
+		loginHandler(response);
+	}, payload);
 }
 
 function loginHandler(response){
@@ -104,6 +106,12 @@ function loginHandler(response){
 	var form = document.querySelector(".form-container");
 	Util.removeClass(form, "isProgressing");
 	
+	if (response == "success") {
+		// close modal. and update login panel
+		WILDGOOSE.ui.modal.closeModal(function(){
+			updateTopbar(true);
+		});
+	}
 	var responseDiv = document.createElement("div");
 	responseDiv.innerHTML = response;
 	

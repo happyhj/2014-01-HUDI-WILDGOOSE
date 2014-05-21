@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-zoom=1, user-scalable=no">
 <link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/search_reporter.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/header.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/search.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
@@ -86,42 +85,10 @@
 var inputEl = document.getElementById("query-entry");
 inputEl.focus();
 
-/*
- * attatch button click event
- */
-// 함수가 아무것도 리턴하지 않는 경우 사용할 수 있는
-// 즉시실행 함수 패턴 중 하나
-!function() {
-	var joinBtn = document.querySelector(".header-btn#join");
-	if(joinBtn) {
-		joinBtn.addEventListener("click", function() {
-			var url = "/api/v1/subhtml/create_account";
-			modal.openModalWindow(url, function() {
-				var btn = arguments[0];
-				addValidationEvent();
-				btn.addEventListener("click", signUpAccout, false);
-			})
-		}, false);
-	}
-	var loginBtn = document.querySelector(".header-btn#login");
-	if(loginBtn) {
-		loginBtn.addEventListener("click", function() {
-			var url = "/api/v1/subhtml/authenticate_user";	
-			modal.openModalWindow(url, function() {
-				var btn = arguments[0];
-				btn.addEventListener("click", loginAccount, false);
-			})
-		}, false);
-	}
-}();
-
 
 </script>
-<script type="text/javascript" src="/scripts/lib/sha256.js"></script>
+
 <script type="text/javascript" src="/scripts/util.js"></script>
-<script type="text/javascript" src="/scripts/modal.js"></script>
 <script type="text/javascript" src="/scripts/searchReporter.js"></script>
 <script type="text/javascript" src="/scripts/auto-complement.js"></script>
-<script type="text/javascript" src="/scripts/validation.js"></script>
-<script type="text/javascript" src="/scripts/account.js"></script>
 <script type="text/javascript" src="/scripts/fav.js"></script>
