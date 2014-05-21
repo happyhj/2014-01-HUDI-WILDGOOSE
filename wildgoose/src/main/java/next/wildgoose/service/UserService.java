@@ -23,7 +23,8 @@ public class UserService implements Daction {
 		//uri = api/v1/user/reporters
 		HttpSession session = request.getSession();
 		String methodType = request.getMethod();//POST or DELTE확인 가능
-		String reporterId = request.getParameter("reporter_id");
+		//String reporterId = request.getParameter("reporter_id");
+		String reporterId = uri.get(4);
 		String email = (String) session.getAttribute("userId");
 		
 		ServletContext context = request.getServletContext();

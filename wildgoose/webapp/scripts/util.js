@@ -139,7 +139,18 @@ var Util = (function() {
 		ltrim: function (str) {
 			str.replace(/^\s*/, "");
 			return str;
-		}
-		
+		},
+		getTemplateCompiler: function(templateStr) {
+		    return function(dataObj) {
+		        var resultStr = Util.trim(templateStr);
+		        for (var variableName in dataObj)
+		        {
+		            if (dataObj[variableName]===0||dataObj[variableName]) {
+		                resultStr = resultStr.replace("%= "+variableName+" %", dataObj[variableName]);
+		            }
+		        }
+		        return resultStr;
+		    };
+		} 
 	};
 }());

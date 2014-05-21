@@ -1,25 +1,29 @@
 
-var loaded_templates = {};
+//var loaded_templates = {};
 
-window.addEventListener("load", function(e) {
-	
+var searchResultContainer = document.querySelector(".search-result");
+searchResultContainer.addEventListener("DOMSubtreeModified", function() {
+//    alert("DOMSubtreeModified fired!");
+}, false);
+
+
+window.addEventListener("load", function(e) {	
 	// 더보기 버튼 링크주소 설정
 	var searchMoreBtn = document.querySelector(".search-more .search-button");
 	if (searchMoreBtn != null) {
 		searchMoreBtn.addEventListener("click", function(e){
 			var searchQuery = document.querySelector(".search-more .state-search-query").innerText;
-			
 			// template
 			var url = "/api/v1/subhtml/create_reporter_card";
+/*
 			if (loaded_templates.reporter_card === undefined) {
 				Ajax.GET(url, function(t) {
 					loaded_templates.reporter_card = t;
 				});
 			}
-			
+*/		
 			var totalNum = document.querySelector(".search-more .state-search-total").innerText;
 			var requestNum = 24;
-			
 			
 			// search
 			var url = "/api/v1/more_reporter_card?q=" + searchQuery + "&last=" + totalNum + "&req=" + requestNum;
@@ -28,7 +32,7 @@ window.addEventListener("load", function(e) {
 		            url: location.href
 		        }
 				
-				clickSearchMoreBtn(rawD, loaded_templates.reporter_card);
+				clickSearchMoreBtn(rawD);
 				
 				history.pushState(pageInfo, null, pageInfo.url);
 //				history.pushState(pageInfo);
@@ -49,7 +53,7 @@ window.addEventListener("load", function(e) {
 } ,false);
 
 
-function clickSearchMoreBtn(rawD, template) {
+function clickSearchMoreBtn(rawD) {
 	
 	var hasMoreCards = rawD.indexOf(0);
 	var searchMore = document.querySelector(".search-more");
@@ -68,21 +72,12 @@ function clickSearchMoreBtn(rawD, template) {
 				(function(card) {
 					var newLi = document.createElement("li");
 					newLi.setAttribute("class", "card card-reporter");
-					newLi.innerHTML = template;
-					
-					var nameAnchor = newLi.querySelector(".name a");
-					nameAnchor.innerHTML = card.name;
-					nameAnchor.setAttribute("href", "/reporters/" + card.id);
-					
-					var email = newLi.querySelector(".email");
-					email.innerHTML = card.email;
-					
-					var pressTag = newLi.querySelector(".press-tag");
-					pressTag.className = card.pressName + " press-tag";
+					// html에서 템플릿을 불러온 뒤
+					var templateStr = document.getElementById("reporter-card-template").innerHTML;
+					var templateCompiler = Util.getTemplateCompiler(templateStr);
+					// 해당 템픗릿 컴파일러에 데이터를 담은 객체를 넘겨준다. // 완성된 partial html을 newLi 내부에 채운다.
+					newLi.innerHTML = templateCompiler(reporterCards[i]);
 
-					var headline = newLi.querySelector(".headline");
-					headline.innerHTML = card.articleTitle;
-					
 					return newLi;
 				}(reporterCards[i]))
 			)

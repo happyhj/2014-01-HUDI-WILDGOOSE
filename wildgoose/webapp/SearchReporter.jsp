@@ -10,6 +10,19 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/search.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
+<script type="text/template" id="reporter-card-template">
+<div class="card-section card-section-identity">
+	<h3 class="name">
+		<a href="/reporters/%= id %">%= name %</a>
+	</h3>
+	<p class="email">%= email %</p>
+	<h4 class="favorite">&#x2605;</h4>
+	<div class="%= pressName % press-tag"></div>
+</div>
+<div class="card-section card-section-headline">
+	<h4 class="headline">%= articleTitle %</h4>
+</div>
+</script>
 <title>Wildgoose</title>
 
 <div class="wrap">
@@ -80,22 +93,26 @@ inputEl.focus();
 // 즉시실행 함수 패턴 중 하나
 !function() {
 	var joinBtn = document.querySelector(".header-btn#join");
-	joinBtn.addEventListener("click", function() {
-		var url = "/api/v1/subhtml/create_account";
-		modal.openModalWindow(url, function() {
-			var btn = arguments[0];
-			addValidationEvent();
-			btn.addEventListener("click", signUpAccout, false);
-		})
-	}, false);
+	if(joinBtn) {
+		joinBtn.addEventListener("click", function() {
+			var url = "/api/v1/subhtml/create_account";
+			modal.openModalWindow(url, function() {
+				var btn = arguments[0];
+				addValidationEvent();
+				btn.addEventListener("click", signUpAccout, false);
+			})
+		}, false);
+	}
 	var loginBtn = document.querySelector(".header-btn#login");
-	loginBtn.addEventListener("click", function() {
-		var url = "/api/v1/subhtml/authenticate_user";	
-		modal.openModalWindow(url, function() {
-			var btn = arguments[0];
-			btn.addEventListener("click", loginAccount, false);
-		})
-	}, false);
+	if(loginBtn) {
+		loginBtn.addEventListener("click", function() {
+			var url = "/api/v1/subhtml/authenticate_user";	
+			modal.openModalWindow(url, function() {
+				var btn = arguments[0];
+				btn.addEventListener("click", loginAccount, false);
+			})
+		}, false);
+	}
 }();
 
 

@@ -1,4 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <div class="card-section card-section-identity">
 	<h3 class="name">
 		<a href="/reporters/${ reporterCard.id }">${ reporterCard.name }</a>
