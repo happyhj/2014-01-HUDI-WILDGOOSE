@@ -65,6 +65,7 @@ public class ApiController extends HttpServlet {
 		Map<String, Daction> dactionMap = WebListener.dactionMap;
 		Daction result = dactionMap.get(resourceName);
 		if (result == null) {
+			LOGGER.debug("here");
 			result = defaultDaction;
 		}
 		return result;

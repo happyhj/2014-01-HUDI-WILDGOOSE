@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import next.wildgoose.database.DataSource;
 
@@ -60,8 +62,35 @@ public class FavoriteDAO {
 		}
 		return result;
 	}
+	
+	public List<Integer> getFavorites(String email) {
+		List<Integer> favorites = new ArrayList<Integer>();
+		Connection conn = DataSource.getInstance().getConnection();
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT author_id FROM favorite WHERE user_email = ?");
 
-	public JSONObject getFavorites(String email) {
+		try {
+			psmt = conn.prepareStatement(query.toString());
+			psmt.setString(1, email);
+			rs = psmt.executeQuery();
+			
+			while (rs.next()) {
+				favorites.add(rs.getInt("author_id"));
+			}
+		} catch (SQLException sqle) {
+			LOGGER.debug(sqle.getMessage(), sqle);
+		} finally {
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeConnection(conn);
+		}
+		return favorites;
+	}
+
+	public JSONObject getFavoritesAsJson(String email) {
 		JSONObject result = new JSONObject();
 		Connection conn = DataSource.getInstance().getConnection();
 		PreparedStatement psmt = null;

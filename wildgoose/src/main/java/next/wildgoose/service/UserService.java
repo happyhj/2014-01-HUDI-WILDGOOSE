@@ -41,7 +41,7 @@ public class UserService implements Daction {
 			json.put("text", "failed");
 			
 			if ("GET".equals(methodType)) {
-				json = favDao.getFavorites(email);
+				json = favDao.getFavoritesAsJson(email);
 				result = new DactionResult("json", json);
 			} else if ("POST".equals(methodType)) {
 				//필요한 파라미터: reporter_id, user_email

@@ -1,0 +1,38 @@
+@CHARSET "UTF-8";
+@font-face{
+	font-family:"NanumMyeongjo";
+	src:url('../fonts/NanumMyeongjo.eot');
+	src:url('../fonts/NanumMyeongjo.eot?#iefix') format('embedded-opentype'),
+	url('../fonts/NanumMyeongjo.woff') format('woff'),
+	url('../fonts/NanumMyeongjo.ttf') format('truetype');
+	src:local(â»), url('../fonts/NanumMyeongjo.woff') format('woff');
+
+	font-style: normal;
+	font-weight: normal;
+}
+
+/* body {
+	background-color: gray;
+	text-align: center;
+	font-family: 'NanumMyeongjo';
+	color: #555;
+} */
+.card {
+	width: 496px;
+	padding: 20px;
+	font-family: 'NanumMyeongjo';
+}
+
+.card-section.article-preview {
+	font-size: 16px;
+	text-align: left;
+}
+.card-section.article-preview > h1 {
+	font-size: 2em;
+	margin-bottom: 15px;
+	color: #333;
+}
+.card-section.article-preview > p {
+	font-size: 1em;
+	line-height: 1.5em;
+}
