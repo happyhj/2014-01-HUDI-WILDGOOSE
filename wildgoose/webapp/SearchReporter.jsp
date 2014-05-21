@@ -50,7 +50,7 @@
 							<span>${ requestScope.searchQuery }에 대한 검색 결과가 없습니다.</span>
 						</c:if>
 						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }"><li class="card card-reporter">
-							<%@ include file = "template/reporterCard.html" %>
+							<%@ include file = "template/reporterCard.jsp" %>
 						</li></c:forEach>
 					</c:when>
 				</c:choose>

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import next.wildgoose.dao.ReporterCardDAO;
 import next.wildgoose.dto.ReporterCard;
 import next.wildgoose.utility.Constants;
-import next.wildgoose.utility.Validation;
+import next.wildgoose.utility.Utility;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +64,7 @@ public class ReporterCardService implements Action {
 		String type = null;
 		
 		// searchQuery의 검색 type설정
-		type = (Validation.isURL(searchQuery))? "url" : "name";
+		type = (Utility.isURL(searchQuery))? "url" : "name";
 		reporterCards = rcardDao.findReportersByType(type, searchQuery, start, end);
 
 		return reporterCards;
