@@ -53,4 +53,44 @@ public class ArticleCardDAO {
 		
 		return articleCards;
 	}
+	
+	public List<ArticleCard> findArticlesByFavorite(String email) {
+		Connection conn = DataSource.getInstance().getConnection();
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		List<ArticleCard> articleCards = new ArrayList<ArticleCard>();
+		ArticleCard articleCard = null;
+		
+		StringBuilder query = new StringBuilder();
+		
+		query.append("SELECT author.name, favorite.* from author JOIN ");
+		query.append("(SELECT * FROM article JOIN article_author ON article_author.article_URL = article.URL ");
+		query.append("WHERE article_author.author_id IN ");
+		query.append("(SELECT author_id FROM favorite WHERE user_email = ?) ");
+		query.append("ORDER BY article.datetime desc limit 24) AS favorite ON author.id = favorite.author_id;");
+		
+		try {
+			psmt = conn.prepareStatement(query.toString());
+			psmt.setString(1, email);
+			rs = psmt.executeQuery();
+			
+			while (rs.next()) {
+				articleCard = new ArticleCard();
+				articleCard.setUrl(rs.getString("URL"));
+				articleCard.setTitle(rs.getString("title"));
+				articleCard.setName(rs.getString("name"));
+				articleCard.setContent(rs.getString("content"));
+				articleCard.setDatetime(rs.getTimestamp("datetime").toString());
+				articleCards.add(articleCard);
+			}
+		} catch (SQLException sqle) {
+			LOGGER.debug(sqle.getMessage(),sqle);
+		} finally {
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closeConnection(conn);
+		}
+		
+		return articleCards;
+	}
 }

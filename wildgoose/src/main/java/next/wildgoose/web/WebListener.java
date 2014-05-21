@@ -11,6 +11,7 @@ import next.wildgoose.service.AccountService;
 import next.wildgoose.service.Action;
 import next.wildgoose.service.ArticleCardService;
 import next.wildgoose.service.Daction;
+import next.wildgoose.service.FavoriteService;
 import next.wildgoose.service.GraphDataService;
 import next.wildgoose.service.HtmlDocService;
 import next.wildgoose.service.JsonDataService;
@@ -38,6 +39,7 @@ public class WebListener implements ServletContextListener {
 		dactionMap.put(Constants.RESOURCE_ACCOUNT, (AccountService) context.getAttribute("AccountService"));
 		dactionMap.put(Constants.RESOURCE_SESSION, (SessionService) context.getAttribute("SessionService"));
 		dactionMap.put(Constants.RESOURCE_USER, (UserService) context.getAttribute("UserService"));
+		dactionMap.put(Constants.RESOURCE_FAVORITE, (FavoriteService) context.getAttribute("FavoriteService"));
 	}
 	
 	public void contextDestroyed(ServletContextEvent e) {
