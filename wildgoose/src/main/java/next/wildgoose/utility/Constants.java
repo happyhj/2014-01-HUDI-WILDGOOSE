@@ -9,9 +9,11 @@ public class Constants {
 	public static final String PAGE_ERROR_SEARCH_REPORTER = "SearchReporter.jsp";
 	public static final String PAGE_SEARCH_REPORTER = "SearchReporter.jsp";
 	public static final String PAGE_SHOW_REPORTER = "ShowReporter.jsp";
+	public static final String PAGE_TIMELINE = "timeline.jsp";
 	public static final String PAGE_STATIC_ACCOUNT = "account.html";
 	public static final String PAGE_STATIC_LOGIN = "login.html";
 	public static final String PAGE_STATIC_REPORTER_CARD = "reporterCard.jsp";
+	
 	
 	public static final String RESOURCE_ROOT = "/";
 	public static final String RESOURCE_INDEX = "";
@@ -25,6 +27,7 @@ public class Constants {
 	public static final String RESOURCE_ACCOUNT = "accounts";
 	public static final String RESOURCE_SESSION = "session";
 	public static final String RESOURCE_FAVORITE = "favorite";
+	public static final String RESOURCE_TIMELINE = "timeline";
 	public static final String RESOURCE_USER = "users";
 	public static final String RESOURCE_NEW = "new";
 	public static final String RESOURCE_MORE_RPT_CARD = "more_reporter_card";
