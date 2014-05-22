@@ -22,21 +22,32 @@
 		</div>
 		<div class="search search-column">
 			<form action="./" method="get" >
+			<ul class="search-column-box">
 				<li class="search-query-entry">
 					<input type="search" autocomplete="off" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.searchQuery }" />
 				</li>
 				<li class="search-button">
 					<input type="submit" id="search-action" value ="Search"/>
 				</li>
+			</ul>
+			<%-- 자동완성 --%>
+			<ul class="auto-completion-list" style="display:inline-block">
+				<li><div>서동규</div></li>
+				<li><div>서동유</div></li>
+				<li><div>호호호</div></li>
+				<li><div>하하하</div></li>
+				<li><div>히히히</div></li>
+			</ul>
 			</form>
-			<table class="searched-box">
+			
+			<!-- <table class="searched-box">
   				<tbody>
     				<tr>
 				    </tr>
   				</tbody>
-			</table>
-			
+			</table> -->
 		</div>
+		
 		<div class="search-result">
 			<ul>
 				<c:choose>
@@ -70,9 +81,6 @@
 	<footer class="footer"></footer>
 </div>
 <script>
-var inputEl = document.getElementById("query-entry");
-inputEl.focus();
-
 /*
  * attatch button click event
  */

@@ -1,92 +1,99 @@
 var searchBox = {
 	init : function() {
-		this.listListener = false;
-		this.callbackRefCache = {
-			notify : this.notify.bind(this),
-			expired : this.expired.bind(this),
-			boxHandler : this.boxHandler.bind(this),
-			listHandler : this.listHandler.bind(this),
-			drawList : this.drawList.bind(this)
-		};
-		this.box = document.querySelector('#query-entry');
-
-		// searched에 입력하고 있는 글자를 가져옴
-		this.list = document.querySelector(".searched-box");
+		this.maxRow = 5;
+		this.isSearching = null;
 		
-		this.box.addEventListener("focus", this.callbackRefCache.notify);
-		this.box.addEventListener("blur", this.callbackRefCache.expired);
+		this.cache = {
+			searchedQuery : "",
+			callbackRef : {
+				notify : this.notify.bind(this),
+				expired : this.expired.bind(this),
+				boxHandler : this.boxHandler.bind(this),
+				listHandler : this.listHandler.bind(this),
+				drawList : this.drawList.bind(this)
+			}
+		};
+		
+		this.box = document.querySelector('#query-entry');
+		this.list = document.querySelector(".auto-completion-list");
+		
+		this.box.addEventListener("focus", this.cache.callbackRef.notify);
+		this.box.addEventListener("blur", this.cache.callbackRef.expired);
+		
+		this.box.focus();
 	},
 
 	expired : function(evt) {
 		console.log("searchBox expired");
-//		this.toggleBox();
-		this.box.removeEventListener("keypress", this.callbackRefCache.boxHandler);
-		if (this.listListener) {
-			this.listListener = false;
-			this.box.removeEventListener("keyup", this.callbackRefCache.listHandler);
+		if (this.isSearching != null) {
+			this.off();
+			this.list.innerHTML = "";
+			clearInterval(this.isSearching);
+			this.box.removeEventListener("keydown", this.cache.callbackRef.listHandler);
+			this.isSearching = null;
+			currentQuery = "";
 		}
 	},
 
 	notify : function(evt) {
 		console.log("searchBox standBy");
-//		this.toggleBox();
 		this.currentRow = 0;
-		this.possibilities = this.list.querySelectorAll("td");
-		this.box.addEventListener("keypress", this.callbackRefCache.boxHandler);
+//		debugger;
+		if (this.isSearching == null) {
+			this.isSearching = setInterval(this.cache.callbackRef.boxHandler, 100);
+			this.box.addEventListener("keydown", this.cache.callbackRef.listHandler);
+		}
+	},
+	on : function() {
+		this.list.style.display = "inline-block";
+	},
+	off : function() {
+		this.list.style.display = "none";
 	},
 
 	boxHandler : function(evt) {
-		if (!this.listListener) {
-			this.listListener = true;
-			this.box.addEventListener("keyup", this.callbackRefCache.listHandler);
+		var currentQuery = this.box.value;
+		if (currentQuery != "" && currentQuery != this.cache.searchedQuery) {
+//			this.find(currentQuery);
+			this.cache.searchedQuery = currentQuery;
 		}
-		this.find(this.box.value);
 	},
 
 	listHandler : function(evt) {
 		var keyID = evt.keyCode;
 		// UP/DOWN Key
 		if (keyID == 38 || keyID == 40) {
+			console.log("press up down key");
 			this.highlightRow(39 - keyID);
-//			console.log("press up down key");
 			return;
 		}
 		if (keyID == 13) {
-			this.selectRow();
-//			console.log("select row");
+			console.log("select row");
+//			this.selectRow();
 		}
 	},
-//	toggleBox : function() {
-//		if (getComputedStyle(this.box, null).display == "none") {
-//			this.box.style.display = "table";
-//		} else {
-//			this.box.style.display = "none";
-//		}
-//	},
 
 	find : function(searched) {
 		var url = "/api/v1/search/most_similar_names?name=" + searched;
-		Ajax.GET(url, this.callbackRefCache.drawList);
+		Ajax.GET(url, this.cache.callbackRef.drawList);
 	},
 
-	drawList : function(data) {
-		var Data = JSON.parse(data)["data"];
+	drawList : function(response) {
+		var data = JSON.parse(response)["data"];
+		if (data.length == 0) {
+			this.off();
+		}
 		
-		this.list.style.display = "table";
-		if (typeof Data != "undefined" && Data.length != 0) {
-			var tr_pos = this.list.lastElementChild.lastElementChild;
-			var childCount = tr_pos.childElementCount;
-			if (childCount != 0) {
-				for (var i = 0; i < childCount; i++) {
-					tr_pos.removeChild(tr_pos.childNodes[0]);
-				}
+		if (data !== undefined && data.length != 0) {
+			this.on();
+			var li_template = "";
+			for (var i = 0; i < data.length; i++) {
+				li_template += "<li><div>" + data[i]["name"] + "</div></li>";
 			}
-
-			for (var i = 0; i < Data.length; i++) {
-				tr_pos.insertAdjacentHTML('beforeend', '<td>' + Data[i]["name"] + '</td>');
-			}
+			this.list.innerHTML = li_template;
 		}
 	},
+	
 	selectRow : function() {
 		evt = document.createEvent("MouseEvents");
 		evt.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
@@ -113,7 +120,7 @@ var searchBox = {
 }
 //debugger;
 // searchBox에 focus evt가 발생시 searchBox객체 init
-searchBox.init();
+//searchBox.init();
 
 //searching.addEventListener("keyup", searchBoxHandler);
 //searching.addEventListener("click", toggleSearchBox);
