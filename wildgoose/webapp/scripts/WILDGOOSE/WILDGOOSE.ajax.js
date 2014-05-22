@@ -26,14 +26,15 @@
 		return request;
 	}
 		
-	function _responseData(e, request, func) {
+	function _responseData(e, request, callback) {
 		if (request.readyState == 4) {
 			if (request.status == 200) {
-				
 				// responseText의 마지막에 포함된 개행문자 제거
 				var response = request.responseText;
-				response = response.substring(0, response.length - 1);
-				func(response);
+				if(response.substring(response.length - 1) === "\n") {
+					response = response.substring(0, response.length - 1);					
+				}
+				callback(response);
 			}
 		}
 	}
@@ -59,9 +60,11 @@
 		}
 		
 		request.open("GET", url, isAsync);
-		request.addEventListener("readystatechange", function (e) {
-			_responseData(e, request, callback);
-		}, false);
+		if (callback !== undefined) {
+			request.addEventListener("readystatechange", function (e) {
+				_responseData(e, request, callback);
+			}, false);
+		}
 		// send
 		request.send();
 	}
@@ -72,7 +75,7 @@
 			data = config.data,
 			isAsync = config.isAsync;
 		
-		if (isAsync == undefined) {
+		if (isAsync === undefined) {
 			isAsync = true;
 		}
 
@@ -81,15 +84,17 @@
 		}
 				
 		var request = _createRequest();
-		if (request == undefined) {
+		if (request === undefined) {
 			console.log("Unable to create request");
 			return;
 		}
 
 		request.open("POST", url, isAsync);
-		request.addEventListener("readystatechange", function (e) {
-			_responseData(e, request, callback);
-		}, false);
+		if (callback !== undefined) {
+			request.addEventListener("readystatechange", function (e) {
+				_responseData(e, request, callback);
+			}, false);
+		}
 		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		// send
 		request.send(data);
@@ -101,24 +106,26 @@
 			data = config.data,
 			isAsync = config.isAsync;
 		
-		if (isAsync == undefined) {
+		if (isAsync === undefined) {
 			isAsync = true;
 		}
 
-		if (url == undefined) {
+		if (url === undefined) {
 			return;
 		}
 				
 		var request = _createRequest();
-		if (request == undefined) {
+		if (request === undefined) {
 			console.log("Unable to create request");
 			return;
 		}
 
 		request.open("PUT", url, isAsync);
-		request.addEventListener("readystatechange", function (e) {
-			_responseData(e, request, func);
-		}, false);
+		if (callback !== undefined) {
+			request.addEventListener("readystatechange", function (e) {
+				_responseData(e, request, func);
+			}, false);
+		}
 		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		// send
 		request.send(data);
@@ -130,23 +137,23 @@
 			data = config.data,
 			isAsync = config.isAsync;
 		
-		if (isAsync == undefined) {
+		if (isAsync === undefined) {
 			isAsync = true;
 		}
 
-		if (url == undefined) {
+		if (url === undefined) {
 			return;
 		}
 				
 		var request = _createRequest();
-		if (request == undefined) {
+		if (request === undefined) {
 			console.log("Unable to create request");
 			return;
 		}
 
 		request.open("DELETE", url, isAsync);
 		
-		if (callback != undefined) {
+		if (callback !== undefined) {
 			request.addEventListener("readystatechange", function (e) {
 				_responseData(e, request, callback);
 			}, false);
