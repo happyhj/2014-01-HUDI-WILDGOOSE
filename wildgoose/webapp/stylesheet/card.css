@@ -135,6 +135,7 @@
 
 .card-section-identity > .favorite:hover {
 	color: #ED9;
+	cursor: pointer;
 }
 
 .card-section-identity > .press-tag {	
