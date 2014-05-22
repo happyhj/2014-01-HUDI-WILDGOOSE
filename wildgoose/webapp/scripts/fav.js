@@ -1,10 +1,11 @@
-(function() {
+attatchEventToFavBtn();
+function attatchEventToFavBtn() {
 	var stars = document.querySelectorAll(".favorite");
 	for (var i = 0; i < stars.length; i++) {
 		var star = stars[i];
 		star.addEventListener("click", toggleFav, false);
 	}
-})()
+}
 
 function toggleFav(e) {
 	var target = e.target;
