@@ -28,6 +28,7 @@ public class ServiceListener implements ServletContextListener {
 		sc.setAttribute("HtmlDocService", new HtmlDocService());
 		sc.setAttribute("UserService", new UserService());
 		sc.setAttribute("FavoriteService", new FavoriteService());
+		sc.setAttribute("FavoritePageService", new FavoritePageService());
 		sc.setAttribute("Error", new Error());
 		sc.setAttribute("ErrorDaction", new ErrorDaction());
 		
