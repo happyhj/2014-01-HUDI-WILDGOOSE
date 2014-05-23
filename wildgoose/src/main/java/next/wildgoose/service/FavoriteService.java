@@ -18,7 +18,6 @@ public class FavoriteService implements Daction {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(FavoriteService.class.getName());
 
-	@Override
 	public DactionResult execute(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String email = (String) session.getAttribute("userId");

@@ -3,6 +3,7 @@ package next.wildgoose.dto;
 public class ArticleCard {
 	private String url;
 	private String name;
+	private int authorId;
 	private String title;
 	private String content;
 	private int sectionId;
@@ -34,6 +35,14 @@ public class ArticleCard {
 		this.title = title;
 	}
 	
+	public int getAuthorId() {
+		return authorId;
+	}
+
+	public void setAuthorId(int authorId) {
+		this.authorId = authorId;
+	}
+
 	public String getContent() {
 		return content;
 	}

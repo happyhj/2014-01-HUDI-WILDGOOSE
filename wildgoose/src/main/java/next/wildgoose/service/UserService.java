@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.FavoriteDAO;
-import next.wildgoose.dto.ArticleCard;
 import next.wildgoose.dto.ReporterCard;
 import next.wildgoose.utility.Uri;
 
@@ -19,7 +18,6 @@ import org.slf4j.LoggerFactory;
 public class UserService implements Daction {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class.getName());
 
-	@Override
 	public DactionResult execute(HttpServletRequest request) {
 		Uri uri = new Uri(request);
 		DactionResult result = null;

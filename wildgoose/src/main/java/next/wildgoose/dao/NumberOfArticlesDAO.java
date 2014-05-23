@@ -84,7 +84,6 @@ public class NumberOfArticlesDAO implements ExtractDAO{
 		return result;
 	}
 
-	@Override
 	public JSONObject getJson(int reporterId, HttpServletRequest request) {
 		String condition = request.getParameter("by");
 		

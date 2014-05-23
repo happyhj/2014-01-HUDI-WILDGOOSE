@@ -63,7 +63,7 @@ public class ArticleCardDAO {
 		
 		StringBuilder query = new StringBuilder();
 		
-		query.append("SELECT author.name, favorite.* from author JOIN ");
+		query.append("SELECT author.name, author.id, favorite.* from author JOIN ");
 		query.append("(SELECT * FROM article JOIN article_author ON article_author.article_URL = article.URL ");
 		query.append("WHERE article_author.author_id IN ");
 		query.append("(SELECT author_id FROM favorite WHERE user_email = ?) ");
@@ -78,6 +78,7 @@ public class ArticleCardDAO {
 				articleCard = new ArticleCard();
 				articleCard.setUrl(rs.getString("URL"));
 				articleCard.setTitle(rs.getString("title"));
+				articleCard.setAuthorId(rs.getInt("id"));
 				articleCard.setName(rs.getString("name"));
 				articleCard.setContent(rs.getString("content"));
 				articleCard.setDatetime(rs.getTimestamp("datetime").toString());

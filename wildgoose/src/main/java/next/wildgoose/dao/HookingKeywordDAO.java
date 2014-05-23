@@ -56,7 +56,6 @@ public class HookingKeywordDAO implements ExtractDAO{
 		return result;
 	}
 
-	@Override
 	public JSONObject getJson(int reporterId, HttpServletRequest request) {
 		return getHookingKeywordsCount(reporterId);
 	}

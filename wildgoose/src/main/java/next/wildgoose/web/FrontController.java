@@ -71,8 +71,6 @@ public class FrontController extends HttpServlet {
 
 		Action defaultAction = (Error) context.getAttribute("Error");
 		Map<String, Action> actionMap = WebListener.actionMap;
-		actionMap.put(Constants.RESOURCE_INDEX, (ReporterCardService) context.getAttribute("ReporterCardService"));
-		actionMap.put(Constants.RESOURCE_REPORTERS, (ArticleCardService) context.getAttribute("ArticleCardService"));
 		Action result = actionMap.get(uri.get(0));
 		if (result == null) {
 			result = defaultAction;
