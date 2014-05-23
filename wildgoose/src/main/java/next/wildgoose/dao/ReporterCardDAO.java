@@ -85,12 +85,11 @@ public class ReporterCardDAO {
 				reporterCard.setEmail(rs.getString("email"));
 				reporterCard.setName(rs.getString("name"));
 				reporterCard.setPressName(rs.getString("press_name"));
-				reporterCard.setArticleTitle(rs.getString("article_title"));
+				reporterCard.setArticleTitle(rs.getString("title"));
 				reporterCards.add(reporterCard);
 			}
 		} catch (SQLException sqle) {
 			LOGGER.debug(sqle.getMessage(),sqle);
-			reporterCards = null;
 		} finally {
 			SqlUtil.closePrepStatement(psmt);
 			SqlUtil.closeResultSet(rs);
