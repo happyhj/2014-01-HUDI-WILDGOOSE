@@ -26,8 +26,7 @@ public class ReporterCardService implements Action {
 		if ("%".equals(searchQuery)) {
 			searchQuery = null;
 		}
-		LOGGER.debug("searchquery : " + searchQuery);
-		
+
 		setForwardingOption(ar, searchQuery);
 		if (searchQuery != null) {
 			// 25개를 가져온 후, 마지막 카드를 지움.
