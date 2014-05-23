@@ -29,14 +29,15 @@ public class ReporterCardService implements Action {
 		LOGGER.debug("searchquery : " + searchQuery);
 		
 		setForwardingOption(ar, searchQuery);
-		// 25개를 가져온 후, 마지막 카드를 지움.
-		ReporterCardDAO rcardDao = (ReporterCardDAO) context.getAttribute("ReporterCardDAO");
-		reporterCards = getReporterCards(rcardDao, searchQuery, 0, Constants.NUM_OF_CARDS + 1);
-		if (reporterCards.size() > Constants.NUM_OF_CARDS) {
-			hasMoreCards = true;
-			reporterCards.remove(Constants.NUM_OF_CARDS);
+		if (searchQuery != null) {
+			// 25개를 가져온 후, 마지막 카드를 지움.
+			ReporterCardDAO rcardDao = (ReporterCardDAO) context.getAttribute("ReporterCardDAO");
+			reporterCards = getReporterCards(rcardDao, searchQuery, 0, Constants.NUM_OF_CARDS + 1);
+			if (reporterCards.size() > Constants.NUM_OF_CARDS) {
+				hasMoreCards = true;
+				reporterCards.remove(Constants.NUM_OF_CARDS);
+			}
 		}
-
 		request.setAttribute("totalNum", Constants.NUM_OF_CARDS);
 		request.setAttribute("hasMoreCards", hasMoreCards);
 		request.setAttribute("reporterCards", reporterCards);
