@@ -33,7 +33,7 @@ public class FrontController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-//		로그인 시 아래와 같은 형태로 처리
+//		로그인 상태 테스트
 //		session.setAttribute("userId", "hello@world.com");
 		if (session.getAttribute("userId") != null) {
 			session.setMaxInactiveInterval(Constants.SESSION_EXPIRING_TIME);

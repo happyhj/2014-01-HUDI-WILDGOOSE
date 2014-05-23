@@ -23,7 +23,8 @@ public class UserService implements Daction {
 		//uri = api/v1/user/reporters
 		HttpSession session = request.getSession();
 		String methodType = request.getMethod();//POST or DELTE확인 가능
-		String reporterId = request.getParameter("reporter_id");
+		//String reporterId = request.getParameter("reporter_id");
+		String reporterId = uri.get(4);
 		String email = (String) session.getAttribute("userId");
 		
 		ServletContext context = request.getServletContext();
@@ -40,7 +41,7 @@ public class UserService implements Daction {
 			json.put("text", "failed");
 			
 			if ("GET".equals(methodType)) {
-				json = favDao.getFavorites(email);
+				json = favDao.getFavoritesAsJson(email);
 				result = new DactionResult("json", json);
 			} else if ("POST".equals(methodType)) {
 				//필요한 파라미터: reporter_id, user_email

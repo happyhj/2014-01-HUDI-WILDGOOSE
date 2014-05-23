@@ -72,7 +72,10 @@
 	top: 8px;
 	right: 40px;
 	width: 20px;
-	height: 20px;
+	height: 20px;	
+}
+.card-section-identity > .favorite.invisible {
+	visibility: hidden;
 }
 
 .card-section-identity > .press-tag {
@@ -120,17 +123,18 @@
 
 .card-section-identity > .favorite {
 	font-size: 24px;
+}
+
+.card-section-identity > .favorite.on {
+	color: #FD2;
+}
+
+.card-section-identity > .favorite.off {
 	color: #BBB;
 }
 
 .card-section-identity > .favorite:hover {
-	font-size: 24px;
 	color: #ED9;
-}
-
-.card-section-identity > .favorite-on {
-	font-size: 24px;
-	color: #FD2;
 }
 
 .card-section-identity > .press-tag {	

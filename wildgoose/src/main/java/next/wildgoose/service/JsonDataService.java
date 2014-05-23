@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import next.wildgoose.dao.JsonDAO;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
-import next.wildgoose.utility.Validation;
+import next.wildgoose.utility.Utility;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class JsonDataService implements Daction {
 		} else if (uri.check(2, Constants.RESOURCE_MORE_RPT_CARD)) {
 			String searchQuery = request.getParameter("q");
 			String searchType = null;
-			if (Validation.isURL(searchQuery)) {
+			if (Utility.isURL(searchQuery)) {
 				// URL로 검색
 				searchType = "url";
 			} else {

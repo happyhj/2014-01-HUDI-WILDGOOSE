@@ -2,11 +2,22 @@ package next.wildgoose.dto;
 
 public class ArticleCard {
 	private String url;
+	private String name;
 	private String title;
 	private String content;
 	private int sectionId;
 	private String datetime;
 	
+	
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getUrl() {
 		return url;
 	}

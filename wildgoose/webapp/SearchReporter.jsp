@@ -6,10 +6,22 @@
 <meta name="viewport" content="width=device-width, initial-zoom=1, user-scalable=no">
 <link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/search_reporter.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/header.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/search.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
+<script type="text/template" id="reporter-card-template">
+<div class="card-section card-section-identity">
+	<h3 class="name">
+		<a href="/reporters/%= id %">%= name %</a>
+	</h3>
+	<p class="email">%= email %</p>
+	<h4 class="favorite off">&#x2605;</h4>
+	<div class="%= pressName % press-tag"></div>
+</div>
+<div class="card-section card-section-headline">
+	<h4 class="headline">%= articleTitle %</h4>
+</div>
+</script>
 <title>Wildgoose</title>
 
 <div class="wrap">
@@ -61,7 +73,7 @@
 							<span>${ requestScope.searchQuery }에 대한 검색 결과가 없습니다.</span>
 						</c:if>
 						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }"><li class="card card-reporter">
-							<%@ include file = "template/reporterCard.html" %>
+							<%@ include file = "template/reporterCard.jsp" %>
 						</li></c:forEach>
 					</c:when>
 				</c:choose>
@@ -81,38 +93,14 @@
 	<footer class="footer"></footer>
 </div>
 <script>
-/*
- * attatch button click event
- */
-// 함수가 아무것도 리턴하지 않는 경우 사용할 수 있는
-// 즉시실행 함수 패턴 중 하나
-!function() {
-	var joinBtn = document.querySelector(".header-btn#join");
-	joinBtn.addEventListener("click", function() {
-		var url = "/api/v1/subhtml/create_account";
-		modal.openModalWindow(url, function() {
-			var btn = arguments[0];
-			addValidationEvent();
-			btn.addEventListener("click", signUpAccout, false);
-		})
-	}, false);
-	var loginBtn = document.querySelector(".header-btn#login");
-	loginBtn.addEventListener("click", function() {
-		var url = "/api/v1/subhtml/authenticate_user";	
-		modal.openModalWindow(url, function() {
-			var btn = arguments[0];
-			btn.addEventListener("click", loginAccount, false);
-		})
-	}, false);
-}();
+var inputEl = document.getElementById("query-entry");
+inputEl.focus();
 
-
+var favs = [];
+getFavs();
 </script>
-<script type="text/javascript" src="/scripts/lib/sha256.js"></script>
+
 <script type="text/javascript" src="/scripts/util.js"></script>
-<script type="text/javascript" src="/scripts/modal.js"></script>
 <script type="text/javascript" src="/scripts/searchReporter.js"></script>
 <script type="text/javascript" src="/scripts/auto-complement.js"></script>
-<script type="text/javascript" src="/scripts/validation.js"></script>
-<script type="text/javascript" src="/scripts/account.js"></script>
 <script type="text/javascript" src="/scripts/fav.js"></script>

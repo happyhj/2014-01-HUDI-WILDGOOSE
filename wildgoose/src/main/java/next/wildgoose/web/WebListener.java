@@ -11,11 +11,13 @@ import next.wildgoose.service.AccountService;
 import next.wildgoose.service.Action;
 import next.wildgoose.service.ArticleCardService;
 import next.wildgoose.service.Daction;
+import next.wildgoose.service.FavoriteService;
 import next.wildgoose.service.GraphDataService;
 import next.wildgoose.service.HtmlDocService;
 import next.wildgoose.service.JsonDataService;
 import next.wildgoose.service.ReporterCardService;
 import next.wildgoose.service.SessionService;
+import next.wildgoose.service.TimeLineService;
 import next.wildgoose.service.UserService;
 import next.wildgoose.utility.Constants;
 
@@ -29,6 +31,7 @@ public class WebListener implements ServletContextListener {
 		actionMap = new HashMap<String, Action>();
 		actionMap.put(Constants.RESOURCE_INDEX, (ReporterCardService) context.getAttribute("ReporterCardService"));
 		actionMap.put(Constants.RESOURCE_REPORTERS, (ArticleCardService) context.getAttribute("ArticleCardService"));
+		actionMap.put(Constants.RESOURCE_TIMELINE, (TimeLineService) context.getAttribute("TimeLineService"));
 		
 		dactionMap = new HashMap<String, Daction>();
 		dactionMap.put(Constants.RESOURCE_REPORTERS, (GraphDataService) context.getAttribute("GraphDataService"));
@@ -38,6 +41,7 @@ public class WebListener implements ServletContextListener {
 		dactionMap.put(Constants.RESOURCE_ACCOUNT, (AccountService) context.getAttribute("AccountService"));
 		dactionMap.put(Constants.RESOURCE_SESSION, (SessionService) context.getAttribute("SessionService"));
 		dactionMap.put(Constants.RESOURCE_USER, (UserService) context.getAttribute("UserService"));
+		dactionMap.put(Constants.RESOURCE_FAVORITE, (FavoriteService) context.getAttribute("FavoriteService"));
 	}
 	
 	public void contextDestroyed(ServletContextEvent e) {
