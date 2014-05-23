@@ -76,8 +76,12 @@ function showSignUpResult(response) {
 	var form = document.querySelector(".form-container");
 	Util.removeClass(form, "isProgressing");
 	
-	var responseDiv = document.createElement("div");
-	responseDiv.innerHTML = response;
+	if (response == "success") {
+		// close modal. and update login panel
+		WILDGOOSE.ui.modal.closeModal(function(){
+			updateTopbar(true);
+		});
+	}
 	
 	form.appendChild(responseDiv);
 	

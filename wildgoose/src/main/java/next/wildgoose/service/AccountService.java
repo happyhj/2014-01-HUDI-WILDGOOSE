@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Account;
@@ -61,6 +62,8 @@ public class AccountService implements Daction {
 			if (isJoinable(signDao, email) == true && isHashedPassword(password) == true) {
 				if (signDao.joinAccount(account) == true) {
 					json = success();
+					HttpSession session = request.getSession();
+					session.setAttribute("userId", email);
 				}
 			}
 		} else {
