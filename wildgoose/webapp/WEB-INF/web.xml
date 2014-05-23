@@ -89,9 +89,9 @@
 	</context-param>
 	<context-param>
 		<param-name>userName</param-name>
-		<!-- <param-value>viewer</param-value> -->
+		<param-value>viewer</param-value>
 		<!-- <param-value>wildgoose</param-value> -->
-		<param-value>root</param-value>
+		<!-- <param-value>root</param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>userPassword</param-name>

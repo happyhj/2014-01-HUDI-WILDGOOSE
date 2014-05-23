@@ -1,21 +1,28 @@
-var searchBox = {
-	init : function() {
-		this.maxRow = 5;
+var autocomplete = {
+	init : function(searchBox, selector) {
+		this.row = {
+			max : 5,
+			count : 5
+		};
 		this.isSearching = null;
+		
+		this.box = searchBox 
+		this.list = document.querySelector(selector);
+		this.submit = document.querySelector("." + this.box.form.className + " input[type=submit]");
+		
 		
 		this.cache = {
 			searchedQuery : "",
+			row : null,
 			callbackRef : {
 				notify : this.notify.bind(this),
 				expired : this.expired.bind(this),
 				boxHandler : this.boxHandler.bind(this),
-				listHandler : this.listHandler.bind(this),
-				drawList : this.drawList.bind(this)
+				keyboardHandler : this.keyboardHandler.bind(this),
+				drawList : this.drawList.bind(this),
+				mouseHandler : this.mouseHandler.bind(this)
 			}
 		};
-		
-		this.box = document.querySelector('#query-entry');
-		this.list = document.querySelector(".auto-completion-list");
 		
 		this.box.addEventListener("focus", this.cache.callbackRef.notify);
 		this.box.addEventListener("blur", this.cache.callbackRef.expired);
@@ -27,9 +34,11 @@ var searchBox = {
 		console.log("searchBox expired");
 		if (this.isSearching != null) {
 			this.off();
-			this.list.innerHTML = "";
 			clearInterval(this.isSearching);
-			this.box.removeEventListener("keydown", this.cache.callbackRef.listHandler);
+			this.box.removeEventListener("keydown", this.cache.callbackRef.keyboardHandler);
+//			this.list.removeEventListener("mousemove", this.cache.callbackRef.mouseHandler, false);
+			this.list.removeEventListener("click", this.cache.callbackRef.mouseHandler);
+			
 			this.isSearching = null;
 			currentQuery = "";
 		}
@@ -37,39 +46,61 @@ var searchBox = {
 
 	notify : function(evt) {
 		console.log("searchBox standBy");
-		this.currentRow = 0;
-//		debugger;
 		if (this.isSearching == null) {
-			this.isSearching = setInterval(this.cache.callbackRef.boxHandler, 100);
-			this.box.addEventListener("keydown", this.cache.callbackRef.listHandler);
+			this.isSearching = 1;
+//			this.isSearching = setInterval(this.cache.callbackRef.boxHandler, 100);
+			this.box.addEventListener("keydown", this.cache.callbackRef.keyboardHandler);
+//			this.list.addEventListener("mousemove", this.cache.callbackRef.mouseHandler, false);
+			this.list.addEventListener("click", this.cache.callbackRef.mouseHandler);
 		}
 	},
 	on : function() {
 		this.list.style.display = "inline-block";
 	},
 	off : function() {
+		this.cache.row = null;
 		this.list.style.display = "none";
+	},
+	highlightIn : function(rowNum) {
+		this.list.children[rowNum].className = "highlight";
+	},
+	highlightOut : function(rowNum) {
+		if (rowNum !== null) {
+			this.list.children[rowNum].className = "";
+		}
 	},
 
 	boxHandler : function(evt) {
 		var currentQuery = this.box.value;
 		if (currentQuery != "" && currentQuery != this.cache.searchedQuery) {
-//			this.find(currentQuery);
+			this.find(currentQuery);
 			this.cache.searchedQuery = currentQuery;
 		}
 	},
 
-	listHandler : function(evt) {
+	keyboardHandler : function(evt) {
 		var keyID = evt.keyCode;
 		// UP/DOWN Key
+		console.log(keyID);
 		if (keyID == 38 || keyID == 40) {
 			console.log("press up down key");
 			this.highlightRow(39 - keyID);
 			return;
 		}
+		
 		if (keyID == 13) {
+			evt.preventDefault();
 			console.log("select row");
 //			this.selectRow();
+		}
+	},
+	mouseHandler : function(evt) {
+		if (evt.type == "mousemove") {
+			this.highlightOut(this.cache.row);
+			console.log("moving");
+		}
+		else if (evt.type == "click") {
+			console.log("click");
 		}
 	},
 
@@ -101,96 +132,32 @@ var searchBox = {
 	},
 
 	highlightRow : function(change) {
+		console.log("change: " + change);
 		
-//		evt = document.createEvent("MouseEvents");
-//		evt.initMouseEvent("mouseout", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-//		this.possibilities[this.currentRow].dispatchEvent(evt)
-
-		this.currentRow -= change;
-		if (this.currentRow >= 5) {
-			this.currentRow -= 5;
-		} else if (this.currentRow < 0) {
-			this.currentRow += 5;
+		// 처음 입력시
+		if (this.cache.row == null) {
+			this.cache.row = 0;
+			change = 0;
 		}
-//		evt = document.createEvent("MouseEvents");
-//		evt.initMouseEvent("mouseover", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-//		this.possibilities[this.currentRow].dispatchEvent(evt)
+		
+		var cacheRow = this.cache.row;
+		var currentRow = cacheRow - change;
+		if (currentRow >= 5) {
+			currentRow = 0;
+		}
+		else if (currentRow < 0) {
+			currentRow = 4;
+		}
+		console.log(cacheRow);
+		console.log(currentRow);
+		
+		this.highlightOut(cacheRow);
+		this.highlightIn(currentRow);
+		this.cache.row = currentRow;
 	}
 
 }
-//debugger;
+
 // searchBox에 focus evt가 발생시 searchBox객체 init
-//searchBox.init();
-
-//searching.addEventListener("keyup", searchBoxHandler);
-//searching.addEventListener("click", toggleSearchBox);
-
-//function searchBoxHandler(e) {
-//	var keyID = e.keyCode;
-//	// UP/DOWN Key
-//	if (keyID == 38 || keyID == 40) {
-//		highlightRow(39 - keyID);
-//		return;
-//	}
-//	if (keyID == 13) {
-//		selectRow();
-//	}
-//
-//	searchSimilarKeyword(searching.value);
-//}
-
-function searchSimilarKeyword(searched) {
-	var url = "/api/v1/search/most_similar_names?name=" + searched;
-	Ajax.GET(url, drawBox);
-}
-
-//검색창이 클릭하면 추천 검색어 박스가 보였다 보이지 않았다 함
-//function toggleSearchBox() {
-//	var box = document.querySelector(".searched-box");
-//	if(getComputedStyle(box, null).display == "none"){
-//		box.style.display = "table";
-//	} else {
-//		box.style.display = "none";
-//	}
-//}
-
-//var searched = document.querySelector(".searched-box tr");
-//searched.addEventListener("mouseover", function(e) {
-//	var target = e.target;
-//	target.className = "mouseover";
-//});
-//searched.addEventListener("mouseout", function(e) {
-//	var target = e.target;
-//	target.className = "";
-//});
-//
-
-//
-//// 추천 검색어를 박스에 써 넣음
-//function drawBox(data) {
-//	var Data = JSON.parse(data)["data"];
-//	var box = document.querySelector(".searched-box");
-//	box.style.display = "table";
-//	if(typeof Data != "undefined" && Data.length != 0) {
-//		var tr_pos = document.querySelector(".searched-box").lastElementChild.lastElementChild;
-//		var childCount = tr_pos.childElementCount;
-//		if(childCount != 0){
-//			for(var i = 0 ; i < childCount; i++){
-//				tr_pos.removeChild(tr_pos.childNodes[0]);
-//			}
-//		}
-//		
-//		for(var i = 0 ; i < Data.length; i++){
-//			tr_pos.insertAdjacentHTML('beforeend', '<td>'+Data[i]["name"]+'</td>');
-//		}
-//	}
-//}
-//
-//// 클릭하면 검색어 입력
-//document.querySelector(".searched-box").addEventListener('click', insetText, false);
-//function insetText(e) {
-//	if(e.target.tagName == "TD") {
-//		searching.value = e.target.textContent
-//		document.querySelector(".searched-box").style.display = "none";
-//	}
-//}
+var searchBox = document.querySelector('#query-entry');
+autocomplete.init(searchBox, ".auto-completion-list");

@@ -21,7 +21,7 @@
 			<a href="/"><img src="image/logo.png" alt="wildgoose logo" class="logo-image"/></a>
 		</div>
 		<div class="search search-column">
-			<form action="./" method="get" >
+			<form class="search_form" action="./" method="get" >
 			<ul class="search-column-box">
 				<li class="search-query-entry">
 					<input type="search" autocomplete="off" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.searchQuery }" />
