@@ -6,7 +6,16 @@ public class ReporterCard {
 	private String name;
 	private String pressName;
 	private String articleTitle;
+	private String articleURL;
 	
+	public String getArticleURL() {
+		return articleURL;
+	}
+
+	public void setArticleURL(String articleURL) {
+		this.articleURL = articleURL;
+	}
+
 	public int getId() {
 		return id;
 	}
