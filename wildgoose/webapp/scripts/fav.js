@@ -1,10 +1,11 @@
-(function() {
+attatchEventToFavBtn();
+function attatchEventToFavBtn() {
 	var stars = document.querySelectorAll(".favorite");
 	for (var i = 0; i < stars.length; i++) {
 		var star = stars[i];
 		star.addEventListener("click", toggleFav, false);
 	}
-})()
+}
 
 function toggleFav(e) {
 	var target = e.target;
@@ -34,5 +35,28 @@ function toggleFav(e) {
 			}
 		});
 	}
-	
+}
+
+function getFavs() {
+	var url = "api/v1/users/reporters";
+	Ajax.GET(url, function(jsonStr) {
+		var result = JSON.parse(jsonStr);
+		favs = result["data"];
+		var reporterCards = document.querySelectorAll(".card-reporter");
+		updateFavs(reporterCards);
+	});
+}
+
+function updateFavs(reporterCards) {
+	if (favs == undefined || favs == "잘못된 접근입니다") {
+		return;
+	}
+	for (var i = 0; i < reporterCards.length; i++) {
+		var card = reporterCards[i];
+		var reporterName = card.querySelector(".name a");
+		var reporterId = reporterName.getAttribute("href").split("/")[2];
+		if (favs.indexOf(parseInt(reporterId)) >= 0) {
+			card.querySelector(".favorite").className = "favorite on";
+		}
+	}
 }

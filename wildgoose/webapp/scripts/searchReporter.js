@@ -6,7 +6,7 @@ searchResultContainer.addEventListener("DOMSubtreeModified", function() {
 //    alert("DOMSubtreeModified fired!");
 	var loginBtn = document.querySelector(".header-btn#login");
 	var stars = document.querySelectorAll(".card-reporter h4.favorite");
-	if(loginBtn) {
+	if(favs == undefined || favs == "잘못된 접근입니다") {
 		 [].forEach.call(
 				 stars, 
 				 function(el){
@@ -96,7 +96,8 @@ function clickSearchMoreBtn(rawD) {
 					var templateCompiler = Util.getTemplateCompiler(templateStr);
 					// 해당 템픗릿 컴파일러에 데이터를 담은 객체를 넘겨준다. // 완성된 partial html을 newLi 내부에 채운다.
 					newLi.innerHTML = templateCompiler(reporterCards[i]);
-
+					attatchEventToFavBtn();
+					updateFavs([newLi]);
 					return newLi;
 				}(reporterCards[i]))
 			)
@@ -107,7 +108,6 @@ function clickSearchMoreBtn(rawD) {
 	var total = parseInt(total);
 	
 	document.querySelector(".search-more .state-search-total").innerText = total + sizeOfCards;
-	
 }
 
 
