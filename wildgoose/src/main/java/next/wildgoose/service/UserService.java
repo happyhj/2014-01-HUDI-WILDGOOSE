@@ -1,10 +1,15 @@
 package next.wildgoose.service;
 
+import java.util.Iterator;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.FavoriteDAO;
+import next.wildgoose.dto.ArticleCard;
+import next.wildgoose.dto.ReporterCard;
 import next.wildgoose.utility.Uri;
 
 import org.json.JSONObject;
@@ -39,9 +44,14 @@ public class UserService implements Daction {
 			}
 			// Default
 			json.put("text", "failed");
+			List<ReporterCard> reporters = null;
+			
 			
 			if ("GET".equals(methodType)) {
-				json = favDao.getFavoritesAsJson(email);
+				
+				reporters = favDao.getFavorites(email);
+				json = toJson(reporters);
+//				json = favDao.getFavoritesAsJson(email);
 				result = new DactionResult("json", json);
 			} else if ("POST".equals(methodType)) {
 				//필요한 파라미터: reporter_id, user_email
@@ -57,6 +67,26 @@ public class UserService implements Daction {
 			}
 		}
 		return result;
+	}
+	
+	private JSONObject toJson (List<ReporterCard> reporters) {
+		
+		Iterator<ReporterCard> ir = reporters.iterator();
+		ReporterCard reporter = null;
+		JSONObject json = new JSONObject();
+		while (ir.hasNext()) {
+			JSONObject sub = new JSONObject();
+			
+			reporter = ir.next();
+			sub.put("id", reporter.getId());
+			sub.put("email", reporter.getEmail());
+			sub.put("name", reporter.getName());
+			sub.put("press", reporter.getPressName());
+			sub.put("title", reporter.getArticleTitle());
+						
+			json.append("data",sub);
+		}
+		return json;
 	}
 
 }
