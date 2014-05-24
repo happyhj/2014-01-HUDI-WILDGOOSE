@@ -10,7 +10,6 @@ import java.util.List;
 import next.wildgoose.database.DataSource;
 import next.wildgoose.dto.ReporterCard;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -137,7 +137,7 @@
 	position: relative;
 	top: 2px;
 	width: 100%;
-	/* display: none; */
+	display: none;
 	border-bottom: 2px solid #D8D8D8;
 	z-index: 100;
 }

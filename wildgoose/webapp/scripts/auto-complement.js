@@ -4,12 +4,19 @@ var autocomplete = {
 			max : 5,
 			count : 5
 		};
-		this.isSearching = null;
+		this.isSearching = false;
+		this.isHovering = false;
+		this.hasMouseRader = false;
 		
-		this.box = searchBox 
+		this.box = searchBox;
 		this.list = document.querySelector(selector);
-		this.submit = document.querySelector("." + this.box.form.className + " input[type=submit]");
-		
+		console.log(this.box.form);
+//		document.addEventListener("keypress", function (evt) { 
+//			var targetEl = evt.target;
+//			if ((evt.keyCode == 13) && targetEl.type == "search") {
+//				return false;
+//			}
+//		}, false);
 		
 		this.cache = {
 			searchedQuery : "",
@@ -20,7 +27,9 @@ var autocomplete = {
 				boxHandler : this.boxHandler.bind(this),
 				keyboardHandler : this.keyboardHandler.bind(this),
 				drawList : this.drawList.bind(this),
-				mouseHandler : this.mouseHandler.bind(this)
+				setHovering : this.setHovering.bind(this),
+				selectRow : this.selectRow.bind(this),
+				pressEnter : this.pressEnter.bind(this)
 			}
 		};
 		
@@ -31,45 +40,26 @@ var autocomplete = {
 	},
 
 	expired : function(evt) {
-		console.log("searchBox expired");
-		if (this.isSearching != null) {
+		if (this.isSearching != false && this.isHovering == false) {
+			console.log("searchBox expired");
 			this.off();
 			clearInterval(this.isSearching);
 			this.box.removeEventListener("keydown", this.cache.callbackRef.keyboardHandler);
-//			this.list.removeEventListener("mousemove", this.cache.callbackRef.mouseHandler, false);
-			this.list.removeEventListener("click", this.cache.callbackRef.mouseHandler);
 			
-			this.isSearching = null;
-			currentQuery = "";
+			this.isSearching = false;
 		}
 	},
 
 	notify : function(evt) {
-		console.log("searchBox standBy");
-		if (this.isSearching == null) {
-			this.isSearching = 1;
-//			this.isSearching = setInterval(this.cache.callbackRef.boxHandler, 100);
+		if (this.isSearching == false) {
+			console.log("searchBox standBy");
+			this.on();
+//			this.isSearching = 1;
+			this.isSearching = setInterval(this.cache.callbackRef.boxHandler, 100);
 			this.box.addEventListener("keydown", this.cache.callbackRef.keyboardHandler);
-//			this.list.addEventListener("mousemove", this.cache.callbackRef.mouseHandler, false);
-			this.list.addEventListener("click", this.cache.callbackRef.mouseHandler);
 		}
 	},
-	on : function() {
-		this.list.style.display = "inline-block";
-	},
-	off : function() {
-		this.cache.row = null;
-		this.list.style.display = "none";
-	},
-	highlightIn : function(rowNum) {
-		this.list.children[rowNum].className = "highlight";
-	},
-	highlightOut : function(rowNum) {
-		if (rowNum !== null) {
-			this.list.children[rowNum].className = "";
-		}
-	},
-
+	
 	boxHandler : function(evt) {
 		var currentQuery = this.box.value;
 		if (currentQuery != "" && currentQuery != this.cache.searchedQuery) {
@@ -81,26 +71,90 @@ var autocomplete = {
 	keyboardHandler : function(evt) {
 		var keyID = evt.keyCode;
 		// UP/DOWN Key
-		console.log(keyID);
 		if (keyID == 38 || keyID == 40) {
-			console.log("press up down key");
 			this.highlightRow(39 - keyID);
-			return;
 		}
+//		else if (keyID == 13) {
+//			
+//			
+//			console.log("select row");
+//			this.selectRow(evt);
+//		}
+	},
+//	addMouseEvents : function() {
+//		this.list.addEventListener("mousemove", this.cache.callbackRef.mouseHandler, false);
+//		this.list.addEventListener("click", this.cache.callbackRef.mouseHandler);
+//		
+//	},
+//	removeMouseEvents : function() {
+//		this.list.removeEventListener("mousemove", this.cache.callbackRef.mouseHandler, false);
+//		this.list.removeEventListener("click", this.cache.callbackRef.mouseHandler);
+//	},
+	
+//	mouseHandler : function(evt) {
+//		if (evt.type == "mousemove") {
+//			this.highlightOut(this.cache.row);
+//			console.log("moving");
+//		}
+//		else if (evt.type == "click") {
+//			console.log("click");
+//		}
+//	},
+	
+
+	// list
+	on : function() {
+		this.list.style.display = "inline-block";
+		if (this.hasMouseRader == false) {
+			this.addMouseRader();
+			this.list.addEventListener("click", this.cache.callbackRef.selectRow);
+		}
+		this.box.form.addEventListener("keypress", this.cache.callbackRef.pressEnter, false);
 		
-		if (keyID == 13) {
-			evt.preventDefault();
-			console.log("select row");
-//			this.selectRow();
+	},
+	off : function() {
+		this.cache.row = null;
+		this.list.style.display = "none";
+		if (this.hasMouseRader == true) {
+			this.removeMouseRader();
+			this.list.removeEventListener("click", this.cache.callbackRef.selectRow);
+		}
+		this.box.form.removeEventListener("keypress", this.cache.callbackRef.pressEnter, false);
+	},
+	highlightIn : function(rowNum) {
+		this.list.children[rowNum].className = "highlight";
+	},
+	highlightOut : function(rowNum) {
+		if (rowNum !== null) {
+			this.list.children[rowNum].className = "";
 		}
 	},
-	mouseHandler : function(evt) {
-		if (evt.type == "mousemove") {
-			this.highlightOut(this.cache.row);
-			console.log("moving");
+	pressEnter : function (evt) {
+		// 기존 enter입력을 막기위해서.
+		evt.preventDefault();
+		console.log("press enter");
+	},
+
+	addMouseRader : function() {
+		this.hasMouseRader = true;
+		this.list.addEventListener("mouseover", this.cache.callbackRef.setHovering, false);
+		this.list.addEventListener("mouseout", this.cache.callbackRef.setHovering, false);
+	},
+	removeMouseRader : function() {
+		this.hasMouseRader = false;
+		this.list.removeEventListener("mouseover", this.cache.callbackRef.setHovering, false);
+		this.list.removeEventListener("mouseout", this.cache.callbackRef.setHovering, false);
+	},
+	setHovering : function(evt) {
+		this.highlightOut(this.cache.row);
+		
+		if (evt.type == "mouseover") {
+			this.isHovering = true;
+			console.log("hovering");
 		}
-		else if (evt.type == "click") {
-			console.log("click");
+		else if (evt.type == "mouseout") {
+			this.isHovering = false;
+			console.log("not hovering");
 		}
 	},
 
@@ -125,10 +179,11 @@ var autocomplete = {
 		}
 	},
 	
-	selectRow : function() {
-		evt = document.createEvent("MouseEvents");
-		evt.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-		this.possibilities[this.currentRow].dispatchEvent(evt)
+	selectRow : function(evt) {
+		var targetEl = evt.target;
+		this.box.value = targetEl.innerText;
+		this.isHovering = false;
+		this.expired();
 	},
 
 	highlightRow : function(change) {

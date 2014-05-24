@@ -98,9 +98,9 @@
 <script type="text/javascript" src="/scripts/auto-complement.js"></script>
 <script type="text/javascript" src="/scripts/fav.js"></script>
 <script>
-var inputEl = document.getElementById("query-entry");
-inputEl.focus();
+/* var inputEl = document.getElementById("query-entry");
+inputEl.focus(); */
 
-var favs = []
-getFavs();
+/* var favs = []
+getFavs(); */
 </script>
