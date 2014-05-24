@@ -84,7 +84,6 @@ var autocomplete = {
 		if (data === undefined || data.length == 0) {
 			return;
 		}
-
 		// cache.row 초기화
 		this.cache.row = null;
 		// 전달받은 row개수를 기록
@@ -223,4 +222,4 @@ var autocomplete = {
 
 // searchBox에 focus evt가 발생시 searchBox객체 init
 var searchBox = document.querySelector('#query-entry');
-autocomplete.init(searchBox, ".auto-completion-list");
+autocomplete.init(searchBox, ".search .auto-completion-list");

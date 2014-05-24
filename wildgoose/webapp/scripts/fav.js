@@ -12,8 +12,16 @@ function toggleFav(e) {
 	
 	var card = target.parentNode.parentNode;
 	var press = target.nextElementSibling;
+	var email = target.previousElementSibling;
+	var name = card.children[0].firstElementChild.firstElementChild;
+	console.log(email);
+	console.log(name);
+	var headline = card.children[1].firstElementChild;
+	
 	var pressClasses = press.className.split(" ");
-	var pressName = pressClasses[0];
+	var pressName = (pressClasses[0] != "press-tag")?pressClasses[0]:pressClasses[1];
+	var pressNameTemp = pressName.split("-blur");
+	pressName = pressNameTemp[0];
 	
 	var nephew = target.parentElement.firstElementChild.firstElementChild
 	var reporterId = nephew.getAttribute("href").split("reporters/")[1];
@@ -24,11 +32,15 @@ function toggleFav(e) {
 		Ajax.DELETE(url, function(data) {
 			//console.log(data)
 			if (data == "success") {
+//				debugger;
 				Util.removeClass(target, "on");
 				Util.removeClass(press, pressName);
 				Util.addClass(press, pressName + "-blur");
 				Util.addClass(card, "favorite-card-blur");
 				Util.addClass(target, "off");
+				Util.addClass(name, "blur");
+				Util.addClass(email, "blur");
+				Util.addClass(headline, "blur");
 			} else {
 				// react fail
 			}
@@ -37,11 +49,15 @@ function toggleFav(e) {
 		Ajax.POST(url, function(data) {
 			//console.log(data)
 			if (data == "success") {
+//				debugger;
+				Util.removeClass(name, "blur");
+				Util.removeClass(email, "blur");
+				Util.removeClass(headline, "blur");
 				Util.removeClass(press, pressName + "-blur");
 				Util.removeClass(card, "favorite-card-blur");
 				Util.removeClass(target, "off");
 				Util.addClass(target, "on");
-				Util.addClass(press, pressName.substring(0,pressName.length-5));
+				Util.addClass(press, pressName);
 				
 			} else {
 				// react fail

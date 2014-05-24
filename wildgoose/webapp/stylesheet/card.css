@@ -158,8 +158,11 @@
 
 .favorite-card-blur {
 	background: rgba(255,255,255,0.3);
+}
+.card .card-section > .blur {
 	color: #ccc;
 }
+
 .card-section-identity > .press-tag.hankyung-blur {
 	background: rgba(19,60,110,0.3);	
 }
