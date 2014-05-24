@@ -1,29 +1,12 @@
 package next.wildgoose.utility;
 
-import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.regex.Pattern;
 
 public class Utility {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(Utility.class.getName());
-
-	public static String encode(String original, String encodingType) {
-
-		String encoded = null;
-		try {
-			encoded = new String(original.getBytes("8859_1"), encodingType);
-		} catch (UnsupportedEncodingException e) {
-			LOGGER.debug("Utility error" + e.getMessage());
-		}
-
-		return encoded;
-	}
 
 	public static String getDate(Date date, int addDate) {
 		DateFormat dateFormat = new SimpleDateFormat("MM-dd");
@@ -31,5 +14,14 @@ public class Utility {
 		cal.setTime(date);
 		cal.add(Calendar.DATE, addDate);
 		return dateFormat.format(cal.getTime());
+	}
+	
+	public static boolean isURL(String URL) {
+		if (URL == null) {
+			return false;
+		}
+		String regex = "(?i)^(http://)?(www.)?[a-z0-9-_]+.[a-z]{2,3}(.[a-z]{2,3})?.*";
+
+		return Pattern.matches(regex, URL);
 	}
 }

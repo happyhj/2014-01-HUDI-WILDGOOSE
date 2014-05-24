@@ -19,11 +19,11 @@ public class ArticleCardService implements Action {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCardService.class.getName());
 
 	public ActionResult execute(HttpServletRequest request) {
-		ServletContext context = request.getServletContext();
-		Uri uri = new Uri(request);
-		ActionResult ar = new ActionResult();;
 		ReporterCard reporterCard = null;
 		List<ArticleCard> articleCards = null;
+		ServletContext context = request.getServletContext();
+		Uri uri = new Uri(request);
+		ActionResult ar = new ActionResult();
 		
 		ReporterCardDAO reporterCardDao = (ReporterCardDAO) context.getAttribute("ReporterCardDAO");
 		ArticleCardDAO articleCardDao =  (ArticleCardDAO) context.getAttribute("ArticleCardDAO");
@@ -41,11 +41,10 @@ public class ArticleCardService implements Action {
 		reporterCard = reporterCardDao.findReporterById(reporterId);
 		articleCards = articleCardDao.findArticlesById(reporterId);		
 		
-		request.setAttribute("reporter_id", reporterId);
-		request.setAttribute("reporter", reporterCard);		
+		request.setAttribute("reporter", reporterCard);	
 		request.setAttribute("articles", articleCards);
 		
 		ar.setForwardingOption(false, Constants.PAGE_SHOW_REPORTER);
-		return ar;	
+		return ar;
 	}
 }

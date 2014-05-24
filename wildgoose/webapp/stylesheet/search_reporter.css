@@ -34,13 +34,6 @@ body {
 	padding-bottom: 45px;
 }
 
-.account {
-	width: 80px;
-	height: 50px;
-	position: absolute;
-	right: 0px;
-}
-
 /* Module rules */
 .logo {
 	margin-top: 40px;
@@ -50,24 +43,6 @@ body {
 .logo-image {
 	height: 210px;
 	opacity: .4;
-}
-
-.mask {
-	position: fixed;
-	top: 0px;
-	left: 0px;
-}
-
-.mask-on {
-	width: 100%;
-	height: 100%;
-}
-
-.modal {
-	width: 400px;
-	height: 400px;
-	margin: 0 auto;
-	margin-top: 10%;
 }
 
 /* Theme rules */
@@ -84,38 +59,6 @@ body {
 .footer {
 	background: #f2f2f2;
 	border-top: 1px solid #CFCFCF;
-}
-
-.account {
-	background: #4882FD;
-	color: #fff;
-	font-size: 1em;
-	border: 0;
-}
-
-.mask-on {
-	background: rgba(60, 60, 60, 0.7);
-}
-
-.modal {
-	background: rgba(255, 255, 255, 1);
-}
-
-.searched-box {
-	display: none;
-	background-color: white;
-	width: 100%;
-	height: 100%;
-	border: 1px solid #D8D8D8;
-}
-
-.searched-box td {
-	padding: 10px;
-	display: block;
-}
-
-.searched-box td:hover {
-	background-color: #D8D8D8;
 }
 
 /* 뷰포트 별 레이아웃 요소 분기 */

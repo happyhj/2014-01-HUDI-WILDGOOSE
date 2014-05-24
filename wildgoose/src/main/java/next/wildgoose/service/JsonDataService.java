@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import next.wildgoose.dao.JsonDAO;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
+import next.wildgoose.utility.Utility;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -20,14 +21,24 @@ public class JsonDataService implements Daction {
 		JsonDAO jsonDao = (JsonDAO) context.getAttribute("JsonDAO");
 		JSONObject json = null;
 		LOGGER.debug(uri.toString());
-		if (Constants.RESOURCE_MOST_SMR_NAME.equals(uri.get(3))) {
+		if (uri.check(3, Constants.RESOURCE_MOST_SMR_NAME)) {
 			String name = request.getParameter("name");
-			json = jsonDao.getSimilarNames(name);
-		} else if (Constants.RESOURCE_MORE_RPT_CARD.equals(uri.get(2))) {
-			String name = request.getParameter("q");
+			int count = Integer.parseInt(request.getParameter("count")); 
+			json = jsonDao.getSimilarNames(name, count);
+		} else if (uri.check(2, Constants.RESOURCE_MORE_RPT_CARD)) {
+			String searchQuery = request.getParameter("q");
+			String searchType = null;
+			if (Utility.isURL(searchQuery)) {
+				// URL로 검색
+				searchType = "url";
+			} else {
+				// 이름으로 검색
+				searchType = "name";
+			}
+			
 			int start = Integer.parseInt(request.getParameter("last"));
 			int num = Integer.parseInt(request.getParameter("req"));
-			json = jsonDao.moreReporterCard(name, start, num);
+			json = jsonDao.moreReporterCard(searchType, searchQuery, start, num);
 		}
 		
 		DactionResult result = new DactionResult("json", json);

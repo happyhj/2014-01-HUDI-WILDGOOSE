@@ -1,4 +1,4 @@
-package next.wildgoose.pool;
+package next.wildgoose.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;

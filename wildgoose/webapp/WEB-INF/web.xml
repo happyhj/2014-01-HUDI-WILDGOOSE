@@ -85,11 +85,13 @@
 		<param-name>dbUrl</param-name>
 		<param-value>jdbc:mysql://10.73.45.134:3306/wildgoose_dev</param-value>
 		<!-- <param-value>jdbc:mysql://heej.net:3306/wildgoose_dev</param-value> -->
+		<!-- <param-value>jdbc:mysql://localhost/wildgoose_dev</param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>userName</param-name>
 		<param-value>viewer</param-value>
 		<!-- <param-value>wildgoose</param-value> -->
+		<!-- <param-value>root</param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>userPassword</param-name>
@@ -104,8 +106,18 @@
 
 	<!-- Listeners -->
 	<listener>
-		<listener-class>next.wildgoose.listener.WildgooseContextListener</listener-class>
+		<listener-class>next.wildgoose.database.DatabaseListener</listener-class>
 	</listener>
+	<listener>
+		<listener-class>next.wildgoose.dao.DaoListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>next.wildgoose.service.ServiceListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>next.wildgoose.web.WebListener</listener-class>
+	</listener>
+	
 	
 	<!-- Filter -->
 	<filter>
@@ -113,10 +125,19 @@
 		<filter-name>EncodingFilter</filter-name>
 		<filter-class>next.wildgoose.filter.EncodingFilter</filter-class>
 	</filter>
+	<filter>
+		<display-name>QueryFilter</display-name>
+		<filter-name>QueryFilter</filter-name>
+		<filter-class>next.wildgoose.filter.QueryFilter</filter-class>
+	</filter>
 	
 	<!-- Filter Mapping -->
 	<filter-mapping>
 		<filter-name>EncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>QueryFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 </web-app>

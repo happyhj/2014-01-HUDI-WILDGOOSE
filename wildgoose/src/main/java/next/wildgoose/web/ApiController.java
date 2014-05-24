@@ -2,7 +2,6 @@ package next.wildgoose.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -11,13 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import next.wildgoose.service.AccountService;
 import next.wildgoose.service.Daction;
 import next.wildgoose.service.DactionResult;
 import next.wildgoose.service.ErrorDaction;
-import next.wildgoose.service.GraphDataService;
-import next.wildgoose.service.HtmlDocService;
-import next.wildgoose.service.JsonDataService;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
 
@@ -28,15 +23,15 @@ public class ApiController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApiController.class.getName());
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doPost(request, response);
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+	
+	@Override
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Daction daction = getProperDaction(request);
 		DactionResult result = daction.execute(request);
 		send(request, response, result);
 	}
+	
 	
 	private void send(HttpServletRequest request, HttpServletResponse response, DactionResult result) {
 		ServletContext context = request.getServletContext();
@@ -67,14 +62,10 @@ public class ApiController extends HttpServlet {
 		String resourceName = uri.get(2);
 		
 		Daction defaultDaction = (ErrorDaction) context.getAttribute("ErrorDaction");
-		Map<String, Daction> dactionMap = new HashMap<String, Daction>();
-		dactionMap.put(Constants.RESOURCE_REPORTERS, (GraphDataService) context.getAttribute("GraphDataService"));
-		dactionMap.put(Constants.RESOURCE_SEARCH, (JsonDataService) context.getAttribute("JsonDataService"));
-		dactionMap.put(Constants.RESOURCE_MORE_RPT_CARD, (JsonDataService) context.getAttribute("JsonDataService"));
-		dactionMap.put(Constants.RESOURCE_HTML, (HtmlDocService) context.getAttribute("HtmlDocService"));
-		dactionMap.put(Constants.RESOURCE_SIGN, (AccountService) context.getAttribute("AccountService"));
+		Map<String, Daction> dactionMap = WebListener.dactionMap;
 		Daction result = dactionMap.get(resourceName);
 		if (result == null) {
+			LOGGER.debug("here");
 			result = defaultDaction;
 		}
 		return result;

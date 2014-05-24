@@ -14,8 +14,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import next.wildgoose.utility.Utility;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,11 +68,23 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 		
 		Iterator<String> valuesIr = values.iterator();
 		while (valuesIr.hasNext()) {
-			encodedValues.add(Utility.encode(valuesIr.next(), encodingType));
+			encodedValues.add(encode(valuesIr.next(), encodingType));
 		}
 		return encodedValues.toArray(new String[0]);
 	}
 
+	private static String encode(String original, String encodingType) {
+
+		String encoded = null;
+		try {
+			encoded = new String(original.getBytes("8859_1"), encodingType);
+		} catch (UnsupportedEncodingException e) {
+			LOGGER.debug("Utility error" + e.getMessage());
+		}
+
+		return encoded;
+	}
+	
 	@Override
 	public String getParameter(String name) {
 		String[] values = this.parameters.get(name);

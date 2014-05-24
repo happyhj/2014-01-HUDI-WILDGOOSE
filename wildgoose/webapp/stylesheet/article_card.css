@@ -1,0 +1,58 @@
+@CHARSET "UTF-8";
+@font-face{
+	font-family:"NanumMyeongjo";
+	src:url('../fonts/NanumMyeongjo.eot');
+	src:url('../fonts/NanumMyeongjo.eot?#iefix') format('embedded-opentype'),
+	url('../fonts/NanumMyeongjo.woff') format('woff'),
+	url('../fonts/NanumMyeongjo.ttf') format('truetype');
+	src:local(â»), url('../fonts/NanumMyeongjo.woff') format('woff');
+
+	font-style: normal;
+	font-weight: normal;
+}
+
+/* body {
+	background-color: gray;
+	text-align: center;
+	font-family: 'NanumMyeongjo';
+	color: #555;
+} */
+.card {
+	width: 580px;
+	margin-left: 150px;
+	padding: 18px;
+	font-family: 'NanumMyeongjo';
+
+}
+
+.card-section {
+	position: relative;
+	word-break: break-all;
+}
+.card-section-article > .article-preview {
+	text-align: left;
+}
+.card-section-article > .article-title > h1 {
+	font-size: 2em;
+	margin-bottom: 15px;
+	color: #333;
+}
+.card-section-article > .article-preview > p {
+	font-size: 1em;
+	line-height: 1.5em;
+	margin-bottom: 25px
+}
+
+.card-section-article > a > span,
+.card-section-footer > a > span {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+}
+
+.card-section-footer {
+	text-align: right;
+	padding-top: 15px;
+	color: #888;
+}

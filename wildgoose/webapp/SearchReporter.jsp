@@ -9,33 +9,57 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/search.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
+<script type="text/template" id="reporter-card-template">
+<div class="card-section card-section-identity">
+	<h3 class="name">
+		<a href="/reporters/%= id %">%= name %</a>
+	</h3>
+	<p class="email">%= email %</p>
+	<h4 class="favorite off">&#x2605;</h4>
+	<div class="%= pressName % press-tag"></div>
+</div>
+<div class="card-section card-section-headline">
+	<h4 class="headline">%= articleTitle %</h4>
+</div>
+</script>
 <title>Wildgoose</title>
 
 <div class="wrap">
 	<header class="header">
-		<button class="account">가입하기${ requestScope.accountStatus }</button>
+		<%@ include file ="template/header.jsp" %>
 	</header>
 	<div class="container">
 		<div class="logo">
 			<a href="/"><img src="image/logo.png" alt="wildgoose logo" class="logo-image"/></a>
 		</div>
 		<div class="search search-column">
-			<form action="./" method="get" >
+			<form class="search_form" action="./" method="get" >
+			<ul class="search-column-box">
 				<li class="search-query-entry">
 					<input type="search" autocomplete="off" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.searchQuery }" />
 				</li>
 				<li class="search-button">
 					<input type="submit" id="search-action" value ="Search"/>
 				</li>
+			</ul>
+			<%-- 자동완성 --%>
+			<ul class="auto-completion-list">
+				<!-- <li><div>서동규</div></li>
+				<li><div>서동유</div></li>
+				<li><div>호호호</div></li>
+				<li><div>하하하</div></li>
+				<li><div>히히히</div></li> -->
+			</ul>
 			</form>
-			<table class="searched-box">
+			
+			<!-- <table class="searched-box">
   				<tbody>
     				<tr>
 				    </tr>
   				</tbody>
-			</table>
-			
+			</table> -->
 		</div>
+		
 		<div class="search-result">
 			<ul>
 				<c:choose>
@@ -48,20 +72,9 @@
 						<c:if test="${ empty requestScope.reporterCards }">
 							<span>${ requestScope.searchQuery }에 대한 검색 결과가 없습니다.</span>
 						</c:if>
-						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }">				
-							<li class="card card-reporter">
-								<div class="card-section card-section-identity">
-									<h3 class="name">
-										<a href="/reporters/${ reporterCard.id }">${ reporterCard.name }</a>
-									</h3>
-									<p class="email">${ reporterCard.email }</p>
-									<div class="${ reporterCard.pressName } press-tag"></div>
-								</div>
-								<div class="card-section card-section-headline">
-									<h4 class="headline">${ reporterCard.articleTitle }</h4>
-								</div>
-							</li>
-						</c:forEach>
+						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }"><li class="card card-reporter">
+							<%@ include file = "template/reporterCard.jsp" %>
+						</li></c:forEach>
 					</c:when>
 				</c:choose>
 			</ul>
@@ -79,25 +92,15 @@
 	</div>
 	<footer class="footer"></footer>
 </div>
-<script>
-var inputEl = document.getElementById("query-entry");
-inputEl.focus();
 
-/*
- * attatch click event
- */
-function attatchAccountEvent() {
-	var accountBtn = document.querySelector(".account");
-	var url = "/api/v1/subhtml/create_account";
-	accountBtn.addEventListener("click", function() {modal.openModalWindow(url)}, false);
-}
-attatchAccountEvent();
-
-
-</script>
 <script type="text/javascript" src="/scripts/util.js"></script>
-<script type="text/javascript" src="/scripts/modal.js"></script>
 <script type="text/javascript" src="/scripts/searchReporter.js"></script>
 <script type="text/javascript" src="/scripts/auto-complement.js"></script>
-<script type="text/javascript" src="/scripts/account.js"></script>
-<script type="text/javascript" src="/scripts/validation.js"></script>
+<script type="text/javascript" src="/scripts/fav.js"></script>
+<script>
+/* var inputEl = document.getElementById("query-entry");
+inputEl.focus(); */
+
+/* var favs = []
+getFavs(); */
+</script>

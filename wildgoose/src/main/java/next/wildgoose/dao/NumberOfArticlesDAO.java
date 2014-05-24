@@ -5,13 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import next.wildgoose.pool.DataSource;
+import javax.servlet.http.HttpServletRequest;
+
+import next.wildgoose.database.DataSource;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NumberOfArticlesDAO {
+public class NumberOfArticlesDAO implements ExtractDAO{
 	private static final Logger LOGGER = LoggerFactory.getLogger(NumberOfArticlesDAO.class.getName());
 	
 	public JSONObject byDay(int reporterId) {
@@ -80,5 +82,16 @@ public class NumberOfArticlesDAO {
 			SqlUtil.closeConnection(conn);
 		}
 		return result;
+	}
+
+	public JSONObject getJson(int reporterId, HttpServletRequest request) {
+		String condition = request.getParameter("by");
+		
+		if ("section".equals(condition)) {
+			return bySection(reporterId);
+		} else if ("day".equals(condition)) {
+			return byDay(reporterId);
+		}
+		return null;
 	}
 }

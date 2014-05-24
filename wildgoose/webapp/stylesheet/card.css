@@ -67,6 +67,17 @@
 	padding-top: 0px;
 }
 
+.card-section-identity > .favorite {
+	position: absolute;
+	top: 8px;
+	right: 40px;
+	width: 20px;
+	height: 20px;	
+}
+.card-section-identity > .favorite.invisible {
+	visibility: hidden;
+}
+
 .card-section-identity > .press-tag {
 	position: absolute;
 	top: 12px;
@@ -108,6 +119,23 @@
 .card-section-identity > .email {	
 	font-size: 12px;
 	color: #BBB;
+}
+
+.card-section-identity > .favorite {
+	font-size: 24px;
+}
+
+.card-section-identity > .favorite.on {
+	color: #FD2;
+}
+
+.card-section-identity > .favorite.off {
+	color: #BBB;
+}
+
+.card-section-identity > .favorite:hover {
+	color: #ED9;
+	cursor: pointer;
 }
 
 .card-section-identity > .press-tag {	

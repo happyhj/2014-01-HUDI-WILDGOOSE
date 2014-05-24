@@ -1,19 +1,12 @@
 package next.wildgoose.utility;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Uri {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Uri.class.getName());
 	private List<String> resources;
 	
 	public Uri(HttpServletRequest request) {
@@ -58,5 +51,14 @@ public class Uri {
 			sb.append(ir.next());
 		}
 		return sb.toString();
+	}
+	
+	public boolean check (int position, String uri) {
+		String operand = this.get(position);
+		if (operand == null) {
+			return false;
+		}
+
+		return operand.equals(uri);
 	}
 }

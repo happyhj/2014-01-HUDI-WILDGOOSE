@@ -2,13 +2,11 @@ package next.wildgoose.dao;
 
 import java.util.Random;
 
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.servlet.http.HttpServletRequest;
 
-public class DummyData {
-	private static final Logger LOGGER = LoggerFactory.getLogger(DummyData.class.getName());
-	
+import org.json.JSONObject;
+
+public class DummyData implements ExtractDAO{
 	public JSONObject getJsonWithStatPoints(int reporterId) {
 		JSONObject result = new JSONObject();
 		JSONObject data;
@@ -31,11 +29,8 @@ public class DummyData {
 		
 		return result;
 	}
-	
-	public String getEmail () {
-		return "hello@world.com";
+
+	public JSONObject getJson(int reporterId, HttpServletRequest request) {
+		return getJsonWithStatPoints(reporterId);
 	}
-
-	
-
 }

@@ -5,13 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import next.wildgoose.pool.DataSource;
+import javax.servlet.http.HttpServletRequest;
+
+import next.wildgoose.database.DataSource;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HookingKeywordDAO {
+public class HookingKeywordDAO implements ExtractDAO{
 	private static final Logger LOGGER = LoggerFactory.getLogger(HookingKeywordDAO.class.getName());
 	
 	public JSONObject getHookingKeywordsCount(int reporterId) {
@@ -52,6 +54,10 @@ public class HookingKeywordDAO {
 		}
 		
 		return result;
+	}
+
+	public JSONObject getJson(int reporterId, HttpServletRequest request) {
+		return getHookingKeywordsCount(reporterId);
 	}
 
 	

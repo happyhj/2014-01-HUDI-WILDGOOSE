@@ -24,7 +24,6 @@ var Ajax = (function(){
 					// responseText의 마지막에 포함된 개행문자 제거
 					var response = request.responseText;
 					response = response.substring(0, response.length - 1);
-					
 					func(response);
 				}
 			}
@@ -67,6 +66,27 @@ var Ajax = (function(){
 			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			// send
 			request.send(payload);
+		}, 
+		DELETE : function (url, func, async) {
+			if (async == null) {
+				async = true;
+			}
+			
+			var request = this.createRequest();
+			if (request == null) {
+				console.log("Unable to create request");
+				return;
+			}
+
+			request.open("DELETE", url, async);
+			
+			if (func != null) {
+				request.addEventListener("readystatechange", function (e) {
+					Ajax.responseData(e, request, func);
+				}, false);
+			}
+			// send
+			request.send(null);
 		}
 	}
 }());
@@ -122,7 +142,18 @@ var Util = (function() {
 		ltrim: function (str) {
 			str.replace(/^\s*/, "");
 			return str;
-		}
-		
+		},
+		getTemplateCompiler: function(templateStr) {
+		    return function(dataObj) {
+		        var resultStr = Util.trim(templateStr);
+		        for (var variableName in dataObj)
+		        {
+		            if (dataObj[variableName]===0||dataObj[variableName]) {
+		                resultStr = resultStr.replace("%= "+variableName+" %", dataObj[variableName]);
+		            }
+		        }
+		        return resultStr;
+		    };
+		} 
 	};
 }());
