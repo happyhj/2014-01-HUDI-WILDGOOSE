@@ -43,21 +43,8 @@
 				</li>
 			</ul>
 			<%-- 자동완성 --%>
-			<ul class="auto-completion-list">
-				<!-- <li><div>서동규</div></li>
-				<li><div>서동유</div></li>
-				<li><div>호호호</div></li>
-				<li><div>하하하</div></li>
-				<li><div>히히히</div></li> -->
-			</ul>
+			<ul class="auto-completion-list"></ul>
 			</form>
-			
-			<!-- <table class="searched-box">
-  				<tbody>
-    				<tr>
-				    </tr>
-  				</tbody>
-			</table> -->
 		</div>
 		
 		<div class="search-result">
@@ -98,9 +85,6 @@
 <script type="text/javascript" src="/scripts/auto-complement.js"></script>
 <script type="text/javascript" src="/scripts/fav.js"></script>
 <script>
-/* var inputEl = document.getElementById("query-entry");
-inputEl.focus(); */
-
-/* var favs = []
-getFavs(); */
+var favs = [];
+getFavs();
 </script>
