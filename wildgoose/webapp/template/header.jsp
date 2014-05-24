@@ -2,15 +2,18 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/header.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/modal.css" />
 
+<a href="/"><img src="image/logo.png" alt="wildgoose logo" class="header-logo-image"/></a>
 <c:if test="${ empty sessionScope.userId }">
 	<button class="header-btn" id="join">가입하기</button>
 	<button class="header-btn" id="login">로그인하기</button>
 	<button class="header-btn hidden" id="logout">로그아웃</button>
 </c:if>
 <c:if test="${ not empty sessionScope.userId }">
+	<button class="header-btn" id="logout">로그아웃</button>
+	<button class="header-btn" id="timeline">Timeline</button>
+	<button class="header-btn" id="favorite">favorite</button>
 	<button class="header-btn hidden" id="join">가입하기</button>
 	<button class="header-btn hidden" id="login">로그인하기</button>
-	<button class="header-btn" id="logout">로그아웃</button>
 </c:if>
 <script type="text/javascript" src="/scripts/lib/sha256.js"></script>
 <script type="text/javascript" src="/scripts/validation.js"></script>
@@ -41,6 +44,16 @@
 	logoutBtn.addEventListener("click", function() {
 		Ajax.DELETE('/api/v1/session');
 		updateTopbar(false);
+	}, false);
+	
+	var timelineBtn = document.querySelector(".header-btn#timeline");
+	timelineBtn.addEventListener("click", function() {
+		location.href = "/timeline";
+	}, false);
+	
+	var favoriteBtn = document.querySelector(".header-btn#favorite");
+	favoriteBtn.addEventListener("click", function() {
+		location.href = "/favorite_page";
 	}, false);
 }();
 

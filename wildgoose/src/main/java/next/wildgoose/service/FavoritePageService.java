@@ -20,7 +20,7 @@ public class FavoritePageService implements Action {
 		HttpSession session = request.getSession();
 		
 		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
-		reporters = favoriteDao.getFavorites((String)session.getAttribute("userId"));
+		reporters = favoriteDao.findReporterCard((String)session.getAttribute("userId"));
 		
 		request.setAttribute("reporters", reporters);
 		

@@ -14,8 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FavoriteDAO {
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(FavoriteDAO.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(FavoriteDAO.class.getName());
 
 	public boolean addFavorite(String reporterId, String email) {
 		boolean result = false;
@@ -63,8 +62,34 @@ public class FavoriteDAO {
 		return result;
 	}
 	
-	public List<ReporterCard> getFavorites(String email) {
-		//List<Integer> favorites = new ArrayList<Integer>();		
+	public List<Integer> getFavorites(String email) {
+		List<Integer> favorites = new ArrayList<Integer>();
+		Connection conn = DataSource.getInstance().getConnection();
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT author_id FROM favorite WHERE user_email = ?");
+
+		try {
+			psmt = conn.prepareStatement(query.toString());
+			psmt.setString(1, email);
+			rs = psmt.executeQuery();
+
+			while (rs.next()) {
+				favorites.add(rs.getInt("author_id"));
+			}
+		} catch (SQLException sqle) {
+			LOGGER.debug(sqle.getMessage(), sqle);
+		} finally {
+			SqlUtil.closeResultSet(rs);
+			SqlUtil.closePrepStatement(psmt);
+			SqlUtil.closeConnection(conn);
+		}
+		return favorites;
+	}
+	
+	public List<ReporterCard> findReporterCard(String email) {		
 		Connection conn = DataSource.getInstance().getConnection();
 		PreparedStatement psmt = null;
 		ResultSet rs = null;

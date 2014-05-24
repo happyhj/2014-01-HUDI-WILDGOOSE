@@ -181,6 +181,7 @@ var autocomplete = {
 		// ajax통신이 일어나지 못하도록 캐싱된 마지막 검색 query를 바꾼다.
 		this.cache.searchedQuery = text;
 		this.removeList();
+		this.box.form.submit();
 	},
 	
 	removeNewline : function(text) {

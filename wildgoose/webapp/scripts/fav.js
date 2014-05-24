@@ -9,9 +9,15 @@ function attatchEventToFavBtn() {
 
 function toggleFav(e) {
 	var target = e.target;
+	
+	var card = target.parentNode.parentNode;
+	var press = target.nextElementSibling;
+	var pressClasses = press.className.split(" ");
+	var pressName = pressClasses[0];
+	
 	var nephew = target.parentElement.firstElementChild.firstElementChild
 	var reporterId = nephew.getAttribute("href").split("reporters/")[1];
-	var url = "/api/v1/users/reporters/"+reporterId;
+	var url = "/api/v1/users/reporters/id/"+reporterId;
 	//var payload = "reporter_id="+reporterId;
 	if (Util.hasClass(target, "on")) {
 		//url = url + "?" + payload;
@@ -19,6 +25,9 @@ function toggleFav(e) {
 			//console.log(data)
 			if (data == "success") {
 				Util.removeClass(target, "on");
+				Util.removeClass(press, pressName);
+				Util.addClass(press, pressName + "-blur");
+				Util.addClass(card, "favorite-card-blur");
 				Util.addClass(target, "off");
 			} else {
 				// react fail
@@ -28,8 +37,12 @@ function toggleFav(e) {
 		Ajax.POST(url, function(data) {
 			//console.log(data)
 			if (data == "success") {
+				Util.removeClass(press, pressName + "-blur");
+				Util.removeClass(card, "favorite-card-blur");
 				Util.removeClass(target, "off");
 				Util.addClass(target, "on");
+				Util.addClass(press, pressName.substring(0,pressName.length-5));
+				
 			} else {
 				// react fail
 			}
@@ -38,7 +51,7 @@ function toggleFav(e) {
 }
 
 function getFavs() {
-	var url = "api/v1/users/reporters";
+	var url = "api/v1/users/reporters/id";
 	Ajax.GET(url, function(jsonStr) {
 		var result = JSON.parse(jsonStr);
 		favs = result["data"];
