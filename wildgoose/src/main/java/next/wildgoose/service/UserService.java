@@ -23,17 +23,17 @@ public class UserService implements Daction {
 		DactionResult result = null;
 		JSONObject json = new JSONObject();
 		json.put("text", "잘못된 접근입니다");
-		//uri = api/v1/user/reporters
+
 		HttpSession session = request.getSession();
 		String methodType = request.getMethod();//POST or DELTE확인 가능
 		//String reporterId = request.getParameter("reporter_id");
-		String reporterId = uri.get(4);
+		
 		String email = (String) session.getAttribute("userId");
 		
 		ServletContext context = request.getServletContext();
 		FavoriteDAO favDao = (FavoriteDAO) context.getAttribute("FavoriteDAO");
-		LOGGER.debug(methodType + ": " + request.getRequestURI() + ", " + email + ", " + reporterId); 
-
+		
+		//uri = api/v1/user/reporters
 		if (uri.check(3, "reporters")) {
 			//session 에서 user의 email을 확인함
 			if(email == null){
@@ -44,23 +44,33 @@ public class UserService implements Daction {
 			json.put("text", "failed");
 			List<ReporterCard> reporters = null;
 			
-			
-			if ("GET".equals(methodType)) {
-				
-				reporters = favDao.getFavorites(email);
+			//uri = api/v1/user/reporters/card
+			if (uri.check(4, "card") && "GET".equals(methodType)) {
+				reporters = favDao.findReporterCard(email);
 				json = toJson(reporters);
-//				json = favDao.getFavoritesAsJson(email);
 				result = new DactionResult("json", json);
-			} else if ("POST".equals(methodType)) {
-				//필요한 파라미터: reporter_id, user_email
-				if (favDao.addFavorite(reporterId, email)) {
-					json.put("text", "success");
-					result = new DactionResult("text", json);
-				}
-			} else if ("DELETE".equals(methodType)) {
-				if (favDao.removeFavorite(reporterId, email)) {
-					json.put("text", "success");
-					result = new DactionResult("text", json);
+			}
+			//uri = api/v1/user/reporters/id
+			else if (uri.check(4, "id")) {
+				String reporterId = uri.get(5);
+				if ("GET".equals(methodType)) {
+					List<Integer> favIdList = favDao.getFavorites(email);;
+					Iterator<Integer> ir = favIdList.iterator();
+					while (ir.hasNext()) {
+						json.append("data", ir.next());
+					}
+					result = new DactionResult("json", json);
+				} else if ("POST".equals(methodType)) {
+					//필요한 파라미터: reporter_id, user_email
+					if (favDao.addFavorite(reporterId, email)) {
+						json.put("text", "success");
+						result = new DactionResult("text", json);
+					}
+				} else if ("DELETE".equals(methodType)) {
+					if (favDao.removeFavorite(reporterId, email)) {
+						json.put("text", "success");
+						result = new DactionResult("text", json);
+					}
 				}
 			}
 		}

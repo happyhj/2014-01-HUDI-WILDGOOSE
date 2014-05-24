@@ -154,8 +154,6 @@
 .auto-completion-list li:hover {
 	border-left: 2px solid #B3B3B3;
 	border-right: 2px solid #B3B3B3;
-	/* background-color:rgba(255,255,255,0.3); */
-	/* background-color:white; */
 	background-color: rgba(199,199,199,1);
 }
 .auto-completion-list li div {
@@ -172,5 +170,5 @@
 .auto-completion-list .highlight {
 	border-left: 2px solid #B3B3B3;
 	border-right: 2px solid #B3B3B3;
-	background-color:rgba(255,255,255,0.3);
+	background-color: #ECECEC;
 }

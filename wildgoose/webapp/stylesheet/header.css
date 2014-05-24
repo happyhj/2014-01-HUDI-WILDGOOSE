@@ -7,6 +7,12 @@
 	margin-left: 4px;
 }
 
+.header-logo-image {
+	margin: 5px;
+	height: 60px;
+	opacity: .4;
+}
+
 /* Theme rules */
 .header-btn {
 	background: #4882FD;

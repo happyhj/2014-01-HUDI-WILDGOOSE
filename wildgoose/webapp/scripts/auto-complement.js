@@ -84,7 +84,6 @@ var autocomplete = {
 		if (data === undefined || data.length == 0) {
 			return;
 		}
-
 		// cache.row 초기화
 		this.cache.row = null;
 		// 전달받은 row개수를 기록
@@ -181,6 +180,7 @@ var autocomplete = {
 		// ajax통신이 일어나지 못하도록 캐싱된 마지막 검색 query를 바꾼다.
 		this.cache.searchedQuery = text;
 		this.removeList();
+		this.box.form.submit();
 	},
 	
 	removeNewline : function(text) {
@@ -222,4 +222,4 @@ var autocomplete = {
 
 // searchBox에 focus evt가 발생시 searchBox객체 init
 var searchBox = document.querySelector('#query-entry');
-autocomplete.init(searchBox, ".auto-completion-list");
+autocomplete.init(searchBox, ".search .auto-completion-list");

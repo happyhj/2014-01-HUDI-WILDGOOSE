@@ -127,7 +127,8 @@ var Util = (function() {
 			}
 			
 			// DOM에 class가 두개 이상 존재시
-			DOM.className = DOM.className.replace(" " + className, "");
+			var pattern = new RegExp("( " + className + "|" + className + " )");
+			DOM.className = DOM.className.replace(pattern,"");
 		},
 		
 		trim: function (str) {
