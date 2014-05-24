@@ -43,12 +43,12 @@
 				</li>
 			</ul>
 			<%-- 자동완성 --%>
-			<ul class="auto-completion-list" style="display:inline-block">
-				<li><div>서동규</div></li>
+			<ul class="auto-completion-list">
+				<!-- <li><div>서동규</div></li>
 				<li><div>서동유</div></li>
 				<li><div>호호호</div></li>
 				<li><div>하하하</div></li>
-				<li><div>히히히</div></li>
+				<li><div>히히히</div></li> -->
 			</ul>
 			</form>
 			
