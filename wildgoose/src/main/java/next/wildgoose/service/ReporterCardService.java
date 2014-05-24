@@ -10,11 +10,7 @@ import next.wildgoose.dto.ReporterCard;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Utility;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class ReporterCardService implements Action {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ReporterCardService.class.getName());
 	
 	public ActionResult execute(HttpServletRequest request) {
 		ServletContext context = request.getServletContext();
@@ -26,8 +22,7 @@ public class ReporterCardService implements Action {
 		if ("%".equals(searchQuery)) {
 			searchQuery = null;
 		}
-		LOGGER.debug("searchquery : " + searchQuery);
-		
+
 		setForwardingOption(ar, searchQuery);
 		if (searchQuery != null) {
 			// 25개를 가져온 후, 마지막 카드를 지움.

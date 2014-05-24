@@ -23,7 +23,8 @@ public class JsonDataService implements Daction {
 		LOGGER.debug(uri.toString());
 		if (uri.check(3, Constants.RESOURCE_MOST_SMR_NAME)) {
 			String name = request.getParameter("name");
-			json = jsonDao.getSimilarNames(name);
+			int count = Integer.parseInt(request.getParameter("count")); 
+			json = jsonDao.getSimilarNames(name, count);
 		} else if (uri.check(2, Constants.RESOURCE_MORE_RPT_CARD)) {
 			String searchQuery = request.getParameter("q");
 			String searchType = null;

@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
 public class JsonDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JsonDAO.class.getName());
 
-	public JSONObject getSimilarNames(String name) {
+	public JSONObject getSimilarNames(String name, int count) {
 		JSONObject result = new JSONObject();
-		String query = "SELECT name FROM author WHERE name LIKE ? ORDER BY name LIMIT 0, 5 ";
+		String query = "SELECT name FROM author WHERE name LIKE ? ORDER BY name LIMIT 0, ? ";
 		Connection conn = DataSource.getInstance().getConnection();
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
@@ -24,6 +24,7 @@ public class JsonDAO {
 		try {
 			psmt = conn.prepareStatement(query.toString());
 			psmt.setString(1, name + "%");
+			psmt.setInt(2, count);
 			rs = psmt.executeQuery();
 			while (rs.next()) {
 				JSONObject data = new JSONObject();
