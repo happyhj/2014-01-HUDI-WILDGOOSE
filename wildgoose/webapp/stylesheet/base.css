@@ -34,3 +34,7 @@ ul, li {
 a {
 	text-decorate: none;
 }
+
+button:focus {
+	outline-style: none;
+}

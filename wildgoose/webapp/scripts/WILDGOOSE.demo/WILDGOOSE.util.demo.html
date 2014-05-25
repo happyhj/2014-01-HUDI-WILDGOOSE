@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<meta charset="utf-8">
+<script type="text/template" id="article_list">
+<li class="article-list">
+	<
+</li>
+</script>
+<style>
+.alert {
+	background-color: red;
+	color: yellow;
+}
+.xl {
+	font-size: 60px;
+	font-weight: 700;
+}
+</style>
+<script src="../WILDGOOSE/WILDGOOSE.util.js"></script>
+<h1>콘솔을 보라</h1>
+<button id="addAlert">add alert style</button>
+<button id="removeAlert">remove alert style</button>
+<button id="addXl">add xl style</button>
+<button id="removeXl">remove xl style</button>
+<script>
+window.addEventListener("load", function() {
+	// 의존할 모듈을 선언합니다.
+	var util = WILDGOOSE.util;
+	
+	// dom
+	var titleEl = document.querySelector("h1");
+	var addAlert = document.getElementById("addAlert");
+	var removeAlert = document.getElementById("removeAlert");
+	var addXl = document.getElementById("addXl");
+	var removeXl = document.getElementById("removeXl");
+	addAlert.addEventListener("click", function(){
+		util.dom.addClass(titleEl,"alert");	
+	}, false);
+	removeAlert.addEventListener("click", function(){
+		util.dom.removeClass(titleEl,"alert");	
+	}, false);
+	addXl.addEventListener("click", function(){
+		util.dom.addClass(titleEl,"xl");	
+	}, false);
+	removeXl.addEventListener("click", function(){
+		util.dom.removeClass(titleEl,"xl");	
+	}, false);	
+	// string 
+	console.log("-- String trim TEST --");
+	var before = "    -123-       ";
+	var after = util.string.trim(before);
+	console.log("before trim:시작"+before+"끝");
+	console.log("after trim:시작"+after+"끝");
+	// template
+	
+});
+</script>
