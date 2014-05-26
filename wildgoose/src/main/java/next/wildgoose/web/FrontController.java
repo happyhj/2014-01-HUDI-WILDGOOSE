@@ -12,15 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import next.wildgoose.backcontroller.BackController;
+import next.wildgoose.backcontroller.ErrorController;
 import next.wildgoose.service.Action;
 import next.wildgoose.service.ActionResult;
-import next.wildgoose.service.ArticleCardService;
-import next.wildgoose.service.Daction;
-import next.wildgoose.service.DactionResult;
 import next.wildgoose.service.Error;
-import next.wildgoose.service.ReporterCardService;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
+import next.wildgoose.view.JSONView;
+import next.wildgoose.view.JSPView;
+import next.wildgoose.view.View;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,17 +40,9 @@ public class FrontController extends HttpServlet {
 		String reqPath = request.getRequestURI();
 		ServletContext context = request.getServletContext();
 
-		// back컨트롤러를 가져온다.
 		BackController backController = getBackController(context, reqPath);
-		System.out.println("back!: " + backController.toString());
-		/// 가져온 back 컨트롤러에 일을 시키기 위해 request 객체를 인자로 넣어 일 수행 메서드를 실행한다.
-		// 응답으로 OBJECT를 가져온다.
-		Map<String, Object> resultData = backController.execute(request);
-		
-		// 요청(request path)를 View Picker 에 전달해서 대응하는 View 인터페이스의 구현체(JSPView or JSONView)를 가져온다.
+		Object resultData = backController.execute(request);
 		View view = createView(context, reqPath);
-		
-		// View객체에 OBJECT와 http response를 인자로 넘겨서 응답을 하도록 시킨다.	
 		view.show(resultData, request, response);
 	}
 	
@@ -120,38 +113,5 @@ public class FrontController extends HttpServlet {
 		}
 		view.setTarget(target);	
 		return view;
-	}
-		
-		
-		
-		
-		
-	void oldFunction(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		
-		// 요청에 해당하는 action 인터페이스 구현체를 받아오기
-		Action action = getProperAction(request);
-		ActionResult result = action.execute(request);
-		
-		if (result.isRedirect()) {
-			response.sendRedirect(result.getPath());
-			return;
-		}
-		
-		RequestDispatcher reqDispatcher = request.getRequestDispatcher(result.getPath());
-		reqDispatcher.forward(request, response);
-	}
-	
-	private Action getProperAction(HttpServletRequest request) {
-		ServletContext context = request.getServletContext();
-		Uri uri = new Uri(request);
-		LOGGER.debug(uri.get(0));
-
-		Action defaultAction = (Error) context.getAttribute("Error");
-		Map<String, Action> actionMap = WebListener.actionMap;
-		Action result = actionMap.get(uri.get(0));
-		if (result == null) {
-			result = defaultAction;
-		}
-		return result;
 	}
 }

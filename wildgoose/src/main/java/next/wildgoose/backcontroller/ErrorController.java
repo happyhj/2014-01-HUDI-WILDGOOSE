@@ -1,4 +1,4 @@
-package next.wildgoose.web;
+package next.wildgoose.backcontroller;
 
 import java.util.Map;
 

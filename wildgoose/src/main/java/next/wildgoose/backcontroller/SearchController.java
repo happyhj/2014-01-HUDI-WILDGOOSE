@@ -1,20 +1,19 @@
-package next.wildgoose.web;
+package next.wildgoose.backcontroller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import next.wildgoose.dao.ReporterCardDAO;
 import next.wildgoose.dto.ReporterCard;
+import next.wildgoose.dto.SearchResult;
 
 public class SearchController implements BackController {
 
 	@Override
-	public Map<String, Object> execute(HttpServletRequest request) {
-		Map<String, Object> result = new HashMap<String, Object>();
+	public Object execute(HttpServletRequest request) {
+		SearchResult result = new SearchResult();
 		List<ReporterCard> list = new ArrayList<ReporterCard>();
 		
 		ReporterCardDAO rcd = new ReporterCardDAO();
@@ -26,8 +25,8 @@ public class SearchController implements BackController {
 		
 		System.out.println("list: " + list);
 
-		result.put("searchQuery", searchQuery);	
-		result.put("reporterCards", list);
+		result.setReporterCards(list);
+		result.setSearchQuery(searchQuery);
 		return result;
 	}
 
