@@ -18,37 +18,6 @@ public class AccountService implements Daction {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class.getName());
 
-	public boolean isJoinable(SignDAO signDao, String email) {
-		if (isValidEmail(email)) {
-			return signDao.findEmail(email);
-		}
-		return false;
-	}
-	
-	
-	private static boolean isValidEmail(String email) {
-		String regex = "^[\\w\\.-_\\+]+@[\\w-]+(\\.\\w{2,4})+$";
-
-		return isFilled(email) && Pattern.matches(regex, email);
-	}
-
-	private static boolean isHashedPassword(String password) {
-		if (password.length() == 64) {
-			return true;
-		}
-		else return false;
-	}
-	
-	public static boolean isFilled(String data) {
-		
-		if (data != null && data.length() > 0) {
-			return true;
-		}
-		
-		return false;
-		
-	}
-
 	public DactionResult execute(HttpServletRequest request) {
 		Uri uri = new Uri(request);
 		String email = request.getParameter("email");
@@ -88,6 +57,37 @@ public class AccountService implements Daction {
 		JSONObject result = new JSONObject();
 		result.put("text", "failed");
 		return result;
+	}
+	
+	private boolean isJoinable(SignDAO signDao, String email) {
+		if (isValidEmail(email)) {
+			return signDao.findEmail(email);
+		}
+		return false;
+	}
+	
+	
+	private boolean isValidEmail(String email) {
+		String regex = "^[\\w\\.-_\\+]+@[\\w-]+(\\.\\w{2,4})+$";
+
+		return isFilled(email) && Pattern.matches(regex, email);
+	}
+
+	private boolean isHashedPassword(String password) {
+		if (password.length() == 64) {
+			return true;
+		}
+		else return false;
+	}
+	
+	private boolean isFilled(String data) {
+		
+		if (data != null && data.length() > 0) {
+			return true;
+		}
+		
+		return false;
+		
 	}
 	
 	
