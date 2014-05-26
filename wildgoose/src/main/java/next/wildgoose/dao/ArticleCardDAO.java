@@ -1,13 +1,11 @@
 package next.wildgoose.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import next.wildgoose.database.DataSource;
 import next.wildgoose.dto.ArticleCard;
 
 import org.slf4j.Logger;
@@ -16,12 +14,32 @@ import org.slf4j.LoggerFactory;
 public class ArticleCardDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCardDAO.class.getName());
 	
-	public List<ArticleCard> findArticlesById(int reporterId) {
-		Connection conn = DataSource.getInstance().getConnection();
-		PreparedStatement psmt = null;
-		ResultSet rs = null;
-		List<ArticleCard> articleCards = new ArrayList<ArticleCard>();
-		ArticleCard articleCard = null;
+	public List<ArticleCard> findArticlesById(final int reporterId) {
+		
+		SelectJdbcTemplate template = new SelectJdbcTemplate(){
+
+			@Override
+			Object mapRow(ResultSet rs) throws SQLException {
+				List<ArticleCard> articles = new ArrayList<ArticleCard>();
+				ArticleCard article = null;
+				while (rs.next()) {
+					article = new ArticleCard();
+					article.setUrl(rs.getString("url"));
+					article.setTitle(rs.getString("title"));
+					article.setSectionId(rs.getInt("section"));
+					article.setContent(rs.getString("content"));
+					article.setDatetime(rs.getTimestamp("datetime").toString());
+					articles.add(article);
+				}
+				return articles;
+			}
+
+			@Override
+			void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setInt(1, reporterId);
+			}
+			
+		};
 		
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT article.URL as url, article.title as title, ");
@@ -29,69 +47,49 @@ public class ArticleCardDAO {
 		query.append("FROM article_author JOIN article ON article.URL = article_author.article_URL ");
 		query.append("WHERE article_author.author_id = ? ORDER BY datetime DESC limit 5;");
 		
-		try {
-			psmt = conn.prepareStatement(query.toString());
-			psmt.setInt(1, reporterId);
-			rs = psmt.executeQuery();
-				
-			while (rs.next()) {
-				articleCard = new ArticleCard();
-				articleCard.setUrl(rs.getString("url"));
-				articleCard.setTitle(rs.getString("title"));
-				articleCard.setSectionId(rs.getInt("section"));
-				articleCard.setContent(rs.getString("content"));
-				articleCard.setDatetime(rs.getTimestamp("datetime").toString());
-				articleCards.add(articleCard);
-			}
-		} catch (SQLException sqle) {
-			LOGGER.debug(sqle.getMessage(),sqle);
-		} finally {
-			SqlUtil.closePrepStatement(psmt);
-			SqlUtil.closeResultSet(rs);
-			SqlUtil.closeConnection(conn);
-		}
+		List<ArticleCard> articles = (List<ArticleCard>) template.select(query.toString());
 		
-		return articleCards;
+		return articles;
 	}
 	
-	public List<ArticleCard> findArticlesByFavorite(String email) {
-		Connection conn = DataSource.getInstance().getConnection();
-		PreparedStatement psmt = null;
-		ResultSet rs = null;
-		List<ArticleCard> articleCards = new ArrayList<ArticleCard>();
-		ArticleCard articleCard = null;
+	public List<ArticleCard> findArticlesByFavorite(final String email) {
+		SelectJdbcTemplate template = new SelectJdbcTemplate() {
+
+			@Override
+			Object mapRow(ResultSet rs) throws SQLException {
+				List<ArticleCard> articles = new ArrayList<ArticleCard>();
+				ArticleCard article = null;
+				
+				while (rs.next()) {
+					article = new ArticleCard();
+					article.setUrl(rs.getString("URL"));
+					article.setTitle(rs.getString("title"));
+					article.setAuthorId(rs.getInt("id"));
+					article.setName(rs.getString("name"));
+					article.setContent(rs.getString("content"));
+					article.setDatetime(rs.getTimestamp("datetime").toString());
+					articles.add(article);
+				}
+				
+				return articles;
+			}
+
+			@Override
+			void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, email);
+			}
+		};
 		
 		StringBuilder query = new StringBuilder();
-		
 		query.append("SELECT author.name, author.id, favorite.* from author JOIN ");
 		query.append("(SELECT * FROM article JOIN article_author ON article_author.article_URL = article.URL ");
 		query.append("WHERE article_author.author_id IN ");
 		query.append("(SELECT author_id FROM favorite WHERE user_email = ?) ");
 		query.append("ORDER BY article.datetime desc limit 24) AS favorite ON author.id = favorite.author_id;");
 		
-		try {
-			psmt = conn.prepareStatement(query.toString());
-			psmt.setString(1, email);
-			rs = psmt.executeQuery();
-			
-			while (rs.next()) {
-				articleCard = new ArticleCard();
-				articleCard.setUrl(rs.getString("URL"));
-				articleCard.setTitle(rs.getString("title"));
-				articleCard.setAuthorId(rs.getInt("id"));
-				articleCard.setName(rs.getString("name"));
-				articleCard.setContent(rs.getString("content"));
-				articleCard.setDatetime(rs.getTimestamp("datetime").toString());
-				articleCards.add(articleCard);
-			}
-		} catch (SQLException sqle) {
-			LOGGER.debug(sqle.getMessage(),sqle);
-		} finally {
-			SqlUtil.closePrepStatement(psmt);
-			SqlUtil.closeResultSet(rs);
-			SqlUtil.closeConnection(conn);
-		}
 		
-		return articleCards;
+		List<ArticleCard> articles = (List<ArticleCard>) template.select(query.toString());
+		
+		return articles;
 	}
 }
