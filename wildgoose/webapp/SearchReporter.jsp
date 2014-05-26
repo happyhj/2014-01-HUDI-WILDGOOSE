@@ -46,7 +46,6 @@
 			<ul class="auto-completion-list"></ul>
 			</form>
 		</div>
-		
 		<div class="search-result">
 			<ul>
 				<c:choose>
@@ -55,11 +54,11 @@
 						<span>${ requestScope.message }</span>
 					</c:when>
 					<%-- searchQuery 존재시 --%>
-					<c:when test="${ not empty requestScope.searchQuery }">
-						<c:if test="${ empty requestScope.reporterCards }">
+					<c:when test="${ not empty requestScope.data.searchQuery }">
+						<c:if test="${ empty requestScope.data.reporterCards }">
 							<span>${ requestScope.searchQuery }에 대한 검색 결과가 없습니다.</span>
 						</c:if>
-						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }"><li class="card card-reporter">
+						<c:forEach var="reporterCard" items="${ requestScope.data.reporterCards }" ><li class="card card-reporter">
 							<%@ include file = "template/reporterCard.jsp" %>
 						</li></c:forEach>
 					</c:when>

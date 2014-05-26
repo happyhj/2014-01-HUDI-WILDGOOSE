@@ -13,7 +13,7 @@ import next.wildgoose.dto.ReporterCard;
 public class SearchController implements BackController {
 
 	@Override
-	public Object execute(HttpServletRequest request) {
+	public Map<String, Object> execute(HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<ReporterCard> list = new ArrayList<ReporterCard>();
 		
@@ -22,7 +22,12 @@ public class SearchController implements BackController {
 		list.add(rcd.findReporterById(22));
 		list.add(rcd.findReporterById(222));
 		
-		result.put("data", list);
+		String searchQuery = request.getParameter("q");
+		
+		System.out.println("list: " + list);
+
+		result.put("searchQuery", searchQuery);	
+		result.put("reporterCards", list);
 		return result;
 	}
 

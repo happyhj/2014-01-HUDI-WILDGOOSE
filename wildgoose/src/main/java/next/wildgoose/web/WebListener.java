@@ -31,6 +31,7 @@ public class WebListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent e) {
 		ServletContext context = e.getServletContext();
 		
+		context.setAttribute("Error", new ErrorController());
 		actionMap = new HashMap<String, Action>();
 		actionMap.put(Constants.RESOURCE_INDEX, (ReporterCardService) context.getAttribute("ReporterCardService"));
 		actionMap.put(Constants.RESOURCE_REPORTERS, (ArticleCardService) context.getAttribute("ArticleCardService"));
@@ -51,7 +52,7 @@ public class WebListener implements ServletContextListener {
 		controllerMap.put("search", new SearchController());
 
 		jspMap = new HashMap<String, String>();
-		jspMap.put("search", "searchReporter.jsp");
+		jspMap.put("search", "SearchReporter.jsp");
 	}
 	
 	public void contextDestroyed(ServletContextEvent e) {

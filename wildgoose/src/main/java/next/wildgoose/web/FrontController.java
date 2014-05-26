@@ -41,16 +41,16 @@ public class FrontController extends HttpServlet {
 
 		// back컨트롤러를 가져온다.
 		BackController backController = getBackController(context, reqPath);
-
+		System.out.println("back!: " + backController.toString());
 		/// 가져온 back 컨트롤러에 일을 시키기 위해 request 객체를 인자로 넣어 일 수행 메서드를 실행한다.
 		// 응답으로 OBJECT를 가져온다.
-		Object resultData = backController.execute(request);
+		Map<String, Object> resultData = backController.execute(request);
 		
 		// 요청(request path)를 View Picker 에 전달해서 대응하는 View 인터페이스의 구현체(JSPView or JSONView)를 가져온다.
-		View view = getView(context, reqPath);
+		View view = createView(context, reqPath);
 		
 		// View객체에 OBJECT와 http response를 인자로 넘겨서 응답을 하도록 시킨다.	
-		view.show(resultData, response);
+		view.show(resultData, request, response);
 	}
 	
 	private void renewAuth(HttpServletRequest request, HttpServletResponse response) {
@@ -75,7 +75,7 @@ public class FrontController extends HttpServlet {
 	private BackController getBackController(ServletContext context, String reqPath) {
 		String primeResource = getPrimeResource(reqPath);
 		BackController result = null;
-
+		System.out.println(primeResource);
 		BackController defaultController = (ErrorController) context.getAttribute("Error");
 		Map<String, BackController> controllerMap = WebListener.controllerMap;
 		result = controllerMap.get(primeResource);
@@ -90,13 +90,19 @@ public class FrontController extends HttpServlet {
 		
 		if (uri.startsWith("/api/v1/")) {
 			result = uri.replaceFirst("/api/v1/", "");
+		} else {
+			result = uri.replaceFirst("/", "");
 		}
-		result.substring(0, result.indexOf("/"));
+		
+		if( result.indexOf("/") >= 0 ) {
+			result.substring(0, result.indexOf("/"));
+		} 
+
 		return result;
 	}
 		
 		
-	private View getView(ServletContext context, String reqPath) {
+	private View createView(ServletContext context, String reqPath) {
 		String target = null;
 		
 		// 요청종류에 따라 뷰 구현체의 인스턴스를 마련한다.
@@ -108,7 +114,10 @@ public class FrontController extends HttpServlet {
 		JSPView view = new JSPView();
 		//// JSPView의 경우 이 과정에서 내부적으로 대응하는 .jsp 파일을 멤버로 확보하도록 한다.
 		Map<String, String> jspMap = WebListener.jspMap;
-		target = jspMap.get(reqPath);
+		target = jspMap.get(getPrimeResource(reqPath));
+		if(target == null) {
+			target = "error.jsp";
+		}
 		view.setTarget(target);	
 		return view;
 	}
