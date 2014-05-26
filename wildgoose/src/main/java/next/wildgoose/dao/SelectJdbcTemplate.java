@@ -4,13 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+
+import next.wildgoose.database.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import next.wildgoose.database.DataSource;
-import next.wildgoose.dto.ReporterCard;
 
 public abstract class SelectJdbcTemplate {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SelectJdbcTemplate.class.getName());
