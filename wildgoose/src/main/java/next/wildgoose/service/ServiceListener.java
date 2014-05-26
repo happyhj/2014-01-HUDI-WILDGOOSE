@@ -11,32 +11,42 @@ import next.wildgoose.dao.DummyData;
 import next.wildgoose.dao.ExtractDAO;
 import next.wildgoose.dao.HookingKeywordDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
+import next.wildgoose.utility.Constants;
 
 public class ServiceListener implements ServletContextListener {
-	public static Map<String, ExtractDAO> extractMap;
 	public void contextInitialized(ServletContextEvent event) {
-		ServletContext sc = event.getServletContext();
+		Map<String, Action> actionMap;
+		Map<String, Daction> dactionMap;
+		Map<String, ExtractDAO> extractMap;
 		
-		// SERVICE
-		sc.setAttribute("ReporterCardService", new ReporterCardService());
-		sc.setAttribute("ArticleCardService", new ArticleCardService());
-		sc.setAttribute("GraphDataService", new GraphDataService());
-		sc.setAttribute("JsonDataService", new JsonDataService());
-		sc.setAttribute("AccountService", new AccountService());
-		sc.setAttribute("SessionService", new SessionService());
-		sc.setAttribute("TimeLineService", new TimeLineService());
-		sc.setAttribute("HtmlDocService", new HtmlDocService());
-		sc.setAttribute("UserService", new UserService());
-		sc.setAttribute("FavoriteService", new FavoriteService());
-		sc.setAttribute("FavoritePageService", new FavoritePageService());
-		sc.setAttribute("Error", new Error());
-		sc.setAttribute("ErrorDaction", new ErrorDaction());
+		ServletContext context = event.getServletContext();
+		
+		actionMap = new HashMap<String, Action>();
+		actionMap.put(Constants.RESOURCE_INDEX, new ReporterCardService());
+		actionMap.put(Constants.RESOURCE_REPORTERS, new ArticleCardService());
+		actionMap.put(Constants.RESOURCE_TIMELINE, new TimeLineService());
+		actionMap.put(Constants.RESOURCE_FAVORITE_PAGE, new FavoritePageService());
+		
+		dactionMap = new HashMap<String, Daction>();
+		dactionMap.put(Constants.RESOURCE_REPORTERS, new GraphDataService());
+		dactionMap.put(Constants.RESOURCE_SEARCH, new JsonDataService());
+		dactionMap.put(Constants.RESOURCE_MORE_RPT_CARD, new JsonDataService());
+		dactionMap.put(Constants.RESOURCE_HTML, new HtmlDocService());
+		dactionMap.put(Constants.RESOURCE_ACCOUNT, new AccountService());
+		dactionMap.put(Constants.RESOURCE_SESSION, new SessionService());
+		dactionMap.put(Constants.RESOURCE_USER, new UserService());
+		dactionMap.put(Constants.RESOURCE_FAVORITE, new FavoriteService());
+		
 		
 		// IN Service
-		extractMap = new HashMap<String, ExtractDAO>();
-		extractMap.put("number_of_articles", (NumberOfArticlesDAO) sc.getAttribute("NumberOfArticlesDAO"));
-		extractMap.put("number_of_hook_keywords", (HookingKeywordDAO) sc.getAttribute("HookingKeywordDAO"));
-		extractMap.put("stat_points", (DummyData) sc.getAttribute("DummyData"));
+		 extractMap = new HashMap<String, ExtractDAO>();
+		 extractMap.put("number_of_articles", (NumberOfArticlesDAO) context.getAttribute("NumberOfArticlesDAO"));
+		 extractMap.put("number_of_hook_keywords", (HookingKeywordDAO) context.getAttribute("HookingKeywordDAO"));
+		 extractMap.put("stat_points", (DummyData) context.getAttribute("DummyData"));
+		
+		context.setAttribute("actionMap", actionMap);
+		context.setAttribute("dactionMap", dactionMap);
+		context.setAttribute("extractMap", extractMap);
 	}
 	
 	public void contextDestroyed(ServletContextEvent event) {
