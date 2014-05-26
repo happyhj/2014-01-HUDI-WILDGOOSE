@@ -62,7 +62,7 @@ public class ApiController extends HttpServlet {
 		String resourceName = uri.get(2);
 		
 		Daction defaultDaction = (ErrorDaction) context.getAttribute("ErrorDaction");
-		Map<String, Daction> dactionMap = WebListener.dactionMap;
+		Map<String, Daction> dactionMap = (Map<String, Daction>) context.getAttribute("dactionMap");
 		Daction result = dactionMap.get(resourceName);
 		if (result == null) {
 			LOGGER.debug("here");

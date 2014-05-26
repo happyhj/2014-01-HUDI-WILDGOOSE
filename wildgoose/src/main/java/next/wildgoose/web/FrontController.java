@@ -14,9 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import next.wildgoose.service.Action;
 import next.wildgoose.service.ActionResult;
-import next.wildgoose.service.ArticleCardService;
 import next.wildgoose.service.Error;
-import next.wildgoose.service.ReporterCardService;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
 
@@ -70,7 +68,7 @@ public class FrontController extends HttpServlet {
 		LOGGER.debug(uri.get(0));
 
 		Action defaultAction = (Error) context.getAttribute("Error");
-		Map<String, Action> actionMap = WebListener.actionMap;
+		Map<String, Action> actionMap = (Map<String, Action>) context.getAttribute("actionMap");
 		Action result = actionMap.get(uri.get(0));
 		if (result == null) {
 			result = defaultAction;
