@@ -47,7 +47,7 @@ public class ReporterCardDAO {
 	}
 	
 	public List<ReporterCard> findReportersByType(String type, final String searchQuery, final int start, final int num) {
-		List<ReporterCard> reporters = null;
+
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 
 			@Override
@@ -89,7 +89,7 @@ public class ReporterCardDAO {
 		query.append("JOIN article ON article.URL = result.article_URL ");
 		query.append("JOIN press ON result.press_id = press.id");
 
-		reporters = (List<ReporterCard>) template.select(query.toString());
+		List<ReporterCard> reporters = (List<ReporterCard>) template.select(query.toString());
 
 		return reporters;
 	}
