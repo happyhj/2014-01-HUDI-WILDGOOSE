@@ -49,7 +49,6 @@ public class FrontController extends HttpServlet {
 		// 요청(request path)를 View Picker 에 전달해서 대응하는 View 인터페이스의 구현체(JSPView or JSONView)를 가져온다.
 		View view = getView(context, reqPath);
 		
-		
 		// View객체에 OBJECT와 http response를 인자로 넘겨서 응답을 하도록 시킨다.	
 		view.show(resultData, response);
 	}
@@ -74,40 +73,43 @@ public class FrontController extends HttpServlet {
 	
 	// 요청(request path)에 해당하는 BackController 구현체를 받아오기
 	private BackController getBackController(ServletContext context, String reqPath) {
+		String primeResource = getPrimeResource(reqPath);
 		BackController result = null;
 
 		BackController defaultController = (ErrorController) context.getAttribute("Error");
 		Map<String, BackController> controllerMap = WebListener.controllerMap;
-		result = controllerMap.get(reqPath);
+		result = controllerMap.get(primeResource);
 		if (result == null) {
 			result = defaultController;
 		}
 		return result;
 	}
-		//// request path 의 api pre-fix를 제거한 path string을 BackController Picker에 전달한다.
 	
-	private String removePrefix(String uri) {
+	private String getPrimeResource(String uri) {
 		String result = uri;
 		
-		if (uri.startsWith("/api/v1")) {
-			result = uri.replaceFirst("/api/v1", "");
+		if (uri.startsWith("/api/v1/")) {
+			result = uri.replaceFirst("/api/v1/", "");
 		}
+		result.substring(0, result.indexOf("/"));
 		return result;
 	}
 		
 		
 	private View getView(ServletContext context, String reqPath) {
-		View view = null;
 		String target = null;
-
-		Map<String, View> viewMap = WebListener.viewMap;
-		view = viewMap.get(reqPath);
-
+		
+		// 요청종류에 따라 뷰 구현체의 인스턴스를 마련한다.
+		if (reqPath.startsWith("/api/v1/")) {
+			JSONView view = new JSONView();
+			return view;
+		} 
+		
+		JSPView view = new JSPView();
 		//// JSPView의 경우 이 과정에서 내부적으로 대응하는 .jsp 파일을 멤버로 확보하도록 한다.
 		Map<String, String> jspMap = WebListener.jspMap;
 		target = jspMap.get(reqPath);
-		
-		view.setTarget(target);
+		view.setTarget(target);	
 		return view;
 	}
 		
@@ -115,19 +117,7 @@ public class FrontController extends HttpServlet {
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
 	void oldFunction(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		
-		
-		
-		
-		
 		
 		// 요청에 해당하는 action 인터페이스 구현체를 받아오기
 		Action action = getProperAction(request);

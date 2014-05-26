@@ -27,7 +27,6 @@ public class WebListener implements ServletContextListener {
 	public static Map<String, Action> actionMap;
 	public static Map<String, Daction> dactionMap;
 	public static Map<String, BackController> controllerMap;
-	public static Map<String, View> viewMap;
 	public static Map<String, String> jspMap;
 	public void contextInitialized(ServletContextEvent e) {
 		ServletContext context = e.getServletContext();
@@ -47,6 +46,12 @@ public class WebListener implements ServletContextListener {
 		dactionMap.put(Constants.RESOURCE_SESSION, (SessionService) context.getAttribute("SessionService"));
 		dactionMap.put(Constants.RESOURCE_USER, (UserService) context.getAttribute("UserService"));
 		dactionMap.put(Constants.RESOURCE_FAVORITE, (FavoriteService) context.getAttribute("FavoriteService"));
+
+		controllerMap = new HashMap<String, BackController>();
+		controllerMap.put("search", new SearchController());
+
+		jspMap = new HashMap<String, String>();
+		jspMap.put("search", "searchReporter.jsp");
 	}
 	
 	public void contextDestroyed(ServletContextEvent e) {
