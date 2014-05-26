@@ -26,6 +26,9 @@ public class WebListener implements ServletContextListener {
 	
 	public static Map<String, Action> actionMap;
 	public static Map<String, Daction> dactionMap;
+	public static Map<String, BackController> controllerMap;
+	public static Map<String, View> viewMap;
+	public static Map<String, String> jspMap;
 	public void contextInitialized(ServletContextEvent e) {
 		ServletContext context = e.getServletContext();
 		
