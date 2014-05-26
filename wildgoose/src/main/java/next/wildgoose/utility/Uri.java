@@ -19,11 +19,14 @@ public class Uri {
 		int startIdx = 0;
 		int endIdx = uri.length();
 		
-		if (uri.length() == 1) {
-			return uri.substring(1);
+		if (uri == "/") {
+			return "";
 		}
 		if (uri.indexOf('/') == 0) {
 			startIdx++;
+		}
+		if (uri.startsWith("/api/v1/")) {
+			startIdx += 7;
 		}
 		if (uri.lastIndexOf('/') == endIdx-1) {
 			endIdx--;

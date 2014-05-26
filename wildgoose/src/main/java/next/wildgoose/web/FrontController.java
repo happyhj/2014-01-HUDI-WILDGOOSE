@@ -68,7 +68,6 @@ public class FrontController extends HttpServlet {
 	private BackController getBackController(ServletContext context, String reqPath) {
 		String primeResource = getPrimeResource(reqPath);
 		BackController result = null;
-		System.out.println(primeResource);
 		Map<String, BackController> controllerMap = (Map<String, BackController>) context.getAttribute("controllerMap");
 		result = controllerMap.get(primeResource);
 		if (result == null) {
@@ -87,7 +86,7 @@ public class FrontController extends HttpServlet {
 		}
 		
 		if( result.indexOf("/") >= 0 ) {
-			result.substring(0, result.indexOf("/"));
+			result = result.substring(0, result.indexOf("/"));
 		} 
 
 		return result;
