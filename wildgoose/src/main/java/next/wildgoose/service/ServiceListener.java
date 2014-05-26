@@ -14,10 +14,11 @@ import next.wildgoose.dao.NumberOfArticlesDAO;
 import next.wildgoose.utility.Constants;
 
 public class ServiceListener implements ServletContextListener {
-	public static Map<String, ExtractDAO> extractMap;
 	public void contextInitialized(ServletContextEvent event) {
 		Map<String, Action> actionMap;
 		Map<String, Daction> dactionMap;
+		Map<String, ExtractDAO> extractMap;
+		
 		ServletContext context = event.getServletContext();
 		
 		actionMap = new HashMap<String, Action>();
@@ -36,8 +37,16 @@ public class ServiceListener implements ServletContextListener {
 		dactionMap.put(Constants.RESOURCE_USER, new UserService());
 		dactionMap.put(Constants.RESOURCE_FAVORITE, new FavoriteService());
 		
+		
+		// IN Service
+		 extractMap = new HashMap<String, ExtractDAO>();
+		 extractMap.put("number_of_articles", (NumberOfArticlesDAO) context.getAttribute("NumberOfArticlesDAO"));
+		 extractMap.put("number_of_hook_keywords", (HookingKeywordDAO) context.getAttribute("HookingKeywordDAO"));
+		 extractMap.put("stat_points", (DummyData) context.getAttribute("DummyData"));
+		
 		context.setAttribute("actionMap", actionMap);
 		context.setAttribute("dactionMap", dactionMap);
+		context.setAttribute("extractMap", extractMap);
 	}
 	
 	public void contextDestroyed(ServletContextEvent event) {
