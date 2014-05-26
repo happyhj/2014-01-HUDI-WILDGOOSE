@@ -69,11 +69,10 @@ public class FrontController extends HttpServlet {
 		String primeResource = getPrimeResource(reqPath);
 		BackController result = null;
 		System.out.println(primeResource);
-		BackController defaultController = (ErrorController) context.getAttribute("Error");
-		Map<String, BackController> controllerMap = WebListener.controllerMap;
+		Map<String, BackController> controllerMap = (Map<String, BackController>) context.getAttribute("controllerMap");
 		result = controllerMap.get(primeResource);
 		if (result == null) {
-			result = defaultController;
+			result = controllerMap.get("error");
 		}
 		return result;
 	}
@@ -106,7 +105,7 @@ public class FrontController extends HttpServlet {
 		
 		JSPView view = new JSPView();
 		//// JSPView의 경우 이 과정에서 내부적으로 대응하는 .jsp 파일을 멤버로 확보하도록 한다.
-		Map<String, String> jspMap = WebListener.jspMap;
+		Map<String, String> jspMap = (Map<String, String>) context.getAttribute("jspMap");
 		target = jspMap.get(getPrimeResource(reqPath));
 		if(target == null) {
 			target = "error.jsp";

@@ -22,7 +22,7 @@ public class GraphDataService implements Daction {
 			return null;
 		}
 		
-		Map<String, ExtractDAO> extractMap = ServiceListener.extractMap;
+		Map<String, ExtractDAO> extractMap = (Map<String, ExtractDAO>) request.getServletContext().getAttribute("extractMap");
 		ExtractDAO seledtedApi = extractMap.get(apiName);
 		json = seledtedApi.getJson(reporterId, request);
 		
