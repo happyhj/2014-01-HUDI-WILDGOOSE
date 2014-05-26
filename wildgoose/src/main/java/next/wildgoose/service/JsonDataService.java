@@ -12,6 +12,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+
 public class JsonDataService implements Daction {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JsonDataService.class.getName());
 	public DactionResult execute(HttpServletRequest request) {
@@ -38,6 +40,7 @@ public class JsonDataService implements Daction {
 			
 			int start = Integer.parseInt(request.getParameter("last"));
 			int num = Integer.parseInt(request.getParameter("req"));
+			
 			json = jsonDao.moreReporterCard(searchType, searchQuery, start, num);
 		}
 		
