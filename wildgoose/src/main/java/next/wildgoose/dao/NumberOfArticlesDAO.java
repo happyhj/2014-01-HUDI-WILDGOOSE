@@ -3,29 +3,31 @@ package next.wildgoose.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 import next.wildgoose.dao.template.SelectJdbcTemplate;
+import next.wildgoose.dto.NumberOfArticles;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NumberOfArticlesDAO implements ExtractDAO{
+public class NumberOfArticlesDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NumberOfArticlesDAO.class.getName());
 	
-	public JSONObject byDay(final int reporterId) {
+	public List<NumberOfArticles> findNumberOfArticlesByDay(final int reporterId) {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 			
 			@Override
-			protected Object mapRow(ResultSet rs) throws SQLException {
-				JSONObject result = new JSONObject();
-				JSONObject data = new JSONObject();
+			protected List<NumberOfArticles> mapRow(ResultSet rs) throws SQLException {
+				List<NumberOfArticles> result = new ArrayList<NumberOfArticles>();
+				NumberOfArticles numOfArticle = null;
 				while (rs.next()) {
-					data.accumulate(rs.getString("date"), rs.getInt("count"));
+					numOfArticle = new NumberOfArticles();
+					numOfArticle.setCount(rs.getInt("count"));
+					numOfArticle.setDate(rs.getString("date"));
+					result.add(numOfArticle);
 				}
-				result.put("data", data);
 				return result;
 			}
 
@@ -42,22 +44,21 @@ public class NumberOfArticlesDAO implements ExtractDAO{
 		query.append("and DATEDIFF(now(), article.datetime) < 7 ");
 		query.append("group by date_format(datetime, '%m/%d');");
 		
-		JSONObject result = new JSONObject();
-		result = (JSONObject) template.select(query.toString());
-		return result;
+		return (List<NumberOfArticles>) template.select(query.toString());
 	}
 	
-	public JSONObject bySection (final int reporterId) {
+	public List<NumberOfArticles> findNumberOfArticlesBySection (final int reporterId) {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 			
 			@Override
-			protected Object mapRow(ResultSet rs) throws SQLException {
-				JSONObject result = new JSONObject();
+			protected List<NumberOfArticles> mapRow(ResultSet rs) throws SQLException {
+				List<NumberOfArticles> result = new ArrayList<NumberOfArticles>();
+				NumberOfArticles numOfArticle = null;
 				while (rs.next()) {
-					JSONObject data = new JSONObject();
-					data.put("label", rs.getString(1));
-					data.put("value", rs.getInt(2));
-					result.append("data", data);
+					numOfArticle = new NumberOfArticles();
+					numOfArticle.setLabel(rs.getString(1));
+					numOfArticle.setValue(rs.getInt(2));
+					result.add(numOfArticle);
 				}
 				return result;
 			}
@@ -76,19 +77,17 @@ public class NumberOfArticlesDAO implements ExtractDAO{
 		query.append("JOIN section as sec ON section_id = sec.id ");
 		query.append("GROUP BY section_id ORDER BY section_id LIMIT 5;");
 
-		JSONObject result = new JSONObject();
-		result = (JSONObject) template.select(query.toString());
-		return result;
+		return (List<NumberOfArticles>) template.select(query.toString());
 	}
 
-	public JSONObject getJson(int reporterId, HttpServletRequest request) {
-		String condition = request.getParameter("by");
-		
-		if ("section".equals(condition)) {
-			return bySection(reporterId);
-		} else if ("day".equals(condition)) {
-			return byDay(reporterId);
-		}
-		return null;
-	}
+//	public JSONObject getJson(int reporterId, HttpServletRequest request) {
+//		String condition = request.getParameter("by");
+//		
+//		if ("section".equals(condition)) {
+//			return findNumberOfArticlesBySection(reporterId);
+//		} else if ("day".equals(condition)) {
+//			return findNumberOfArticlesByDay(reporterId);
+//		}
+//		return null;
+//	}
 }
