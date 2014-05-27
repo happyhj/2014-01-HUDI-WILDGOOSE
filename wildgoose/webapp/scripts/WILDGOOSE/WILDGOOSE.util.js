@@ -79,17 +79,35 @@
 		},
 		
 		string: {
-			trim: function (str) {
-				return this.ltrim(this.rtrim(str));
-			},
+			trim: (function() {
+				if('trim' in String.prototype) {
+					return function(str) {
+						return str.trim;
+					}
+				} else return function (str) {
+					return this.ltrim(this.rtrim(str));
+				}
+			})(),
 			
-			rtrim: function (str) {
-				return str.replace(/\s*$/, "");
-			},
+			rtrim: (function() {
+				if('trimRight' in String.prototype) {
+					return function(str) {
+						return str.trimRight();
+					}
+				} else return function (str) {
+					return str.replace(/\s*$/, "");
+				}
+			})(),
 			
-			ltrim: function (str) {
-				return str.replace(/^\s*/, "");
-			},
+			ltrim: (function() {
+				if('trimLeft' in String.prototype) {
+					return function(str) {
+						return str.trimLeft();
+					}
+				} else return function (str) {
+					return str.replace(/^\s*/, "");
+				}
+			})(),
 		},
 		template: {
 			getTemplateCompiler: function(templateStr) {
