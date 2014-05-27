@@ -1,3 +1,6 @@
+
+
+/*
 function donutGraph (rawD) {
 	var realData = JSON.parse(rawD);
 	var data = realData["data"];
@@ -48,3 +51,4 @@ function donutGraph (rawD) {
     .attr("font-size", "18px")
     .attr("fill", "#FFF")  ; //get the label from our original data array
 }
+*/
