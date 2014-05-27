@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Account;
+import next.wildgoose.dto.AccountResult;
 import next.wildgoose.utility.Uri;
 
 public class AccountController implements BackController {
@@ -30,35 +31,46 @@ public class AccountController implements BackController {
 		return null;
 	}
 
-	private Object usedEmail(HttpServletRequest request, String email) {
+	private AccountResult usedEmail(HttpServletRequest request, String email) {
 		ServletContext context = request.getServletContext();
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
-		JSONObject json = failed();
+		AccountResult accountResult = new AccountResult(request.getParameterMap());
 		
 		if(isJoinable(signDao, email)){
-			json = success();
+			accountResult.setMessage("fetching account info succeed");
+		} else {
+			accountResult.setStatus(500);
+			accountResult.setMessage("fetching account info failed");
 		}
-		return json;
+		accountResult.setEmail(email);
+
+		return accountResult;
 	}
 
-	private Object join(HttpServletRequest request) {
+	private AccountResult join(HttpServletRequest request) {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		ServletContext context = request.getServletContext();
 		
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
 		Account account = new Account(email, password);
-		JSONObject json = failed();
+		AccountResult accountResult = new AccountResult(request.getParameterMap());
+		
+		// 기본 세팅 fail
+		accountResult.setStatus(500);
+		accountResult.setMessage("adding user account failed");
 		
 		if (isJoinable(signDao, email) == true && isHashedPassword(password) == true) {
 			if (signDao.joinAccount(account) == true) {
-				json = success();
+				// 가입 성공
+				accountResult.setStatus(200);
+				accountResult.setMessage("adding user account succeed");
 				
 				HttpSession session = request.getSession();
 				session.setAttribute("userId", email);
 			}
 		}
-		return json;
+		return accountResult;
 	}
 	
 	private boolean isJoinable(SignDAO signDao, String email) {
@@ -91,17 +103,4 @@ public class AccountController implements BackController {
 		return false;
 		
 	}
-	
-	private JSONObject success() {		
-		JSONObject result = new JSONObject();
-		result.put("text", "success");
-		return result;
-	}
-	
-	private JSONObject failed(){
-		JSONObject result = new JSONObject();
-		result.put("text", "failed");
-		return result;
-	}
-
 }
