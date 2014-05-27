@@ -36,7 +36,7 @@
 			<form class="search_form" action="./" method="get" >
 			<ul class="search-column-box">
 				<li class="search-query-entry">
-					<input type="search" autocomplete="off" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.searchQuery }" />
+					<input type="search" autocomplete="off" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.data.searchQuery }" />
 				</li>
 				<li class="search-button">
 					<input type="submit" id="search-action" value ="Search"/>
@@ -46,20 +46,19 @@
 			<ul class="auto-completion-list"></ul>
 			</form>
 		</div>
-		
 		<div class="search-result">
 			<ul>
 				<c:choose>
 					<%-- message 존재시 --%>
-					<c:when test="${ not empty requestScope.message }">
-						<span>${ requestScope.message }</span>
+					<c:when test="${ requestScope.data.status == 500 }">
+						<span>${ requestScope.data.message }</span>
 					</c:when>
 					<%-- searchQuery 존재시 --%>
-					<c:when test="${ not empty requestScope.searchQuery }">
-						<c:if test="${ empty requestScope.reporterCards }">
-							<span>${ requestScope.searchQuery }에 대한 검색 결과가 없습니다.</span>
+					<c:when test="${ not empty requestScope.data.searchQuery }">
+						<c:if test="${ empty requestScope.data.reporters }">
+							<span>${ requestScope.data.searchQuery }에 대한 검색 결과가 없습니다.</span>
 						</c:if>
-						<c:forEach var="reporterCard" items="${ requestScope.reporterCards }"><li class="card card-reporter">
+						<c:forEach var="reporter" items="${ requestScope.data.reporters }" ><li class="card card-reporter">
 							<%@ include file = "template/reporterCard.jsp" %>
 						</li></c:forEach>
 					</c:when>
@@ -67,15 +66,17 @@
 			</ul>
 		</div>
 		<%-- searchQuery 존재시 and 검색 결과가 더 많을 때 --%>
-		<c:if test="${ not empty requestScope.searchQuery and requestScope.hasMoreCards == true }">
+		<%--
+		<c:if test="${ not empty requestScope.data.searchQuery and requestScope.data.hasMoreCards == true }">
 			<div class="search-more">
 				<div class="search-button search-button-ajax">더보기</div>
 				<div class="search-state search-state-hidden">
-				<div class="state-search-query hidden">${ requestScope.searchQuery }</div>
-				<div class="state-search-total hidden">${ requestScope.totalNum }</div>
+				<div class="state-search-query hidden">${ requestScope.data.searchQuery }</div>
+				<div class="state-search-total hidden">${ requestScope.data.totalNum }</div>
 				</div>
 			</div>
 		</c:if>
+		 --%>
 	</div>
 	<footer class="footer"></footer>
 </div>

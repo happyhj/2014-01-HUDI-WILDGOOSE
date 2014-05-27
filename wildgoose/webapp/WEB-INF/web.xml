@@ -66,10 +66,6 @@
 		<url-pattern>*.ico</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>ApiController</servlet-name>
-		<url-pattern>/api/v1/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
 		<servlet-name>FrontController</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
@@ -113,6 +109,12 @@
 	</listener>
 	<listener>
 		<listener-class>next.wildgoose.service.ServiceListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>next.wildgoose.backcontroller.BackControllerListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>next.wildgoose.web.WebListener</listener-class>
 	</listener>
 	
 	

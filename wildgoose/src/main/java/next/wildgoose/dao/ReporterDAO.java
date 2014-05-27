@@ -7,21 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import next.wildgoose.dao.template.SelectJdbcTemplate;
-import next.wildgoose.dto.ReporterCard;
+import next.wildgoose.dto.Reporter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReporterCardDAO {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ReporterCardDAO.class.getName());
+public class ReporterDAO {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReporterDAO.class.getName());
 	
-	public ReporterCard findReporterById (final int reporterId) {
+	public Reporter findReporterById (final int reporterId) {
 		
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 
 			@Override
 			protected Object mapRow(ResultSet rs) throws SQLException {
-				ReporterCard reporter = new ReporterCard();
+				Reporter reporter = new Reporter();
 				if (rs.first()) {
 					reporter.setId(rs.getInt("id"));
 					reporter.setEmail(rs.getString("email"));
@@ -42,27 +42,27 @@ public class ReporterCardDAO {
 		query.append("SELECT author.id as id, author.email as email, author.name as name, press.name as pressName ");
 		query.append("from author JOIN press ON author.press_id = press.id WHERE author.id = ?;");
 
-		ReporterCard reporter = (ReporterCard) template.select(query.toString());
+		Reporter reporter = (Reporter) template.select(query.toString());
 
 		return reporter;
 	}
 	
-	public List<ReporterCard> findReportersByType(String type, final String searchQuery, final int start, final int num) {
+	public List<Reporter> findReportersByType(String type, final String searchQuery, final int start, final int num) {
 
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 
 			@Override
 			protected Object mapRow(ResultSet rs) throws SQLException {
-				List<ReporterCard> reporters = new ArrayList<ReporterCard>();
-				ReporterCard reporterCard = null;
+				List<Reporter> reporters = new ArrayList<Reporter>();
+				Reporter Reporter = null;
 				while (rs.next()) {
-					reporterCard = new ReporterCard();
-					reporterCard.setId(rs.getInt("id"));
-					reporterCard.setEmail(rs.getString("email"));
-					reporterCard.setName(rs.getString("name"));
-					reporterCard.setPressName(rs.getString("press_name"));
-					reporterCard.setArticleTitle(rs.getString("title"));
-					reporters.add(reporterCard);
+					Reporter = new Reporter();
+					Reporter.setId(rs.getInt("id"));
+					Reporter.setEmail(rs.getString("email"));
+					Reporter.setName(rs.getString("name"));
+					Reporter.setPressName(rs.getString("press_name"));
+					Reporter.setArticleTitle(rs.getString("title"));
+					reporters.add(Reporter);
 				}
 				return reporters;
 			}
@@ -90,7 +90,7 @@ public class ReporterCardDAO {
 		query.append("JOIN article ON article.URL = result.article_URL ");
 		query.append("JOIN press ON result.press_id = press.id");
 
-		List<ReporterCard> reporters = (List<ReporterCard>) template.select(query.toString());
+		List<Reporter> reporters = (List<Reporter>) template.select(query.toString());
 
 		return reporters;
 	}

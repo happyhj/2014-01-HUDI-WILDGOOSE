@@ -9,7 +9,7 @@ import java.util.List;
 import next.wildgoose.dao.template.DeleteJdbcTemplate;
 import next.wildgoose.dao.template.InsertJdbcTemplate;
 import next.wildgoose.dao.template.SelectJdbcTemplate;
-import next.wildgoose.dto.ReporterCard;
+import next.wildgoose.dto.Reporter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,14 +17,14 @@ import org.slf4j.LoggerFactory;
 public class FavoriteDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FavoriteDAO.class.getName());
 
-	public boolean addFavorite(final String reporterId, final String email) {
+	public boolean addFavorite(final int reporterId, final String email) {
 		
 		InsertJdbcTemplate template = new InsertJdbcTemplate () {
 			
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, email);
-				psmt.setString(2, reporterId);
+				psmt.setInt(2, reporterId);
 			}
 		};
 		
@@ -35,14 +35,14 @@ public class FavoriteDAO {
 	}
 	
 	
-	public boolean removeFavorite(final String reporterId, final String email) {
+	public boolean removeFavorite(final int reporterId, final String email) {
 		
 		DeleteJdbcTemplate template = new DeleteJdbcTemplate() {
 
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, email);
-				psmt.setString(2, reporterId);
+				psmt.setInt(2, reporterId);
 			}
 		};
 		
@@ -79,16 +79,16 @@ public class FavoriteDAO {
 		return favorites;
 	}
 	
-	public List<ReporterCard> findReporterCard(final String email) {
+	public List<Reporter> findReporter(final String email) {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 
 			@Override
 			protected Object mapRow(ResultSet rs) throws SQLException {
-				List<ReporterCard> favorites = new ArrayList<ReporterCard>();
-				ReporterCard reporter = null;
+				List<Reporter> favorites = new ArrayList<Reporter>();
+				Reporter reporter = null;
 				
 				while (rs.next()) {
-					reporter = new ReporterCard();
+					reporter = new Reporter();
 					reporter.setId(rs.getInt("id"));
 					reporter.setEmail(rs.getString("email"));
 					reporter.setName(rs.getString("name"));
@@ -115,7 +115,7 @@ public class FavoriteDAO {
 		query.append("FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id GROUP BY author.id ORDER BY author.name) as result ");
 		query.append("JOIN article ON article.URL = result.article_URL JOIN press ON result.press_id = press.id) AS author ON author.id = myfav.author_id LIMIT 24");
 		
-		List<ReporterCard> favorites = (List<ReporterCard>) template.select(query.toString());
+		List<Reporter> favorites = (List<Reporter>) template.select(query.toString());
 		
 		return favorites;
 	}

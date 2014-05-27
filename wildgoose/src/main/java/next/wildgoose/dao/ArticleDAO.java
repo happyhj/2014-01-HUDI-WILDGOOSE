@@ -7,24 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import next.wildgoose.dao.template.SelectJdbcTemplate;
-import next.wildgoose.dto.ArticleCard;
+import next.wildgoose.dto.Article;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ArticleCardDAO {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCardDAO.class.getName());
+public class ArticleDAO {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleDAO.class.getName());
 	
-	public List<ArticleCard> findArticlesById(final int reporterId) {
+	public List<Article> findArticlesById(final int reporterId) {
 		
 		SelectJdbcTemplate template = new SelectJdbcTemplate(){
 
 			@Override
 			protected Object mapRow(ResultSet rs) throws SQLException {
-				List<ArticleCard> articles = new ArrayList<ArticleCard>();
-				ArticleCard article = null;
+				List<Article> articles = new ArrayList<Article>();
+				Article article = null;
 				while (rs.next()) {
-					article = new ArticleCard();
+					article = new Article();
 					article.setUrl(rs.getString("url"));
 					article.setTitle(rs.getString("title"));
 					article.setSectionId(rs.getInt("section"));
@@ -48,21 +48,21 @@ public class ArticleCardDAO {
 		query.append("FROM article_author JOIN article ON article.URL = article_author.article_URL ");
 		query.append("WHERE article_author.author_id = ? ORDER BY datetime DESC limit 5;");
 		
-		List<ArticleCard> articles = (List<ArticleCard>) template.select(query.toString());
+		List<Article> articles = (List<Article>) template.select(query.toString());
 		
 		return articles;
 	}
 	
-	public List<ArticleCard> findArticlesByFavorite(final String email) {
+	public List<Article> findArticlesByFavorite(final String email) {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 
 			@Override
 			protected Object mapRow(ResultSet rs) throws SQLException {
-				List<ArticleCard> articles = new ArrayList<ArticleCard>();
-				ArticleCard article = null;
+				List<Article> articles = new ArrayList<Article>();
+				Article article = null;
 				
 				while (rs.next()) {
-					article = new ArticleCard();
+					article = new Article();
 					article.setUrl(rs.getString("URL"));
 					article.setTitle(rs.getString("title"));
 					article.setAuthorId(rs.getInt("id"));
@@ -89,7 +89,7 @@ public class ArticleCardDAO {
 		query.append("ORDER BY article.datetime desc limit 24) AS favorite ON author.id = favorite.author_id;");
 		
 		
-		List<ArticleCard> articles = (List<ArticleCard>) template.select(query.toString());
+		List<Article> articles = (List<Article>) template.select(query.toString());
 		
 		return articles;
 	}

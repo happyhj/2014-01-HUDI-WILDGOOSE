@@ -1,6 +1,6 @@
 package next.wildgoose.dto;
 
-public class ArticleCard {
+public class Article {
 	private String url;
 	private String name;
 	private int authorId;

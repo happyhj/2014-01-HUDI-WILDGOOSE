@@ -1,15 +1,12 @@
 package next.wildgoose.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import next.wildgoose.dao.template.InsertJdbcTemplate;
 import next.wildgoose.dao.template.SelectJdbcTemplate;
-import next.wildgoose.database.DataSource;
 import next.wildgoose.dto.Account;
-import next.wildgoose.dto.ReporterCard;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
