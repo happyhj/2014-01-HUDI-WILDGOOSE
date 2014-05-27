@@ -1,9 +1,15 @@
 attatchEventToFavBtn();
 function attatchEventToFavBtn() {
-	var stars = document.querySelectorAll(".favorite");
+	var stars = document.querySelectorAll(".star");
 	for (var i = 0; i < stars.length; i++) {
 		var star = stars[i];
 		star.addEventListener("click", toggleFav, false);
+		document.querySelector(".star").addEventListener("click", function(e) {
+			Util.addClass(e.target, "pumping");
+			setTimeout(function() {
+				Util.removeClass(e.target, "pumping");
+			}, 300)
+		}, false)
 	}
 }
 
@@ -85,7 +91,7 @@ function updateFavs(reporterCards) {
 		var reporterName = card.querySelector(".name a");
 		var reporterId = reporterName.getAttribute("href").split("/")[2];
 		if (favs.indexOf(parseInt(reporterId)) >= 0) {
-			card.querySelector(".favorite").className = "favorite on";
+			card.querySelector(".star").className = "star on";
 		}
 	}
 }

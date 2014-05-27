@@ -4,7 +4,7 @@
 	</h3>
 	<p class="email">${ reporter.email }</p>
 	<c:if test="${ not empty sessionScope.userId }">
-		<h4 class="favorite off">&#x2605;</h4>
+		<div class="favorite"><div class="star"></div></div>
 	</c:if>
 	<div class="${ reporter.pressName } press-tag"></div>
 </div>
