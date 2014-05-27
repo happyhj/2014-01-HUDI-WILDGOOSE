@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import next.wildgoose.database.DataSource;
 import next.wildgoose.dto.Account;
+import next.wildgoose.dto.ReporterCard;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,88 +16,68 @@ import org.slf4j.LoggerFactory;
 public class SignDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SignDAO.class.getName());
 	
-	public boolean findEmail (String email) {
+	public boolean findEmail (final String email) {
 		boolean result = false;
-		Connection conn = DataSource.getInstance().getConnection();
-		PreparedStatement psmt = null;
-		ResultSet rs = null;
-		int len = 0;
+		SelectJdbcTemplate template = new SelectJdbcTemplate() {
+			@Override
+			Object mapRow(ResultSet rs) throws SQLException {
+				if (rs.first()) {
+					return true;
+				}
+				return false;
+			}
+
+			@Override
+			void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, email);
+			}
+		};
 		
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT count(email) as exist FROM user_account WHERE email = ?");
-		
-		try {
-			psmt = conn.prepareStatement(query.toString());
-			psmt.setString(1, email);
-			rs = psmt.executeQuery();
-			if (rs.next()) {
-				len = rs.getInt("exist");
-				if (len == 0) {
-					result = true;
-				}
-			}
-		} catch (SQLException sqle) {
-			LOGGER.debug(sqle.getMessage(), sqle);
-		} finally {
-			SqlUtil.closePrepStatement(psmt);
-			SqlUtil.closeResultSet(rs);
-			SqlUtil.closeConnection(conn);
-		}
-		
+
+		result = (Boolean) template.select(query.toString());
+
 		return result;
 	}
 	
-	public Account findAccount (String email) {
-		Connection conn = DataSource.getInstance().getConnection();
-		PreparedStatement psmt = null;
-		ResultSet rs = null;
-		Account account = null;
+	public Account findAccount (final String email) {
+		SelectJdbcTemplate template = new SelectJdbcTemplate() {
+			@Override
+			Object mapRow(ResultSet rs) throws SQLException {
+				Account account = null;
+				if (rs.first()) {
+					account = new Account(rs.getString("email"), rs.getString("password"));
+				}
+				return account;
+			}
+
+			@Override
+			void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, email);
+			}
+		};
 		
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT * FROM user_account WHERE email = ?");
-		
-		try {
-			psmt = conn.prepareStatement(query.toString());
-			psmt.setString(1, email);
-			rs = psmt.executeQuery();
-			if (rs.next()) {
-				account = new Account(rs.getString("email"), rs.getString("password"));
-			}
-		} catch (SQLException sqle) {
-			LOGGER.debug(sqle.getMessage(), sqle);
-		} finally {
-			SqlUtil.closePrepStatement(psmt);
-			SqlUtil.closeResultSet(rs);
-			SqlUtil.closeConnection(conn);
-		}
-		
-		return account;
+
+		return (Account) template.select(query.toString());
 	}
 
-	public boolean joinAccount (Account account) {
-		boolean result = false;
-		Connection conn = DataSource.getInstance().getConnection();
-		PreparedStatement psmt = null;
-		ResultSet rs = null;
+	public boolean joinAccount (final Account account) {
+
+		InsertJdbcTemplate template = new InsertJdbcTemplate () {
+			
+			@Override
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, account.getEmail());
+				psmt.setString(2, account.getPassword());
+			}
+		};
 		
 		StringBuilder query = new StringBuilder();
 		query.append("INSERT INTO user_account (email, password) VALUES (?, ?) ");
 		
-		try {
-			psmt = conn.prepareStatement(query.toString());
-			psmt.setString(1, account.getEmail());
-			psmt.setString(2, account.getPassword());
-			psmt.execute();
-			result = true;
-		} catch (SQLException sqle) {
-			LOGGER.debug(sqle.getMessage(), sqle);
-		} finally {
-			SqlUtil.closePrepStatement(psmt);
-			SqlUtil.closeResultSet(rs);
-			SqlUtil.closeConnection(conn);
-		}
-		return result;
+		return template.insert(query.toString());
 	}
-	
-	
 }
