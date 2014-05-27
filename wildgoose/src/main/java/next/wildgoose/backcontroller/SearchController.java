@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import next.wildgoose.dao.JsonDAO;
 import next.wildgoose.dao.ReporterDAO;
 import next.wildgoose.dto.Reporter;
 import next.wildgoose.dto.SearchResult;
@@ -34,7 +35,7 @@ public class SearchController implements BackController {
 	}
 	
 	
-	private Object getSearchResult(HttpServletRequest request) {
+	private SearchResult getSearchResult(HttpServletRequest request) {
 		SearchResult searchResult = new SearchResult(request.getParameterMap());
 		boolean hasMore = false;
 		List<Reporter> reporters = null;
@@ -57,8 +58,8 @@ public class SearchController implements BackController {
 			searchResult.setMessage("You can not search with whitespace");
 			return searchResult;
 		}
-		
 		// 25개를 가져온 후, 마지막 카드를 지움.
+		// TODO: change this to use "start_item and how_many parameter
 		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
 		reporters = getReporters(reporterDao, searchQuery, 0, Constants.NUM_OF_CARDS + 1);
 		if (reporters.size() > Constants.NUM_OF_CARDS) {
@@ -76,10 +77,15 @@ public class SearchController implements BackController {
 		return searchResult;
 	}
 
-
+	// TODO: FIX THIS to use "AutocompleteResult"
 	private Object getAutocompleteResult(HttpServletRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+		ServletContext context = request.getServletContext();
+		JsonDAO jsonDao = (JsonDAO) context.getAttribute("JsonDAO");
+		
+		String name = request.getParameter("q");
+		int count = Integer.parseInt(request.getParameter("count")); 
+		
+		return jsonDao.getSimilarNames(name, count);
 	}
 
 

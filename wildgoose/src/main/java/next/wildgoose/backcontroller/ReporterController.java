@@ -10,6 +10,7 @@ import next.wildgoose.dao.ReporterDAO;
 import next.wildgoose.dto.Article;
 import next.wildgoose.dto.Reporter;
 import next.wildgoose.dto.ReporterResult;
+import next.wildgoose.dto.Result;
 import next.wildgoose.utility.Uri;
 import next.wildgoose.utility.Utility;
 
@@ -22,29 +23,29 @@ public class ReporterController implements BackController {
 	
 	@Override
 	public Object execute(HttpServletRequest request) {	
-		ReporterResult reporterResult = null;
+		Result result = null;
 		Uri uri = new Uri(request);
 		
 		// id가 입력되지 않은 경우 처리
 		if (uri.size() <= 1 || uri.check(1, "")) {
-			reporterResult = new ReporterResult(request.getParameterMap());
-			reporterResult.setStatus(500);
-			reporterResult.setMessage("parameter is missing.");
-			return reporterResult;
+			result = new ReporterResult(request.getParameterMap());
+			result.setStatus(500);
+			result.setMessage("parameter is missing.");
+			return result;
 		}
 		
 		int reporterId = Integer.parseInt(uri.get(1));
 		if (uri.check(2, "")) {
-			reporterResult = getReporterPage(request, reporterId);
+			result = getReporterPage(request, reporterId);
 		} else if (uri.check(2, "statistics")) {
-			reporterResult = getGraphData(request, reporterId);
+			result = getGraphData(request, reporterId);
 		}
 		
 		
-		LOGGER.debug("resultData: " + Utility.toJsonString(reporterResult));
+		LOGGER.debug("resultData: " + Utility.toJsonString(result));
 		
 		
-		return reporterResult;
+		return result;
 	}
 
 	private ReporterResult getGraphData(HttpServletRequest request,
