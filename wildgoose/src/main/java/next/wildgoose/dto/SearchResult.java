@@ -1,26 +1,25 @@
 package next.wildgoose.dto;
 
 import java.util.List;
+import java.util.Map;
 
-public class SearchResult {
-	public List<ReporterCard> reporterCards;
-	public String searchQuery;
-	
+public class SearchResult extends Result {
+	public SearchResult(Map<String, String[]> parameters) {
+		super(parameters);
+	}
 	public List<ReporterCard> getReporterCards() {
-		return this.reporterCards;
+		return (List<ReporterCard>) super.getData("reporterCards");
 	}
 
-	public void setReporterCards(List<ReporterCard> list) {
-		this.reporterCards = list;
+	public void setReporterCards(List<ReporterCard> ReporterCards) {
+		super.setData("reporterCards", ReporterCards);
 	}
 
 	public String getSearchQuery() {
-		System.out.println("this!!!!");
-		return this.searchQuery;
-	}
-	
-	public void setSearchQuery(String searchQuery) {
-		this.searchQuery = searchQuery;
-	}
+		return (String) super.getData("searchQuery");
 
+	}
+	public void setSearchQuery(String searchQuery) {
+		super.setData("searchQuery", searchQuery);
+	}
 }
