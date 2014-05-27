@@ -22,7 +22,7 @@
 			<ul>
 				<%-- session 존재시 --%>
 				<c:if test="${ not empty sessionScope.userId }">
-					<c:forEach var="articleCard" items="${ requestScope.articleCards }">
+					<c:forEach var="article" items="${ requestScope.articles }">
 					<li class="card">
 						<%@ include file = "/template/articleCard.jsp" %>
 					</li>
@@ -38,4 +38,4 @@
 	<footer class="footer"></footer>
 </div>
 <script type="text/javascript" src="/scripts/util.js"></script>
-<script type="text/javascript" src="/scripts/articleCard.js"></script>
+<script type="text/javascript" src="/scripts/article.js"></script>

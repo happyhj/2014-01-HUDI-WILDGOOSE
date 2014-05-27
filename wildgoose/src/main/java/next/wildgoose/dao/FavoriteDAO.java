@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import next.wildgoose.database.DataSource;
-import next.wildgoose.dto.ReporterCard;
+import next.wildgoose.dto.Reporter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,12 +89,12 @@ public class FavoriteDAO {
 		return favorites;
 	}
 	
-	public List<ReporterCard> findReporterCard(String email) {		
+	public List<Reporter> findReporterCard(String email) {		
 		Connection conn = DataSource.getInstance().getConnection();
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
-		List<ReporterCard> favorites = new ArrayList<ReporterCard>();
-		ReporterCard reporterCard = null;
+		List<Reporter> favorites = new ArrayList<Reporter>();
+		Reporter reporterCard = null;
 		
 
 		StringBuilder query = new StringBuilder();
@@ -112,7 +112,7 @@ public class FavoriteDAO {
 			rs = psmt.executeQuery();
 			
 			while (rs.next()) {
-				reporterCard = new ReporterCard();
+				reporterCard = new Reporter();
 				reporterCard.setId(rs.getInt("id"));
 				reporterCard.setEmail(rs.getString("email"));
 				reporterCard.setName(rs.getString("name"));

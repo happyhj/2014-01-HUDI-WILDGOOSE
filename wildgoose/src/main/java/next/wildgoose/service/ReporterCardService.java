@@ -5,8 +5,8 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.dao.ReporterCardDAO;
-import next.wildgoose.dto.ReporterCard;
+import next.wildgoose.dao.ReporterDAO;
+import next.wildgoose.dto.Reporter;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Utility;
 
@@ -17,7 +17,7 @@ public class ReporterCardService implements Action {
 		ActionResult ar = new ActionResult();
 		String searchQuery = request.getParameter("q");
 		boolean hasMoreCards = false;
-		List<ReporterCard> reporterCards = null;
+		List<Reporter> reporterCards = null;
 		
 		if ("%".equals(searchQuery)) {
 			searchQuery = null;
@@ -26,7 +26,7 @@ public class ReporterCardService implements Action {
 		setForwardingOption(ar, searchQuery);
 		if (searchQuery != null) {
 			// 25개를 가져온 후, 마지막 카드를 지움.
-			ReporterCardDAO rcardDao = (ReporterCardDAO) context.getAttribute("ReporterCardDAO");
+			ReporterDAO rcardDao = (ReporterDAO) context.getAttribute("ReporterCardDAO");
 			reporterCards = getReporterCards(rcardDao, searchQuery, 0, Constants.NUM_OF_CARDS + 1);
 			if (reporterCards.size() > Constants.NUM_OF_CARDS) {
 				hasMoreCards = true;
@@ -55,8 +55,8 @@ public class ReporterCardService implements Action {
 		}
 	}
 	
-	private List<ReporterCard> getReporterCards(ReporterCardDAO rcardDao, String searchQuery, int start, int end) {
-		List<ReporterCard> reporterCards = null;
+	private List<Reporter> getReporterCards(ReporterDAO rcardDao, String searchQuery, int start, int end) {
+		List<Reporter> reporterCards = null;
 		String type = null;
 		
 		// searchQuery의 검색 type설정

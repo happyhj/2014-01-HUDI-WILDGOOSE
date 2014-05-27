@@ -3,7 +3,6 @@ package next.wildgoose.web;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -13,12 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.backcontroller.BackController;
-import next.wildgoose.backcontroller.ErrorController;
-import next.wildgoose.service.Action;
-import next.wildgoose.service.ActionResult;
-import next.wildgoose.service.Error;
 import next.wildgoose.utility.Constants;
-import next.wildgoose.utility.Uri;
+import next.wildgoose.utility.Utility;
 import next.wildgoose.view.JSONView;
 import next.wildgoose.view.JSPView;
 import next.wildgoose.view.View;
@@ -39,9 +34,11 @@ public class FrontController extends HttpServlet {
 		}
 		String reqPath = request.getRequestURI();
 		ServletContext context = request.getServletContext();
-
+		
+		LOGGER.debug("reqPath: " + reqPath);
 		BackController backController = getBackController(context, reqPath);
 		Object resultData = backController.execute(request);
+		
 		View view = createView(context, reqPath);
 		view.show(resultData, request, response);
 	}
@@ -101,11 +98,12 @@ public class FrontController extends HttpServlet {
 			JSONView view = new JSONView();
 			return view;
 		} 
-		
 		JSPView view = new JSPView();
 		//// JSPView의 경우 이 과정에서 내부적으로 대응하는 .jsp 파일을 멤버로 확보하도록 한다.
 		Map<String, String> jspMap = (Map<String, String>) context.getAttribute("jspMap");
 		target = jspMap.get(getPrimeResource(reqPath));
+		LOGGER.debug("target " + target);
+
 		if(target == null) {
 			target = "error.jsp";
 		}

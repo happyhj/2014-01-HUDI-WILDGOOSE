@@ -8,20 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import next.wildgoose.database.DataSource;
-import next.wildgoose.dto.ArticleCard;
+import next.wildgoose.dto.Article;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ArticleCardDAO {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCardDAO.class.getName());
+public class ArticleDAO {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleDAO.class.getName());
 	
-	public List<ArticleCard> findArticlesById(int reporterId) {
+	public List<Article> findArticlesById(int reporterId) {
 		Connection conn = DataSource.getInstance().getConnection();
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
-		List<ArticleCard> articleCards = new ArrayList<ArticleCard>();
-		ArticleCard articleCard = null;
+		List<Article> articleCards = new ArrayList<Article>();
+		Article articleCard = null;
 		
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT article.URL as url, article.title as title, ");
@@ -35,7 +35,7 @@ public class ArticleCardDAO {
 			rs = psmt.executeQuery();
 				
 			while (rs.next()) {
-				articleCard = new ArticleCard();
+				articleCard = new Article();
 				articleCard.setUrl(rs.getString("url"));
 				articleCard.setTitle(rs.getString("title"));
 				articleCard.setSectionId(rs.getInt("section"));
@@ -54,12 +54,12 @@ public class ArticleCardDAO {
 		return articleCards;
 	}
 	
-	public List<ArticleCard> findArticlesByFavorite(String email) {
+	public List<Article> findArticlesByFavorite(String email) {
 		Connection conn = DataSource.getInstance().getConnection();
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
-		List<ArticleCard> articleCards = new ArrayList<ArticleCard>();
-		ArticleCard articleCard = null;
+		List<Article> articleCards = new ArrayList<Article>();
+		Article articleCard = null;
 		
 		StringBuilder query = new StringBuilder();
 		
@@ -75,7 +75,7 @@ public class ArticleCardDAO {
 			rs = psmt.executeQuery();
 			
 			while (rs.next()) {
-				articleCard = new ArticleCard();
+				articleCard = new Article();
 				articleCard.setUrl(rs.getString("URL"));
 				articleCard.setTitle(rs.getString("title"));
 				articleCard.setAuthorId(rs.getInt("id"));

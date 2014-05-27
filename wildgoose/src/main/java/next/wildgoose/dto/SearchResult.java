@@ -7,12 +7,12 @@ public class SearchResult extends Result {
 	public SearchResult(Map<String, String[]> parameters) {
 		super(parameters);
 	}
-	public List<ReporterCard> getReporterCards() {
-		return (List<ReporterCard>) super.getData("reporterCards");
+	public List<Reporter> getReporters() {
+		return (List<Reporter>) super.getData("reporterCards");
 	}
 
-	public void setReporterCards(List<ReporterCard> ReporterCards) {
-		super.setData("reporterCards", ReporterCards);
+	public void setReporters(List<Reporter> Reporters) {
+		super.setData("reporterCards", Reporters);
 	}
 
 	public String getSearchQuery() {
@@ -22,4 +22,21 @@ public class SearchResult extends Result {
 	public void setSearchQuery(String searchQuery) {
 		super.setData("searchQuery", searchQuery);
 	}
+	
+	public Boolean getHasMore() {
+		return (Boolean) super.getData("hasMore");
+
+	}
+	public void setHasMore(boolean hasMore) {
+		super.setData("hasMore", hasMore);
+	}
+	
+	public int getTotalNum() {
+		return (Integer) super.getData("totalNum");
+
+	}
+	public void setTotalNum(int totalNum) {
+		super.setData("totalNum", totalNum);
+	}
+	
 }

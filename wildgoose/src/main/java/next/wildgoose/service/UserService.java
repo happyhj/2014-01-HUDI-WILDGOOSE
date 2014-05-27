@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.FavoriteDAO;
-import next.wildgoose.dto.ReporterCard;
+import next.wildgoose.dto.Reporter;
 import next.wildgoose.utility.Uri;
 
 import org.json.JSONObject;
@@ -42,7 +42,7 @@ public class UserService implements Daction {
 			}
 			// Default
 			json.put("text", "failed");
-			List<ReporterCard> reporters = null;
+			List<Reporter> reporters = null;
 			
 			//uri = api/v1/user/reporters/card
 			if (uri.check(4, "card") && "GET".equals(methodType)) {
@@ -77,10 +77,10 @@ public class UserService implements Daction {
 		return result;
 	}
 	
-	private JSONObject toJson (List<ReporterCard> reporters) {
+	private JSONObject toJson (List<Reporter> reporters) {
 		
-		Iterator<ReporterCard> ir = reporters.iterator();
-		ReporterCard reporter = null;
+		Iterator<Reporter> ir = reporters.iterator();
+		Reporter reporter = null;
 		JSONObject json = new JSONObject();
 		while (ir.hasNext()) {
 			JSONObject sub = new JSONObject();

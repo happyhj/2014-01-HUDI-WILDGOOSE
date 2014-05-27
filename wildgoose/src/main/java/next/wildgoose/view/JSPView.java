@@ -14,7 +14,7 @@ public class JSPView implements View {
 	@Override
 	public void show(Object resultData, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		request.setAttribute("data", resultData);
-		RequestDispatcher reqDispatcher = request.getRequestDispatcher(target);
+		RequestDispatcher reqDispatcher = request.getRequestDispatcher("/" + this.target);
 		reqDispatcher.forward(request, response);
 	}
 

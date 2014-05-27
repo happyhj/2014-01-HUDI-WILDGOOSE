@@ -7,8 +7,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import next.wildgoose.dao.ArticleCardDAO;
-import next.wildgoose.dto.ArticleCard;
+import next.wildgoose.dao.ArticleDAO;
+import next.wildgoose.dto.Article;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -24,12 +24,12 @@ public class FavoriteService implements Daction {
 		LOGGER.debug("email: " + email);
 		
 		ServletContext context = request.getServletContext();
-		ArticleCardDAO articleDao = (ArticleCardDAO) context.getAttribute("ArticleCardDAO");
+		ArticleDAO articleDao = (ArticleDAO) context.getAttribute("ArticleCardDAO");
 		
-		List<ArticleCard> articles = articleDao.findArticlesByFavorite(email);
+		List<Article> articles = articleDao.findArticlesByFavorite(email);
 		
-		Iterator<ArticleCard> ir = articles.iterator();
-		ArticleCard article = null;
+		Iterator<Article> ir = articles.iterator();
+		Article article = null;
 		JSONObject json = new JSONObject();
 		while (ir.hasNext()) {
 			JSONObject sub = new JSONObject();

@@ -9,17 +9,17 @@ public class ReporterResult extends Result{
 		super(parameters);
 	}
 	
-	public List<ArticleCard> getArticleCards() {
-		return (List<ArticleCard>) super.getData("articleCards");
+	public List<Article> getArticles() {
+		return (List<Article>) super.getData("articles");
 	}
-	public void setArticleCards(List<ArticleCard> articleCards) {
-		super.setData("articleCards", articleCards);
+	public void setArticles(List<Article> articles) {
+		super.setData("articles", articles);
 	}
-	public ReporterCard getReporterCard() {
-		return (ReporterCard) super.getData("reporterCard");
+	public Reporter getReporter() {
+		return (Reporter) super.getData("reporter");
 	}
-	public void setReporterCard(ReporterCard reporterCard) {
-		super.setData("reporterCard", reporterCard);
+	public void setReporter(Reporter reporter) {
+		super.setData("reporter", reporter);
 	}
 	
 }

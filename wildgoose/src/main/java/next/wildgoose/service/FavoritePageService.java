@@ -7,14 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.FavoriteDAO;
-import next.wildgoose.dto.ReporterCard;
+import next.wildgoose.dto.Reporter;
 import next.wildgoose.utility.Constants;
 
 public class FavoritePageService implements Action {
 
 	@Override
 	public ActionResult execute(HttpServletRequest request) {
-		List<ReporterCard> reporters = null;
+		List<Reporter> reporters = null;
 		ServletContext context = request.getServletContext();
 		ActionResult ar = new ActionResult();
 		HttpSession session = request.getSession();

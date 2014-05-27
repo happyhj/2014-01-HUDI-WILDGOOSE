@@ -5,10 +5,10 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.dao.ArticleCardDAO;
+import next.wildgoose.dao.ArticleDAO;
 import next.wildgoose.dao.FavoriteDAO;
-import next.wildgoose.dto.ArticleCard;
-import next.wildgoose.dto.ReporterCard;
+import next.wildgoose.dto.Article;
+import next.wildgoose.dto.Reporter;
 import next.wildgoose.utility.Uri;
 
 import org.slf4j.Logger;
@@ -32,19 +32,19 @@ public class UserController implements BackController {
 	}
 	
 	private Object getTimeline(ServletContext context, String userId) {
-		List<ArticleCard> articleCards = null;
+		List<Article> articles = null;
 		
-		ArticleCardDAO articleCardDao =  (ArticleCardDAO) context.getAttribute("ArticleCardDAO");
-		articleCards = articleCardDao.findArticlesByFavorite(userId);
+		ArticleDAO articleDao =  (ArticleDAO) context.getAttribute("ArticleDAO");
+		articles = articleDao.findArticlesByFavorite(userId);
 		
-		return articleCards;
+		return articles;
 	}
 	private Object getFavorites(ServletContext context, String userId) {
-		List<ReporterCard> reporterCards = null;
+		List<Reporter> reporters = null;
 		
 		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
-		reporterCards = favoriteDao.findReporterCard(userId);
+		reporters = favoriteDao.findReporterCard(userId);
 		
-		return reporterCards;
+		return reporters;
 	}
 }

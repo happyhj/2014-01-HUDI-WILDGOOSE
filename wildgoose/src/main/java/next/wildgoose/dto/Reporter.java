@@ -1,6 +1,6 @@
 package next.wildgoose.dto;
 
-public class ReporterCard {
+public class Reporter {
 	private int id;
 	private String email;
 	private String name;

@@ -6,19 +6,19 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import next.wildgoose.dao.ArticleCardDAO;
-import next.wildgoose.dto.ArticleCard;
+import next.wildgoose.dao.ArticleDAO;
+import next.wildgoose.dto.Article;
 import next.wildgoose.utility.Constants;
 
 public class TimeLineService implements Action {
 
 	public ActionResult execute(HttpServletRequest request) {
-		List<ArticleCard> articleCards = null;
+		List<Article> articleCards = null;
 		ServletContext context = request.getServletContext();
 		ActionResult ar = new ActionResult();
 		HttpSession session = request.getSession();
 		
-		ArticleCardDAO articleCardDao =  (ArticleCardDAO) context.getAttribute("ArticleCardDAO");
+		ArticleDAO articleCardDao =  (ArticleDAO) context.getAttribute("ArticleCardDAO");
 		articleCards = articleCardDao.findArticlesByFavorite((String)session.getAttribute("userId"));
 		
 		request.setAttribute("articleCards", articleCards);

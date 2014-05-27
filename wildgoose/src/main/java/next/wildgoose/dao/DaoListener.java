@@ -10,10 +10,10 @@ public class DaoListener implements ServletContextListener {
 		ServletContext sc = event.getServletContext();
 		
 		// DAO
-		sc.setAttribute("ArticleCardDAO", new ArticleCardDAO());
+		sc.setAttribute("ArticleDAO", new ArticleDAO());
 		sc.setAttribute("HookingKeywordDAO", new HookingKeywordDAO());
 		sc.setAttribute("NumberOfArticlesDAO", new NumberOfArticlesDAO());
-		sc.setAttribute("ReporterCardDAO", new ReporterCardDAO());
+		sc.setAttribute("ReporterDAO", new ReporterDAO());
 		sc.setAttribute("JsonDAO", new JsonDAO());
 		sc.setAttribute("SignDAO", new SignDAO());
 		sc.setAttribute("FavoriteDAO", new FavoriteDAO());

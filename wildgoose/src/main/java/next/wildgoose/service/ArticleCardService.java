@@ -5,10 +5,10 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.dao.ArticleCardDAO;
-import next.wildgoose.dao.ReporterCardDAO;
-import next.wildgoose.dto.ArticleCard;
-import next.wildgoose.dto.ReporterCard;
+import next.wildgoose.dao.ArticleDAO;
+import next.wildgoose.dao.ReporterDAO;
+import next.wildgoose.dto.Article;
+import next.wildgoose.dto.Reporter;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
 
@@ -19,14 +19,14 @@ public class ArticleCardService implements Action {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCardService.class.getName());
 
 	public ActionResult execute(HttpServletRequest request) {
-		ReporterCard reporterCard = null;
-		List<ArticleCard> articleCards = null;
+		Reporter reporterCard = null;
+		List<Article> articleCards = null;
 		ServletContext context = request.getServletContext();
 		Uri uri = new Uri(request);
 		ActionResult ar = new ActionResult();
 		
-		ReporterCardDAO reporterCardDao = (ReporterCardDAO) context.getAttribute("ReporterCardDAO");
-		ArticleCardDAO articleCardDao =  (ArticleCardDAO) context.getAttribute("ArticleCardDAO");
+		ReporterDAO reporterCardDao = (ReporterDAO) context.getAttribute("ReporterCardDAO");
+		ArticleDAO articleCardDao =  (ArticleDAO) context.getAttribute("ArticleCardDAO");
 		
 		// id가 입력되지 않은 경우 처리
 		if (uri.size() <= 1 || uri.get(1).equals("")) {
