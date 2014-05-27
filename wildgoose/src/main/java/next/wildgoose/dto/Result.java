@@ -37,6 +37,9 @@ public abstract class Result {
 	public Map<String, String[]> getParameters() {
 		return parameters;
 	}
+	public String[] getParameter(String key) {
+		return parameters.get(key);
+	}
 	public void setParameters(Map<String, String[]> parameters) {
 		this.parameters = parameters;
 	}

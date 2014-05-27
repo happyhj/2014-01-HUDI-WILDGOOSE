@@ -5,14 +5,15 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import next.wildgoose.dao.ReporterDAO;
 import next.wildgoose.dto.Reporter;
 import next.wildgoose.dto.SearchResult;
 import next.wildgoose.utility.Constants;
+import next.wildgoose.utility.Uri;
 import next.wildgoose.utility.Utility;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SearchController implements BackController {
 	
@@ -20,7 +21,20 @@ public class SearchController implements BackController {
 	
 	@Override
 	public Object execute(HttpServletRequest request) {
-		
+		Object result = null;
+		Uri uri = new Uri(request);
+
+		if (uri.check(1, "autocomplete")) {
+			// TODO: autocomplete API 구현
+			result = getAutocompleteResult(request);
+		} else if (uri.get(1) == null){
+			result = getSearchResult(request);
+		}
+		return result;
+	}
+	
+	
+	private Object getSearchResult(HttpServletRequest request) {
 		SearchResult searchResult = new SearchResult(request.getParameterMap());
 		boolean hasMore = false;
 		List<Reporter> reporters = null;
@@ -28,16 +42,14 @@ public class SearchController implements BackController {
 		
 		String searchQuery = request.getParameter("q");
 		LOGGER.debug("searchQuery: " + searchQuery);
-		
-		if ("%".equals(searchQuery)) {
-			searchQuery = null;
-		}
 
 		if (searchQuery == null) {
 			searchResult.setStatus(200);
 			searchResult.setMessage("welcome to search page! This path is not provided as API.");
 			return searchResult;
 		}
+		
+		searchQuery.replaceAll("%", "");
 		
 		String trimmedQuery = searchQuery.trim();
 		if ("".equals(trimmedQuery)) {
@@ -63,14 +75,20 @@ public class SearchController implements BackController {
 		
 		return searchResult;
 	}
-	
-	
+
+
+	private Object getAutocompleteResult(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 	private List<Reporter> getReporters(ReporterDAO reporterDao, String searchQuery, int start, int end) {
 		List<Reporter> reporters = null;
 		String type = null;
 		
 		// searchQuery의 검색 type설정
-		type = (Utility.isURL(searchQuery))? "url" : "name";
+		type = Utility.isURL(searchQuery) ? "url" : "name";
 		reporters = reporterDao.findReportersByType(type, searchQuery, start, end);
 
 		return reporters;

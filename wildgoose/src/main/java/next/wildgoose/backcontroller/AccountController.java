@@ -6,8 +6,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONObject;
-
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Account;
 import next.wildgoose.dto.AccountResult;
