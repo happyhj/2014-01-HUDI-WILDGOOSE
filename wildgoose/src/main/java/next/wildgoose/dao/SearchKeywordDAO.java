@@ -13,25 +13,20 @@ import next.wildgoose.database.DataSource;
 public class SearchKeywordDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearchKeywordDAO.class.getName());
 	
-	public void addKeywordRecord (String keyword) {
-		Connection conn = DataSource.getInstance().getConnection();
-		PreparedStatement psmt = null;
-		ResultSet rs = null;
+	public boolean addKeywordRecord (final String keyword) {
+		
+		InsertJdbcTemplate template = new InsertJdbcTemplate () {
+			
+			@Override
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, keyword);
+			}
+		};
 		
 		StringBuilder query = new StringBuilder();
 		query.append("INSERT INTO search_keyword (keyword) VALUES (?) ");
 		query.append("ON DUPLICATE KEY UPDATE count = count + 1");
 		
-		try {
-			psmt = conn.prepareStatement(query.toString());
-			psmt.setString(1, keyword);
-			psmt.execute();
-		} catch (SQLException sqle) {
-			LOGGER.debug(sqle.getMessage(), sqle);
-		} finally {
-			SqlUtil.closePrepStatement(psmt);
-			SqlUtil.closeResultSet(rs);
-			SqlUtil.closeConnection(conn);
-		}
+		return template.insert(query.toString());
 	}
 }	
