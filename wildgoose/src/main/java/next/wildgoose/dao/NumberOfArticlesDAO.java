@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public class NumberOfArticlesDAO implements ExtractDAO{
 	private static final Logger LOGGER = LoggerFactory.getLogger(NumberOfArticlesDAO.class.getName());
 	
-	public JSONObject byDay(int reporterId) {
+	public JSONObject byDay(final int reporterId) {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 			
 			@Override
@@ -47,7 +47,7 @@ public class NumberOfArticlesDAO implements ExtractDAO{
 		return result;
 	}
 	
-	public JSONObject bySection (int reporterId) {
+	public JSONObject bySection (final int reporterId) {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 			
 			@Override
