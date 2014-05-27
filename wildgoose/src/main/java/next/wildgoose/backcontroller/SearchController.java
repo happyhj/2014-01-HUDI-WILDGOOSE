@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 public class SearchController implements BackController {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(ReporterController.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(SearchController.class.getName());
 	
 	@Override
 	public Object execute(HttpServletRequest request) {
