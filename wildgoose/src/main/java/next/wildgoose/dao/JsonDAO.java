@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import next.wildgoose.dao.template.SelectJdbcTemplate;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +18,7 @@ public class JsonDAO {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 
 			@Override
-			Object mapRow(ResultSet rs) throws SQLException {
+			protected Object mapRow(ResultSet rs) throws SQLException {
 				JSONObject result = new JSONObject();
 				
 				while (rs.next()) {
@@ -29,7 +31,7 @@ public class JsonDAO {
 			}
 
 			@Override
-			void setValues(PreparedStatement psmt) throws SQLException {
+			protected void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, name + "%");
 				psmt.setInt(2, count);
 			}
@@ -47,7 +49,7 @@ public class JsonDAO {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 
 			@Override
-			Object mapRow(ResultSet rs) throws SQLException {
+			protected Object mapRow(ResultSet rs) throws SQLException {
 				JSONObject result = new JSONObject();
 				
 				while (rs.next()) {
@@ -63,7 +65,7 @@ public class JsonDAO {
 			}
 
 			@Override
-			void setValues(PreparedStatement psmt) throws SQLException {
+			protected void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, "%" + searchQuery + "%");
 				psmt.setInt(2, start);
 				psmt.setInt(3, num);

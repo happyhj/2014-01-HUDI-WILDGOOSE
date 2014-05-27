@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import next.wildgoose.dao.template.InsertJdbcTemplate;
 import next.wildgoose.database.DataSource;
 
 public class SearchKeywordDAO {

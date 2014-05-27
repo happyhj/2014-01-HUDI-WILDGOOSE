@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import next.wildgoose.dao.template.SelectJdbcTemplate;
 import next.wildgoose.dto.ArticleCard;
 
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class ArticleCardDAO {
 		SelectJdbcTemplate template = new SelectJdbcTemplate(){
 
 			@Override
-			Object mapRow(ResultSet rs) throws SQLException {
+			protected Object mapRow(ResultSet rs) throws SQLException {
 				List<ArticleCard> articles = new ArrayList<ArticleCard>();
 				ArticleCard article = null;
 				while (rs.next()) {
@@ -35,7 +36,7 @@ public class ArticleCardDAO {
 			}
 
 			@Override
-			void setValues(PreparedStatement psmt) throws SQLException {
+			protected void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setInt(1, reporterId);
 			}
 			
@@ -56,7 +57,7 @@ public class ArticleCardDAO {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 
 			@Override
-			Object mapRow(ResultSet rs) throws SQLException {
+			protected Object mapRow(ResultSet rs) throws SQLException {
 				List<ArticleCard> articles = new ArrayList<ArticleCard>();
 				ArticleCard article = null;
 				
@@ -75,7 +76,7 @@ public class ArticleCardDAO {
 			}
 
 			@Override
-			void setValues(PreparedStatement psmt) throws SQLException {
+			protected void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, email);
 			}
 		};

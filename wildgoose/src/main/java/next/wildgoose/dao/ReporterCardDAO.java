@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import next.wildgoose.dao.template.SelectJdbcTemplate;
 import next.wildgoose.dto.ReporterCard;
 
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class ReporterCardDAO {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 
 			@Override
-			Object mapRow(ResultSet rs) throws SQLException {
+			protected Object mapRow(ResultSet rs) throws SQLException {
 				ReporterCard reporter = new ReporterCard();
 				if (rs.first()) {
 					reporter.setId(rs.getInt("id"));
@@ -32,7 +33,7 @@ public class ReporterCardDAO {
 			}
 
 			@Override
-			void setValues(PreparedStatement psmt) throws SQLException {
+			protected void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setInt(1, reporterId);
 			}
 		};
@@ -51,7 +52,7 @@ public class ReporterCardDAO {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 
 			@Override
-			Object mapRow(ResultSet rs) throws SQLException {
+			protected Object mapRow(ResultSet rs) throws SQLException {
 				List<ReporterCard> reporters = new ArrayList<ReporterCard>();
 				ReporterCard reporterCard = null;
 				while (rs.next()) {
@@ -67,7 +68,7 @@ public class ReporterCardDAO {
 			}
 
 			@Override
-			void setValues(PreparedStatement psmt) throws SQLException {
+			protected void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, "%" + searchQuery + "%");
 				psmt.setInt(2, start);
 				psmt.setInt(3, num);

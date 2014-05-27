@@ -9,7 +9,6 @@ import javax.servlet.ServletContextListener;
 
 import next.wildgoose.dao.DummyData;
 import next.wildgoose.dao.ExtractDAO;
-import next.wildgoose.dao.HookingKeywordDAO;
 import next.wildgoose.dao.NumberOfArticlesDAO;
 import next.wildgoose.utility.Constants;
 
@@ -41,7 +40,6 @@ public class ServiceListener implements ServletContextListener {
 		// IN Service
 		 extractMap = new HashMap<String, ExtractDAO>();
 		 extractMap.put("number_of_articles", (NumberOfArticlesDAO) context.getAttribute("NumberOfArticlesDAO"));
-		 extractMap.put("number_of_hook_keywords", (HookingKeywordDAO) context.getAttribute("HookingKeywordDAO"));
 		 extractMap.put("stat_points", (DummyData) context.getAttribute("DummyData"));
 		
 		context.setAttribute("actionMap", actionMap);

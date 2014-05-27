@@ -37,6 +37,7 @@ public class ArticleCardService implements Action {
 		
 		int reporterId = Integer.parseInt(uri.get(1));
 		
+		LOGGER.debug(""+reporterId);
 		// DB에서 id로 검색하여 reporterCardData 가져오기
 		reporterCard = reporterCardDao.findReporterById(reporterId);
 		articleCards = articleCardDao.findArticlesById(reporterId);		

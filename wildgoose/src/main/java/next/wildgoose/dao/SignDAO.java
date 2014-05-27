@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import next.wildgoose.dao.template.InsertJdbcTemplate;
+import next.wildgoose.dao.template.SelectJdbcTemplate;
 import next.wildgoose.database.DataSource;
 import next.wildgoose.dto.Account;
 import next.wildgoose.dto.ReporterCard;
@@ -20,7 +22,7 @@ public class SignDAO {
 		boolean result = false;
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 			@Override
-			Object mapRow(ResultSet rs) throws SQLException {
+			protected Object mapRow(ResultSet rs) throws SQLException {
 				if (rs.first()) {
 					return true;
 				}
@@ -28,7 +30,7 @@ public class SignDAO {
 			}
 
 			@Override
-			void setValues(PreparedStatement psmt) throws SQLException {
+			protected void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, email);
 			}
 		};
@@ -44,7 +46,7 @@ public class SignDAO {
 	public Account findAccount (final String email) {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 			@Override
-			Object mapRow(ResultSet rs) throws SQLException {
+			protected Object mapRow(ResultSet rs) throws SQLException {
 				Account account = null;
 				if (rs.first()) {
 					account = new Account(rs.getString("email"), rs.getString("password"));
@@ -53,7 +55,7 @@ public class SignDAO {
 			}
 
 			@Override
-			void setValues(PreparedStatement psmt) throws SQLException {
+			protected void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, email);
 			}
 		};

@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import next.wildgoose.dao.template.DeleteJdbcTemplate;
+import next.wildgoose.dao.template.InsertJdbcTemplate;
+import next.wildgoose.dao.template.SelectJdbcTemplate;
 import next.wildgoose.dto.ReporterCard;
 
 import org.slf4j.Logger;
@@ -55,7 +58,7 @@ public class FavoriteDAO {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 
 			@Override
-			Object mapRow(ResultSet rs) throws SQLException {
+			protected Object mapRow(ResultSet rs) throws SQLException {
 				List<Integer> favorites = new ArrayList<Integer>();
 				
 				while (rs.next()) {
@@ -65,7 +68,7 @@ public class FavoriteDAO {
 			}
 
 			@Override
-			void setValues(PreparedStatement psmt) throws SQLException {
+			protected void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, email);
 			}
 		};
@@ -80,7 +83,7 @@ public class FavoriteDAO {
 		SelectJdbcTemplate template = new SelectJdbcTemplate() {
 
 			@Override
-			Object mapRow(ResultSet rs) throws SQLException {
+			protected Object mapRow(ResultSet rs) throws SQLException {
 				List<ReporterCard> favorites = new ArrayList<ReporterCard>();
 				ReporterCard reporter = null;
 				
@@ -99,7 +102,7 @@ public class FavoriteDAO {
 			}
 
 			@Override
-			void setValues(PreparedStatement psmt) throws SQLException {
+			protected void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, email);
 				//psmt.setInt(2, start);
 				//psmt.setInt(3, num);

@@ -1,13 +1,12 @@
 package next.wildgoose.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.database.DataSource;
+import next.wildgoose.dao.template.SelectJdbcTemplate;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -17,11 +16,25 @@ public class NumberOfArticlesDAO implements ExtractDAO{
 	private static final Logger LOGGER = LoggerFactory.getLogger(NumberOfArticlesDAO.class.getName());
 	
 	public JSONObject byDay(int reporterId) {
-		JSONObject result = new JSONObject();
-		JSONObject data = new JSONObject();
-		PreparedStatement psmt = null;
-		Connection conn = DataSource.getInstance().getConnection();
-		ResultSet rs = null;
+		SelectJdbcTemplate template = new SelectJdbcTemplate() {
+			
+			@Override
+			protected Object mapRow(ResultSet rs) throws SQLException {
+				JSONObject result = new JSONObject();
+				JSONObject data = new JSONObject();
+				while (rs.next()) {
+					data.accumulate(rs.getString("date"), rs.getInt("count"));
+				}
+				result.put("data", data);
+				return result;
+			}
+
+			@Override
+			protected void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setInt(1, reporterId);
+			}
+			
+		};
 		
 		StringBuilder query = new StringBuilder();
 		query.append("select date_format(datetime, '%m/%d') as date, count(URL) as count from article ");
@@ -29,32 +42,32 @@ public class NumberOfArticlesDAO implements ExtractDAO{
 		query.append("and DATEDIFF(now(), article.datetime) < 7 ");
 		query.append("group by date_format(datetime, '%m/%d');");
 		
-		try {
-			psmt = conn.prepareStatement(query.toString());
-			psmt.setInt(1, reporterId);
-			rs = psmt.executeQuery();
-
-			while (rs.next()) {
-				data.accumulate(rs.getString("date"), rs.getInt("count"));	
-			}
-			result.put("data", data);
-		} catch (SQLException sqle) {
-			LOGGER.debug(sqle.getMessage(), sqle);
-		} finally {
-			SqlUtil.closePrepStatement(psmt);
-			SqlUtil.closeResultSet(rs);
-			SqlUtil.closeConnection(conn);
-		}
-
+		JSONObject result = new JSONObject();
+		result = (JSONObject) template.select(query.toString());
 		return result;
 	}
 	
 	public JSONObject bySection (int reporterId) {
-		JSONObject result = new JSONObject();
-		PreparedStatement psmt = null;
-		Connection conn = DataSource.getInstance().getConnection();
-		ResultSet rs = null;
-		
+		SelectJdbcTemplate template = new SelectJdbcTemplate() {
+			
+			@Override
+			protected Object mapRow(ResultSet rs) throws SQLException {
+				JSONObject result = new JSONObject();
+				while (rs.next()) {
+					JSONObject data = new JSONObject();
+					data.put("label", rs.getString(1));
+					data.put("value", rs.getInt(2));
+					result.append("data", data);
+				}
+				return result;
+			}
+
+			@Override
+			protected void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setInt(1, reporterId);
+			}
+			
+		};
 		
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT distinct sec.name, count(section_id) FROM article ");
@@ -62,25 +75,9 @@ public class NumberOfArticlesDAO implements ExtractDAO{
 		query.append("ON URL = result.article_URL ");
 		query.append("JOIN section as sec ON section_id = sec.id ");
 		query.append("GROUP BY section_id ORDER BY section_id LIMIT 5;");
-				
-		try {
-			psmt = conn.prepareStatement(query.toString());
-			psmt.setInt(1, reporterId);
-			rs = psmt.executeQuery();
 
-			while (rs.next()) {
-				JSONObject subJsonObj = new JSONObject();
-				subJsonObj.put("label", rs.getString(1));
-				subJsonObj.put("value", rs.getInt(2));
-				result.append("data", subJsonObj);
-			}
-		} catch (SQLException sqle) {
-			LOGGER.debug(sqle.getMessage(), sqle);
-		} finally {
-			SqlUtil.closePrepStatement(psmt);
-			SqlUtil.closeResultSet(rs);
-			SqlUtil.closeConnection(conn);
-		}
+		JSONObject result = new JSONObject();
+		result = (JSONObject) template.select(query.toString());
 		return result;
 	}
 

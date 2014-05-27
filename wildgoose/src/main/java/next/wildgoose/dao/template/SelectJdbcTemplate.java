@@ -1,4 +1,4 @@
-package next.wildgoose.dao;
+package next.wildgoose.dao.template;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,9 +40,9 @@ public abstract class SelectJdbcTemplate {
 		return obj;
 	}
 
-	abstract Object mapRow(ResultSet rs) throws SQLException ;
+	protected abstract Object mapRow(ResultSet rs) throws SQLException ;
 
-	abstract void setValues(PreparedStatement psmt) throws SQLException ;
+	protected abstract void setValues(PreparedStatement psmt) throws SQLException ;
 
 	
 
