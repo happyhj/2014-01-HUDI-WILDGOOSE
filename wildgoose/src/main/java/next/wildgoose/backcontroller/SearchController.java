@@ -13,7 +13,7 @@ public class SearchController implements BackController {
 
 	@Override
 	public Object execute(HttpServletRequest request) {
-		SearchResult result = new SearchResult();
+		SearchResult result = new SearchResult(request.getParameterMap());
 		List<ReporterCard> list = new ArrayList<ReporterCard>();
 		
 		ReporterCardDAO rcd = new ReporterCardDAO();
