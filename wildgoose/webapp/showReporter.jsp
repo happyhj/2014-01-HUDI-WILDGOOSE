@@ -52,14 +52,6 @@
 	</div>
 	<div class="card card-graph">
 		<div class="card-section card-section-header">
-			<h3 class="title">낚시 단어 수</h3>
-		</div>
-		<div id="bar-graph" class="card-section">
-			<div class="graph"></div>
-		</div>
-	</div>
-	<div class="card card-graph">
-		<div class="card-section card-section-header">
 			<h3 class="title">기자의 특성</h3>
 		</div>
 		<div id="radar-graph" class="card-section">

@@ -40,9 +40,10 @@ public class ReporterController implements BackController {
 		}
 
 		int reporterId = Integer.parseInt(uri.get(1));
-		if (uri.check(2, "")) {
+		if (uri.get(2) == null) {
 			result = getReporterPage(request, reporterId);
-		} else if (uri.check(2, "statistics")) {
+		}
+		else if (uri.check(2, "statistics")) {
 			result = getGraphData(request, uri, reporterId);
 		}
 
@@ -76,16 +77,13 @@ public class ReporterController implements BackController {
 		return reporterResult;
 	}
 
-	private ReporterResult getReporterPage(HttpServletRequest request,
-			int reporterId) {
+	private ReporterResult getReporterPage(HttpServletRequest request, int reporterId) {
 		ServletContext context = request.getServletContext();
-		ReporterResult reporterResult = new ReporterResult(
-				request.getParameterMap());
+		ReporterResult reporterResult = new ReporterResult(request.getParameterMap());
 
 		Reporter reporter = null;
 		List<Article> articles = null;
-		ReporterDAO reporterDao = (ReporterDAO) context
-				.getAttribute("ReporterDAO");
+		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
 		ArticleDAO articleDao = (ArticleDAO) context.getAttribute("ArticleDAO");
 
 		// DB에서 id로 검색하여 reporterCardData 가져오기
@@ -95,6 +93,10 @@ public class ReporterController implements BackController {
 		reporterResult.setReporter(reporter);
 		reporterResult.setArticles(articles);
 		reporterResult.setMessage("getting Reporter Info success");
+		
+		LOGGER.debug("result: " + Utility.toJsonString(reporterResult));
+		
+		
 		return reporterResult;
 	}
 
