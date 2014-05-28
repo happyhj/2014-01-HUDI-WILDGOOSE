@@ -19,7 +19,7 @@
 <body>
 <div class="wrap viewport">
 <header class="header"> 
-	<%@ include file="template/header.jsp" %> 
+	<%@ include file="jsp_templates/header.jsp" %> 
 </header>
 <div class="container test-outline">
 	<!-- 기자 정보 -->

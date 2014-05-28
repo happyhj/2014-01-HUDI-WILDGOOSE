@@ -8,6 +8,8 @@ import java.io.IOException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import next.wildgoose.dto.Result;
+import next.wildgoose.dto.TemplateResult;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
 
@@ -19,20 +21,17 @@ public class TemplateController implements BackController {
 	
 	@Override
 	public Object execute(HttpServletRequest request) {
-		ServletContext context = request.getServletContext();
-		Uri uri = new Uri(request);
-		
-		String templateFileName = uri.get(1);
-		String root = context.getRealPath(Constants.RESOURCE_ROOT);
-		String path = root + templateFileName;
-		
-		String templateStr = read(path);
-		// TODO: Make Template response DTO and put this str into it
-		
-		return null;
+		Result result = readTemplate(request);
+		return result;
 	}
 	
-	public String read(String path) {
+	private TemplateResult readTemplate(HttpServletRequest request) {
+		ServletContext context = request.getServletContext();
+		Uri uri = new Uri(request);
+		String templateFileName = uri.get(1);
+		String root = context.getRealPath(Constants.RESOURCE_ROOT);
+		String path = root +"html_templates/"+ templateFileName;
+		TemplateResult result = new TemplateResult(request.getParameterMap());
 		String htmlDocument = null;
 		
 		try {
@@ -44,14 +43,21 @@ public class TemplateController implements BackController {
 		    }
 			in.close();
 			htmlDocument = sb.toString();
+			result.setMessage("Loading template string success");
+			result.setStatus(200);
+			result.setTemplate(htmlDocument);
 		} catch (FileNotFoundException e) {
 			LOGGER.debug(e.getMessage(), e);
-			htmlDocument = "request file is not exist";
+			result.setStatus(500);
+			result.setMessage("request file is not exist");
 		} catch (IOException e) {
 			LOGGER.debug(e.getMessage(), e);
-			htmlDocument = "can't read file";
+			result.setStatus(500);
+			result.setMessage("can't read file");
 		}
-		
-		return htmlDocument;
+		LOGGER.debug(result.getMessage());
+		LOGGER.debug(""+result.getStatus());
+		LOGGER.debug(result.getTemplate());
+		return result;
 	}
 }
