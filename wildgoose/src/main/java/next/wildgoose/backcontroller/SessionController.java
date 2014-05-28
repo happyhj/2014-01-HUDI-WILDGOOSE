@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.SignDAO;
-import next.wildgoose.dto.Account;
 import next.wildgoose.dto.Result;
 import next.wildgoose.dto.SimpleResult;
 import next.wildgoose.utility.Constants;
@@ -33,7 +32,7 @@ public class SessionController implements BackController {
 		SimpleResult simpleResult = new SimpleResult(request.getParameterMap());
 		
 		String email = request.getParameter("email");
-		String password = request.getParameter("password");
+		String hashedPassword = request.getParameter("password");
 		
 		ServletContext context = request.getServletContext();
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
@@ -41,16 +40,16 @@ public class SessionController implements BackController {
 		HttpSession session = request.getSession();
 		String randNum = (String) session.getAttribute("randNum");
 
-		Account account = signDao.findAccount(email);
-		if (account == null) {
+		String accountPw = signDao.findAccount(email);
+		if (accountPw == null) {
 			// 가입되지 않은 아이디입니다. 다시 확인해주세요.
 			return simpleResult;
 		}
 		// H(db_password+random)
-		if(SHA256.testSHA256(account.getPassword() + randNum).equals(password)){
+		if(SHA256.testSHA256(accountPw + randNum).equals(hashedPassword)){
 			simpleResult.setStatus(200);
 			simpleResult.setMessage("getting user authentication succeed");
-			session.setAttribute("userId", account.getEmail());
+			session.setAttribute("userId", email);
 			session.setMaxInactiveInterval(Constants.SESSION_EXPIRING_TIME);
 		} else {
 			simpleResult.setMessage("getting user authentication failed");
