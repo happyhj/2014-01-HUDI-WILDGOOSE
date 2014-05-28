@@ -55,24 +55,19 @@ public class ReporterController implements BackController {
 		ReporterResult reporterResult = new ReporterResult(request.getParameterMap());
 		ServletContext context = request.getServletContext();
 		
-		LOGGER.debug("uri: " + uri.toString());
 		String graph = request.getParameter("data");
 		String by = request.getParameter("by");
-		
-		LOGGER.debug("graph: " + graph + ",  by: " + by);
+		List<NumberOfArticles> numberOfArticlesList = null;
 		
 		if("number_of_articles".equals(graph)){
 			NumberOfArticlesDAO numberOfArticlesDao = (NumberOfArticlesDAO) context.getAttribute("NumberOfArticlesDAO");
-			List<NumberOfArticles> numberOfArticlesList;
 			if("day".equals(by)){
 				numberOfArticlesList = numberOfArticlesDao.findNumberOfArticlesByDay(reporterId);
-				LOGGER.debug(numberOfArticlesList.toString());
-				reporterResult.setNumberOfArticles(numberOfArticlesList);
-			} else if ("section".equals(by)){
-				numberOfArticlesList = numberOfArticlesDao.findNumberOfArticlesBySection(reporterId);
-				LOGGER.debug(numberOfArticlesList.toString());
-				reporterResult.setNumberOfArticles(numberOfArticlesList);
 			}
+			else if ("section".equals(by)){
+				numberOfArticlesList = numberOfArticlesDao.findNumberOfArticlesBySection(reporterId);
+			}
+			reporterResult.setNumberOfArticles(numberOfArticlesList);
 		}
 		else if ("stat_points".equals(by)){
 			DummyData dummy = (DummyData) context.getAttribute("DummyData");
