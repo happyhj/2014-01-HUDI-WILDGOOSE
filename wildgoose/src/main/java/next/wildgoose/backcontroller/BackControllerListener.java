@@ -7,6 +7,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import next.wildgoose.framework.BackController;
+
 public class BackControllerListener implements ServletContextListener {
 
 	@Override

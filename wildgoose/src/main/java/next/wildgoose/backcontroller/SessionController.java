@@ -6,8 +6,9 @@ import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Account;
-import next.wildgoose.dto.Result;
 import next.wildgoose.dto.SimpleResult;
+import next.wildgoose.framework.Result;
+import next.wildgoose.framework.BackController;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.SHA256;
 import next.wildgoose.utility.Uri;

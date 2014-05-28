@@ -9,7 +9,8 @@ import javax.servlet.http.HttpSession;
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Account;
 import next.wildgoose.dto.AccountResult;
-import next.wildgoose.dto.Result;
+import next.wildgoose.framework.BackController;
+import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Uri;
 
 public class AccountController implements BackController {

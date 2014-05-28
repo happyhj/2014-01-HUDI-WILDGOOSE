@@ -10,9 +10,10 @@ import next.wildgoose.dao.FavoriteDAO;
 import next.wildgoose.dto.Article;
 import next.wildgoose.dto.FavoriteResult;
 import next.wildgoose.dto.Reporter;
-import next.wildgoose.dto.Result;
 import next.wildgoose.dto.SimpleResult;
 import next.wildgoose.dto.TimelineResult;
+import next.wildgoose.framework.BackController;
+import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Uri;
 
 import org.slf4j.Logger;

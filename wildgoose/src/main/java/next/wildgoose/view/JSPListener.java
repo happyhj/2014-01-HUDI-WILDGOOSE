@@ -1,4 +1,4 @@
-package next.wildgoose.web;
+package next.wildgoose.view;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +7,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-public class WebListener implements ServletContextListener {
+public class JSPListener implements ServletContextListener {
 	
 	
 	public void contextInitialized(ServletContextEvent event) {

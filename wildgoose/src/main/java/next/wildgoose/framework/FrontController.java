@@ -1,4 +1,4 @@
-package next.wildgoose.web;
+package next.wildgoose.framework;
 
 import java.io.IOException;
 import java.util.Map;
@@ -11,11 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import next.wildgoose.backcontroller.BackController;
 import next.wildgoose.utility.Constants;
-import next.wildgoose.view.JSONView;
-import next.wildgoose.view.JSPView;
-import next.wildgoose.view.View;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

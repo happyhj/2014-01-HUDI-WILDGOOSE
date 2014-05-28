@@ -1,4 +1,4 @@
-package next.wildgoose.view;
+package next.wildgoose.framework;
 
 import java.io.IOException;
 import java.util.ArrayList;
