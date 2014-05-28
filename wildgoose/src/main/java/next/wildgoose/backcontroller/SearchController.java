@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import next.wildgoose.dao.ReporterDAO;
 import next.wildgoose.dto.Reporter;
+import next.wildgoose.dto.Result;
 import next.wildgoose.dto.SearchResult;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Utility;
@@ -19,40 +20,47 @@ public class SearchController implements BackController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearchController.class.getName());
 	
 	@Override
-	public Object execute(HttpServletRequest request) {
-		int howMany = Constants.NUM_OF_CARDS;
+	public Result execute(HttpServletRequest request) {
 		String searchQuery = request.getParameter("q");
-		boolean autocomplete = false;
+		int howMany = Constants.NUM_OF_CARDS;
+		SearchResult searchResult = checkQuery(request, searchQuery);
 		
-		// searchQuery 존재여부 검사
+		if (searchResult != null) {
+			return searchResult;
+		}
+		
+		if (request.getParameter("how_many") != null) {
+			howMany = Integer.parseInt(request.getParameter("how_many"));
+		}
+		// 결과 반환
+		if (request.getParameter("autocomplete") != null) {
+			LOGGER.debug("searchQuery: " + searchQuery + ", autocompete: " + request.getParameter("autocomplete"));
+			searchResult = getAutoCompleteResult(request, searchQuery, howMany);
+		} else {
+			searchResult = getSearchResult(request, searchQuery, howMany);
+		}
+		return searchResult;
+	}
+	
+	private SearchResult checkQuery(HttpServletRequest request, String searchQuery) {
+		SearchResult searchResult = null;
+		
 		if (searchQuery == null) {
-			SearchResult searchResult = new SearchResult(request.getParameterMap());
+			searchResult = new SearchResult(request.getParameterMap());
 			searchResult.setStatus(200);
 			searchResult.setMessage("welcome to search page! This path is not provided as API.");
 			return searchResult;
 		}
-		
-		// 자동완성 여부 검사
-		if (request.getParameter("autocomplete") != null) {
-			autocomplete = true;
-			LOGGER.debug("searchQuery: " + searchQuery + ", autocompete: " + request.getParameter("autocomplete"));
-			howMany = Integer.parseInt(request.getParameter("how_many"));
-		}
-		
+				
 		// searchQuery 에러 검사
 		searchQuery.replaceAll("%", "");
 		String trimmedQuery = searchQuery.trim();
 		if ("".equals(trimmedQuery)) {
-			SearchResult searchResult = new SearchResult(request.getParameterMap());
+			searchResult = new SearchResult(request.getParameterMap());
 			searchResult.setMessage("You can not search with whitespace");
 			return searchResult;
 		}
-		
-		// 결과 반환
-		if (autocomplete) {
-			return getAutoCompleteResult(request, searchQuery, howMany);
-		}
-		return getSearchResult(request, searchQuery, howMany);
+		return null;
 	}
 	
 	private SearchResult getAutoCompleteResult(HttpServletRequest request, String searchQuery, int howMany) {

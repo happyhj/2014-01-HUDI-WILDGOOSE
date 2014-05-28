@@ -20,7 +20,7 @@ public class TemplateController implements BackController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TemplateController.class.getName());
 	
 	@Override
-	public Object execute(HttpServletRequest request) {
+	public Result execute(HttpServletRequest request) {
 		Result result = readTemplate(request);
 		return result;
 	}

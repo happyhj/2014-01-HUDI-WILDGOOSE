@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import next.wildgoose.dao.ArticleDAO;
 import next.wildgoose.dao.FavoriteDAO;
 import next.wildgoose.dto.Article;
+import next.wildgoose.dto.FavoriteResult;
 import next.wildgoose.dto.Reporter;
+import next.wildgoose.dto.Result;
 import next.wildgoose.dto.SimpleResult;
+import next.wildgoose.dto.TimelineResult;
 import next.wildgoose.utility.Uri;
 
 import org.slf4j.Logger;
@@ -17,10 +20,10 @@ import org.slf4j.LoggerFactory;
 
 public class UserController implements BackController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class.getName());
+	
 	@Override
-	// TODO: change to result
-	public Object execute(HttpServletRequest request) {
-		Object result = null;
+	public Result execute(HttpServletRequest request) {
+		Result result = null;
 		Uri uri = new Uri(request);
 		String userId = uri.get(1);
 		String pageName = uri.get(2);
@@ -41,26 +44,27 @@ public class UserController implements BackController {
 	}
 	
 	// TODO: change to result
-	private Object getTimeline(HttpServletRequest request, String userId) {
+	private TimelineResult getTimeline(HttpServletRequest request, String userId) {
 		ServletContext context = request.getServletContext();
 
-		List<Article> articles = null;
-		
 		ArticleDAO articleDao =  (ArticleDAO) context.getAttribute("ArticleDAO");
-		articles = articleDao.findArticlesByFavorite(userId);
+		List<Article> articles = articleDao.findArticlesByFavorite(userId);
 		
-		return articles;
+		TimelineResult timelineResult = new TimelineResult(request.getParameterMap());
+		timelineResult.setArticles("articles", articles);
+		return timelineResult;
 	}
 	
 	// TODO: change to result
-	private Object getFavorites(HttpServletRequest request, String userId) {
+	private Result getFavorites(HttpServletRequest request, String userId) {
 		ServletContext context = request.getServletContext();
-		List<Reporter> reporters = null;
 		
 		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
-		reporters = favoriteDao.findReporter(userId);
+		List<Reporter> reporters = favoriteDao.findReporter(userId);
 		
-		return reporters;
+		FavoriteResult favoriteResult = new FavoriteResult(request.getParameterMap());
+		favoriteResult.setFavorites("reporters", reporters);
+		return favoriteResult;
 	}
 	
 	private SimpleResult addFavorites(HttpServletRequest request, String userId) {

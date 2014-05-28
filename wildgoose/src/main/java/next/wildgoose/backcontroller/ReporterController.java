@@ -26,7 +26,7 @@ public class ReporterController implements BackController {
 			.getLogger(ReporterController.class.getName());
 
 	@Override
-	public Object execute(HttpServletRequest request) {
+	public Result execute(HttpServletRequest request) {
 		Result result = null;
 		Uri uri = new Uri(request);
 

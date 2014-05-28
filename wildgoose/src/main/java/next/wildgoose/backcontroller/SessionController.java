@@ -15,7 +15,7 @@ import next.wildgoose.utility.Uri;
 public class SessionController implements BackController {
 
 	@Override
-	public Object execute(HttpServletRequest request) {
+	public Result execute(HttpServletRequest request) {
 		Result result = null;
 		String method = request.getMethod();
 		Uri uri = new Uri(request);

@@ -9,24 +9,26 @@ import javax.servlet.http.HttpSession;
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Account;
 import next.wildgoose.dto.AccountResult;
+import next.wildgoose.dto.Result;
 import next.wildgoose.utility.Uri;
 
 public class AccountController implements BackController {
 
 	@Override
-	public Object execute(HttpServletRequest request) {
+	public Result execute(HttpServletRequest request) {
+		Result result = null;
 		Uri uri = new Uri(request);
 		String feature = uri.get(1);
 		
 		if("new".equals(feature)){
 			// 체크하고 유효한 경우 가입
-			return join(request);
+			result = join(request);
 		} else if("email".equals(feature)){
 			String email = uri.get(2);
-			return usedEmail(request, email);
+			result = usedEmail(request, email);
 		}
 		
-		return null;
+		return result;
 	}
 
 	private AccountResult usedEmail(HttpServletRequest request, String email) {

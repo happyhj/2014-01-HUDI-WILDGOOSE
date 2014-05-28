@@ -20,7 +20,7 @@
 			<ul>
 				<%-- session 존재시 --%>
 				<c:if test="${ not empty sessionScope.userId }">
-					<c:forEach var="reporterCard" items="${ requestScope.reporters }">
+					<c:forEach var="reporter" items="${ requestScope.data.favorites }">
 					<li class="card card-reporter">
 						<%@ include file = "/jsp_templates/reporterCard.jsp" %>
 					</li>
