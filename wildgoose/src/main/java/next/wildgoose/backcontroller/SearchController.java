@@ -5,12 +5,10 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.dao.JsonDAO;
 import next.wildgoose.dao.ReporterDAO;
 import next.wildgoose.dto.Reporter;
 import next.wildgoose.dto.SearchResult;
 import next.wildgoose.utility.Constants;
-import next.wildgoose.utility.Uri;
 import next.wildgoose.utility.Utility;
 
 import org.slf4j.Logger;
@@ -22,71 +20,74 @@ public class SearchController implements BackController {
 	
 	@Override
 	public Object execute(HttpServletRequest request) {
-		Object result = null;
-		Uri uri = new Uri(request);
-
-		if (uri.check(1, "autocomplete")) {
-			// TODO: autocomplete API 구현
-			result = getAutocompleteResult(request);
-		} else if (uri.get(1) == null){
-			result = getSearchResult(request);
-		}
-		return result;
-	}
-	
-	
-	private SearchResult getSearchResult(HttpServletRequest request) {
-		SearchResult searchResult = new SearchResult(request.getParameterMap());
-		boolean hasMore = false;
-		List<Reporter> reporters = null;
-		ServletContext context = request.getServletContext();
-		
+		int howMany = Constants.NUM_OF_CARDS;
 		String searchQuery = request.getParameter("q");
-		LOGGER.debug("searchQuery: " + searchQuery);
-
+		boolean autocomplete = false;
+		
+		// searchQuery 존재여부 검사
 		if (searchQuery == null) {
+			SearchResult searchResult = new SearchResult(request.getParameterMap());
 			searchResult.setStatus(200);
 			searchResult.setMessage("welcome to search page! This path is not provided as API.");
 			return searchResult;
 		}
 		
-		searchQuery.replaceAll("%", "");
+		// 자동완성 여부 검사
+		if (request.getParameter("autocomplete") != null) {
+			autocomplete = true;
+			LOGGER.debug("searchQuery: " + searchQuery + ", autocompete: " + request.getParameter("autocomplete"));
+			howMany = Integer.parseInt(request.getParameter("how_many"));
+		}
 		
+		// searchQuery 에러 검사
+		searchQuery.replaceAll("%", "");
 		String trimmedQuery = searchQuery.trim();
 		if ("".equals(trimmedQuery)) {
+			SearchResult searchResult = new SearchResult(request.getParameterMap());
 			searchResult.setMessage("You can not search with whitespace");
 			return searchResult;
 		}
-		// 25개를 가져온 후, 마지막 카드를 지움.
-		// TODO: change this to use "start_item and how_many parameter
+		
+		// 결과 반환
+		if (autocomplete) {
+			return getAutoCompleteResult(request, searchQuery, howMany);
+		}
+		return getSearchResult(request, searchQuery, howMany);
+	}
+	
+	private SearchResult getAutoCompleteResult(HttpServletRequest request, String searchQuery, int howMany) {
+		SearchResult searchResult = new SearchResult(request.getParameterMap());
+		ServletContext context = request.getServletContext();
 		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
-		reporters = getReporters(reporterDao, searchQuery, 0, Constants.NUM_OF_CARDS + 1);
-		if (reporters.size() > Constants.NUM_OF_CARDS) {
-			hasMore = true;
-			reporters.remove(Constants.NUM_OF_CARDS);
-		}		
+		
+		List<Reporter> reporters = reporterDao.getSimilarNames(searchQuery, howMany);
 		
 		searchResult.setStatus(200);
-		searchResult.setMessage("getting search result success");
-		searchResult.setTotalNum(Constants.NUM_OF_CARDS);
+		searchResult.setMessage("getting similar names result success");
 		searchResult.setReporters(reporters);
-		searchResult.setHasMore(hasMore);
+		searchResult.setSearchQuery(searchQuery);
+		
+		return searchResult;
+		
+	}
+
+	private SearchResult getSearchResult(HttpServletRequest request, String searchQuery, int count) {
+		SearchResult searchResult = new SearchResult(request.getParameterMap());
+		ServletContext context = request.getServletContext();
+		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
+//		boolean hasMore = false;
+		List<Reporter> reporters = null;
+		
+		reporters = getReporters(reporterDao, searchQuery, 0, count);
+		searchResult.setStatus(200);
+		searchResult.setMessage("getting search result success");
+		searchResult.setReporters(reporters);
+//		searchResult.setHasMore(hasMore);
+//		searchResult.setTotalNum(Constants.NUM_OF_CARDS);
 		searchResult.setSearchQuery(searchQuery);
 		
 		return searchResult;
 	}
-
-	// TODO: FIX THIS to use "AutocompleteResult"
-	private Object getAutocompleteResult(HttpServletRequest request) {
-		ServletContext context = request.getServletContext();
-		JsonDAO jsonDao = (JsonDAO) context.getAttribute("JsonDAO");
-		
-		String name = request.getParameter("q");
-		int count = Integer.parseInt(request.getParameter("count")); 
-		
-		return jsonDao.getSimilarNames(name, count);
-	}
-
 
 	private List<Reporter> getReporters(ReporterDAO reporterDao, String searchQuery, int start, int end) {
 		List<Reporter> reporters = null;
@@ -98,5 +99,4 @@ public class SearchController implements BackController {
 
 		return reporters;
 	}
-
 }
