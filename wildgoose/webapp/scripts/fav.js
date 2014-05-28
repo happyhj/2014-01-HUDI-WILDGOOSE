@@ -1,9 +1,15 @@
 attatchEventToFavBtn();
 function attatchEventToFavBtn() {
-	var stars = document.querySelectorAll(".favorite");
+	var stars = document.querySelectorAll(".star");
 	for (var i = 0; i < stars.length; i++) {
 		var star = stars[i];
 		star.addEventListener("click", toggleFav, false);
+		document.querySelector(".star").addEventListener("click", function(e) {
+			Util.addClass(e.target, "pumping");
+			setTimeout(function() {
+				Util.removeClass(e.target, "pumping");
+			}, 300)
+		}, false)
 	}
 }
 
@@ -25,7 +31,7 @@ function toggleFav(e) {
 	
 	var nephew = target.parentElement.firstElementChild.firstElementChild
 	var reporterId = nephew.getAttribute("href").split("reporters/")[1];
-	var url = "/api/v1/users/reporters/id/"+reporterId;
+	var url = "api/v1/users/?user_id?/favorites/?reporter_id=" + reporterId;
 	//var payload = "reporter_id="+reporterId;
 	if (Util.hasClass(target, "on")) {
 		//url = url + "?" + payload;
@@ -67,7 +73,7 @@ function toggleFav(e) {
 }
 
 function getFavs() {
-	var url = "api/v1/users/reporters/id";
+	var url = "api/v1/users/?user_id?/favorites/";
 	Ajax.GET(url, function(jsonStr) {
 		var result = JSON.parse(jsonStr);
 		favs = result["data"];
@@ -85,7 +91,7 @@ function updateFavs(reporterCards) {
 		var reporterName = card.querySelector(".name a");
 		var reporterId = reporterName.getAttribute("href").split("/")[2];
 		if (favs.indexOf(parseInt(reporterId)) >= 0) {
-			card.querySelector(".favorite").className = "favorite on";
+			card.querySelector(".star").className = "star on";
 		}
 	}
 }

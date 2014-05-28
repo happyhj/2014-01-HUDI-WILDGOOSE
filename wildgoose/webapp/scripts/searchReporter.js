@@ -32,20 +32,12 @@ window.addEventListener("load", function(e) {
 	if (searchMoreBtn != null) {
 		searchMoreBtn.addEventListener("click", function(e){
 			var searchQuery = document.querySelector(".search-more .state-search-query").innerText;
-			// template
-			var url = "/api/v1/subhtml/create_reporter_card";
-/*
-			if (loaded_templates.reporter_card === undefined) {
-				Ajax.GET(url, function(t) {
-					loaded_templates.reporter_card = t;
-				});
-			}
-*/		
+
 			var totalNum = document.querySelector(".search-more .state-search-total").innerText;
 			var requestNum = 24;
 			
 			// search
-			var url = "/api/v1/more_reporter_card?q=" + searchQuery + "&last=" + totalNum + "&req=" + requestNum;
+			var url = "/api/v1/search?q=" + searchQuery + "&start_page=" + totalNum + "&how_many=" + requestNum;
 			Ajax.GET(url, function(rawD) {
 				var pageInfo = {
 		            url: location.href

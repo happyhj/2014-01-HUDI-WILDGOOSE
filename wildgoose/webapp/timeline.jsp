@@ -15,7 +15,7 @@
 
 <div class="wrap">
 	<header class="header">
-		<%@ include file ="template/header.jsp" %>
+		<%@ include file ="jsp_templates/header.jsp" %>
 	</header>
 	<div class="container">
 		<div class="timeline-result">
@@ -24,7 +24,7 @@
 				<c:if test="${ not empty sessionScope.userId }">
 					<c:forEach var="article" items="${ requestScope.articles }">
 					<li class="card">
-						<%@ include file = "/template/articleCard.jsp" %>
+						<%@ include file = "/jsp_templates/articleCard.jsp" %>
 					</li>
 					</c:forEach>
 				</c:if>

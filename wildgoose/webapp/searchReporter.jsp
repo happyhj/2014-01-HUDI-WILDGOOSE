@@ -26,7 +26,7 @@
 
 <div class="wrap">
 	<header class="header">
-		<%@ include file ="template/header.jsp" %>
+		<%@ include file ="jsp_templates/header.jsp" %>
 	</header>
 	<div class="container">
 		<div class="logo">
@@ -59,7 +59,7 @@
 							<span>${ requestScope.data.searchQuery }에 대한 검색 결과가 없습니다.</span>
 						</c:if>
 						<c:forEach var="reporter" items="${ requestScope.data.reporters }" ><li class="card card-reporter">
-							<%@ include file = "template/reporterCard.jsp" %>
+							<%@ include file = "jsp_templates/reporterCard.jsp" %>
 						</li></c:forEach>
 					</c:when>
 				</c:choose>

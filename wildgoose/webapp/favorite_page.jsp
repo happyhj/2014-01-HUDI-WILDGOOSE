@@ -13,7 +13,7 @@
 
 <div class="wrap">
 	<header class="header">
-		<%@ include file ="template/header.jsp" %>
+		<%@ include file ="jsp_templates/header.jsp" %>
 	</header>
 	<div class="container">
 		<div class="search-result">
@@ -22,7 +22,7 @@
 				<c:if test="${ not empty sessionScope.userId }">
 					<c:forEach var="reporterCard" items="${ requestScope.reporters }">
 					<li class="card card-reporter">
-						<%@ include file = "/template/reporterCard.jsp" %>
+						<%@ include file = "/jsp_templates/reporterCard.jsp" %>
 					</li>
 					</c:forEach>
 				</c:if>

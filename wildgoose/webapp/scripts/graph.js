@@ -7,16 +7,16 @@ function initGraph() {
 	var reporterId = window.location.pathname.split("/")[2];
 	var graphInfo = {
 		"donut":{
-			"url": "/api/v1/reporters/:reporterId/statistics/number_of_articles?by=section",
+			"url": "/api/v1/reporters/:reporterId/statistics?data=number_of_articles&by=section",
 			"function": donutGraph
 		},
-		"brokenLine" : {
-			"url" : "/api/v1/reporters/:reporterId/statistics/number_of_articles?by=day",
-			"function" : brokenLineGraph
+		"brokenLine":{
+			"url": "/api/v1/reporters/:reporterId/statistics?data=number_of_articles&by=day",
+			"function": brokenLineGraph
 		},
-		"radar" : {
-			"url" : "/api/v1/reporters/:reporterId/statistics/stat_points",
-			"function" : radarGraph
+		"radar":{
+		 	"url": "/api/v1/reporters/:reporterId/statistics?data=stat_points",
+		 	"function": radarGraph
 		}
 	};
 

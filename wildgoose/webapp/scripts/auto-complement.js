@@ -74,7 +74,7 @@ var autocomplete = {
 	
 	search : function(searched) {
 		this.cache.searchedQuery = searched;
-		var url = "/api/v1/search/most_similar_names?name=" + searched + "&count=" + this.row.requestCount;
+		var url = "/api/v1/search?autocomplete=true&q=" + searched + "&how_many=" + this.row.requestCount;
 		Ajax.GET(url, this.cache.callbackRef.drawList);
 	},
 	
