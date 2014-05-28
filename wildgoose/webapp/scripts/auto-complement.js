@@ -80,10 +80,11 @@ var autocomplete = {
 	
 	drawList : function(response) {
 		this.is.pressedEnter = false;
-		var data = JSON.parse(response)["data"];
+		var data = JSON.parse(response).data.reporterCards;
 		if (data === undefined || data.length == 0) {
 			return;
 		}
+		
 		// cache.row 초기화
 		this.cache.row = null;
 		// 전달받은 row개수를 기록

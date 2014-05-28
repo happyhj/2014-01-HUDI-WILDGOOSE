@@ -94,4 +94,32 @@ public class ReporterDAO {
 
 		return reporters;
 	}
+	
+	public List<Reporter> getSimilarNames(final String name, final int count) {
+		
+		SelectJdbcTemplate template = new SelectJdbcTemplate() {
+
+			@Override
+			protected Object mapRow(ResultSet rs) throws SQLException {
+				List<Reporter> reporters = new ArrayList<Reporter>();
+				Reporter reporter = null;
+				while (rs.next()) {
+					reporter = new Reporter();
+					reporter.setName(rs.getString("name"));
+					reporters.add(reporter);
+				}
+				return reporters;
+			}
+
+			@Override
+			protected void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, name + "%");
+				psmt.setInt(2, count);
+			}
+		};
+
+		String query = "SELECT name FROM author WHERE name LIKE ? ORDER BY name LIMIT 0, ? ";
+		
+		return (List<Reporter>) template.select(query);
+	}
 }
