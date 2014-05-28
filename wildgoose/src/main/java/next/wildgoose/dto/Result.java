@@ -11,8 +11,8 @@ public abstract class Result {
 	protected Map<String, Object> data;
 	
 	protected Result(Map<String, String[]> parameters) {
-		this.status = 200;
-		this.message = "success";
+		this.status = 500;
+		this.message = "failure";
 		this.parameters = parameters;
 		this.data = new HashMap<String, Object>();
 	}

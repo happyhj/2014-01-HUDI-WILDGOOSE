@@ -54,7 +54,6 @@ public class SearchController implements BackController {
 		
 		String trimmedQuery = searchQuery.trim();
 		if ("".equals(trimmedQuery)) {
-			searchResult.setStatus(500);
 			searchResult.setMessage("You can not search with whitespace");
 			return searchResult;
 		}

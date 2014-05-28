@@ -16,7 +16,6 @@ import next.wildgoose.dto.ReporterResult;
 import next.wildgoose.dto.Result;
 import next.wildgoose.dto.StatPoints;
 import next.wildgoose.utility.Uri;
-import next.wildgoose.utility.Utility;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +33,10 @@ public class ReporterController implements BackController {
 		// id가 입력되지 않은 경우 처리
 		if (uri.size() <= 1 || uri.check(1, "")) {
 			result = new ReporterResult(request.getParameterMap());
-			result.setStatus(500);
 			result.setMessage("parameter is missing.");
 			return result;
 		}
-
+		
 		int reporterId = Integer.parseInt(uri.get(1));
 		if (uri.get(2) == null) {
 			result = getReporterPage(request, reporterId);
@@ -62,16 +60,20 @@ public class ReporterController implements BackController {
 		if("number_of_articles".equals(graph)){
 			NumberOfArticlesDAO numberOfArticlesDao = (NumberOfArticlesDAO) context.getAttribute("NumberOfArticlesDAO");
 			if("day".equals(by)){
+				reporterResult.setStatus(200);
 				numberOfArticlesList = numberOfArticlesDao.findNumberOfArticlesByDay(reporterId);
+				reporterResult.setNumberOfArticles(numberOfArticlesList);
 			}
 			else if ("section".equals(by)){
+				reporterResult.setStatus(200);
 				numberOfArticlesList = numberOfArticlesDao.findNumberOfArticlesBySection(reporterId);
+				reporterResult.setNumberOfArticles(numberOfArticlesList);
 			}
-			reporterResult.setNumberOfArticles(numberOfArticlesList);
 		}
 		else if ("stat_points".equals(by)){
 			DummyData dummy = (DummyData) context.getAttribute("DummyData");
 			StatPoints statPoints = dummy.getStatPoints(reporterId);
+			reporterResult.setStatus(200);
 			reporterResult.setStatPoints(statPoints);
 		}
 		return reporterResult;

@@ -53,7 +53,6 @@ public class SessionController implements BackController {
 			session.setAttribute("userId", account.getEmail());
 			session.setMaxInactiveInterval(Constants.SESSION_EXPIRING_TIME);
 		} else {
-			simpleResult.setStatus(500);
 			simpleResult.setMessage("getting user authentication failed");
 		}
 		return simpleResult;
