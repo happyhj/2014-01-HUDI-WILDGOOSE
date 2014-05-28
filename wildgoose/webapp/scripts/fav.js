@@ -31,7 +31,7 @@ function toggleFav(e) {
 	
 	var nephew = target.parentElement.firstElementChild.firstElementChild
 	var reporterId = nephew.getAttribute("href").split("reporters/")[1];
-	var url = "/api/v1/users/reporters/id/"+reporterId;
+	var url = "api/v1/users/?user_id?/favorites/?reporter_id=" + reporterId;
 	//var payload = "reporter_id="+reporterId;
 	if (Util.hasClass(target, "on")) {
 		//url = url + "?" + payload;
@@ -73,7 +73,7 @@ function toggleFav(e) {
 }
 
 function getFavs() {
-	var url = "api/v1/users/reporters/id";
+	var url = "api/v1/users/?user_id?/favorites/";
 	Ajax.GET(url, function(jsonStr) {
 		var result = JSON.parse(jsonStr);
 		favs = result["data"];

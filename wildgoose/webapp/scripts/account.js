@@ -57,7 +57,7 @@ function checkFormStatus(form) {
  * 모두 작성된 정보를 Ajax POST로 서버에 전달
  */
 function signUpAccout() {
-	var url = "/api/v1/accounts/new";
+	var url = "/api/v1/accounts/";
 	var form = document.querySelector(".form-container");
 	
 	var email = escape(form[0].value)
@@ -98,7 +98,7 @@ function loginAccount() {
 	
 	var finalPassword = SHA256(hashedPassword+randomNumber);
 	
-	var url = "/api/v1/session/new";
+	var url = "/api/v1/session/";
 	var payload = "email="+email+"&password="+finalPassword;
 	Ajax.POST(url, function(response) {
 		loginHandler(response);

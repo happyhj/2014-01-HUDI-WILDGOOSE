@@ -35,7 +35,7 @@
 	
 	var loginBtn = document.querySelector(".header-btn#login");
 	loginBtn.addEventListener("click", function() {
-		var url = "/api/v1/subhtml/authenticate_user";	
+		var url = "/api/v1/templates/login.html";	
 		WILDGOOSE.ui.modal.openModalWindow(url, function() {
 			var btn = arguments[0];
 			btn.addEventListener("click", loginAccount, false);
@@ -50,12 +50,12 @@
 	
 	var timelineBtn = document.querySelector(".header-btn#timeline");
 	timelineBtn.addEventListener("click", function() {
-		location.href = "/timeline";
+		location.href = "/users/?user_id?/timeline";
 	}, false);
 	
 	var favoriteBtn = document.querySelector(".header-btn#favorite");
 	favoriteBtn.addEventListener("click", function() {
-		location.href = "/favorite_page";
+		location.href = "/users/?user_id?/favorite";
 	}, false);
 }();
 

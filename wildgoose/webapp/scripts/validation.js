@@ -43,7 +43,7 @@
 	}
 
 	function existInServer(inputEl, callback) {
-		var url = "api/v1/accounts/" + inputEl.value;
+		var url = "api/v1/accounts/?user_id=" + inputEl.value;
 		Ajax.GET(url, function(response) {
 			console.log(response);
 			var validity = (response=="success")?true:false;
