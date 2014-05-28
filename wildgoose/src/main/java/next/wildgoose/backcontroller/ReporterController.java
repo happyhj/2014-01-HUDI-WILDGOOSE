@@ -47,29 +47,34 @@ public class ReporterController implements BackController {
 			result = getGraphData(request, uri, reporterId);
 		}
 
-		LOGGER.debug("resultData: " + Utility.toJsonString(result));
-
 		return result;
 	}
 
-	private ReporterResult getGraphData(HttpServletRequest request, Uri uri,
-			int reporterId) {
+	private ReporterResult getGraphData(HttpServletRequest request, Uri uri, int reporterId) {
 		
 		ReporterResult reporterResult = new ReporterResult(request.getParameterMap());
 		ServletContext context = request.getServletContext();
 		
-		if(uri.check(3, "number_of_articles")){
+		LOGGER.debug("uri: " + uri.toString());
+		String graph = request.getParameter("data");
+		String by = request.getParameter("by");
+		
+		LOGGER.debug("graph: " + graph + ",  by: " + by);
+		
+		if("number_of_articles".equals(graph)){
 			NumberOfArticlesDAO numberOfArticlesDao = (NumberOfArticlesDAO) context.getAttribute("NumberOfArticlesDAO");
-			String by = request.getParameter("by");
 			List<NumberOfArticles> numberOfArticlesList;
 			if("day".equals(by)){
 				numberOfArticlesList = numberOfArticlesDao.findNumberOfArticlesByDay(reporterId);
+				LOGGER.debug(numberOfArticlesList.toString());
 				reporterResult.setNumberOfArticles(numberOfArticlesList);
 			} else if ("section".equals(by)){
 				numberOfArticlesList = numberOfArticlesDao.findNumberOfArticlesBySection(reporterId);
+				LOGGER.debug(numberOfArticlesList.toString());
 				reporterResult.setNumberOfArticles(numberOfArticlesList);
 			}
-		} else if (uri.check(3, "stat_points")){
+		}
+		else if ("stat_points".equals(by)){
 			DummyData dummy = (DummyData) context.getAttribute("DummyData");
 			StatPoints statPoints = dummy.getStatPoints(reporterId);
 			reporterResult.setStatPoints(statPoints);
@@ -93,9 +98,6 @@ public class ReporterController implements BackController {
 		reporterResult.setReporter(reporter);
 		reporterResult.setArticles(articles);
 		reporterResult.setMessage("getting Reporter Info success");
-		
-		LOGGER.debug("result: " + Utility.toJsonString(reporterResult));
-		
 		
 		return reporterResult;
 	}

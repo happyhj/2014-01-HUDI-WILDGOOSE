@@ -1,6 +1,8 @@
 function donutGraph (rawD) {
+	
+	console.log(rawD);
 	var realData = JSON.parse(rawD);
-	var data = realData["data"];
+	var data = realData.data.numberOfArticles;
 	
 	console.log(data);
 	

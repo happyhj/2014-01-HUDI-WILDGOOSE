@@ -8,7 +8,10 @@
 //
 //}
 
-function brokenLineGraph(data) {
+function brokenLineGraph(rawD) {
+	
+	var realData = JSON.parse(rawD);
+	var sampleData = realData.data.numberOfArticles;
 	
 	var svgContainer = d3.select("#brokenline-graph > .graph").append("svg")
 	.style("width", "100%").style("height", 300).attr("id", "brokenLineGraph")
@@ -43,8 +46,6 @@ function brokenLineGraph(data) {
 	} ];
 	
 	graphPositionX = [ 50, 120, 190, 260, 330, 400, 470 ];
-	
-	sampleData = JSON.parse(data)["data"];
 	
 	var keys = new Array();
 	var now = new Date();
