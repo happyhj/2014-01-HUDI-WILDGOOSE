@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 
 import next.wildgoose.backcontroller.BackController;
 import next.wildgoose.utility.Constants;
-import next.wildgoose.utility.Utility;
 import next.wildgoose.view.JSONView;
 import next.wildgoose.view.JSPView;
 import next.wildgoose.view.View;
@@ -39,7 +38,7 @@ public class FrontController extends HttpServlet {
 		BackController backController = getBackController(context, reqPath);
 		Object resultData = backController.execute(request);
 		
-		View view = createView(context, reqPath);
+		View view = createView(reqPath);
 		view.show(resultData, request, response);
 	}
 	
@@ -90,24 +89,14 @@ public class FrontController extends HttpServlet {
 	}
 		
 		
-	private View createView(ServletContext context, String reqPath) {
-		String target = null;
-		
+	private View createView(String reqPath) {
 		// 요청종류에 따라 뷰 구현체의 인스턴스를 마련한다.
 		if (reqPath.startsWith("/api/v1/")) {
 			JSONView view = new JSONView();
 			return view;
 		} 
 		JSPView view = new JSPView();
-		//// JSPView의 경우 이 과정에서 내부적으로 대응하는 .jsp 파일을 멤버로 확보하도록 한다.
-		Map<String, String> jspMap = (Map<String, String>) context.getAttribute("jspMap");
-		target = jspMap.get(getPrimeResource(reqPath));
-		LOGGER.debug("target " + target);
-
-		if(target == null) {
-			target = "error.jsp";
-		}
-		view.setTarget(target);	
+		
 		return view;
 	}
 }

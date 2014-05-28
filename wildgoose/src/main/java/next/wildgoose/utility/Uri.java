@@ -14,12 +14,11 @@ public class Uri {
 		String trimmedUri = trimUri(uri);
 		this.resources = Arrays.asList(trimmedUri.split("/"));
 	}
-	
 	private String trimUri (String uri) {
 		int startIdx = 0;
 		int endIdx = uri.length();
 		
-		if (uri == "/") {
+		if ("/".equals(uri)) {
 			return "";
 		}
 		if (uri.indexOf('/') == 0) {
