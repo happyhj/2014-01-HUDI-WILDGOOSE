@@ -48,11 +48,9 @@ public class TemplateController implements BackController {
 			result.setTemplate(htmlDocument);
 		} catch (FileNotFoundException e) {
 			LOGGER.debug(e.getMessage(), e);
-			result.setStatus(500);
 			result.setMessage("request file is not exist");
 		} catch (IOException e) {
 			LOGGER.debug(e.getMessage(), e);
-			result.setStatus(500);
 			result.setMessage("can't read file");
 		}
 		LOGGER.debug(result.getMessage());

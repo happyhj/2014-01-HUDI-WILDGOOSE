@@ -55,7 +55,6 @@ public class AccountController implements BackController {
 		AccountResult accountResult = new AccountResult(request.getParameterMap());
 		
 		// 기본 세팅 fail
-		accountResult.setStatus(500);
 		accountResult.setMessage("adding user account failed");
 		
 		if (isJoinable(signDao, email) == true && isHashedPassword(password) == true) {
