@@ -26,6 +26,3 @@ function initGraph() {
 		Ajax.GET(url, graph['function']);
 	}
 }
-
-
-

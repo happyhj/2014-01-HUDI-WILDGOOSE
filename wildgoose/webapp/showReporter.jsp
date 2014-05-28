@@ -84,7 +84,6 @@
 <script type="text/javascript" src="/scripts/graph.js"></script>
 <script type="text/javascript" src="/scripts/graph-donut.js"></script>
 <script type="text/javascript" src="/scripts/graph-brokenline.js"></script>
-<script type="text/javascript" src="/scripts/graph-bar.js"></script>
 <script type="text/javascript" src="/scripts/graph-radar.js"></script>
 </body>
 </html>
