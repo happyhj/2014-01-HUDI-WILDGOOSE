@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.SignDAO;
-import next.wildgoose.dto.Account;
 import next.wildgoose.dto.AccountResult;
 import next.wildgoose.dto.Result;
 import next.wildgoose.utility.Uri;
@@ -53,14 +52,13 @@ public class AccountController implements BackController {
 		ServletContext context = request.getServletContext();
 		
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
-		Account account = new Account(email, password);
 		AccountResult accountResult = new AccountResult(request.getParameterMap());
 		
 		// 기본 세팅 fail
 		accountResult.setMessage("adding user account failed");
 		
 		if (isJoinable(signDao, email) == true && isHashedPassword(password) == true) {
-			if (signDao.joinAccount(account) == true) {
+			if (signDao.joinAccount(email, password) == true) {
 				// 가입 성공
 				accountResult.setStatus(200);
 				accountResult.setMessage("adding user account succeed");
