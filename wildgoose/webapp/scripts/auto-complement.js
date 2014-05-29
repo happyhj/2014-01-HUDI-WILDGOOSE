@@ -14,7 +14,7 @@ var autocomplete = {
 			pressedEnter : false,
 			listing : false,
 			highlighting : false
-		}
+		};
 				
 		this.box = searchBox;
 		this.list = document.querySelector(selector);
@@ -80,7 +80,7 @@ var autocomplete = {
 	
 	drawList : function(response) {
 		this.is.pressedEnter = false;
-		var data = JSON.parse(response).data.reporterCards;
+		var data = JSON.parse(response).data.reporters;
 		if (data === undefined || data.length == 0) {
 			return;
 		}

@@ -66,6 +66,18 @@ window.addEventListener("load", function(e) {
 } ,false);
 
 
+window.addEventListener("load", searchMoreBtnHandler, false);
+function searchMoreBtnHandler() {
+	var totalNum = parseInt(document.querySelector(".search-more .state-search-totalNum").innerText);
+	var curNum = parseInt(document.querySelector(".search-more .state-search-curNum").innerText);
+	
+	var searchMore = document.querySelector(".search-more");
+	if (totalNum <= curNum) {
+		searchMore.setAttribute("style", "display: none;");
+	}	
+}
+
+
 function clickSearchMoreBtn(rawD) {	
 	var totalNum = parseInt(document.querySelector(".search-more .state-search-totalNum").innerText);
 	var searchResult = document.querySelector(".search-result > ul");
