@@ -70,8 +70,8 @@
 .card-section-identity > .favorite {
 	position: absolute;
 	display: table-cell;
-	top: 8px;
-	right: 45px;
+	top: 12px;
+	right: 38px;
 	width: 25px;
 	height: 25px;
 	vertical-align: middle;	

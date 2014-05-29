@@ -72,13 +72,12 @@
 	<footer class="footer"></footer>
 </div>
 
-<script type="text/javascript" src="/scripts/util.js"></script>
-<!--script type="text/javascript" src="/scripts/searchReporter.js"></script-->
-
-
 <script type="text/javascript" src="/scripts/refactoring/WILDGOOSE.search.js"></script>
 <script type="text/javascript" src="/scripts/auto-complement.js"></script>
 <script type="text/javascript" src="/scripts/fav.js"></script>
+
+<!-- script type="text/javascript" src="/scripts/util.js"></script -->
+<!-- script type="text/javascript" src="/scripts/searchReporter.js"></script -->
 <script>
 //var favs = [];
 //getFavs();

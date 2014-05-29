@@ -1,4 +1,5 @@
 (function() {
+	var Ajax = CAGE.ajax;
 	// searchMoreBtn
 	function searchMore(clickEvent) {
 		var searchQuery = document.querySelector(".search-more .state-search-query").innerText;
@@ -6,13 +7,13 @@
 		var requestNum = 24;
 		// search
 		var url = "/api/v1/search?q=" + searchQuery + "&start_item=" + curNum + "&how_many=" + requestNum;
-		Ajax.GET(url, function(rawD) {
+		Ajax.GET({"url":url, "callback":function(rawD) {
 			var templateUrl = "/api/v1/templates/articleCard.html"
-			Ajax.GET(templateUrl, function(templateResponse) {
+			Ajax.GET({"url":templateUrl, "callback":function(templateResponse) {
 				var template = JSON.parse(templateResponse)["data"]["template"]
 				attatchRecievedData(rawD, template);
-			})
-		});
+			}})
+		}});
 	}
 	
 	function attatchRecievedData(rawD, template) {	

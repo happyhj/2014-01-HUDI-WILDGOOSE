@@ -1,4 +1,5 @@
 var autocomplete = {
+	Ajax : CAGE.ajax,
 	init : function(searchBox, selector) {
 		this.row = {
 			requestCount : 7,
@@ -30,7 +31,6 @@ var autocomplete = {
 				observeState : this.observeState.bind(this)
 			}
 		};
-		
 		this.box.addEventListener("focus", this.cache.callbackRef.notify);
 		this.box.addEventListener("blur", this.cache.callbackRef.expired);
 		
@@ -75,12 +75,13 @@ var autocomplete = {
 	search : function(searched) {
 		this.cache.searchedQuery = searched;
 		var url = "/api/v1/search?autocomplete=true&q=" + searched + "&how_many=" + this.row.requestCount;
-		Ajax.GET(url, this.cache.callbackRef.drawList);
+		this.Ajax.GET({"url":url, "callback":this.cache.callbackRef.drawList});
 	},
 	
 	drawList : function(response) {
 		this.is.pressedEnter = false;
 		var data = JSON.parse(response).data.reporters;
+		console.log(data)
 		if (data === undefined || data.length == 0) {
 			return;
 		}
@@ -128,11 +129,9 @@ var autocomplete = {
 	setHovering : function(evt) {
 		if (evt.type == "mouseover") {
 			this.is.hovering = true;
-			console.log("hovering");
 		}
 		else if (evt.type == "mouseout") {
 			this.is.hovering = false;
-			console.log("not hovering");
 		}
 	},
 	listHandler : function(evt) {
@@ -220,7 +219,6 @@ var autocomplete = {
 		}
 	}
 }
-
 // searchBox에 focus evt가 발생시 searchBox객체 init
 var searchBox = document.querySelector('#query-entry');
 autocomplete.init(searchBox, ".search .auto-completion-list");

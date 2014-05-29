@@ -22,10 +22,7 @@ public class JSPView implements View {
 
 	@Override
 	public void show(Object resultData, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		
-
 		String jspName = pickJsp(request);	
-		
 		
 		request.setAttribute("data", resultData);
 		RequestDispatcher reqDispatcher = request.getRequestDispatcher("/" + jspName);
@@ -35,13 +32,12 @@ public class JSPView implements View {
 	private String pickJsp(HttpServletRequest request) {
 		//// JSPView의 경우 이 과정에서 내부적으로 대응하는 .jsp 파일을 멤버로 확보하도록 한다.
 		ServletContext context = request.getServletContext();
-		Uri uri = new Uri(request);
-		String uriResourceSchema = getUriResourceSchema(uri);
 		Map<String, String> jspMap = (Map<String, String>) context.getAttribute("jspMap");
+		Uri uri = new Uri(request);
+
+		String uriResourceSchema = getUriResourceSchema(uri);
 		String jspFileName = jspMap.get(uriResourceSchema);
-		
 		LOGGER.debug("jspFileName " + jspFileName);
-		
 		if(jspFileName == null) {
 			jspFileName = "error.jsp";
 		}
