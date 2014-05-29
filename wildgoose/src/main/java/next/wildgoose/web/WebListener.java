@@ -18,6 +18,7 @@ public class WebListener implements ServletContextListener {
 		Map<String, String> jspMap;
 
 		jspMap = new HashMap<String, String>();
+		jspMap.put("", "searchReporter.jsp");
 		jspMap.put("search", "searchReporter.jsp");
 		jspMap.put("reporters", "showReporter.jsp");
 		jspMap.put("users/favorites", "favorite_page.jsp");

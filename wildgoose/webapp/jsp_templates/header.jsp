@@ -2,7 +2,7 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/header.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/modal.css" />
 
-<a href="/search"><img src="/image/logo.png" alt="wildgoose logo" class="header-logo-image"/></a>
+<a href="/"><img src="/image/logo.png" alt="wildgoose logo" class="header-logo-image"/></a>
 <c:if test="${ empty sessionScope.userId }">
 	<button class="header-btn" id="join">가입하기</button>
 	<button class="header-btn" id="login">로그인하기</button>
