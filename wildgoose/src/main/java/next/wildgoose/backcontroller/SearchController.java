@@ -7,8 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import next.wildgoose.dao.ReporterDAO;
 import next.wildgoose.dto.Reporter;
-import next.wildgoose.dto.Result;
 import next.wildgoose.dto.SearchResult;
+import next.wildgoose.framework.BackController;
+import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Utility;
 

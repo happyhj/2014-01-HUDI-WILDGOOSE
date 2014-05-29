@@ -8,8 +8,9 @@ import java.io.IOException;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.dto.Result;
 import next.wildgoose.dto.TemplateResult;
+import next.wildgoose.framework.BackController;
+import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.Uri;
 

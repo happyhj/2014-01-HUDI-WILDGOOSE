@@ -13,8 +13,9 @@ import next.wildgoose.dto.Article;
 import next.wildgoose.dto.NumberOfArticles;
 import next.wildgoose.dto.Reporter;
 import next.wildgoose.dto.ReporterResult;
-import next.wildgoose.dto.Result;
 import next.wildgoose.dto.StatPoints;
+import next.wildgoose.framework.BackController;
+import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Uri;
 
 import org.slf4j.Logger;

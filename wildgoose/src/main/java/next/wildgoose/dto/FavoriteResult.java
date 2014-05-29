@@ -3,6 +3,8 @@ package next.wildgoose.dto;
 import java.util.List;
 import java.util.Map;
 
+import next.wildgoose.framework.Result;
+
 public class FavoriteResult extends Result {
 
 	public FavoriteResult(Map<String, String[]> parameters) {

@@ -3,6 +3,8 @@ package next.wildgoose.dto;
 import java.util.List;
 import java.util.Map;
 
+import next.wildgoose.framework.Result;
+
 public class SearchResult extends Result {
 	public SearchResult(Map<String, String[]> parameters) {
 		super(parameters);

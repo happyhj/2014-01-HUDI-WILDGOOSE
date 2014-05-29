@@ -2,7 +2,8 @@ package next.wildgoose.backcontroller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.dto.Result;
+import next.wildgoose.framework.BackController;
+import next.wildgoose.framework.Result;
 
 public class ErrorController implements BackController {
 

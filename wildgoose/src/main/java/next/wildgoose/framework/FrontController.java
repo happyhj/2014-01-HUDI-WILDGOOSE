@@ -1,4 +1,4 @@
-package next.wildgoose.web;
+package next.wildgoose.framework;
 
 import java.io.IOException;
 import java.util.Map;
@@ -11,10 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import next.wildgoose.framework.BackController;
-import next.wildgoose.framework.JSONView;
-import next.wildgoose.framework.JSPView;
-import next.wildgoose.framework.View;
 import next.wildgoose.utility.Constants;
 
 import org.slf4j.Logger;
@@ -34,6 +30,7 @@ public class FrontController extends HttpServlet {
 		String reqPath = request.getRequestURI();
 		ServletContext context = request.getServletContext();
 		
+		LOGGER.debug("reqPath: " + reqPath);
 		BackController backController = getBackController(context, reqPath);
 		Object resultData = backController.execute(request);
 		
@@ -61,8 +58,8 @@ public class FrontController extends HttpServlet {
 	
 	// 요청(request path)에 해당하는 BackController 구현체를 받아오기
 	private BackController getBackController(ServletContext context, String reqPath) {
-		BackController result = null;
 		String primeResource = getPrimeResource(reqPath);
+		BackController result = null;
 		Map<String, BackController> controllerMap = (Map<String, BackController>) context.getAttribute("controllerMap");
 		result = controllerMap.get(primeResource);
 		if (result == null) {
