@@ -2,11 +2,15 @@
 //var loaded_templates = {};
 
 var searchResultContainer = document.querySelector(".search-result");
-searchResultContainer.addEventListener("DOMSubtreeModified", function() {
-//    alert("DOMSubtreeModified fired!");
+searchResultContainer.addEventListener("DOMSubtreeModified", toggelStar, false);
+
+function toggelStar() {
+//  alert("DOMSubtreeModified fired!");
 	var loginBtn = document.querySelector(".header-btn#login");
 	var stars = document.querySelectorAll(".card-reporter h4.favorite");
-	if(favs == undefined || favs == "잘못된 접근입니다") {
+
+	if(favs.length == 0 || favs == "잘못된 접근입니다") {
+		console.log("in");
 		 [].forEach.call(
 				 stars, 
 				 function(el){
@@ -23,8 +27,7 @@ searchResultContainer.addEventListener("DOMSubtreeModified", function() {
 		 );	
 		 */	
 	}
-}, false);
-
+}
 
 window.addEventListener("load", function(e) {	
 	// 더보기 버튼 링크주소 설정
@@ -32,20 +35,19 @@ window.addEventListener("load", function(e) {
 	if (searchMoreBtn != null) {
 		searchMoreBtn.addEventListener("click", function(e){
 			var searchQuery = document.querySelector(".search-more .state-search-query").innerText;
-
-			var totalNum = document.querySelector(".search-more .state-search-total").innerText;
+			var curNum = document.querySelector(".search-more .state-search-curNum").innerText;
 			var requestNum = 24;
-			
+			console.log("curNum: " + curNum);
 			// search
-			var url = "/api/v1/search?q=" + searchQuery + "&start_page=" + totalNum + "&how_many=" + requestNum;
+			var url = "/api/v1/search?q=" + searchQuery + "&start_item=" + curNum + "&how_many=" + requestNum;
 			Ajax.GET(url, function(rawD) {
-				var pageInfo = {
-		            url: location.href
-		        }
-				
+//				var pageInfo = {
+//		            url: location.href
+//		        }
+//				
 				clickSearchMoreBtn(rawD);
 				
-				history.pushState(pageInfo, null, pageInfo.url);
+//				history.pushState(pageInfo, null, pageInfo.url);
 //				history.pushState(pageInfo);
 //				document.title = oPageInfo.title = vMsg.page;
 //                document.getElementById(sTargetId).innerHTML = vMsg.content;
@@ -64,18 +66,12 @@ window.addEventListener("load", function(e) {
 } ,false);
 
 
-function clickSearchMoreBtn(rawD) {
-	
-	var hasMoreCards = rawD.indexOf(0);
-	var searchMore = document.querySelector(".search-more");
-	searchMore.setAttribute("style", "display: none;");
-	if (hasMoreCards != "0") {
-		searchMore.setAttribute("style", "");
-	}
-	
+function clickSearchMoreBtn(rawD) {	
+	var totalNum = parseInt(document.querySelector(".search-more .state-search-totalNum").innerText);
 	var searchResult = document.querySelector(".search-result > ul");
-	var reporterCards = JSON.parse(rawD)["data"];
-	var sizeOfCards = reporterCards.length;
+	
+	var reporters = JSON.parse(rawD)["data"]["reporters"];
+	var sizeOfCards = reporters.length;
 	
 	(function(cards) {
 		for (var i=0; i<sizeOfCards; i++) {
@@ -87,19 +83,23 @@ function clickSearchMoreBtn(rawD) {
 					var templateStr = document.getElementById("reporter-card-template").innerHTML;
 					var templateCompiler = Util.getTemplateCompiler(templateStr);
 					// 해당 템픗릿 컴파일러에 데이터를 담은 객체를 넘겨준다. // 완성된 partial html을 newLi 내부에 채운다.
-					newLi.innerHTML = templateCompiler(reporterCards[i]);
+					newLi.innerHTML = templateCompiler(reporters[i]);
 					attatchEventToFavBtn();
 					updateFavs([newLi]);
 					return newLi;
-				}(reporterCards[i]))
+				}(reporters[i]))
 			)
 		}
-	}(reporterCards));;
+	}(reporters));;
 	
-	var total = document.querySelector(".search-more .state-search-total").innerText;
-	var total = parseInt(total);
+	var curNumDiv = document.querySelector(".search-more .state-search-curNum");
+	var curNum = parseInt(curNumDiv.innerText) + sizeOfCards;
+	curNumDiv.innerText = curNum;
 	
-	document.querySelector(".search-more .state-search-total").innerText = total + sizeOfCards;
+	var searchMore = document.querySelector(".search-more");
+	if (totalNum <= curNum) {
+		searchMore.setAttribute("style", "display: none;");
+	}	
 }
 
 
