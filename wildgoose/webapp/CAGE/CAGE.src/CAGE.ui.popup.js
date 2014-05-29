@@ -13,11 +13,10 @@
     
 	function ajaxPopup(config){
 		var el = config.element;
+		
 		el.addEventListener("click",function(event){
 			event.preventDefault();
-			event.stopPropagation();			
-			console.log(event);
-			
+			event.stopPropagation();
 			var originalTarget;
 			if(event.toElement) {
 				originalTarget = event.toElement;
@@ -25,13 +24,15 @@
 				originalTarget = event.originalTarget;
 			}
 			var sourceUrl = originalTarget.getAttribute("href");
-			
+			console.log(sourceUrl);
+
 			Ajax.GET({
 				url: sourceUrl,
 				callback: ajaxCallback.bind(this)
 			});
 			
 			function ajaxCallback(response) {
+
 				var popupBg = document.createElement("div");
 				Util.addClass(popupBg, "popup-bg");
 				Util.addClass(popupBg, "popup-animation");
@@ -98,7 +99,8 @@
 					var afteropenCallbackRef = function(){
 						// 오픈 엔드 콜백 실행
 						if(config.callbacks != undefined && config.callbacks.afteropen != undefined) {
-							config.callbacks.afteropen();
+							var btn = document.querySelector(".form-container .button[type='button']")
+							config.callbacks.afteropen(btn);
 						}	
 						popupWrapAnimation.removeEventListener("webkitTransitionEnd", afteropenCallbackRef, false);    
 						

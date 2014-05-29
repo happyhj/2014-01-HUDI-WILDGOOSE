@@ -39,7 +39,7 @@ public class JSPView implements View {
 		String uriResourceSchema = getUriResourceSchema(uri);
 		Map<String, String> jspMap = (Map<String, String>) context.getAttribute("jspMap");
 		String jspFileName = jspMap.get(uriResourceSchema);
-		
+		LOGGER.debug(uriResourceSchema);
 		LOGGER.debug("jspFileName " + jspFileName);
 		
 		if(jspFileName == null) {

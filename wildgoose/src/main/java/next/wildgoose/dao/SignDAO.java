@@ -29,6 +29,9 @@ public class SignDAO {
 			@Override
 			public Object mapRow(ResultSet rs) throws SQLException {
 				if (rs.first()) {
+					if (rs.getInt("exist") == 0) {
+						return false;
+					}
 					return true;
 				}
 				return false;

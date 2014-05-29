@@ -73,7 +73,21 @@ function toggleFav(e) {
 }
 
 function getFavs() {
-	var url = "api/v1/users/?user_id?/favorites/";
+   function getCookie(cName) {
+          cName = cName + '=';
+          var cookieData = document.cookie;
+          var start = cookieData.indexOf(cName);
+          var cValue = '';
+          if(start != -1){
+               start += cName.length;
+               var end = cookieData.indexOf(';', start);
+               if(end == -1)end = cookieData.length;
+               cValue = cookieData.substring(start, end);
+          }
+          return unescape(cValue);
+     }
+   
+	var url = "api/v1/users/"+getCookie("userId")+"/favorites/";
 	Ajax.GET(url, function(jsonStr) {
 		var result = JSON.parse(jsonStr);
 		favs = result["data"];

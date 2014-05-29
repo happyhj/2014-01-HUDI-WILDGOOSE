@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dto.Result;
 import next.wildgoose.dto.TemplateResult;
@@ -33,6 +34,9 @@ public class TemplateController implements BackController {
 		String path = root +"html_templates/"+ templateFileName;
 		TemplateResult result = new TemplateResult(request.getParameterMap());
 		String htmlDocument = null;
+	
+		HttpSession session = request.getSession();
+		String randNum = "1234567890123";		
 		
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(path));

@@ -46,6 +46,7 @@ public class FrontController extends HttpServlet {
 		session.setMaxInactiveInterval(Constants.SESSION_EXPIRING_TIME);
 		Cookie[] cookies = request.getCookies();
 		Cookie jsessionid = null;
+		Cookie userId = null;
 
 		for (int i=0; i<cookies.length; i++) {
 			Cookie cookie = cookies[i];
@@ -56,7 +57,13 @@ public class FrontController extends HttpServlet {
 		if(jsessionid != null) {
 			jsessionid.setMaxAge(Constants.SESSION_EXPIRING_TIME);
 		}
+
+		//userId.setDomain("userId");
+		//userId.setValue((String) session.getAttribute("userId"));
+
 		response.addCookie(jsessionid);			
+		response.addCookie(userId);			
+
 	}
 	
 	// 요청(request path)에 해당하는 BackController 구현체를 받아오기

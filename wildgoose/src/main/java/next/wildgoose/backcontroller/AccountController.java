@@ -18,13 +18,14 @@ public class AccountController implements BackController {
 	public Result execute(HttpServletRequest request) {
 		Result result = null;
 		Uri uri = new Uri(request);
-		String feature = uri.get(1);
+		String method = request.getMethod();
+		String email;
 		
-		if("new".equals(feature)){
+		if("POST".equals(method)){
 			// 체크하고 유효한 경우 가입
 			result = join(request);
-		} else if("email".equals(feature)){
-			String email = uri.get(2);
+		} else if("GET".equals(method)){
+			email = request.getParameter("email");
 			result = usedEmail(request, email);
 		}
 		
@@ -37,6 +38,7 @@ public class AccountController implements BackController {
 		AccountResult accountResult = new AccountResult(request.getParameterMap());
 		
 		if(isJoinable(signDao, email)){
+			accountResult.setStatus(200);
 			accountResult.setMessage("fetching account info succeed");
 		} else {
 			accountResult.setStatus(500);
@@ -74,7 +76,7 @@ public class AccountController implements BackController {
 	
 	private boolean isJoinable(SignDAO signDao, String email) {
 		if (isValidEmail(email)) {
-			return signDao.findEmail(email);
+			return !signDao.findEmail(email);
 		}
 		return false;
 	}

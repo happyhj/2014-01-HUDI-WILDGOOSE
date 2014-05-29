@@ -4,8 +4,8 @@
 
 <a href="/"><img src="/image/logo.png" alt="wildgoose logo" class="header-logo-image"/></a>
 <c:if test="${ empty sessionScope.userId }">
-	<button class="header-btn" id="join">가입하기</button>
-	<button class="header-btn" id="login">로그인하기</button>
+	<button class="header-btn" id="join" href="/api/v1/templates/account.html">가입하기</button>
+	<button class="header-btn" id="login" href="/api/v1/templates/login.html">로그인하기</button>
 	<button class="header-btn hidden" id="logout">로그아웃</button>
 	<button class="header-btn hidden" id="timeline">Timeline</button>
 	<button class="header-btn hidden" id="favorite">favorite</button>
@@ -26,28 +26,17 @@
 <script type="text/javascript" src="/CAGE/CAGE.src/CAGE.util.js"></script>
 <script type="text/javascript" src="/CAGE/CAGE.src/CAGE.ui.popup.js"></script>
 <script>
-
-
-
-
-!function() {
 	var Popup = CAGE.ui.popup;
 	var joinBtn = document.querySelector("#join");
-
-	var myPopup1 = Popup.ajaxPopup({
+	
+	var joinPopup = Popup.ajaxPopup({
 		element: joinBtn,
 		transitionEffect: "turn", // turn
 		callbacks: {
-			beforeopen: function() {
-				//alert("beforeopen");
-			},
 			afteropen: function() {
 				addValidationEvent();
 				var btn = arguments[0];
 				btn.addEventListener("click", signUpAccout, false);
-			},
-			beforeclose: function() {
-				//alert("beforeclose");
 			},
 			afterclose: function() {
 				//alert("afterclose");	
@@ -57,16 +46,26 @@
 			return JSON.parse(AjaxResponse).data.template;
 		}
 	});
-	/*
-	var loginBtn = document.querySelector(".header-btn#login");
-	loginBtn.addEventListener("click", function() {
-		var url = "/api/v1/templates/login.html";	
-		WILDGOOSE.ui.modal.openModalWindow(url, function() {
-			var btn = arguments[0];
-			btn.addEventListener("click", loginAccount, false);
-		})
-	}, false);
-	*/
+	var loginBtn = document.querySelector("#login");
+	
+	var loginPopup = Popup.ajaxPopup({
+		element: loginBtn,
+		transitionEffect: "turn", // turn
+		callbacks: {
+			afteropen: function() {
+				addValidationEvent();
+				var btn = arguments[0];
+				btn.addEventListener("click", loginAccount, false);
+			},
+			afterclose: function() {
+				//alert("afterclose");	
+			}
+		},
+		templateLoader: function(AjaxResponse) {
+			return JSON.parse(AjaxResponse).data.template;
+		}
+	});
+
 	var logoutBtn = document.querySelector(".header-btn#logout");
 	logoutBtn.addEventListener("click", function() {
 		Ajax.DELETE('/api/v1/session');
@@ -82,7 +81,6 @@
 	favoriteBtn.addEventListener("click", function() {
 		location.href = "/users/?user_id?/favorite";
 	}, false);
-}();
 
 function updateTopbar(isLogined) {
 	var joinBtn = document.querySelector(".header-btn#join");

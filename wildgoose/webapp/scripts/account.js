@@ -7,20 +7,21 @@ var validCheck = WILDGOOSE.ui.validation.validCheck;
 
 	
 function addValidationEvent() {
-	var formContainer = document.querySelector(".modal .form-container");
-	
+	var formContainer = document.querySelector(".form-container");
 	for (var i = formContainer.length - 1; i >= 0; --i) {
 		var input = formContainer[i];
 		if (input.type == "email" || input.type == "password") {
 			// blur event
-			input.addEventListener("blur", checkSignUpFrom, false);
+			var dataCheck = input.getAttribute("data-check");
+			if(dataCheck == "true") {
+				input.addEventListener("blur", checkSignUpFrom, false);
+			}
 		}
 	}
 }
 
 function checkSignUpFrom(e) {
 	var inputEl = e.target;
-	
 	// validCheck는 전역으로 선언
 	if (validCheck(inputEl)) {
 		console.log("validation ok");

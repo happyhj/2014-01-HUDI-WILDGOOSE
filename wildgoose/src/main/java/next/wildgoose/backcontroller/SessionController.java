@@ -18,9 +18,8 @@ public class SessionController implements BackController {
 	public Result execute(HttpServletRequest request) {
 		Result result = null;
 		String method = request.getMethod();
-		Uri uri = new Uri(request);
 		
-		if ("POST".equals(method) && uri.check(1, "new")) {
+		if ("POST".equals(method)) {
 			result = login(request);
 		} else if ("DELETE".equals(method)) {
 			result = logout(request);
