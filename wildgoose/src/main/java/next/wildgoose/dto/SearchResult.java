@@ -6,8 +6,8 @@ import java.util.Map;
 import next.wildgoose.framework.Result;
 
 public class SearchResult extends Result {
-	public SearchResult(Map<String, String[]> parameters) {
-		super(parameters);
+	public SearchResult() {
+		super();
 	}
 	public List<Reporter> getReporters() {
 		return (List<Reporter>) super.getData("reporterCards");

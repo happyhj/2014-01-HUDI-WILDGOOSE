@@ -47,7 +47,7 @@ public class SearchController implements BackController {
 		SearchResult searchResult = null;
 		
 		if (searchQuery == null) {
-			searchResult = new SearchResult(request.getParameterMap());
+			searchResult = new SearchResult();
 			searchResult.setStatus(200);
 			searchResult.setMessage("welcome to search page! This path is not provided as API.");
 			return searchResult;
@@ -57,7 +57,7 @@ public class SearchController implements BackController {
 		searchQuery.replaceAll("%", "");
 		String trimmedQuery = searchQuery.trim();
 		if ("".equals(trimmedQuery)) {
-			searchResult = new SearchResult(request.getParameterMap());
+			searchResult = new SearchResult();
 			searchResult.setMessage("You can not search with whitespace");
 			return searchResult;
 		}
@@ -65,7 +65,7 @@ public class SearchController implements BackController {
 	}
 	
 	private SearchResult getAutoCompleteResult(HttpServletRequest request, String searchQuery, int howMany) {
-		SearchResult searchResult = new SearchResult(request.getParameterMap());
+		SearchResult searchResult = new SearchResult();
 		ServletContext context = request.getServletContext();
 		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
 		
@@ -81,7 +81,7 @@ public class SearchController implements BackController {
 	}
 
 	private SearchResult getSearchResult(HttpServletRequest request, String searchQuery, int count) {
-		SearchResult searchResult = new SearchResult(request.getParameterMap());
+		SearchResult searchResult = new SearchResult();
 		ServletContext context = request.getServletContext();
 		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
 //		boolean hasMore = false;

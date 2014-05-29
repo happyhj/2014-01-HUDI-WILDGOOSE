@@ -1,14 +1,13 @@
 package next.wildgoose.dto;
 
 import java.util.List;
-import java.util.Map;
 
 import next.wildgoose.framework.Result;
 
 public class FavoriteResult extends Result {
 
-	public FavoriteResult(Map<String, String[]> parameters) {
-		super(parameters);
+	public FavoriteResult() {
+		super();
 		// TODO Auto-generated constructor stub
 	}
 

@@ -7,8 +7,8 @@ import next.wildgoose.framework.Result;
 
 public class TimelineResult extends Result {
 
-	public TimelineResult(Map<String, String[]> parameters) {
-		super(parameters);
+	public TimelineResult() {
+		super();
 	}
 	
 	public List<Article> getAtricles() {

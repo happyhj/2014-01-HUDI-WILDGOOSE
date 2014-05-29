@@ -30,7 +30,7 @@ public class SessionController implements BackController {
 	}
 
 	private SimpleResult login(HttpServletRequest request) {
-		SimpleResult simpleResult = new SimpleResult(request.getParameterMap());
+		SimpleResult simpleResult = new SimpleResult();
 		
 		String email = request.getParameter("email");
 		String hashedPassword = request.getParameter("password");
@@ -62,7 +62,7 @@ public class SessionController implements BackController {
 		HttpSession session = request.getSession();
 		session.removeAttribute("userId");
 		
-		SimpleResult simpleResult = new SimpleResult(request.getParameterMap());
+		SimpleResult simpleResult = new SimpleResult();
 		simpleResult.setStatus(200);
 	    simpleResult.setMessage("removing user authentication succeed");
 		return simpleResult;

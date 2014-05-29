@@ -5,8 +5,8 @@ import java.util.Map;
 import next.wildgoose.framework.Result;
 
 public class TemplateResult extends Result {
-	public TemplateResult(Map<String, String[]> parameters) {
-		super(parameters);
+	public TemplateResult() {
+		super();
 	}
 
 	public String getTemplate() {

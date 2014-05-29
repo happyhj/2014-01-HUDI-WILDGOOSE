@@ -34,7 +34,7 @@ public class AccountController implements BackController {
 	private AccountResult usedEmail(HttpServletRequest request, String email) {
 		ServletContext context = request.getServletContext();
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
-		AccountResult accountResult = new AccountResult(request.getParameterMap());
+		AccountResult accountResult = new AccountResult();
 		
 		if(isJoinable(signDao, email)){
 			accountResult.setMessage("fetching account info succeed");
@@ -53,7 +53,7 @@ public class AccountController implements BackController {
 		ServletContext context = request.getServletContext();
 		
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
-		AccountResult accountResult = new AccountResult(request.getParameterMap());
+		AccountResult accountResult = new AccountResult();
 		
 		// 기본 세팅 fail
 		accountResult.setMessage("adding user account failed");

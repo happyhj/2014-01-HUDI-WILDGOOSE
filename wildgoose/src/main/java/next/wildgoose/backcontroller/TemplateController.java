@@ -32,7 +32,7 @@ public class TemplateController implements BackController {
 		String templateFileName = uri.get(1);
 		String root = context.getRealPath(Constants.RESOURCE_ROOT);
 		String path = root +"html_templates/"+ templateFileName;
-		TemplateResult result = new TemplateResult(request.getParameterMap());
+		TemplateResult result = new TemplateResult();
 		String htmlDocument = null;
 		
 		try {

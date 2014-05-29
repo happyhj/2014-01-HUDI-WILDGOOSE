@@ -7,8 +7,8 @@ import next.wildgoose.framework.Result;
 
 public class ReporterResult extends Result {
 
-	public ReporterResult(Map<String, String[]> parameters) {
-		super(parameters);
+	public ReporterResult() {
+		super();
 	}
 
 	public List<Article> getArticles() {

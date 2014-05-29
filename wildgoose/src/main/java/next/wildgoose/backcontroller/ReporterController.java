@@ -33,7 +33,7 @@ public class ReporterController implements BackController {
 
 		// id가 입력되지 않은 경우 처리
 		if (uri.size() <= 1 || uri.check(1, "")) {
-			result = new ReporterResult(request.getParameterMap());
+			result = new ReporterResult();
 			result.setMessage("parameter is missing.");
 			return result;
 		}
@@ -51,7 +51,7 @@ public class ReporterController implements BackController {
 
 	private ReporterResult getGraphData(HttpServletRequest request, Uri uri, int reporterId) {
 		
-		ReporterResult reporterResult = new ReporterResult(request.getParameterMap());
+		ReporterResult reporterResult = new ReporterResult();
 		ServletContext context = request.getServletContext();
 		
 		String graph = request.getParameter("data");
@@ -82,7 +82,7 @@ public class ReporterController implements BackController {
 
 	private ReporterResult getReporterPage(HttpServletRequest request, int reporterId) {
 		ServletContext context = request.getServletContext();
-		ReporterResult reporterResult = new ReporterResult(request.getParameterMap());
+		ReporterResult reporterResult = new ReporterResult();
 
 		Reporter reporter = null;
 		List<Article> articles = null;

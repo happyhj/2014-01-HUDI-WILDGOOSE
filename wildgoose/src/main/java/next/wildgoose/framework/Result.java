@@ -7,13 +7,21 @@ public abstract class Result {
 	
 	protected int status;
 	protected String message;
-	protected Map<String, String[]> parameters;
 	protected Map<String, Object> data;
 	
-	protected Result(Map<String, String[]> parameters) {
+	protected Result() {
 		this.status = 500;
 		this.message = "failure";
-		this.parameters = parameters;
+		this.data = new HashMap<String, Object>();
+	}
+	protected Result(boolean success) {
+		if (success == true) {
+			this.status = 200;
+			this.message = "success";	
+		} else {
+			this.status = 500;
+			this.message = "failure";
+		}
 		this.data = new HashMap<String, Object>();
 	}
 	
@@ -32,16 +40,6 @@ public abstract class Result {
 	}
 	public void setMessage(String message) {
 		this.message = message;
-	}
-	
-	public Map<String, String[]> getParameters() {
-		return parameters;
-	}
-	public String[] getParameter(String key) {
-		return parameters.get(key);
-	}
-	public void setParameters(Map<String, String[]> parameters) {
-		this.parameters = parameters;
 	}
 	
 	public Object getData(String key) {
