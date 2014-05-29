@@ -11,8 +11,8 @@
 	<button class="header-btn hidden" id="favorite">favorite</button>
 </c:if>
 <c:if test="${ not empty sessionScope.userId }">
-	<button class="header-btn hidden" id="join">가입하기</button>
-	<button class="header-btn hidden" id="login">로그인하기</button>
+	<button class="header-btn hidden" id="join" href="/api/v1/templates/account.html">가입하기</button>
+	<button class="header-btn hidden" id="login" href="/api/v1/templates/login.html">로그인하기</button>
 	<button class="header-btn" id="logout">로그아웃</button>
 	<button class="header-btn" id="timeline">Timeline</button>
 	<button class="header-btn" id="favorite">favorite</button>
@@ -20,19 +20,44 @@
 <script type="text/javascript" src="/scripts/lib/sha256.js"></script>
 <script type="text/javascript" src="/scripts/validation.js"></script>
 <script type="text/javascript" src="/scripts/account.js"></script>
-<script type="text/javascript" src="/scripts/modal.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/CAGE/CAGE.src/CAGE.ui.popup.css">
+<script type="text/javascript" src="/CAGE/CAGE.src/CAGE.ajax.js"></script>
+<script type="text/javascript" src="/CAGE/CAGE.src/CAGE.util.js"></script>
+<script type="text/javascript" src="/CAGE/CAGE.src/CAGE.ui.popup.js"></script>
 <script>
+
+
+
+
 !function() {
-	var joinBtn = document.querySelector(".header-btn#join");
-	joinBtn.addEventListener("click", function() {
-		var url = "/api/v1/subhtml/create_account";
-		WILDGOOSE.ui.modal.openModalWindow(url, function() {
-			addValidationEvent();
-			var btn = arguments[0];
-			btn.addEventListener("click", signUpAccout, false);
-		})
-	}, false);
-	
+	var Popup = CAGE.ui.popup;
+	var joinBtn = document.querySelector("#join");
+
+	var myPopup1 = Popup.ajaxPopup({
+		element: joinBtn,
+		transitionEffect: "turn", // turn
+		callbacks: {
+			beforeopen: function() {
+				//alert("beforeopen");
+			},
+			afteropen: function() {
+				addValidationEvent();
+				var btn = arguments[0];
+				btn.addEventListener("click", signUpAccout, false);
+			},
+			beforeclose: function() {
+				//alert("beforeclose");
+			},
+			afterclose: function() {
+				//alert("afterclose");	
+			}
+		},
+		templateLoader: function(AjaxResponse) {
+			return JSON.parse(AjaxResponse).data.template;
+		}
+	});
+	/*
 	var loginBtn = document.querySelector(".header-btn#login");
 	loginBtn.addEventListener("click", function() {
 		var url = "/api/v1/templates/login.html";	
@@ -41,7 +66,7 @@
 			btn.addEventListener("click", loginAccount, false);
 		})
 	}, false);
-	
+	*/
 	var logoutBtn = document.querySelector(".header-btn#logout");
 	logoutBtn.addEventListener("click", function() {
 		Ajax.DELETE('/api/v1/session');
