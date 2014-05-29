@@ -1,11 +1,11 @@
 package next.wildgoose.dto;
 
-import java.util.Map;
+import next.wildgoose.framework.Result;
 
 public class AccountResult extends Result{
 	
-	public AccountResult(Map<String, String[]> parameters) {
-		super(parameters);
+	public AccountResult() {
+		super();
 		
 	}
 	

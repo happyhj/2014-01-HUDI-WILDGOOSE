@@ -1,8 +1,6 @@
-package next.wildgoose.backcontroller;
+package next.wildgoose.framework;
 
 import javax.servlet.http.HttpServletRequest;
-
-import next.wildgoose.dto.Result;
 
 public interface BackController {
 	public Result execute(HttpServletRequest request);

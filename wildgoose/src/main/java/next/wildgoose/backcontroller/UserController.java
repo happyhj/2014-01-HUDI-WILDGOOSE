@@ -10,9 +10,10 @@ import next.wildgoose.dao.FavoriteDAO;
 import next.wildgoose.dto.Article;
 import next.wildgoose.dto.FavoriteResult;
 import next.wildgoose.dto.Reporter;
-import next.wildgoose.dto.Result;
 import next.wildgoose.dto.SimpleResult;
 import next.wildgoose.dto.TimelineResult;
+import next.wildgoose.framework.BackController;
+import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Uri;
 
 import org.slf4j.Logger;
@@ -50,7 +51,7 @@ public class UserController implements BackController {
 		ArticleDAO articleDao =  (ArticleDAO) context.getAttribute("ArticleDAO");
 		List<Article> articles = articleDao.findArticlesByFavorite(userId);
 		
-		TimelineResult timelineResult = new TimelineResult(request.getParameterMap());
+		TimelineResult timelineResult = new TimelineResult();
 		timelineResult.setArticles("articles", articles);
 		return timelineResult;
 	}
@@ -62,7 +63,7 @@ public class UserController implements BackController {
 		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
 		List<Reporter> reporters = favoriteDao.findFavoriteReporters(userId);
 		
-		FavoriteResult favoriteResult = new FavoriteResult(request.getParameterMap());
+		FavoriteResult favoriteResult = new FavoriteResult();
 		favoriteResult.setFavorites("reporters", reporters);
 		return favoriteResult;
 	}
@@ -70,7 +71,7 @@ public class UserController implements BackController {
 	private SimpleResult addFavorites(HttpServletRequest request, String userId) {
 		ServletContext context = request.getServletContext();
 		FavoriteDAO favDao = (FavoriteDAO) context.getAttribute("FavoriteDAO");
-		SimpleResult simpleResult = new SimpleResult(request.getParameterMap());
+		SimpleResult simpleResult = new SimpleResult();
 		
 		int reporterId = Integer.parseInt(request.getParameter("reporterId"));
 		if (favDao.addFavorite(reporterId, userId)) {
@@ -83,7 +84,7 @@ public class UserController implements BackController {
 	private SimpleResult removeFavorites(HttpServletRequest request, String userId) {
 		ServletContext context = request.getServletContext();
 		FavoriteDAO favDao = (FavoriteDAO) context.getAttribute("FavoriteDAO");
-		SimpleResult simpleResult = new SimpleResult(request.getParameterMap());
+		SimpleResult simpleResult = new SimpleResult();
 		
 		int reporterId = Integer.parseInt(request.getParameter("reporterId"));
 		if (favDao.removeFavorite(reporterId, userId)) {

@@ -3,10 +3,12 @@ package next.wildgoose.dto;
 import java.util.List;
 import java.util.Map;
 
+import next.wildgoose.framework.Result;
+
 public class AutocompleteResult extends Result {
 
-	public AutocompleteResult(Map<String, String[]> parameters) {
-		super(parameters);
+	public AutocompleteResult() {
+		super();
 	}
 	
 	public List<String> getNames() {

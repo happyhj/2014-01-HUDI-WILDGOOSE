@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.SignDAO;
-import next.wildgoose.dto.Account;
 import next.wildgoose.dto.AccountResult;
-import next.wildgoose.dto.Result;
+import next.wildgoose.framework.BackController;
+import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Uri;
 
 public class AccountController implements BackController {
@@ -35,7 +35,7 @@ public class AccountController implements BackController {
 	private AccountResult usedEmail(HttpServletRequest request, String email) {
 		ServletContext context = request.getServletContext();
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
-		AccountResult accountResult = new AccountResult(request.getParameterMap());
+		AccountResult accountResult = new AccountResult();
 		
 		if(isJoinable(signDao, email)){
 			accountResult.setStatus(200);
@@ -55,14 +55,13 @@ public class AccountController implements BackController {
 		ServletContext context = request.getServletContext();
 		
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
-		Account account = new Account(email, password);
-		AccountResult accountResult = new AccountResult(request.getParameterMap());
+		AccountResult accountResult = new AccountResult();
 		
 		// 기본 세팅 fail
 		accountResult.setMessage("adding user account failed");
 		
 		if (isJoinable(signDao, email) == true && isHashedPassword(password) == true) {
-			if (signDao.joinAccount(account) == true) {
+			if (signDao.joinAccount(email, password) == true) {
 				// 가입 성공
 				accountResult.setStatus(200);
 				accountResult.setMessage("adding user account succeed");

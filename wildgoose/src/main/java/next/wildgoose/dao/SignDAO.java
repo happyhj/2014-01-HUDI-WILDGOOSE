@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import next.wildgoose.dao.template.JdbcTemplate;
 import next.wildgoose.dao.template.PreparedStatementSetter;
 import next.wildgoose.dao.template.RowMapper;
-import next.wildgoose.dto.Account;
 
 
 public class SignDAO {
@@ -45,7 +44,7 @@ public class SignDAO {
 		return (Boolean) t.execute(query.toString(), pss, rm);
 	}
 	
-	public Account findAccount (final String email) {
+	public String findAccount (final String email) {
 		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
@@ -61,11 +60,12 @@ public class SignDAO {
 
 			@Override
 			public Object mapRow(ResultSet rs) throws SQLException {
-				Account account = null;
+				String result = null;
+
 				if (rs.first()) {
-					account = new Account(rs.getString("email"), rs.getString("password"));
+					result = rs.getString("password");
 				}
-				return account;
+				return result;
 			}
 			
 		};
@@ -73,18 +73,18 @@ public class SignDAO {
 		
 		String query = "SELECT * FROM user_account WHERE email = ?";
 
-		return (Account) t.execute(query, pss, rm);
+		return (String) t.execute(query, pss, rm);
+
 	}
 
-	public boolean joinAccount (final Account account) {
+	public boolean joinAccount (final String email, final String password) {
 		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
-				psmt.setString(1, account.getEmail());
-				psmt.setString(2, account.getPassword());
-				
+				psmt.setString(1, email);
+				psmt.setString(2, password);
 			}
 			
 		};

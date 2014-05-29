@@ -1,4 +1,4 @@
-package next.wildgoose.view;
+package next.wildgoose.framework;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import next.wildgoose.framework.View;
 import next.wildgoose.utility.Uri;
 
 import org.apache.commons.lang.StringUtils;
@@ -40,7 +39,7 @@ public class JSPView implements View {
 		String uriResourceSchema = getUriResourceSchema(uri);
 		Map<String, String> jspMap = (Map<String, String>) context.getAttribute("jspMap");
 		String jspFileName = jspMap.get(uriResourceSchema);
-		LOGGER.debug(uriResourceSchema);
+		
 		LOGGER.debug("jspFileName " + jspFileName);
 		
 		if(jspFileName == null) {
@@ -58,10 +57,6 @@ public class JSPView implements View {
 		}
 		String joinedResourceList = StringUtils.join(resourceList, "/");
 		return joinedResourceList;
-	}
-
-	public static void main(String[] args) {
-		Math.random();
 	}
 
 }

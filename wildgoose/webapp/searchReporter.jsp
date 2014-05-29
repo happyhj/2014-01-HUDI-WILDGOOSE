@@ -66,17 +66,16 @@
 			</ul>
 		</div>
 		<%-- searchQuery 존재시 and 검색 결과가 더 많을 때 --%>
-		<%--
-		<c:if test="${ not empty requestScope.data.searchQuery and requestScope.data.hasMoreCards == true }">
+		<c:if test = "${ not empty requestScope.data.searchQuery }" >
 			<div class="search-more">
 				<div class="search-button search-button-ajax">더보기</div>
 				<div class="search-state search-state-hidden">
+				<div class="state-search-curNum hidden">${ requestScope.data.reporters.size() }</div>
 				<div class="state-search-query hidden">${ requestScope.data.searchQuery }</div>
-				<div class="state-search-total hidden">${ requestScope.data.totalNum }</div>
+				<div class="state-search-totalNum hidden">${ requestScope.data.totalNum }</div>
 				</div>
 			</div>
 		</c:if>
-		 --%>
 	</div>
 	<footer class="footer"></footer>
 </div>

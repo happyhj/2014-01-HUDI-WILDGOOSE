@@ -3,10 +3,12 @@ package next.wildgoose.dto;
 import java.util.List;
 import java.util.Map;
 
+import next.wildgoose.framework.Result;
+
 public class TimelineResult extends Result {
 
-	public TimelineResult(Map<String, String[]> parameters) {
-		super(parameters);
+	public TimelineResult() {
+		super();
 	}
 	
 	public List<Article> getAtricles() {

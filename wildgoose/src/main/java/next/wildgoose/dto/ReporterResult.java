@@ -3,10 +3,12 @@ package next.wildgoose.dto;
 import java.util.List;
 import java.util.Map;
 
+import next.wildgoose.framework.Result;
+
 public class ReporterResult extends Result {
 
-	public ReporterResult(Map<String, String[]> parameters) {
-		super(parameters);
+	public ReporterResult() {
+		super();
 	}
 
 	public List<Article> getArticles() {
