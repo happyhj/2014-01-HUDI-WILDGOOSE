@@ -34,7 +34,6 @@ public class FrontController extends HttpServlet {
 		String reqPath = request.getRequestURI();
 		ServletContext context = request.getServletContext();
 		
-		LOGGER.debug("reqPath: " + reqPath);
 		BackController backController = getBackController(context, reqPath);
 		Object resultData = backController.execute(request);
 		
@@ -62,8 +61,8 @@ public class FrontController extends HttpServlet {
 	
 	// 요청(request path)에 해당하는 BackController 구현체를 받아오기
 	private BackController getBackController(ServletContext context, String reqPath) {
-		String primeResource = getPrimeResource(reqPath);
 		BackController result = null;
+		String primeResource = getPrimeResource(reqPath);
 		Map<String, BackController> controllerMap = (Map<String, BackController>) context.getAttribute("controllerMap");
 		result = controllerMap.get(primeResource);
 		if (result == null) {
