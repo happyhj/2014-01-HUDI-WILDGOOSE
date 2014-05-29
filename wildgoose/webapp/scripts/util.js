@@ -150,7 +150,7 @@ var Util = (function() {
 		        for (var variableName in dataObj)
 		        {
 		            if (dataObj[variableName]===0||dataObj[variableName]) {
-		                resultStr = resultStr.replace("%= "+variableName+" %", dataObj[variableName]);
+		                resultStr = resultStr.replace("<%= "+variableName+" %>", dataObj[variableName]);
 		            }
 		        }
 		        return resultStr;

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +38,10 @@ public class TemplateController implements BackController {
 		String htmlDocument = null;
 	
 		HttpSession session = request.getSession();
-		String randNum = "1234567890123";		
+		Random random = new Random();
+		String rand = Double.toString(random.nextDouble());
+		rand = rand.replace("0.", "");
+		session.setAttribute("randNum", rand);
 		
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(path));
@@ -61,6 +65,8 @@ public class TemplateController implements BackController {
 		LOGGER.debug(result.getMessage());
 		LOGGER.debug(""+result.getStatus());
 		LOGGER.debug(result.getTemplate());
+		
+		result.setMessage(rand);
 		return result;
 	}
 }

@@ -1,8 +1,8 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/account.css" />
 <div class="login-container">
 <form class="form-container">
-	<input name="randomNumber" type="hidden" value="{$}" />
-	<input class="input" type="email" id="email" name="email" placeholder="이메일을 입력하세요" data-check="false"/>
+	<input name="randomNumber" type="hidden" value="<%= randNum %>" />
+	<input class="input" type="email" id="email" name="email" placeholder="이메일을 입력하세요" />
 	<label for="name" class="form-msg msg-email"></label>
 	<input class="input" type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" data-check="true"/>
 	<label for="password" class="form-msg msg-password"></label>

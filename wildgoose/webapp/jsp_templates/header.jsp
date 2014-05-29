@@ -27,6 +27,8 @@
 <script type="text/javascript" src="/CAGE/CAGE.src/CAGE.ui.popup.js"></script>
 <script>
 	var Popup = CAGE.ui.popup;
+	var Util = CAGE.util;
+
 	var joinBtn = document.querySelector("#join");
 	
 	var joinPopup = Popup.ajaxPopup({
@@ -62,7 +64,12 @@
 			}
 		},
 		templateLoader: function(AjaxResponse) {
-			return JSON.parse(AjaxResponse).data.template;
+			var templateStr = JSON.parse(AjaxResponse).data.template;
+			var randNum = JSON.parse(AjaxResponse).message;
+			var compiler = Util.getTemplateCompiler(templateStr);
+			return compiler({
+				"randNum": randNum
+			});		
 		}
 	});
 

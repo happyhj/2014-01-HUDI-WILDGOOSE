@@ -12,10 +12,10 @@ function addValidationEvent() {
 		var input = formContainer[i];
 		if (input.type == "email" || input.type == "password") {
 			// blur event
-			var dataCheck = input.getAttribute("data-check");
-			if(dataCheck == "true") {
+//			var dataCheck = input.getAttribute("data-check");
+	//		if(dataCheck == "true") {
 				input.addEventListener("blur", checkSignUpFrom, false);
-			}
+		//	}
 		}
 	}
 }

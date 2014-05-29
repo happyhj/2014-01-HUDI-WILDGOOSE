@@ -61,8 +61,8 @@ public class FrontController extends HttpServlet {
 		//userId.setDomain("userId");
 		//userId.setValue((String) session.getAttribute("userId"));
 
-		response.addCookie(jsessionid);			
-		response.addCookie(userId);			
+		//response.addCookie(jsessionid);			
+		//response.addCookie(userId);			
 
 	}
 	
