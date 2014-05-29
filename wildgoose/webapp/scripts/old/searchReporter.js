@@ -6,7 +6,6 @@ searchResultContainer.addEventListener("DOMSubtreeModified", toggelStar, false);
 
 function toggelStar() {
 //  alert("DOMSubtreeModified fired!");
-	var loginBtn = document.querySelector(".header-btn#login");
 	var stars = document.querySelectorAll(".card-reporter h4.favorite");
 
 	if(favs.length == 0 || favs == "잘못된 접근입니다") {

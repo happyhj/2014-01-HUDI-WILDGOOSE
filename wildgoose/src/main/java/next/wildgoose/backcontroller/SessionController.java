@@ -1,16 +1,16 @@
 package next.wildgoose.backcontroller;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.SimpleResult;
-import next.wildgoose.framework.Result;
 import next.wildgoose.framework.BackController;
+import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.SHA256;
-import next.wildgoose.utility.Uri;
 
 public class SessionController implements BackController {
 
@@ -18,7 +18,7 @@ public class SessionController implements BackController {
 	public Result execute(HttpServletRequest request) {
 		Result result = null;
 		String method = request.getMethod();
-		
+
 		if ("POST".equals(method)) {
 			result = login(request);
 		} else if ("DELETE".equals(method)) {
@@ -49,8 +49,10 @@ public class SessionController implements BackController {
 		if(SHA256.testSHA256(accountPw + randNum).equals(hashedPassword)){
 			simpleResult.setStatus(200);
 			simpleResult.setMessage("getting user authentication succeed");
+			simpleResult.setData("userId", email);
 			session.setAttribute("userId", email);
 			session.setMaxInactiveInterval(Constants.SESSION_EXPIRING_TIME);
+
 		} else {
 			simpleResult.setMessage("getting user authentication failed");
 		}

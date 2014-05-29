@@ -21,10 +21,10 @@
 <script type="text/javascript" src="/scripts/validation.js"></script>
 <script type="text/javascript" src="/scripts/account.js"></script>
 
-<link rel="stylesheet" type="text/css" href="/CAGE/CAGE.src/CAGE.ui.popup.css">
-<script type="text/javascript" src="/CAGE/CAGE.src/CAGE.ajax.js"></script>
-<script type="text/javascript" src="/CAGE/CAGE.src/CAGE.util.js"></script>
-<script type="text/javascript" src="/CAGE/CAGE.src/CAGE.ui.popup.js"></script>
+<link rel="stylesheet" type="text/css" href="/CAGE/src/CAGE.ui.popup.css">
+<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
+<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
+<script type="text/javascript" src="/CAGE/src/CAGE.ui.popup.js"></script>
 <script>
 	var Popup = CAGE.ui.popup;
 	var Util = CAGE.util;

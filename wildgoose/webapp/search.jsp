@@ -9,19 +9,7 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/search.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
-<script type="text/template" id="reporter-card-template">
-<div class="card-section card-section-identity">
-	<h3 class="name">
-		<a href="/reporters/%= id %">%= name %</a>
-	</h3>
-	<p class="email">%= email %</p>
-	<h4 class="favorite off">&#x2605;</h4>
-	<div class="%= pressName % press-tag"></div>
-</div>
-<div class="card-section card-section-headline">
-	<h4 class="headline">%= articleTitle %</h4>
-</div>
-</script>
+
 <title>Wildgoose</title>
 
 <div class="wrap">
@@ -49,39 +37,46 @@
 		<div class="search-result">
 			<ul>
 				<c:choose>
-					<%-- message 존재시 --%>
-					<c:when test="${ requestScope.data.status == 500 }">
-						<span>${ requestScope.data.message }</span>
-					</c:when>
-					<%-- searchQuery 존재시 --%>
-					<c:when test="${ not empty requestScope.data.searchQuery }">
-						<c:if test="${ empty requestScope.data.reporters }">
-							<span>${ requestScope.data.searchQuery }에 대한 검색 결과가 없습니다.</span>
-						</c:if>
-						<c:forEach var="reporter" items="${ requestScope.data.reporters }" ><li class="card card-reporter">
-							<%@ include file = "jsp_templates/reporterCard.jsp" %>
-						</li></c:forEach>
-					</c:when>
+				
+				<%-- message 존재시 --%>
+				<c:when test="${ requestScope.data.status == 500 }">
+					<span>${ requestScope.data.message }</span>
+				</c:when>
+				
+				<%-- searchQuery 존재시 --%>
+				<c:when test="${ not empty requestScope.data.searchQuery }">
+					<c:if test="${ empty requestScope.data.reporters }">
+					<span>${ requestScope.data.searchQuery }에 대한 검색 결과가 없습니다.</span>
+					</c:if>
+					<%-- searchResult 표시부 --%>
+					<c:forEach var="reporter" items="${ requestScope.data.reporters }" ><li class="card card-reporter">
+						<%@ include file = "jsp_templates/reporterCard.jsp" %>
+					</li></c:forEach>
+				</c:when>
+				
 				</c:choose>
 			</ul>
 		</div>
 		<%-- searchQuery 존재시 and 검색 결과가 더 많을 때 --%>
 		<c:if test = "${ not empty requestScope.data.searchQuery }" >
-			<div class="search-more">
-				<div class="search-button search-button-ajax">더보기</div>
-				<div class="search-state search-state-hidden">
-				<div class="state-search-curNum hidden">${ requestScope.data.reporters.size() }</div>
-				<div class="state-search-query hidden">${ requestScope.data.searchQuery }</div>
-				<div class="state-search-totalNum hidden">${ requestScope.data.totalNum }</div>
-				</div>
+		<div class="search-more">
+			<span class="search-button-ajax">더보기</span>
+			<div class="search-state search-state-hidden">
+				<span class="state-search-curNum hidden">${ requestScope.data.reporters.size() }</span>
+				<span class="state-search-query hidden">${ requestScope.data.searchQuery }</span>
+				<span class="state-search-totalNum hidden">${ requestScope.data.totalNum }</span>
 			</div>
+		</div>
 		</c:if>
 	</div>
 	<footer class="footer"></footer>
 </div>
 
 <script type="text/javascript" src="/scripts/util.js"></script>
-<script type="text/javascript" src="/scripts/searchReporter.js"></script>
+<!--script type="text/javascript" src="/scripts/searchReporter.js"></script-->
+
+
+<script type="text/javascript" src="/scripts/refactoring/WILDGOOSE.search.js"></script>
 <script type="text/javascript" src="/scripts/auto-complement.js"></script>
 <script type="text/javascript" src="/scripts/fav.js"></script>
 <script>

@@ -46,7 +46,6 @@ public class FrontController extends HttpServlet {
 		session.setMaxInactiveInterval(Constants.SESSION_EXPIRING_TIME);
 		Cookie[] cookies = request.getCookies();
 		Cookie jsessionid = null;
-		Cookie userId = null;
 
 		for (int i=0; i<cookies.length; i++) {
 			Cookie cookie = cookies[i];
@@ -58,12 +57,7 @@ public class FrontController extends HttpServlet {
 			jsessionid.setMaxAge(Constants.SESSION_EXPIRING_TIME);
 		}
 
-		//userId.setDomain("userId");
-		//userId.setValue((String) session.getAttribute("userId"));
-
-		//response.addCookie(jsessionid);			
-		//response.addCookie(userId);			
-
+		
 	}
 	
 	// 요청(request path)에 해당하는 BackController 구현체를 받아오기
@@ -93,7 +87,6 @@ public class FrontController extends HttpServlet {
 
 		return result;
 	}
-		
 		
 	private View createView(String reqPath) {
 		// 요청종류에 따라 뷰 구현체의 인스턴스를 마련한다.
