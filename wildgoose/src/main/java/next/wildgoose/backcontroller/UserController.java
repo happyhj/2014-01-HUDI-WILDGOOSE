@@ -60,7 +60,7 @@ public class UserController implements BackController {
 		ServletContext context = request.getServletContext();
 		
 		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
-		List<Reporter> reporters = favoriteDao.findReporter(userId);
+		List<Reporter> reporters = favoriteDao.findFavoriteReporters(userId);
 		
 		FavoriteResult favoriteResult = new FavoriteResult(request.getParameterMap());
 		favoriteResult.setFavorites("reporters", reporters);

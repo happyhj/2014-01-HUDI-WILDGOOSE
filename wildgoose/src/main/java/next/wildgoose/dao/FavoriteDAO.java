@@ -6,21 +6,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import next.wildgoose.dao.template.DeleteJdbcTemplate;
-import next.wildgoose.dao.template.InsertJdbcTemplate;
-import next.wildgoose.dao.template.SelectJdbcTemplate;
+import next.wildgoose.dao.template.JdbcTemplate;
+import next.wildgoose.dao.template.PreparedStatementSetter;
+import next.wildgoose.dao.template.RowMapper;
 import next.wildgoose.dto.Reporter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class FavoriteDAO {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FavoriteDAO.class.getName());
 
 	public boolean addFavorite(final int reporterId, final String email) {
-		
-		InsertJdbcTemplate template = new InsertJdbcTemplate () {
-			
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, email);
@@ -28,16 +24,15 @@ public class FavoriteDAO {
 			}
 		};
 		
-		StringBuilder query = new StringBuilder();
-		query.append("INSERT INTO favorite (user_email, author_id) VALUES(?,?);");
-		
-		return template.insert(query.toString());
+		String query = "INSERT INTO favorite (user_email, author_id) VALUES(?,?);";
+
+		return (Boolean) t.execute(query, pss);
 	}
 	
 	
 	public boolean removeFavorite(final int reporterId, final String email) {
-		
-		DeleteJdbcTemplate template = new DeleteJdbcTemplate() {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
@@ -46,47 +41,60 @@ public class FavoriteDAO {
 			}
 		};
 		
-		StringBuilder query = new StringBuilder();
-		query.append("DELETE FROM favorite WHERE user_email =? AND author_id =?;");
+		String query = "DELETE FROM favorite WHERE user_email =? AND author_id =?;";
 		
-		return template.delete(query.toString());
+		return (Boolean) t.execute(query, pss);
 	}
 	
 	
-	public List<Integer> getFavorites(final String email) {
-		
-		SelectJdbcTemplate template = new SelectJdbcTemplate() {
+	public List<Integer> getFavoriteIds(final String email) {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
 			@Override
-			protected Object mapRow(ResultSet rs) throws SQLException {
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, email);
+			}
+			
+		};
+		
+		RowMapper rm = new RowMapper() {
+
+			@Override
+			public Object mapRow(ResultSet rs) throws SQLException {
 				List<Integer> favorites = new ArrayList<Integer>();
-				
 				while (rs.next()) {
 					favorites.add(rs.getInt("author_id"));
 				}
 				return favorites;
 			}
-
-			@Override
-			protected void setValues(PreparedStatement psmt) throws SQLException {
-				psmt.setString(1, email);
-			}
+			
 		};
-		StringBuilder query = new StringBuilder();
-		query.append("SELECT author_id FROM favorite WHERE user_email = ?");
-		List<Integer> favorites = (List<Integer>) template.select(query.toString());
+		
+		String query = "SELECT author_id FROM favorite WHERE user_email = ?";
 
-		return favorites;
+		return (List<Integer>) t.execute(query, pss, rm);
 	}
 	
-	public List<Reporter> findReporter(final String email) {
-		SelectJdbcTemplate template = new SelectJdbcTemplate() {
+	public List<Reporter> findFavoriteReporters(final String email) {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
 			@Override
-			protected Object mapRow(ResultSet rs) throws SQLException {
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, email);
+				//psmt.setInt(2, start);
+				//psmt.setInt(3, num);
+			}
+			
+		};
+		
+		RowMapper rm = new RowMapper() {
+
+			@Override
+			public Object mapRow(ResultSet rs) throws SQLException {
 				List<Reporter> favorites = new ArrayList<Reporter>();
 				Reporter reporter = null;
-				
 				while (rs.next()) {
 					reporter = new Reporter();
 					reporter.setId(rs.getInt("id"));
@@ -100,13 +108,7 @@ public class FavoriteDAO {
 				}
 				return favorites;
 			}
-
-			@Override
-			protected void setValues(PreparedStatement psmt) throws SQLException {
-				psmt.setString(1, email);
-				//psmt.setInt(2, start);
-				//psmt.setInt(3, num);
-			}
+			
 		};
 		
 		StringBuilder query = new StringBuilder();
@@ -115,8 +117,6 @@ public class FavoriteDAO {
 		query.append("FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id GROUP BY author.id ORDER BY author.name) as result ");
 		query.append("JOIN article ON article.URL = result.article_URL JOIN press ON result.press_id = press.id) AS author ON author.id = myfav.author_id LIMIT 24");
 		
-		List<Reporter> favorites = (List<Reporter>) template.select(query.toString());
-		
-		return favorites;
+		return (List<Reporter>) t.execute(query.toString(), pss, rm);
 	}
 }

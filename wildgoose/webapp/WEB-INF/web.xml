@@ -107,9 +107,9 @@
 	<listener>
 		<listener-class>next.wildgoose.dao.DaoListener</listener-class>
 	</listener>
-	<listener>
+	<!-- <listener>
 		<listener-class>next.wildgoose.service.ServiceListener</listener-class>
-	</listener>
+	</listener> -->
 	<listener>
 		<listener-class>next.wildgoose.backcontroller.BackControllerListener</listener-class>
 	</listener>
