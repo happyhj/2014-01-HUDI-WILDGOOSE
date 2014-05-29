@@ -22,24 +22,94 @@ public class SearchController implements BackController {
 	@Override
 	public Result execute(HttpServletRequest request) {
 		String searchQuery = request.getParameter("q");
-		int howMany = Constants.NUM_OF_CARDS;
+		boolean autoComplete = (request.getParameter("autocomplete") != null)? Boolean.parseBoolean(request.getParameter("autocomplete")) : false;
+		int howMany = (request.getParameter("how_many") != null)? Integer.parseInt(request.getParameter("how_many")) : Constants.NUM_OF_CARDS;
+//		int startPage = (request.getParameter("start_page") != null)? Integer.parseInt(request.getParameter("start_page")) : -1;
+		int startItem = (request.getParameter("start_item") != null)? Integer.parseInt(request.getParameter("start_item")) : -1;
 		SearchResult searchResult = checkQuery(request, searchQuery);
 		
+		
+		// 결과 반환
+		// 에러 혹은 root인 경우 반환
 		if (searchResult != null) {
 			return searchResult;
 		}
-		
-		if (request.getParameter("how_many") != null) {
-			howMany = Integer.parseInt(request.getParameter("how_many"));
-		}
-		// 결과 반환
-		if (request.getParameter("autocomplete") != null) {
+		// 자동완성 반환
+		if (autoComplete) {
 			LOGGER.debug("searchQuery: " + searchQuery + ", autocompete: " + request.getParameter("autocomplete"));
-			searchResult = getAutoCompleteResult(request, searchQuery, howMany);
-		} else {
-			searchResult = getSearchResult(request, searchQuery, howMany);
+			return getAutoCompleteResult(request, searchQuery, howMany);
 		}
+		
+		// 결과를 특정 부분부터 반환
+		if (startItem != -1) {
+			return getSearchResult(request, searchQuery, startItem, howMany);
+		}
+		
+		// 결과를 처음부터 반환
+		return getSearchResult(request, searchQuery, howMany);
+	}
+	
+	
+	private SearchResult getAutoCompleteResult(HttpServletRequest request, String searchQuery, int howMany) {
+		SearchResult searchResult = new SearchResult(request.getParameterMap());
+		ServletContext context = request.getServletContext();
+		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
+		
+		List<Reporter> reporters = reporterDao.getSimilarNames(searchQuery, howMany);
+		
+		searchResult.setStatus(200);
+		searchResult.setMessage("getting similar names result success");
+		searchResult.setReporters(reporters);
+		searchResult.setSearchQuery(searchQuery);
+		
 		return searchResult;
+		
+	}
+	
+	private SearchResult getSearchResult (HttpServletRequest request, String searchQuery, int start, int howMany) {
+		SearchResult searchResult = new SearchResult(request.getParameterMap());
+		ServletContext context = request.getServletContext();
+		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
+		List<Reporter> reporters = null;
+		
+		if (start == 0) {
+			int numOfResult = getNumOfResult(reporterDao, searchQuery);
+			searchResult.setTotalNum(numOfResult);
+		}
+		
+		reporters = getReporters(reporterDao, searchQuery, start, howMany);
+		searchResult.setStatus(200);
+		searchResult.setMessage("getting search result success");
+		searchResult.setReporters(reporters);
+		searchResult.setSearchQuery(searchQuery);
+		
+		return searchResult;
+	}
+
+	private SearchResult getSearchResult(HttpServletRequest request, String searchQuery, int howMany) {
+		return getSearchResult(request, searchQuery, 0, howMany);
+	}
+	
+	
+	private int getNumOfResult(ReporterDAO reporterDao, String searchQuery) {
+		String type = null;
+		
+		// searchQuery의 검색 type설정
+		type = Utility.isURL(searchQuery) ? "url" : "name";
+
+		return reporterDao.findNumberOfReportersByType(type, searchQuery);
+	}
+	
+
+	private List<Reporter> getReporters(ReporterDAO reporterDao, String searchQuery, int start, int howMany) {
+		List<Reporter> reporters = null;
+		String type = null;
+		
+		// searchQuery의 검색 type설정
+		type = Utility.isURL(searchQuery) ? "url" : "name";
+		reporters = reporterDao.findReportersByType(type, searchQuery, start, howMany);
+
+		return reporters;
 	}
 	
 	private SearchResult checkQuery(HttpServletRequest request, String searchQuery) {
@@ -61,50 +131,5 @@ public class SearchController implements BackController {
 			return searchResult;
 		}
 		return null;
-	}
-	
-	private SearchResult getAutoCompleteResult(HttpServletRequest request, String searchQuery, int howMany) {
-		SearchResult searchResult = new SearchResult(request.getParameterMap());
-		ServletContext context = request.getServletContext();
-		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
-		
-		List<Reporter> reporters = reporterDao.getSimilarNames(searchQuery, howMany);
-		
-		searchResult.setStatus(200);
-		searchResult.setMessage("getting similar names result success");
-		searchResult.setReporters(reporters);
-		searchResult.setSearchQuery(searchQuery);
-		
-		return searchResult;
-		
-	}
-
-	private SearchResult getSearchResult(HttpServletRequest request, String searchQuery, int count) {
-		SearchResult searchResult = new SearchResult(request.getParameterMap());
-		ServletContext context = request.getServletContext();
-		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
-//		boolean hasMore = false;
-		List<Reporter> reporters = null;
-		
-		reporters = getReporters(reporterDao, searchQuery, 0, count);
-		searchResult.setStatus(200);
-		searchResult.setMessage("getting search result success");
-		searchResult.setReporters(reporters);
-//		searchResult.setHasMore(hasMore);
-//		searchResult.setTotalNum(Constants.NUM_OF_CARDS);
-		searchResult.setSearchQuery(searchQuery);
-		
-		return searchResult;
-	}
-
-	private List<Reporter> getReporters(ReporterDAO reporterDao, String searchQuery, int start, int end) {
-		List<Reporter> reporters = null;
-		String type = null;
-		
-		// searchQuery의 검색 type설정
-		type = Utility.isURL(searchQuery) ? "url" : "name";
-		reporters = reporterDao.findReportersByType(type, searchQuery, start, end);
-
-		return reporters;
 	}
 }

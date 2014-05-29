@@ -48,6 +48,39 @@ public class ReporterDAO {
 		return (Reporter) t.execute(query.toString(), pss, rm);
 	}
 	
+	public int findNumberOfReportersByType(String type, final String searchQuery) {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+
+			@Override
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, "%" + searchQuery + "%");
+			}
+			
+		};
+		
+		RowMapper rm = new RowMapper() {
+
+			@Override
+			public Object mapRow(ResultSet rs) throws SQLException {
+				int result = 0;
+				if (rs.first()) {
+					result = rs.getInt("count");
+				}
+				return result;
+			}
+			
+		};
+
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT COUNT(*) AS count FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
+		query.append("WHERE ").append(getWhereClauseForType(type)).append(" LIKE ? GROUP BY author.id ORDER BY author.name) as result ");
+		query.append("JOIN article ON article.URL = result.article_URL ");
+		query.append("JOIN press ON result.press_id = press.id");
+
+		return (Integer) t.execute(query.toString(), pss, rm);
+	}
+	
 	public List<Reporter> findReportersByType(String type, final String searchQuery, final int start, final int num) {
 		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
@@ -81,20 +114,10 @@ public class ReporterDAO {
 			
 		};
 		
-		
-		// choice search type
-		String where = null;
-		if ("name".equals(type)) {
-			where = "author.name";
-		}
-		else if ("url".equals(type)) {
-			where = "aa.article_URL";
-		}
-		
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT result.id as id, result.name as name, result.email as email, article.title as title, press.name as press_name ");
 		query.append("FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id ");
-		query.append("WHERE ").append(where).append(" LIKE ? GROUP BY author.id ORDER BY author.name ");
+		query.append("WHERE ").append(getWhereClauseForType(type)).append(" LIKE ? GROUP BY author.id ORDER BY author.name ");
 		query.append("LIMIT ?, ?) as result ");
 		query.append("JOIN article ON article.URL = result.article_URL ");
 		query.append("JOIN press ON result.press_id = press.id");
@@ -132,5 +155,19 @@ public class ReporterDAO {
 		String query = "SELECT name FROM author WHERE name LIKE ? ORDER BY name LIMIT 0, ? ";
 		
 		return (List<Reporter>) t.execute(query, pss, rm);
+	}
+	
+	// choice search type
+	private String getWhereClauseForType(String type) {
+		String where = null;
+
+		if ("name".equals(type)) {
+			where = "author.name";
+		}
+		else if ("url".equals(type)) {
+			where = "aa.article_URL";
+		}
+		
+		return where;
 	}
 }

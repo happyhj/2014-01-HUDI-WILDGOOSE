@@ -8,11 +8,11 @@ public class SearchResult extends Result {
 		super(parameters);
 	}
 	public List<Reporter> getReporters() {
-		return (List<Reporter>) super.getData("reporterCards");
+		return (List<Reporter>) super.getData("reporters");
 	}
 
 	public void setReporters(List<Reporter> Reporters) {
-		super.setData("reporterCards", Reporters);
+		super.setData("reporters", Reporters);
 	}
 
 	public String getSearchQuery() {
