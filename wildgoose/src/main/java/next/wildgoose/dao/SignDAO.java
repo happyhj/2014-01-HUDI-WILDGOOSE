@@ -4,79 +4,90 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import next.wildgoose.dao.template.InsertJdbcTemplate;
-import next.wildgoose.dao.template.SelectJdbcTemplate;
+import next.wildgoose.dao.template.JdbcTemplate;
+import next.wildgoose.dao.template.PreparedStatementSetter;
+import next.wildgoose.dao.template.RowMapper;
 import next.wildgoose.dto.Account;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class SignDAO {
-	private static final Logger LOGGER = LoggerFactory.getLogger(SignDAO.class.getName());
-	
-	public boolean findEmail (final String email) {
-		boolean result = false;
-		SelectJdbcTemplate template = new SelectJdbcTemplate() {
+		
+	public boolean findEmail (final String email) {		
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+
 			@Override
-			protected Object mapRow(ResultSet rs) throws SQLException {
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, email);
+				
+			}
+			
+		};
+		
+		RowMapper rm = new RowMapper() {
+
+			@Override
+			public Object mapRow(ResultSet rs) throws SQLException {
 				if (rs.first()) {
 					return true;
 				}
 				return false;
 			}
-
-			@Override
-			protected void setValues(PreparedStatement psmt) throws SQLException {
-				psmt.setString(1, email);
-			}
+			
 		};
 		
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT count(email) as exist FROM user_account WHERE email = ?");
-
-		result = (Boolean) template.select(query.toString());
-
-		return result;
+		
+		return (Boolean) t.execute(query.toString(), pss, rm);
 	}
 	
 	public Account findAccount (final String email) {
-		SelectJdbcTemplate template = new SelectJdbcTemplate() {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+
 			@Override
-			protected Object mapRow(ResultSet rs) throws SQLException {
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, email);
+				
+			}
+			
+		};
+		
+		RowMapper rm = new RowMapper() {
+
+			@Override
+			public Object mapRow(ResultSet rs) throws SQLException {
 				Account account = null;
 				if (rs.first()) {
 					account = new Account(rs.getString("email"), rs.getString("password"));
 				}
 				return account;
 			}
-
-			@Override
-			protected void setValues(PreparedStatement psmt) throws SQLException {
-				psmt.setString(1, email);
-			}
+			
 		};
 		
-		StringBuilder query = new StringBuilder();
-		query.append("SELECT * FROM user_account WHERE email = ?");
+		
+		String query = "SELECT * FROM user_account WHERE email = ?";
 
-		return (Account) template.select(query.toString());
+		return (Account) t.execute(query, pss, rm);
 	}
 
 	public boolean joinAccount (final Account account) {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
-		InsertJdbcTemplate template = new InsertJdbcTemplate () {
-			
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, account.getEmail());
 				psmt.setString(2, account.getPassword());
+				
 			}
+			
 		};
+
+		String query = "INSERT INTO user_account (email, password) VALUES (?, ?) ";
 		
-		StringBuilder query = new StringBuilder();
-		query.append("INSERT INTO user_account (email, password) VALUES (?, ?) ");
-		
-		return template.insert(query.toString());
+		return (Boolean) t.execute(query, pss);
 	}
 }

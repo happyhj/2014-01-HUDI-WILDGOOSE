@@ -6,88 +6,102 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import next.wildgoose.dao.template.SelectJdbcTemplate;
+import next.wildgoose.dao.template.JdbcTemplate;
+import next.wildgoose.dao.template.PreparedStatementSetter;
+import next.wildgoose.dao.template.RowMapper;
 import next.wildgoose.dto.NumberOfArticles;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class NumberOfArticlesDAO {
-	private static final Logger LOGGER = LoggerFactory.getLogger(NumberOfArticlesDAO.class.getName());
 	
-	public List<NumberOfArticles> findNumberOfArticlesByDay(final int reporterId) {
-		SelectJdbcTemplate template = new SelectJdbcTemplate() {
-			
-			@Override
-			protected List<NumberOfArticles> mapRow(ResultSet rs) throws SQLException {
-				List<NumberOfArticles> result = new ArrayList<NumberOfArticles>();
-				NumberOfArticles numOfArticle = null;
-				while (rs.next()) {
-					numOfArticle = new NumberOfArticles();
-					numOfArticle.setCount(rs.getInt("count"));
-					numOfArticle.setDate(rs.getString("date"));
-					result.add(numOfArticle);
-				}
-				return result;
-			}
+	public List<NumberOfArticles> findNumberOfArticlesByDay(int reporterId) {
+		return findNumberOfArticlesByCondition("day", reporterId);
+	}
+	
+	public List<NumberOfArticles> findNumberOfArticlesBySection (int reporterId) {
+		return findNumberOfArticlesByCondition("section", reporterId);
+	}
+	
+	private List<NumberOfArticles> findNumberOfArticlesByCondition (String condition, final int reporterId) {
+		StringBuilder query = null;
+		RowMapper rm = null;
+		JdbcTemplate t = new JdbcTemplate();
+		
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
 			@Override
-			protected void setValues(PreparedStatement psmt) throws SQLException {
+			public void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setInt(1, reporterId);
 			}
 			
 		};
 		
-		StringBuilder query = new StringBuilder();
-		query.append("select date_format(datetime, '%m/%d') as date, count(URL) as count from article ");
-		query.append("WHERE URL in (Select article_URL as url from article_author where author_id = ?) ");
-		query.append("and DATEDIFF(now(), article.datetime) < 7 ");
-		query.append("group by date_format(datetime, '%m/%d');");
+		query = getSuitableQueryForCondition(condition);
+		rm = getSuitableRowMapperForCondition(condition);
 		
-		return (List<NumberOfArticles>) template.select(query.toString());
+		return (List<NumberOfArticles>) t.execute(query.toString(), pss, rm);
 	}
 	
-	public List<NumberOfArticles> findNumberOfArticlesBySection (final int reporterId) {
-		SelectJdbcTemplate template = new SelectJdbcTemplate() {
-			
-			@Override
-			protected List<NumberOfArticles> mapRow(ResultSet rs) throws SQLException {
-				List<NumberOfArticles> result = new ArrayList<NumberOfArticles>();
-				NumberOfArticles numOfArticle = null;
-				while (rs.next()) {
-					numOfArticle = new NumberOfArticles();
-					numOfArticle.setLabel(rs.getString(1));
-					numOfArticle.setValue(rs.getInt(2));
-					result.add(numOfArticle);
-				}
-				return result;
-			}
-
-			@Override
-			protected void setValues(PreparedStatement psmt) throws SQLException {
-				psmt.setInt(1, reporterId);
-			}
-			
-		};
-		
+	
+	private StringBuilder getSuitableQueryForCondition (String condition) {
 		StringBuilder query = new StringBuilder();
-		query.append("SELECT distinct sec.name, count(section_id) FROM article ");
-		query.append("JOIN (SELECT author_id, article_URL FROM article_author as aa WHERE aa.author_id = ?) as result ");
-		query.append("ON URL = result.article_URL ");
-		query.append("JOIN section as sec ON section_id = sec.id ");
-		query.append("GROUP BY section_id ORDER BY section_id LIMIT 5;");
-
-		return (List<NumberOfArticles>) template.select(query.toString());
+		
+		if ("day".equals(condition)) {
+			query.append("select date_format(datetime, '%m/%d') as date, count(URL) as count from article ");
+			query.append("WHERE URL in (Select article_URL as url from article_author where author_id = ?) ");
+			query.append("and DATEDIFF(now(), article.datetime) < 7 ");
+			query.append("group by date_format(datetime, '%m/%d');");
+		}
+		else if ("section".equals(condition)) {
+			query.append("SELECT distinct sec.name, count(section_id) FROM article ");
+			query.append("JOIN (SELECT author_id, article_URL FROM article_author as aa WHERE aa.author_id = ?) as result ");
+			query.append("ON URL = result.article_URL ");
+			query.append("JOIN section as sec ON section_id = sec.id ");
+			query.append("GROUP BY section_id ORDER BY section_id LIMIT 5;");
+		}
+		
+		return query;
 	}
 
-//	public JSONObject getJson(int reporterId, HttpServletRequest request) {
-//		String condition = request.getParameter("by");
-//		
-//		if ("section".equals(condition)) {
-//			return findNumberOfArticlesBySection(reporterId);
-//		} else if ("day".equals(condition)) {
-//			return findNumberOfArticlesByDay(reporterId);
-//		}
-//		return null;
-//	}
+	private RowMapper getSuitableRowMapperForCondition (String condition) {
+		RowMapper rm = null;
+		
+		if ("day".equals(condition)) {
+			rm = new RowMapper() {
+
+				@Override
+				public Object mapRow(ResultSet rs) throws SQLException {
+					List<NumberOfArticles> result = new ArrayList<NumberOfArticles>();
+					NumberOfArticles numOfArticle = null;
+					while (rs.next()) {
+						numOfArticle = new NumberOfArticles();
+						numOfArticle.setCount(rs.getInt("count"));
+						numOfArticle.setDate(rs.getString("date"));
+						result.add(numOfArticle);
+					}
+					return result;
+				}
+				
+			};
+		}
+		else if ("section".equals(condition)) {
+			rm = new RowMapper() {
+
+				@Override
+				public Object mapRow(ResultSet rs) throws SQLException {
+					List<NumberOfArticles> result = new ArrayList<NumberOfArticles>();
+					NumberOfArticles numOfArticle = null;
+					while (rs.next()) {
+						numOfArticle = new NumberOfArticles();
+						numOfArticle.setLabel(rs.getString(1));
+						numOfArticle.setValue(rs.getInt(2));
+						result.add(numOfArticle);
+					}
+					return result;
+				}
+				
+			};
+		}
+		
+		return rm;
+	}
 }

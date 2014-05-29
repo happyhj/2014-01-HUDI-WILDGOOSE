@@ -22,7 +22,4 @@ public class DummyData{
 		
 	}
 
-//	public JSONObject getJson(int reporterId, HttpServletRequest request) {
-//		return getJsonWithStatPoints(reporterId);
-//	}
 }

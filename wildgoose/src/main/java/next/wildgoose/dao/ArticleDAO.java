@@ -6,21 +6,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import next.wildgoose.dao.template.SelectJdbcTemplate;
+import next.wildgoose.dao.template.JdbcTemplate;
+import next.wildgoose.dao.template.PreparedStatementSetter;
+import next.wildgoose.dao.template.RowMapper;
 import next.wildgoose.dto.Article;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class ArticleDAO {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleDAO.class.getName());
 	
 	public List<Article> findArticlesById(final int reporterId) {
-		
-		SelectJdbcTemplate template = new SelectJdbcTemplate(){
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
 			@Override
-			protected Object mapRow(ResultSet rs) throws SQLException {
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setInt(1, reporterId);
+			}
+			
+		};
+		
+		RowMapper rm = new RowMapper() {
+
+			@Override
+			public Object mapRow(ResultSet rs) throws SQLException {
 				List<Article> articles = new ArrayList<Article>();
 				Article article = null;
 				while (rs.next()) {
@@ -34,11 +41,6 @@ public class ArticleDAO {
 				}
 				return articles;
 			}
-
-			@Override
-			protected void setValues(PreparedStatement psmt) throws SQLException {
-				psmt.setInt(1, reporterId);
-			}
 			
 		};
 		
@@ -48,19 +50,26 @@ public class ArticleDAO {
 		query.append("FROM article_author JOIN article ON article.URL = article_author.article_URL ");
 		query.append("WHERE article_author.author_id = ? ORDER BY datetime DESC limit 5;");
 		
-		List<Article> articles = (List<Article>) template.select(query.toString());
-		
-		return articles;
+		return (List<Article>) t.execute(query.toString(), pss, rm);
 	}
 	
 	public List<Article> findArticlesByFavorite(final String email) {
-		SelectJdbcTemplate template = new SelectJdbcTemplate() {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
 			@Override
-			protected Object mapRow(ResultSet rs) throws SQLException {
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, email);
+			}
+			
+		};
+		
+		RowMapper rm = new RowMapper() {
+
+			@Override
+			public Object mapRow(ResultSet rs) throws SQLException {
 				List<Article> articles = new ArrayList<Article>();
 				Article article = null;
-				
 				while (rs.next()) {
 					article = new Article();
 					article.setUrl(rs.getString("URL"));
@@ -71,14 +80,9 @@ public class ArticleDAO {
 					article.setDatetime(rs.getTimestamp("datetime").toString());
 					articles.add(article);
 				}
-				
 				return articles;
 			}
-
-			@Override
-			protected void setValues(PreparedStatement psmt) throws SQLException {
-				psmt.setString(1, email);
-			}
+			
 		};
 		
 		StringBuilder query = new StringBuilder();
@@ -88,9 +92,6 @@ public class ArticleDAO {
 		query.append("(SELECT author_id FROM favorite WHERE user_email = ?) ");
 		query.append("ORDER BY article.datetime desc limit 24) AS favorite ON author.id = favorite.author_id;");
 		
-		
-		List<Article> articles = (List<Article>) template.select(query.toString());
-		
-		return articles;
+		return (List<Article>) t.execute(query.toString(), pss, rm);
 	}
 }
