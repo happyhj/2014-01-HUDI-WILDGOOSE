@@ -1,11 +1,22 @@
 (function() {
-	var Ajax = CAGE.ajax;
+	'use strict';
+	var document = window.document;
+	var console = window.console;
+	var WILDGOOSE = window.WILDGOOSE || {};
 	
-	attatchEventToFavBtn();
+	WILDGOOSE.ui = WILDGOOSE.ui || {};
+	WILDGOOSE.ui.favorite = WILDGOOSE.ui.favorite || {};
+	
+	var Ajax = CAGE.ajax;
+	if(document.getElementById('userId') != null) {
+		attatchEventToFavBtn();
+	}
+	
 	function attatchEventToFavBtn() {
 		var stars = document.querySelectorAll(".star");
 		for (var i = 0; i < stars.length; i++) {
 			var star = stars[i];
+			Util.removeClass(star, "invisible");
 			star.addEventListener("click", toggleFav, false);
 			document.querySelector(".star").addEventListener("click", function(e) {
 				Util.addClass(e.target, "pumping");
@@ -18,55 +29,32 @@
 
 	function toggleFav(e) {
 		var target = e.target;
+		var card = target.parentElement.parentElement;
+		var anchor = card.querySelector('a');
+		var reporterId = anchor.getAttribute("href").split("reporters/")[1];
+		var userId = document.getElementById("userId").getAttribute('email');
+		var url = "api/v1/users/"+userId+"/favorites/?reporter_id=" + reporterId;
 		
 		var card = target.parentNode.parentNode;
-		var press = target.nextElementSibling;
-		var email = target.previousElementSibling;
-		var name = card.children[0].firstElementChild.firstElementChild;
-		console.log(email);
-		console.log(name);
-		var headline = card.children[1].firstElementChild;
 		
-		var pressClasses = press.className.split(" ");
-		var pressName = (pressClasses[0] != "press-tag")?pressClasses[0]:pressClasses[1];
-		var pressNameTemp = pressName.split("-blur");
-		pressName = pressNameTemp[0];
-		
-		var nephew = target.parentElement.firstElementChild.firstElementChild
-		var reporterId = nephew.getAttribute("href").split("reporters/")[1];
-		var url = "api/v1/users/?user_id?/favorites/?reporter_id=" + reporterId;
-		//var payload = "reporter_id="+reporterId;
 		if (Util.hasClass(target, "on")) {
-			//url = url + "?" + payload;
 			Ajax.DELETE({"url":url, "callback":function(data) {
-				//console.log(data)
-				if (data == "success") {
-//					debugger;
+				var data = JSON.parse(data);
+				if (data.status == 200) {
 					Util.removeClass(target, "on");
-					Util.removeClass(press, pressName);
-					Util.addClass(press, pressName + "-blur");
-					Util.addClass(card, "favorite-card-blur");
 					Util.addClass(target, "off");
-					Util.addClass(name, "blur");
-					Util.addClass(email, "blur");
-					Util.addClass(headline, "blur");
+					Util.addClass(card, "blur");
 				} else {
 					// react fail
 				}
 			}});
 		} else {
 			Ajax.POST({"url":url, "callback":function(data) {
-				//console.log(data)
-				if (data == "success") {
-//					debugger;
-					Util.removeClass(name, "blur");
-					Util.removeClass(email, "blur");
-					Util.removeClass(headline, "blur");
-					Util.removeClass(press, pressName + "-blur");
-					Util.removeClass(card, "favorite-card-blur");
-					Util.removeClass(target, "off");
+				var data = JSON.parse(data);
+				if (data.status == 200) {
 					Util.addClass(target, "on");
-					Util.addClass(press, pressName);
+					Util.removeClass(target, "off");
+					Util.removeClass(card, "blur");
 					
 				} else {
 					// react fail
@@ -112,4 +100,10 @@
 			}
 		}
 	}
-});
+	
+	WILDGOOSE.ui.fovorite = {
+			attatchEventToFavBtn: attatchEventToFavBtn,
+			toggleFav : toggleFav
+	}
+//	WILDGOOSE.ui.fovorite.attatchEventToFavBtn();
+})();

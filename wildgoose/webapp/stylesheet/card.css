@@ -115,6 +115,10 @@
 	background: #fff;
 }
 
+.card.blur {
+	opacity: 0.3;
+}
+
 .card-section { 
 	border-bottom-style: solid;
 	border-bottom-color: #DDD;
@@ -171,27 +175,6 @@
 	-webkit-box-orient:vertical;
 	-webkit-line-clamp:1;
 }
-
-.favorite-card-blur {
-	background: rgba(255,255,255,0.3);
-}
-.card .card-section > .blur {
-	color: #ccc;
-}
-
-.card-section-identity > .press-tag.hankyung-blur {
-	background: rgba(19,60,110,0.3);	
-}
-.card-section-identity > .press-tag.donga-blur {
-	background: rgba(251,65,42,0.3);	
-}
-.card-section-identity > .press-tag.hani-blur {
-	background: rgba(0,140,133,0.3);	
-}
-.card-section-identity > .press-tag.joongang-blur {
-	background: rgba(255,170,51,0.3);	
-}
-
 
 /* Press Color */
 .card-section-identity > .press-tag.hankyung {

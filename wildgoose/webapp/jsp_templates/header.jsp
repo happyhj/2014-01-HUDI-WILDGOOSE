@@ -11,6 +11,7 @@
 	<button class="header-btn hidden" id="favorite">favorite</button>
 </c:if>
 <c:if test="${ not empty sessionScope.userId }">
+	<sapn id ="userId" class="hidden" email=${sessionScope.userId}></sapn>
 	<button class="header-btn hidden" id="join" href="/api/v1/templates/account.html">가입하기</button>
 	<button class="header-btn hidden" id="login" href="/api/v1/templates/login.html">로그인하기</button>
 	<button class="header-btn" id="logout">로그아웃</button>

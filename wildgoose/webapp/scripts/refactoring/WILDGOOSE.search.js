@@ -1,5 +1,6 @@
 (function() {
 	var Ajax = CAGE.ajax;
+	var Fav = WILDGOOSE.ui.favorite;
 	// searchMoreBtn
 	function searchMore(clickEvent) {
 		var searchQuery = document.querySelector(".search-more .state-search-query").innerText;
@@ -36,12 +37,24 @@
 		var curNumDiv = document.querySelector(".search-more .state-search-curNum");
 		var curNum = parseInt(curNumDiv.innerText) + reporterNum;
 		curNumDiv.innerText = curNum;
+		
+		var logined = false;
+		var userId = document.getElementById("userId").getAttribute('email');
+		if(userId != null){
+			logined = true;
+		}
 
 		// append cards
 		for (var i=0; i<reporterNum; i++) {
 			var cardData = reporters[i];
-			var card = makeReporterCard(cardData, template)
-			searchResult.appendChild(card)
+			var card = makeReporterCard(cardData, template);
+			searchResult.appendChild(card);
+			if(logined){
+				var star = card.querySelector(".star");
+				console.log(star);
+//				Util.removeClass(star, "invisible");
+//				star.addEventListener("click", Fav.toggleFav, false);
+			}
 		}
 		
 		// hide search-more button

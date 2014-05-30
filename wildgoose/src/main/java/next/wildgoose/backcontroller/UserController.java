@@ -73,7 +73,7 @@ public class UserController implements BackController {
 		FavoriteDAO favDao = (FavoriteDAO) context.getAttribute("FavoriteDAO");
 		SimpleResult simpleResult = new SimpleResult();
 		
-		int reporterId = Integer.parseInt(request.getParameter("reporterId"));
+		int reporterId = Integer.parseInt(request.getParameter("reporter_id"));
 		if (favDao.addFavorite(reporterId, userId)) {
 			simpleResult.setStatus(200);
 			simpleResult.setMessage("success");
@@ -86,7 +86,7 @@ public class UserController implements BackController {
 		FavoriteDAO favDao = (FavoriteDAO) context.getAttribute("FavoriteDAO");
 		SimpleResult simpleResult = new SimpleResult();
 		
-		int reporterId = Integer.parseInt(request.getParameter("reporterId"));
+		int reporterId = Integer.parseInt(request.getParameter("reporter_id"));
 		if (favDao.removeFavorite(reporterId, userId)) {
 			simpleResult.setStatus(200);
 			simpleResult.setMessage("success");
