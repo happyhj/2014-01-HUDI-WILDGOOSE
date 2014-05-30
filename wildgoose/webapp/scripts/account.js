@@ -2,7 +2,7 @@
 /*
  * validation action
  */
-
+var Ajax = CAGE.ajax;
 var validCheck = WILDGOOSE.ui.validation.validCheck;
 
 	
@@ -64,7 +64,7 @@ function signUpAccout() {
 	var email = escape(form[0].value)
 	var password = escape(form[1].value);
 	var payload = "email=" + email + "&password=" + SHA256(password);
-	Ajax.POST(url, showSignUpResult, payload);
+	Ajax.POST({"url":url, "callback":showSignUpResult, "data":payload});
 //	Util.addClass(form, "isProgressing");
 
 }
@@ -83,9 +83,6 @@ function showSignUpResult(response) {
 			updateTopbar(true);
 		});
 	}
-	
-	form.appendChild(responseDiv);
-	
 }
 
 
@@ -101,9 +98,9 @@ function loginAccount() {
 	
 	var url = "/api/v1/session/";
 	var payload = "email="+email+"&password="+finalPassword;
-	Ajax.POST(url, function(response) {
+	Ajax.POST({"url": url, "callback":function(response) {
 		loginHandler(response);
-	}, payload);
+	}, "data":payload});
 }
 
 function loginHandler(response){
@@ -111,14 +108,10 @@ function loginHandler(response){
 	var form = document.querySelector(".form-container");
 	Util.removeClass(form, "isProgressing");
 	
+	console.log(response);
 	if (response == "success") {
 		// close modal. and update login panel
-		WILDGOOSE.ui.modal.closeModal(function(){
-			updateTopbar(true);
-		});
+		loginPopup.close();
+		updateTopbar(true);
 	}
-	var responseDiv = document.createElement("div");
-	responseDiv.innerHTML = response;
-	
-	form.appendChild(responseDiv);
 }

@@ -56,7 +56,6 @@
 		transitionEffect: "turn", // turn
 		callbacks: {
 			afteropen: function() {
-				addValidationEvent();
 				var btn = arguments[0];
 				btn.addEventListener("click", loginAccount, false);
 			},
@@ -76,7 +75,7 @@
 
 	var logoutBtn = document.querySelector(".header-btn#logout");
 	logoutBtn.addEventListener("click", function() {
-		Ajax.DELETE('/api/v1/session');
+		Ajax.DELETE({"url":'/api/v1/session'});
 		updateTopbar(false);
 	}, false);
 	
