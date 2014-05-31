@@ -4,6 +4,7 @@
 
 <a href="/"><img src="/image/logo.png" alt="wildgoose logo" class="header-logo-image"/></a>
 <c:if test="${ empty sessionScope.userId }">
+	<span id ="userId" class="hidden"></span>
 	<button class="header-btn" id="join" href="/api/v1/templates/account.html">가입하기</button>
 	<button class="header-btn" id="login" href="/api/v1/templates/login.html">로그인하기</button>
 	<button class="header-btn hidden" id="logout">로그아웃</button>
@@ -11,7 +12,7 @@
 	<button class="header-btn hidden" id="favorite">favorite</button>
 </c:if>
 <c:if test="${ not empty sessionScope.userId }">
-	<sapn id ="userId" class="hidden" email=${sessionScope.userId}></sapn>
+	<span id ="userId" class="hidden">${sessionScope.userId}</span>
 	<button class="header-btn hidden" id="join" href="/api/v1/templates/account.html">가입하기</button>
 	<button class="header-btn hidden" id="login" href="/api/v1/templates/login.html">로그인하기</button>
 	<button class="header-btn" id="logout">로그아웃</button>

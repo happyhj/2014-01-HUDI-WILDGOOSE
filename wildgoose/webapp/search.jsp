@@ -21,7 +21,7 @@
 			<a href="/"><img src="image/logo.png" alt="wildgoose logo" class="logo-image"/></a>
 		</div>
 		<div class="search search-column">
-			<form class="search_form" action="./" method="get" >
+			<form class="search_form" action="./search" method="get" >
 			<ul class="search-column-box">
 				<li class="search-query-entry">
 					<input type="search" autocomplete="off" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.data.searchQuery }" />
@@ -37,12 +37,12 @@
 		<div class="search-result">
 			<ul>
 				<c:choose>
-				
+
 				<%-- message 존재시 --%>
 				<c:when test="${ requestScope.data.status == 500 }">
 					<span>${ requestScope.data.message }</span>
 				</c:when>
-				
+
 				<%-- searchQuery 존재시 --%>
 				<c:when test="${ not empty requestScope.data.searchQuery }">
 					<c:if test="${ empty requestScope.data.reporters }">
@@ -53,7 +53,7 @@
 						<%@ include file = "jsp_templates/reporterCard.jsp" %>
 					</li></c:forEach>
 				</c:when>
-				
+
 				</c:choose>
 			</ul>
 		</div>
@@ -72,13 +72,8 @@
 	<footer class="footer"></footer>
 </div>
 
-<script type="text/javascript" src="/scripts/WILDGOOSE.favorite.js"></script>
-<script type="text/javascript" src="/scripts/refactoring/WILDGOOSE.search.js"></script>
+<script type="text/javascript" src="/scripts/WILDGOOSE/etc.js"></script>
+<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.favorite.js"></script>
+<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.search.js"></script>
 <script type="text/javascript" src="/scripts/auto-complement.js"></script>
 
-<!-- script type="text/javascript" src="/scripts/util.js"></script -->
-<!-- script type="text/javascript" src="/scripts/searchReporter.js"></script -->
-<script>
-//var favs = [];
-//getFavs();
-</script>

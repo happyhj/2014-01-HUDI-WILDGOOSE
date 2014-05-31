@@ -3,9 +3,8 @@
 		<a href="/reporters/${ reporter.id }">${ reporter.name }</a>
 	</h3>
 	<p class="email">${ reporter.email }</p>
-	<c:if test="${ not empty sessionScope.userId }">
-		<div class="favorite"><div class="star"></div></div>
-	</c:if>
+	<div class="favorite"><div class="star<c:if test="${ empty sessionScope.userId }"> invisible</c:if>"></div></div>
+
 	<div class="${ reporter.pressName } press-tag"></div>
 </div>
 <div class="card-section card-section-headline">
