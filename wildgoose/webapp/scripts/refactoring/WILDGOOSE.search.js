@@ -1,6 +1,7 @@
 (function() {
 	var Ajax = CAGE.ajax;
 	var Fav = WILDGOOSE.ui.favorite;
+	var Template = WILDGOOSE.util.template;
 	// searchMoreBtn
 	function searchMore(clickEvent) {
 		var searchQuery = document.querySelector(".search-more .state-search-query").innerText;
@@ -10,7 +11,6 @@
 		var url = "/api/v1/search?q=" + searchQuery + "&start_item=" + curNum + "&how_many=" + requestNum;
 		
 		Ajax.GET({"url":url, "callback":function(rawD) {
-			var Template = WILDGOOSE.util.template;
 			/*
 			 * template을 비동기로 요청하더라도 attachReceivedData는 template요청이 완료된 후 진행되므로
 			 * Template.get()을 동기로 요청함
@@ -21,29 +21,33 @@
 	};
 	
 	
-	function makeReporterCard(data, template) {
-		var Template = WILDGOOSE.util.template;
-		
-		var newLi = document.createElement("li");
-		newLi.className = "card card-reporter";
+	function makeReporterCard(isLogined, data, template) {
+		var className = "card card-reporter";
+		if(isLogined){
+			var star = card.querySelector(".star");
+			console.log(star);
+//			Util.removeClass(star, "invisible");
+//			star.addEventListener("click", Fav.toggleFav, false);
+		}
+//		var newLi = document.createElement("li");
+//		newLi.className = "card card-reporter";
 		
 		var templateCompiler = Template.getCompiler();
-		newLi.innerHTML = templateCompiler(data, template);
+		var newLi = '<li class="' + className + '">' + templateCompiler(data, template) + '</li>';
 		
 		return newLi;
 	};
 	
+	function getUserId() {
+		var userId = document.getElementById("userId");
+		if(userId != null){
+			userId = document.getElementById("userId").getAttribute('email');
+		}
+		return userId;
+	};
+	
 	
 	function attachRecievedData(rawD, template) {	
-//		var makeReporterCard = function(data, template) {
-//			var newLi = document.createElement("li");
-//			newLi.className = "card card-reporter";
-//
-//			var templateCompiler = Util.getTemplateCompiler(template);
-//			newLi.innerHTML = templateCompiler(data);
-//			
-//			return newLi;
-//		}
 
 		var totalNum = parseInt(document.querySelector(".search-more .state-search-totalNum").innerText);
 		var searchResult = document.querySelector(".search-result > ul");
@@ -55,26 +59,31 @@
 		var curNum = parseInt(curNumDiv.innerText) + reporterNum;
 		curNumDiv.innerText = curNum;
 		
-		// 로그인여부를 확인하여 별을 그려줌.
-		var logined = false;
-		var userId = document.getElementById("userId");
-		if(userId != null){
-			logined = true;
-			var userId = document.getElementById("userId").getAttribute('email');
+		// 로그인여부를 확인
+		var isLogined = false;
+		var userId = getUserId();
+		if (userId != null) {
+			var isLogined = true;
 		}
 
 		// append cards
+		var cards = [];
 		for (var i=0; i<reporterNum; i++) {
 			var cardData = reporters[i];
-			var card = makeReporterCard(cardData, template);
-			searchResult.appendChild(card);
-			if(logined){
-				var star = card.querySelector(".star");
-				console.log(star);
-//				Util.removeClass(star, "invisible");
-//				star.addEventListener("click", Fav.toggleFav, false);
-			}
+			cards.push(makeReporterCard(isLogined, cardData, template));
+			
+//			if(logined){
+//				var star = card.querySelector(".star");
+//				console.log(star);
+////				Util.removeClass(star, "invisible");
+////				star.addEventListener("click", Fav.toggleFav, false);
 		}
+		searchResult.innerHTML += cards.join("");
+	
+		
+//		searchResult.appendChild(card);
+		
+		
 		
 		// hide search-more button
 		var searchMore = document.querySelector(".search-more");
