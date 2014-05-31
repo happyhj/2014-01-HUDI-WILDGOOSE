@@ -8,25 +8,42 @@
 		var requestNum = 24;
 		// search
 		var url = "/api/v1/search?q=" + searchQuery + "&start_item=" + curNum + "&how_many=" + requestNum;
+		
 		Ajax.GET({"url":url, "callback":function(rawD) {
-			var templateUrl = "/api/v1/templates/articleCard.html"
-			Ajax.GET({"url":templateUrl, "callback":function(templateResponse) {
-				var template = JSON.parse(templateResponse)["data"]["template"]
-				attatchRecievedData(rawD, template);
-			}})
+			var Template = WILDGOOSE.util.template;
+			/*
+			 * template을 비동기로 요청하더라도 attachReceivedData는 template요청이 완료된 후 진행되므로
+			 * Template.get()을 동기로 요청함
+			 */
+			var template = Template.get({"url":"/api/v1/templates/articleCard.html"});
+			attachRecievedData(rawD, template);
 		}});
-	}
+	};
 	
-	function attatchRecievedData(rawD, template) {	
-		var makeReporterCard = function(data, template) {
-			var newLi = document.createElement("li");
-			newLi.className = "card card-reporter";
-
-			var templateCompiler = Util.getTemplateCompiler(template);
-			newLi.innerHTML = templateCompiler(data);
-			
-			return newLi;
-		}
+	
+	function makeReporterCard(data, template) {
+		var Template = WILDGOOSE.util.template;
+		
+		var newLi = document.createElement("li");
+		newLi.className = "card card-reporter";
+		
+		var templateCompiler = Template.getCompiler();
+		newLi.innerHTML = templateCompiler(data, template);
+		
+		return newLi;
+	};
+	
+	
+	function attachRecievedData(rawD, template) {	
+//		var makeReporterCard = function(data, template) {
+//			var newLi = document.createElement("li");
+//			newLi.className = "card card-reporter";
+//
+//			var templateCompiler = Util.getTemplateCompiler(template);
+//			newLi.innerHTML = templateCompiler(data);
+//			
+//			return newLi;
+//		}
 
 		var totalNum = parseInt(document.querySelector(".search-more .state-search-totalNum").innerText);
 		var searchResult = document.querySelector(".search-result > ul");
@@ -38,10 +55,12 @@
 		var curNum = parseInt(curNumDiv.innerText) + reporterNum;
 		curNumDiv.innerText = curNum;
 		
+		// 로그인여부를 확인하여 별을 그려줌.
 		var logined = false;
-		var userId = document.getElementById("userId").getAttribute('email');
+		var userId = document.getElementById("userId");
 		if(userId != null){
 			logined = true;
+			var userId = document.getElementById("userId").getAttribute('email');
 		}
 
 		// append cards

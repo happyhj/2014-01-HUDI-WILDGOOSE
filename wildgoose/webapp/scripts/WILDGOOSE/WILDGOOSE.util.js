@@ -110,7 +110,22 @@
 			})(),
 		},
 		template: {
-			getTemplateCompiler: function(templateStr) {
+			compiler: function(dataObj, template) {
+		        var resultStr = CAGE.util.trim(template);
+		        for (var variableName in dataObj) {
+		            if (dataObj[variableName]===0||dataObj[variableName]) {
+		                resultStr = resultStr.replace("<%= "+variableName+" %>", dataObj[variableName]);
+		            }
+		        }
+		        return resultStr;
+		    },
+				
+			getCompiler: function() {
+			    return this.compiler;
+			},
+				
+			/*
+			getCompiler: function(templateStr) {
 			    return function(dataObj) {
 			        var resultStr = Util.trim(templateStr);
 			        for (var variableName in dataObj)
@@ -121,8 +136,22 @@
 			        }
 			        return resultStr;
 			    };
-			} 
-		}	
+			},
+			*/
+			
+			// xhr, using synchronized get method
+			get: function(params) {
+				var Ajax = CAGE.ajax;
+				var url = params.url;
+				var template = null;
+				Ajax.GET({"url":url, "isAsync":false, "callback":function(templateResponse) {
+					template = JSON.parse(templateResponse)["data"]["template"];
+				}});
+				
+				return template;
+			}
+			
+		}
 	};
 	
 	WILDGOOSE.util = Util;

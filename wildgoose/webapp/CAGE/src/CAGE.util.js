@@ -88,9 +88,6 @@
 			var pattern = new RegExp("( " + className + "|" + className + " )");
 			DOM.className = DOM.className.replace(pattern,"");
 		},	
-		trim: function (str) {
-			return this.ltrim(this.rtrim(str));
-		},
 		
 		rtrim: function (str) {
 			str.replace(/\s*$/, "");
@@ -101,6 +98,12 @@
 			str.replace(/^\s*/, "");
 			return str;
 		},
+		
+		trim: function (str) {
+			console.log(this);
+			return this.ltrim(this.rtrim(str));
+		},
+		
 		getTemplateCompiler: function(templateStr) {
 		    return function(dataObj) {
 		        var resultStr = Util.trim(templateStr);
@@ -119,6 +122,8 @@
 		hasClass: Util.hasClass,
 		addClass: Util.addClass,
 		removeClass: Util.removeClass,
+		ltrim: Util.ltrim,
+		rtrim: Util.rtrim,
 		trim: Util.trim,
 		getTemplateCompiler: Util.getTemplateCompiler
 	};
