@@ -123,21 +123,6 @@
 			getCompiler: function() {
 			    return this.compiler;
 			},
-				
-			/*
-			getCompiler: function(templateStr) {
-			    return function(dataObj) {
-			        var resultStr = Util.trim(templateStr);
-			        for (var variableName in dataObj)
-			        {
-			            if (dataObj[variableName]===0||dataObj[variableName]) {
-			                resultStr = resultStr.replace("<%= "+variableName+" %>", dataObj[variableName]);
-			            }
-			        }
-			        return resultStr;
-			    };
-			},
-			*/
 			
 			// xhr, using synchronized get method
 			get: function(params) {
