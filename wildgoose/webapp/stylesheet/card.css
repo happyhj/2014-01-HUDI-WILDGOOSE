@@ -134,7 +134,7 @@
 	color: #BBB;
 }
 
-.card-section-identity > .favorite > .star {
+.card-section-identity .star {
 	-webkit-transition: -webkit-transform 0.5s ease; 
     -moz-transition: -moz-transform 0.5s ease;    
     -o-transition: transform 0.5s ease;    
@@ -144,17 +144,17 @@
 	background-repeat: no-repeat;
 }
 
-.card-section-identity > .favorite > .star:hover {
+.card-section-identity .star:hover {
 	background-image: url('/image/lemonstar.png');
 	cursor: pointer;
 }
-.card-section-identity > .favorite > .star.pumping {
-	-webkit-transform: scale(1.3,1.3); /* Chrome, Safari, Opera */
-    -moz-transform: scale(1.3,1.3); /* Chrome, Safari, Opera */
-	-ms-transform: scale(1.3,1.3); /* IE 9 */
-	transform: scale(1.3,1.3);
+.card-section-identity .star.pumping {
+	-webkit-transform: scale(1.2,1.2); /* Chrome, Safari, Opera */
+    -moz-transform: scale(1.2,1.2); /* Chrome, Safari, Opera */
+	-ms-transform: scale(1.2,1.2); /* IE 9 */
+	transform: scale(1.2,1.2);
 }
-.card-section-identity > .favorite > .star.on {
+.card-section-identity .star.on {
 	background-image: url('/image/yellowstar.png');
 }
 

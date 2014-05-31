@@ -1,6 +1,6 @@
 (function() {
 	var Ajax = CAGE.ajax;
-	var Fav = WILDGOOSE.ui.favorite;
+	var Fav = WILDGOOSE.favorite;
 	// searchMoreBtn
 	function searchMore(clickEvent) {
 		var searchQuery = document.querySelector(".search-more .state-search-query").innerText;
@@ -9,10 +9,11 @@
 		// search
 		var url = "/api/v1/search?q=" + searchQuery + "&start_item=" + curNum + "&how_many=" + requestNum;
 		Ajax.GET({"url":url, "callback":function(rawD) {
-			var templateUrl = "/api/v1/templates/articleCard.html"
+			var templateUrl = "/api/v1/templates/reporterCard.html"
 			Ajax.GET({"url":templateUrl, "callback":function(templateResponse) {
 				var template = JSON.parse(templateResponse)["data"]["template"]
 				attatchRecievedData(rawD, template);
+				Fav.updateFavs(curNum, requestNum);
 			}})
 		}});
 	}
@@ -94,7 +95,6 @@
 				location.load(e.state.url);
 			}
 		}, false);
-
 	}
 		
 	

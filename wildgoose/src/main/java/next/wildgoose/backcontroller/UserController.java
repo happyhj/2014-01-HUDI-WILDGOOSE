@@ -29,7 +29,7 @@ public class UserController implements BackController {
 		String userId = uri.get(1);
 		String pageName = uri.get(2);
 		String method = request.getMethod();
-		
+		LOGGER.debug(uri.toString());
 		if ("timeline".equals(pageName)) {
 			result = getTimeline(request, userId);
 		} else if ("favorites".equals(pageName)) {
@@ -44,7 +44,6 @@ public class UserController implements BackController {
 		return result;
 	}
 	
-	// TODO: change to result
 	private TimelineResult getTimeline(HttpServletRequest request, String userId) {
 		ServletContext context = request.getServletContext();
 
@@ -56,7 +55,6 @@ public class UserController implements BackController {
 		return timelineResult;
 	}
 	
-	// TODO: change to result
 	private Result getFavorites(HttpServletRequest request, String userId) {
 		ServletContext context = request.getServletContext();
 		
@@ -64,6 +62,9 @@ public class UserController implements BackController {
 		List<Reporter> reporters = favoriteDao.findFavoriteReporters(userId);
 		
 		FavoriteResult favoriteResult = new FavoriteResult();
+		favoriteResult.setStatus(200);
+		favoriteResult.setMessage("success");
+		LOGGER.debug(""+reporters.size());
 		favoriteResult.setFavorites("reporters", reporters);
 		return favoriteResult;
 	}

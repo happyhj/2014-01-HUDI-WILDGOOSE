@@ -11,8 +11,13 @@ import next.wildgoose.dao.template.PreparedStatementSetter;
 import next.wildgoose.dao.template.RowMapper;
 import next.wildgoose.dto.Reporter;
 
-public class FavoriteDAO {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+
+public class FavoriteDAO {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FavoriteDAO.class.getName());
+	
 	public boolean addFavorite(final int reporterId, final String email) {
 		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
@@ -115,7 +120,7 @@ public class FavoriteDAO {
 		query.append("SELECT author.* FROM (SELECT * FROM favorite WHERE user_email = ? ) AS myfav JOIN ");
 		query.append("(SELECT result.id as id, result.name as name, result.email as email, article.title as article_title, press.name as press_name, result.article_URL ");
 		query.append("FROM (SELECT * FROM author JOIN article_author AS aa ON author.id = aa.author_id GROUP BY author.id ORDER BY author.name) as result ");
-		query.append("JOIN article ON article.URL = result.article_URL JOIN press ON result.press_id = press.id) AS author ON author.id = myfav.author_id LIMIT 24");
+		query.append("JOIN article ON article.URL = result.article_URL JOIN press ON result.press_id = press.id) AS author ON author.id = myfav.author_id");
 		
 		return (List<Reporter>) t.execute(query.toString(), pss, rm);
 	}
