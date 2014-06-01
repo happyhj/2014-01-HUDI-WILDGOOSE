@@ -18,6 +18,9 @@
 			if (reporterCards.length != 0) {
 				for (var i = curNum - reqNum ; i < curNum; i++) {
 					var card = reporterCards[i];
+					if (card == undefined) {
+						continue;
+					}
 					var star = card.querySelector(".star");
 					star.addEventListener("click", this.toggleFav, false);
 					star.addEventListener("click", function(e) {
@@ -74,13 +77,13 @@
 		},
 
 		updateFavs : function(curNum, reqNum) {
-			console.log(curNum)
-			console.log(reqNum)
 			var reporterCards = document.querySelectorAll(".card");
-			console.log(reporterCards);
 			if (reporterCards.length != 0) {
 				for (var i = curNum - reqNum ; i < curNum; i++) {
 					var card = reporterCards[i];
+					if (card == undefined) {
+						continue;
+					}
 					var reporterName = card.querySelector(".name a");
 					var reporterId = reporterName.getAttribute("href").split("/")[2];
 					if (this.favoriteList.indexOf(parseInt(reporterId)) >= 0) {
