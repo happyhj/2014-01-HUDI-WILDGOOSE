@@ -72,7 +72,7 @@
 		updateFavs : function(curNum, reqNum) {
 			var reporterCards = document.querySelectorAll(".card");
 			if (reporterCards.length != 0) {
-				for (var i = curNum; i < reqNum; i++) {
+				for (var i = curNum; i < curNum + reqNum; i++) {
 					var card = reporterCards[i];
 					var reporterName = document.querySelector(".card .name a");
 					var reporterId = reporterName.getAttribute("href").split("/")[2];
