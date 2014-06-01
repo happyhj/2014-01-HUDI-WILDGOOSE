@@ -11,7 +11,7 @@ public class TimelineResult extends Result {
 		super();
 	}
 	
-	public List<Article> getAtricles() {
+	public List<Article> getArticles() {
 		return (List<Article>) super.getData("articles");
 	}
 	public void setArticles(String string, List<Article> articles) {

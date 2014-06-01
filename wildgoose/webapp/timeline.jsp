@@ -21,7 +21,7 @@
 			<ul>
 				<%-- session 존재시 --%>
 				<c:if test="${ not empty sessionScope.userId }">
-					<c:forEach var="article" items="${ requestScope.articles }">
+					<c:forEach var="article" items="${ requestScope.data.articles }">
 					<li class="card">
 						<%@ include file = "/jsp_templates/articleCard.jsp" %>
 					</li>
