@@ -10,7 +10,7 @@
 
 	// 의존성 주입
 	var Ajax = CAGE.ajax;
-	var Fav = WILDGOOSE.favorite;
+	var Fav = WILDGOOSE.ui.favorite;
 	var Template = CAGE.util.template;
 	
 	var SearchMore = {
@@ -34,7 +34,9 @@
 				this._attachRecievedData(cards);
 				var metaData = this._updateMetaData(cards.length);
 				this._selectStatusOfSearchMoreBtn(metaData.curNum);
+				debugger;
 				Fav.updateFavs(metaData.curNum, this.requestNum);
+				Fav.attatchEventToFavBtn(metaData.curNum, this.requestNum);
 			}
 		},
 		

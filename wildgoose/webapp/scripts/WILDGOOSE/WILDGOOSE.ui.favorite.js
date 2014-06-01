@@ -5,24 +5,28 @@
 
 	// 의존성 선언
 	var Ajax = CAGE.ajax;
+	var Util = CAGE.util.dom;
 	var WILDGOOSE = window.WILDGOOSE || {};
+	WILDGOOSE.ui = WILDGOOSE.ui || {};
 	WILDGOOSE.favorite = WILDGOOSE.favorite || {};
 
 	var Favorite = {
 		favoriteList : [],
 
-		attatchEventToFavBtn : function() {
-			var stars = document.querySelectorAll(".star");
-			for (var i = 0; i < stars.length; i++) {
-				var star = stars[i];
-				star.addEventListener("click", this.toggleFav, false);
-				star.addEventListener("click", function(e) {
-					console.log(e.target);
-					Util.addClass(e.target, "pumping");
-					setTimeout(function() {
-						Util.removeClass(e.target, "pumping");
-					}, 300)
-				}, false);
+		attatchEventToFavBtn : function(curNum, reqNum) {
+			var reporterCards = document.querySelectorAll(".card");
+			if (reporterCards.length != 0) {
+				for (var i = curNum - reqNum ; i < curNum; i++) {
+					var card = reporterCards[i];
+					var star = card.querySelector(".star");
+					star.addEventListener("click", this.toggleFav, false);
+					star.addEventListener("click", function(e) {
+						Util.addClass(e.target, "pumping");
+						setTimeout(function() {
+							Util.removeClass(e.target, "pumping");
+						}, 300)
+					}, false);
+				}				
 			}
 		},
 
@@ -70,11 +74,14 @@
 		},
 
 		updateFavs : function(curNum, reqNum) {
+			console.log(curNum)
+			console.log(reqNum)
 			var reporterCards = document.querySelectorAll(".card");
+			console.log(reporterCards);
 			if (reporterCards.length != 0) {
-				for (var i = curNum; i < curNum + reqNum; i++) {
+				for (var i = curNum - reqNum ; i < curNum; i++) {
 					var card = reporterCards[i];
-					var reporterName = document.querySelector(".card .name a");
+					var reporterName = card.querySelector(".name a");
 					var reporterId = reporterName.getAttribute("href").split("/")[2];
 					if (this.favoriteList.indexOf(parseInt(reporterId)) >= 0) {
 						card.querySelector(".star").className = "star on";
@@ -104,11 +111,11 @@
 					Favorite.favoriteList.push(card["id"]);
 				}
 				// 불러온 목록 내부에 존재하는 favorite 업데이트
-				Favorite.updateFavs(0, 24);
+				Favorite.updateFavs(24, 24);
 			}
 		});
 	}
 
-	WILDGOOSE.favorite = Favorite;
+	WILDGOOSE.ui.favorite = Favorite;
 
 })();
