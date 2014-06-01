@@ -162,6 +162,14 @@
 		request.send();
 	}
 	
+	
+	// 상태 누적
+//	window.addEventListener("popstate", function(e) {
+//		if (e.state) {
+//			location.load(e.state.url);
+//		}
+//	}.bind(this), false);
+	
 	// 공개 메서드 노출
 	CAGE.ajax = {
 		GET: GET,

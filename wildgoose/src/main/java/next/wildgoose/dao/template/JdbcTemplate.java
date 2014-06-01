@@ -24,6 +24,7 @@ public class JdbcTemplate {
 	}
 	
 	public Object execute (String query, PreparedStatementSetter pss, RowMapper rm) {
+		
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
 		Object result = null;
