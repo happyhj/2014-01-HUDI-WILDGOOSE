@@ -8,7 +8,7 @@
 	CAGE.ui.popup = CAGE.ui.popup || {};
 
 
-	var Util = CAGE.util;
+	var Dom = CAGE.util.dom;
 	var Ajax = CAGE.ajax;
     
 	function ajaxPopup(config){
@@ -34,18 +34,18 @@
 			function ajaxCallback(response) {
 
 				var popupBg = document.createElement("div");
-				Util.addClass(popupBg, "popup-bg");
-				Util.addClass(popupBg, "popup-animation");
+				Dom.addClass(popupBg, "popup-bg");
+				Dom.addClass(popupBg, "popup-animation");
 	
 				var popupWrap = document.createElement("div");
-				Util.addClass(popupWrap, "popup-wrap");
-				Util.addClass(popupWrap, "popup-animation");
+				Dom.addClass(popupWrap, "popup-wrap");
+				Dom.addClass(popupWrap, "popup-animation");
 	
 				
 				var popupContainer = document.createElement("div");
-				Util.addClass(popupContainer, "popup-container");
+				Dom.addClass(popupContainer, "popup-container");
 				var popupContent = document.createElement("div");
-				Util.addClass(popupContent, "popup-content");
+				Dom.addClass(popupContent, "popup-content");
 				
 				var templateStr;
 				if(config.templateLoader != undefined) {
@@ -57,7 +57,7 @@
 				popupContainer.appendChild(popupContent);
 				
 				if(config.transitionEffect != undefined) {
-					Util.addClass(popupContent, config.transitionEffect + "-animation-dialog");
+					Dom.addClass(popupContent, config.transitionEffect + "-animation-dialog");
 				}
 
 				popupWrap.appendChild(popupContainer);
@@ -88,8 +88,8 @@
 					popupBgAnimation.offsetHeight;
 /* 					popupBgAnimation.style.transform="translateY(0px)"; */
 					
-					Util.addClass(popupWrapAnimation, "popup-ready");
-					Util.addClass(popupBgAnimation, "popup-ready");
+					Dom.addClass(popupWrapAnimation, "popup-ready");
+					Dom.addClass(popupBgAnimation, "popup-ready");
 /* 					}, 100); */
 					
 					
@@ -134,8 +134,8 @@
 					
 								// 역 애니메이션 걸기
 
-								Util.removeClass(popupBg, "popup-ready");
-								Util.removeClass(popupWrap, "popup-ready");		
+								Dom.removeClass(popupBg, "popup-ready");
+								Dom.removeClass(popupWrap, "popup-ready");		
 								var aftercloseCallbackRef = function(){
 									// 오픈 엔드 콜백 실행
 									if(config.callbacks != undefined && config.callbacks.afterclose != undefined) {

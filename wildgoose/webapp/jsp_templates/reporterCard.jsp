@@ -1,4 +1,4 @@
-<div class="card-section card-section-identity">
+<div class="card-section card-section-identity" data-reporter_id="${reporter.id}" >
 	<h3 class="name">
 		<a href="/reporters/${ reporter.id }">${ reporter.name }</a>
 	</h3>

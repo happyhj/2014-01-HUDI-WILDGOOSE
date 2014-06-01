@@ -111,8 +111,9 @@
 		},
 		
 		template: {
-			compiler: function(dataObj, template) {
-		        var resultStr = Util.string.trim(template);
+			compiler: function(dataObj, templateString) {
+				console.log(templateString);
+		        var resultStr = Util.string.trim(templateString);
 		        for (var variableName in dataObj) {
 		            if (dataObj[variableName]===0||dataObj[variableName]) {
 		                resultStr = resultStr.replace("<%= "+variableName+" %>", dataObj[variableName]);

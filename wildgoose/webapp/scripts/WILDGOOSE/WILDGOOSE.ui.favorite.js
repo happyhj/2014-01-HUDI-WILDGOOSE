@@ -36,13 +36,11 @@
 		toggleFav : function(e) {
 			var target = e.target;
 			var card = target.parentElement.parentElement;
-			var anchor = card.querySelector('a');
-			var reporterId = anchor.getAttribute("href").split("reporters/")[1];
+			var reporterId = card.dataset.reporter_id;
 			var userId = getUserId();
 			var url = "api/v1/users/" + userId + "/favorites/?reporter_id="
 					+ reporterId;
 
-			var card = target.parentNode.parentNode;
 
 			if (Util.hasClass(target, "on")) {
 				Ajax.DELETE({
@@ -52,7 +50,7 @@
 						if (data.status == 200) {
 							Util.removeClass(target, "on");
 							Util.addClass(target, "off");
-							Util.addClass(card, "blur");
+//							Util.addClass(card, "blur");
 						} else {
 							// react fail
 						}
@@ -66,7 +64,7 @@
 						if (data.status == 200) {
 							Util.addClass(target, "on");
 							Util.removeClass(target, "off");
-							Util.removeClass(card, "blur");
+//							Util.removeClass(card, "blur");
 
 						} else {
 							// react fail
@@ -84,8 +82,7 @@
 					if (card == undefined) {
 						continue;
 					}
-					var reporterName = card.querySelector(".name a");
-					var reporterId = reporterName.getAttribute("href").split("/")[2];
+					var reporterId = card.dataset.reporter_id;
 					if (this.favoriteList.indexOf(parseInt(reporterId)) >= 0) {
 						card.querySelector(".star").className = "star on";
 					}

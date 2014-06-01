@@ -3,8 +3,8 @@
  * validation action
  */
 var Ajax = CAGE.ajax;
+var Util = CAGE.util.dom;
 var validCheck = WILDGOOSE.ui.validation.validCheck;
-
 	
 function addValidationEvent() {
 	var formContainer = document.querySelector(".form-container");
@@ -47,10 +47,7 @@ function checkFormStatus(form) {
 		}
 	}
 
-	if (flag)
-		Util.removeClass(form[btn], "hidden");
-	else
-		Util.addClass(form[btn], "hidden");
+	(flag) ? Util.removeClass(form[btn], "hidden") : Util.addClass(form[btn], "hidden");
 	
 }
 

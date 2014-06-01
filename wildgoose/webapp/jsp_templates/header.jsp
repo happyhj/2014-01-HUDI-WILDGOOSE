@@ -30,7 +30,7 @@
 <script type="text/javascript" src="/scripts/account.js"></script>
 <script>
 	var Popup = CAGE.ui.popup;
-	var Util = CAGE.util;
+	var Template = CAGE.util.template;
 
 	var joinBtn = document.querySelector("#join");
 	
@@ -68,10 +68,10 @@
 		templateLoader: function(AjaxResponse) {
 			var templateStr = JSON.parse(AjaxResponse).data.template;
 			var randNum = JSON.parse(AjaxResponse).message;
-			var compiler = Util.getTemplateCompiler(templateStr);
+			var compiler = Template.getCompiler(templateStr);
 			return compiler({
 				"randNum": randNum
-			});		
+			}, templateStr);		
 		}
 	});
 
