@@ -73,7 +73,7 @@
 </div>
 
 <script type="text/javascript" src="/scripts/WILDGOOSE/etc.js"></script>
-<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.favorite.js"></script>
+<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.favorite.js"></script>
 <script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.search_more.js"></script>
 <script type="text/javascript" src="/scripts/auto-complement.js"></script>
 

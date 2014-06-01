@@ -24,6 +24,7 @@ public class FavoriteDAO {
 
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
+				LOGGER.debug("email: " + email + ",  reporterId: " + reporterId);
 				psmt.setString(1, email);
 				psmt.setInt(2, reporterId);
 			}

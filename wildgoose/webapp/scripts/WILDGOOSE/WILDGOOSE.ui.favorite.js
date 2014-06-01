@@ -5,8 +5,10 @@
 
 	// 의존성 선언
 	var Ajax = CAGE.ajax;
+	var Dom = CAGE.util.dom;
 	var WILDGOOSE = window.WILDGOOSE || {};
-	WILDGOOSE.favorite = WILDGOOSE.favorite || {};
+	WILDGOOSE.ui = WILDGOOSE.ui || {};
+	WILDGOOSE.ui.favorite = WILDGOOSE.ui.favorite || {};
 
 	var Favorite = {
 		favoriteList : [],
@@ -18,9 +20,9 @@
 				star.addEventListener("click", this.toggleFav, false);
 				star.addEventListener("click", function(e) {
 					console.log(e.target);
-					Util.addClass(e.target, "pumping");
+					Dom.addClass(e.target, "pumping");
 					setTimeout(function() {
-						Util.removeClass(e.target, "pumping");
+						Dom.removeClass(e.target, "pumping");
 					}, 300)
 				}, false);
 			}
@@ -32,20 +34,19 @@
 			var anchor = card.querySelector('a');
 			var reporterId = anchor.getAttribute("href").split("reporters/")[1];
 			var userId = getUserId();
-			var url = "api/v1/users/" + userId + "/favorites/?reporter_id="
-					+ reporterId;
+			var url = "api/v1/users/" + userId + "/favorites/?reporter_id=" + reporterId;
 
 			var card = target.parentNode.parentNode;
 
-			if (Util.hasClass(target, "on")) {
+			if (Dom.hasClass(target, "on")) {
 				Ajax.DELETE({
 					"url" : url,
 					"callback" : function(data) {
 						var data = JSON.parse(data);
 						if (data.status == 200) {
-							Util.removeClass(target, "on");
-							Util.addClass(target, "off");
-							Util.addClass(card, "blur");
+							Dom.removeClass(target, "on");
+							Dom.addClass(target, "off");
+							Dom.addClass(card, "blur");
 						} else {
 							// react fail
 						}
@@ -57,9 +58,9 @@
 					"callback" : function(data) {
 						var data = JSON.parse(data);
 						if (data.status == 200) {
-							Util.addClass(target, "on");
-							Util.removeClass(target, "off");
-							Util.removeClass(card, "blur");
+							Dom.addClass(target, "on");
+							Dom.removeClass(target, "off");
+							Dom.removeClass(card, "blur");
 
 						} else {
 							// react fail
@@ -68,7 +69,7 @@
 				});
 			}
 		},
-
+		// 이곳 수정 필요함.
 		updateFavs : function(curNum, reqNum) {
 			var reporterCards = document.querySelectorAll(".card");
 			if (reporterCards.length != 0) {
@@ -81,33 +82,37 @@
 					}
 				}				
 			}
+		},
+		
+		init: function() {
+			
 		}
 	};
 	
 	// 초기화
-	if (isUserLogined()) {
-		// userID 확인
-		var userId = getUserId();
-		
-		// 모든 별에 eventlistener 붙이기
-		Favorite.attatchEventToFavBtn();
-		
-		// user의 Favorite 목록 획득
-		var url = "api/v1/users/" + userId + "/favorites/";
-		Ajax.GET({
-			"url" : url,
-			"callback" : function(jsonStr) {
-				var result = JSON.parse(jsonStr);
-				var reporterCards = result["data"]["reporterCards"]
-				for (var i=0; i<reporterCards.length; i++) {
-					var card = reporterCards[i];
-					Favorite.favoriteList.push(card["id"]);
-				}
-				// 불러온 목록 내부에 존재하는 favorite 업데이트
-				Favorite.updateFavs(0, 24);
-			}
-		});
-	}
+//	if (isUserLogined()) {
+//		// userID 확인
+//		var userId = getUserId();
+//		
+//		// 모든 별에 eventlistener 붙이기
+//		Favorite.attatchEventToFavBtn();
+//		
+//		// user의 Favorite 목록 획득
+//		var url = "api/v1/users/" + userId + "/favorites/";
+//		Ajax.GET({
+//			"url" : url,
+//			"callback" : function(jsonStr) {
+//				var result = JSON.parse(jsonStr);
+//				var reporterCards = result["data"]["reporterCards"]
+//				for (var i=0; i<reporterCards.length; i++) {
+//					var card = reporterCards[i];
+//					Favorite.favoriteList.push(card["id"]);
+//				}
+//				// 불러온 목록 내부에 존재하는 favorite 업데이트
+//				Favorite.updateFavs(0, 24);
+//			}
+//		});
+//	}
 
 	WILDGOOSE.favorite = Favorite;
 
