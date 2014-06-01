@@ -9,6 +9,7 @@
 
 
 	var Util = CAGE.util.dom;
+	var Template = CAGE.util.template;
 	var Ajax = CAGE.ajax;
 
   
@@ -44,8 +45,7 @@
 		this.el = config.element;
 		this.template = config.template;	
 		this.transitionEffect = (config.transitionEffect)?(config.transitionEffect):("zoom");	
-//		this.data = config.data;
-		
+		//this.data = (config.data)?(config.data):({});
 		this.afteropen = new eventEmitter("afteropen");
 		this.afterclose = new eventEmitter("afterclose");
 		
@@ -61,6 +61,8 @@
 		var afteropen = this.afteropen;
 		var afterclose = this.afterclose;
 		var status = this.status;
+		
+		var close = this.close;
 		
 		el.addEventListener("click", openHandler.bind(this), false);
 
@@ -84,6 +86,8 @@
 		function afteropenCallbackRef(event){
 			//console.log(event);
 			if(event.propertyName === "-webkit-transform" && status.data === false){	
+				
+				
 				var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");
 				popupWrapAnimation.removeEventListener("webkitTransitionEnd", afteropenCallbackRef, false);    
 	
@@ -91,8 +95,6 @@
 				//console.log("왜 두번 실행되지?");
 				afteropen.dispatch(document.querySelector(".popup-content"));
 				status.data=!status.data;
-				//debugger;
-				// 핸들러 떼기
 				
 				var popupBg = document.querySelector(".popup-bg");			
 				var popupWrap = document.querySelector(".popup-wrap");
@@ -102,8 +104,7 @@
 				// esc 버튼으로 팝업 닫기 
 				var escClose = function(e) {
 				  if (e.keyCode == 27) { 
-					  closePopup();
-					  document.removeEventListener("keyup", escClose, false);				
+					  close();
 				  }
 				};
 				
@@ -203,22 +204,20 @@
 			}
 		);
 		
-		// preload 기능이 필요하다.		
-		Ajax.GET({
-			url: this.templateUrl,
-			callback: (function(response){
-				this.template = this.templateLoader(response);
-			}).bind(this)
-		});
-		
 		this.afteropen = new eventEmitter("afteropen");
 		this.afterclose = new eventEmitter("afterclose");
 		
 		this.status = {
 			data: false
 		};
-		
-		this._init();
+		// preload 기능이 필요하다.		
+		Ajax.GET({
+			url: this.templateUrl,
+			callback: (function(response){
+				this.template = this.templateLoader(response);
+				this._init();
+			}).bind(this)
+		});				
 	}	
 	
 	ajaxPopup.prototype = popup.prototype;	
