@@ -97,7 +97,7 @@
 		var userId = getUserId();
 		
 		// 모든 별에 eventlistener 붙이기
-		Favorite.attatchEventToFavBtn();
+		Favorite.attatchEventToFavBtn(24, 24);
 		
 		// user의 Favorite 목록 획득
 		var url = "api/v1/users/" + userId + "/favorites/";
