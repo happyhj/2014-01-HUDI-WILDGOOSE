@@ -70,16 +70,16 @@
 		},
 
 		updateFavs : function(curNum, reqNum) {
-			console.log(curNum)
-			console.log(reqNum)
 			var reporterCards = document.querySelectorAll(".card");
-			for (var i = curNum; i < curNum + reqNum; i++) {
-				var card = reporterCards.item(i);
-				var reporterName = card.querySelector(".name a");
-				var reporterId = reporterName.getAttribute("href").split("/")[2];
-				if (this.favoriteList.indexOf(parseInt(reporterId)) >= 0) {
-					card.querySelector(".star").className = "star on";
-				}
+			if (reporterCards.length != 0) {
+				for (var i = curNum; i < reqNum; i++) {
+					var card = reporterCards[i];
+					var reporterName = document.querySelector(".card .name a");
+					var reporterId = reporterName.getAttribute("href").split("/")[2];
+					if (this.favoriteList.indexOf(parseInt(reporterId)) >= 0) {
+						card.querySelector(".star").className = "star on";
+					}
+				}				
 			}
 		}
 	};

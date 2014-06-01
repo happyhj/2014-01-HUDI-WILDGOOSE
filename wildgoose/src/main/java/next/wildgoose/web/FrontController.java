@@ -47,11 +47,13 @@ public class FrontController extends HttpServlet {
 		session.setMaxInactiveInterval(Constants.SESSION_EXPIRING_TIME);
 		Cookie[] cookies = request.getCookies();
 		Cookie jsessionid = null;
-
-		for (int i=0; i<cookies.length; i++) {
-			Cookie cookie = cookies[i];
-			if(cookie.getName().equals("JSESSIONID")) {
-				jsessionid = cookie;
+		
+		if (cookies != null) {
+			for (int i=0; i<cookies.length; i++) {
+				Cookie cookie = cookies[i];
+				if(cookie.getName().equals("JSESSIONID")) {
+					jsessionid = cookie;
+				}
 			}
 		}
 		if(jsessionid != null) {

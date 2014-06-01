@@ -52,82 +52,94 @@
 	}	
 	
 	var Util = {
-		hasClass : (function() {
-			if(isClassListExist) {
-				return function(DOM, className) {
-					return DOM.classList.contains(className);
-				}
-			} else return hasClass_common;
-		})(),
+		dom : {
+			hasClass : (function() {
+				if(isClassListExist) {
+					return function(DOM, className) {
+						return DOM.classList.contains(className);
+					}
+				} else return hasClass_common;
+			})(),
+			
+			addClass : (function() {
+				if(isClassListExist) {
+					return function(DOM, className) {
+						return DOM.classList.add(className);
+					}
+				} else return addClass_common;
+			})(),
+			
+			removeClass : (function() {
+				if(isClassListExist) {
+					return function(DOM, className) {
+						return DOM.classList.remove(className);
+					}
+				} else return addClass_common;
+			})()
+		},
 		
-		addClass : (function() {
-			if(isClassListExist) {
-				return function(DOM, className) {
-					return DOM.classList.add(className);
+		string: {
+			trim: (function() {
+				if('trim' in String.prototype) {
+					return function(str) {
+						return String.prototype.trim.call(str);
+					};
+				} else return function (str) {
+					return this.ltrim(this.rtrim(str));
 				}
-			} else return addClass_common;
-		})(),
-		
-		removeClass : (function() {
-			if(isClassListExist) {
-				return function(DOM, className) {
-					return DOM.classList.remove(className);
+			})(),
+			
+			rtrim: (function(str) {
+				if('trimRight' in String.prototype) {
+					return function(str) {
+						return String.prototype.trimRight.call(str);
+					};
+				} else return function (str) {
+					return str.replace(/\s*$/, "");
 				}
-			} else return addClass_common;
-		})(),
-		
-		trim: (function() {
-			if('trim' in String.prototype) {
-				return function(str) {
-					return str.trim();
+			})(),
+			
+			ltrim: (function(str) {
+				if('trimLeft' in String.prototype) {
+					return function(str) {
+						return String.prototype.trimLeft.call(str);
+					};
+				} else return function (str) {
+					return str.replace(/^\s*/, "");
 				}
-			} else return function (str) {
-				return this.ltrim(this.rtrim(str));
-			}
-		})(),
+			})()
+		},
 		
-		rtrim: (function() {
-			if('trimRight' in String.prototype) {
-				return function(str) {
-					return str.trimRight();
-				}
-			} else return function (str) {
-				return str.replace(/\s*$/, "");
-			}
-		})(),
-		
-		ltrim: (function() {
-			if('trimLeft' in String.prototype) {
-				return function(str) {
-					return str.trimLeft();
-				}
-			} else return function (str) {
-				return str.replace(/^\s*/, "");
-			}
-		})(),
-		
-		getTemplateCompiler: function(templateStr) {
-		    return function(dataObj) {
-		        var resultStr = Util.trim(templateStr);
-		        console.log(resultStr);
-		        for (var variableName in dataObj)
-		        {
+		template: {
+			compiler: function(dataObj, template) {
+		        var resultStr = Util.string.trim(template);
+		        for (var variableName in dataObj) {
 		            if (dataObj[variableName]===0||dataObj[variableName]) {
 		                resultStr = resultStr.replace("<%= "+variableName+" %>", dataObj[variableName]);
 		            }
 		        }
 		        return resultStr;
-		    };
-		} 
+		    },
+				
+			getCompiler: function() {
+			    return this.compiler;
+			},
+			
+			// xhr, using synchronized get method
+			get: function(params) {
+				var Ajax = CAGE.ajax;
+				var url = params.url;
+				var template = null;
+				Ajax.GET({"url":url, "isAsync":false, "callback":function(templateResponse) {
+					template = JSON.parse(templateResponse)["data"]["template"];
+				}});
+				
+				return template;
+			}
+		}
 	};
 	
-	CAGE.util = {
-		hasClass: Util.hasClass,
-		addClass: Util.addClass,
-		removeClass: Util.removeClass,
-		trim: Util.trim,
-		getTemplateCompiler: Util.getTemplateCompiler
-	};
+	CAGE.util = Util;
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
 	if (typeof module !== 'undefined' && module.exports) {
