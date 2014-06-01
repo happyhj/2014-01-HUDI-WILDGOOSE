@@ -83,12 +83,14 @@
 	
 	var timelineBtn = document.querySelector(".header-btn#timeline");
 	timelineBtn.addEventListener("click", function() {
-		location.href = "/users/?user_id?/timeline";
+		var userId = getUserId();
+		location.href = "/users/?user_id?/timeline".replace("?user_id?", userId);;
 	}, false);
 	
 	var favoriteBtn = document.querySelector(".header-btn#favorite");
 	favoriteBtn.addEventListener("click", function() {
-		location.href = "/users/?user_id?/favorite";
+		var userId = getUserId();
+		location.href = "/users/?user_id?/favorites".replace("?user_id?", userId);
 	}, false);
 
 function updateTopbar(isLogined) {
