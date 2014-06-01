@@ -112,7 +112,6 @@
 		
 		template: {
 			compiler: function(dataObj, templateString) {
-				console.log(templateString);
 		        var resultStr = Util.string.trim(templateString);
 		        for (var variableName in dataObj) {
 		            if (dataObj[variableName]===0||dataObj[variableName]) {

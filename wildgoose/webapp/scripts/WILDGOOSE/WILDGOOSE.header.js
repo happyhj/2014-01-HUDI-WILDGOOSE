@@ -1,40 +1,29 @@
 
 var Popup = CAGE.ui.popup;
 var Template = CAGE.util.template;
+var Util = CAGE.util.dom;
 
 var joinBtn = document.querySelector("#join");
 
-var joinPopup = Popup.ajaxPopup({
+var joinPopup = new Popup.ajaxPopup({
 	element: joinBtn,
-	transitionEffect: "turn", // turn
-	callbacks: {
-		afteropen: function() {
-			addValidationEvent();
-			var btn = arguments[0];
-			btn.addEventListener("click", signUpAccout, false);
-		},
-		afterclose: function() {
-			//alert("afterclose");	
-		}
-	},
+	templateUrl: "/api/v1/templates/account.html",
 	templateLoader: function(AjaxResponse) {
 		return JSON.parse(AjaxResponse).data.template;
 	}
 });
+
+joinPopup.afteropen.add(function() {
+	addValidationEvent();
+	var btn = arguments[0].querySelector("#create");
+	btn.addEventListener("click", signUpAccout, false);
+});
+
 var loginBtn = document.querySelector("#login");
 
-var loginPopup = Popup.ajaxPopup({
+var loginPopup = new Popup.ajaxPopup({
 	element: loginBtn,
-	transitionEffect: "turn", // turn
-	callbacks: {
-		afteropen: function() {
-			var btn = arguments[0];
-			btn.addEventListener("click", loginAccount, false);
-		},
-		afterclose: function() {
-			location.reload();
-		}
-	},
+	templateUrl: "/api/v1/templates/login.html",
 	templateLoader: function(AjaxResponse) {
 		var templateStr = JSON.parse(AjaxResponse).data.template;
 		var randNum = JSON.parse(AjaxResponse).message;
@@ -43,6 +32,14 @@ var loginPopup = Popup.ajaxPopup({
 			"randNum": randNum
 		}, templateStr);		
 	}
+});
+
+loginPopup.afteropen.add(function() {
+	var btn = arguments[0].querySelector("#create");
+	btn.addEventListener("click", loginAccount, false);
+});
+loginPopup.afterclose.add(function() {
+	location.reload();
 });
 
 var logoutBtn = document.querySelector(".header-btn#logout");
