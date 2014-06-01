@@ -3,6 +3,8 @@
  */
 window.addEventListener("load", initGraph, false);
 
+var Ajax = CAGE.ajax;
+
 function initGraph() {	
 	var reporterId = window.location.pathname.split("/")[2];
 	var graphInfo = {
@@ -23,6 +25,6 @@ function initGraph() {
 	for (var graphName in graphInfo) {
 		var graph = graphInfo[graphName];
 		var url = graph['url'].replace(":reporterId", reporterId);
-		Ajax.GET(url, graph['function']);
+		Ajax.GET({"url":url, "callback":graph['function']});
 	}
 }

@@ -16,6 +16,8 @@
 		attatchEventToFavBtn : function(curNum, reqNum) {
 			var reporterCards = document.querySelectorAll(".card");
 			if (reporterCards.length != 0) {
+				(curNum == undefined) ? curNum = reporterCards.length : true;
+				(reqNum == undefined) ? reqNum = reporterCards.length : true;
 				for (var i = curNum - reqNum ; i < curNum; i++) {
 					var card = reporterCards[i];
 					if (card == undefined) {
@@ -35,10 +37,10 @@
 
 		toggleFav : function(e) {
 			var target = e.target;
-			var card = target.parentElement.parentElement;
-			var reporterId = card.dataset.reporter_id;
+			var card = target.parentElement.parentElement.parentElement;
+			var reporterId = card.firstElementChild.dataset.reporter_id;
 			var userId = getUserId();
-			var url = "api/v1/users/" + userId + "/favorites/?reporter_id="
+			var url = "/api/v1/users/" + userId + "/favorites/?reporter_id="
 					+ reporterId;
 
 
@@ -50,7 +52,7 @@
 						if (data.status == 200) {
 							Util.removeClass(target, "on");
 							Util.addClass(target, "off");
-//							Util.addClass(card, "blur");
+							Util.addClass(card, "blur");
 						} else {
 							// react fail
 						}
@@ -64,7 +66,7 @@
 						if (data.status == 200) {
 							Util.addClass(target, "on");
 							Util.removeClass(target, "off");
-//							Util.removeClass(card, "blur");
+							Util.removeClass(card, "blur");
 
 						} else {
 							// react fail
@@ -75,8 +77,10 @@
 		},
 
 		updateFavs : function(curNum, reqNum) {
-			var reporterCards = document.querySelectorAll(".card");
+			var reporterCards = document.querySelectorAll(".card-section-identity");
 			if (reporterCards.length != 0) {
+				(curNum == undefined) ? curNum = reporterCards.length : true;
+				(reqNum == undefined) ? reqNum = reporterCards.length : true;
 				for (var i = curNum - reqNum ; i < curNum; i++) {
 					var card = reporterCards[i];
 					if (card == undefined) {
@@ -97,13 +101,14 @@
 		var userId = getUserId();
 		
 		// 모든 별에 eventlistener 붙이기
-		Favorite.attatchEventToFavBtn(24, 24);
+		Favorite.attatchEventToFavBtn();
 		
 		// user의 Favorite 목록 획득
-		var url = "api/v1/users/" + userId + "/favorites/";
+		var url = "/api/v1/users/" + userId + "/favorites/";
 		Ajax.GET({
 			"url" : url,
 			"callback" : function(jsonStr) {
+				console.log(url);
 				var result = JSON.parse(jsonStr);
 				var reporterCards = result["data"]["reporterCards"]
 				for (var i=0; i<reporterCards.length; i++) {
@@ -111,7 +116,8 @@
 					Favorite.favoriteList.push(card["id"]);
 				}
 				// 불러온 목록 내부에 존재하는 favorite 업데이트
-				Favorite.updateFavs(24, 24);
+				// 인자가 없으면 모두!
+				Favorite.updateFavs();
 			}
 		});
 	}

@@ -5,10 +5,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-zoom=1, user-scalable=no">
 <link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/search_reporter.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/search.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/basic_layout.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/favorite_page.css" />
 <title>Wildgoose</title>
 
 <div class="wrap">
@@ -36,10 +36,6 @@
 	<footer class="footer"></footer>
 </div>
 
-<script type="text/javascript" src="/scripts/util.js"></script>
-<script type="text/javascript" src="/scripts/searchReporter.js"></script>
-<script type="text/javascript" src="/scripts/WILDGOOSE.favorite.js"></script>
-<script>
-var favs = []
-getFavs();
-</script>
+<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
+<script type="text/javascript" src="/scripts/WILDGOOSE/etc.js"></script>
+<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.favorite.js"></script>

@@ -39,7 +39,6 @@ var autocomplete = {
 
 	expired : function(evt) {
 		if (this.is.searching != false && this.is.hovering == false) {
-			console.log("searchBox expired");
 			// list가 지워지지 않은 경우 제거
 			if (this.is.listing == true) {
 				this.removeList();
@@ -52,7 +51,6 @@ var autocomplete = {
 
 	notify : function(evt) {
 		if (this.is.searching == false) {
-			console.log("searchBox standBy");
 			this.is.searching = setInterval(this.cache.callbackRef.observeState, this.interval);
 		}
 	},

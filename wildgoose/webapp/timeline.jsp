@@ -5,11 +5,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-zoom=1, user-scalable=no">
 <link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/search_reporter.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/search.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/basic_layout.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
-<link type="text/css" rel="stylesheet" href="../stylesheet/article_card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/article_card.css" />
 
 <title>Wildgoose</title>
 
@@ -22,7 +21,7 @@
 			<ul>
 				<%-- session 존재시 --%>
 				<c:if test="${ not empty sessionScope.userId }">
-					<c:forEach var="article" items="${ requestScope.articles }">
+					<c:forEach var="article" items="${ requestScope.data.articles }">
 					<li class="card">
 						<%@ include file = "/jsp_templates/articleCard.jsp" %>
 					</li>
@@ -37,5 +36,4 @@
 	</div>
 	<footer class="footer"></footer>
 </div>
-<script type="text/javascript" src="/scripts/util.js"></script>
-<script type="text/javascript" src="/scripts/article.js"></script>
+<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>

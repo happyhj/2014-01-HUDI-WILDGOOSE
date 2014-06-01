@@ -27,7 +27,7 @@ public class FrontController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();		
-		session.setAttribute("userId", "hello@world.com");
+//		session.setAttribute("userId", "hello@world.com");
 		// 로그인 유지(3일)를 위한 쿠키만료기간 재설정 
 		if (session.getAttribute("userId") != null) {
 			renewAuth(request, response);

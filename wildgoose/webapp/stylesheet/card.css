@@ -76,15 +76,16 @@
 	height: 25px;
 	vertical-align: middle;	
 }
-.card-section-identity > .favorite.invisible {
-	visibility: hidden;
-}
 
-.card-section-identity > .favorite > .star {
+.card-section-identity .star {
 	height: 20px;
 	width: 20px;
 	margin: 0 auto;
 	background-size: 20px 20px;
+}
+
+.card-section-identity .star.invisible {
+	visibility: hidden;
 }
 
 .card-section-identity > .press-tag {
@@ -113,10 +114,6 @@
 	border-color: rgba(255,255,255,.1);
 	border-radius: 3px;
 	background: #fff;
-}
-
-.card.blur {
-	opacity: 0.3;
 }
 
 .card-section { 

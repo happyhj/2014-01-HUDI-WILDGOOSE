@@ -36,6 +36,7 @@ public class JSPView implements View {
 		Uri uri = new Uri(request);
 
 		String uriResourceSchema = getUriResourceSchema(uri);
+		LOGGER.debug("uriResourceSchema " + uriResourceSchema);
 		String jspFileName = jspMap.get(uriResourceSchema);
 		LOGGER.debug("jspFileName " + jspFileName);
 		if(jspFileName == null) {

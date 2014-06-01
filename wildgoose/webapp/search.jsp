@@ -5,7 +5,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-zoom=1, user-scalable=no">
 <link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/search_reporter.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/basic_layout.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/search.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
