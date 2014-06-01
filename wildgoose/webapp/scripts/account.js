@@ -105,8 +105,7 @@ function loginHandler(response){
 	var form = document.querySelector(".form-container");
 	Util.removeClass(form, "isProgressing");
 	
-	console.log(response);
-	if (response == "success") {
+	if (JSON.parse(response).status == 200) {
 		// close modal. and update login panel
 		loginPopup.close();
 		updateTopbar(true);
