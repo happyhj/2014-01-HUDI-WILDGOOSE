@@ -52,7 +52,7 @@
 			}
 		}
 	
-		(flag) ? Dom.removeClass(form[btn], "hidden") : Dom.addClass(form[btn], "hidden");
+		flag ? Dom.removeClass(form[btn], "hidden") : Dom.addClass(form[btn], "hidden");
 		
 	};
 	

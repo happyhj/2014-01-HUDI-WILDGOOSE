@@ -10,6 +10,7 @@
 	var TemplateUtil = CAGE.util.template;
 	var Dom = CAGE.util.dom;
 	var Account = WILDGOOSE.account;
+	var Ajax = CAGE.ajax;
 	
 	function init(){
 		var joinBtn = document.querySelector("#join");
