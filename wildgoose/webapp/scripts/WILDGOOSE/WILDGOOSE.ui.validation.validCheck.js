@@ -7,6 +7,8 @@
 	WILDGOOSE.ui.validation = WILDGOOSE.ui.validation || {};
 
 	var Ajax = CAGE.ajax
+	var DomUtil = CAGE.util.dom;
+	
 	var validation_logics = {
 		email : {
 			sequence : [ "required", "format", "usable" ],
@@ -102,17 +104,17 @@
 	 * 상태에 따른 변경될 style을 모음 
 	 */
 	function validStyle(inputEl) {
-		Util.removeClass(inputEl, "status-denied");
-		Util.removeClass(inputEl, "isInvalid");
-		Util.addClass(inputEl, "status-approved");
-		Util.addClass(inputEl, "isValid");
+		DomUtil.removeClass(inputEl, "status-denied");
+		DomUtil.removeClass(inputEl, "isInvalid");
+		DomUtil.addClass(inputEl, "status-approved");
+		DomUtil.addClass(inputEl, "isValid");
 	}
 	
 	function invalidStyle(inputEl) {
-		Util.removeClass(inputEl, "status-approved");
-		Util.removeClass(inputEl, "isValid");
-		Util.addClass(inputEl, "status-denied");
-		Util.addClass(inputEl, "isInvalid");
+		DomUtil.removeClass(inputEl, "status-approved");
+		DomUtil.removeClass(inputEl, "isValid");
+		DomUtil.addClass(inputEl, "status-denied");
+		DomUtil.addClass(inputEl, "isInvalid");
 	}
 
 	/*
