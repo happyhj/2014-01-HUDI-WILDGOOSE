@@ -13,7 +13,7 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/articles.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/show_reporter.css" />
-<script type="text/javascript" src="/webjars/d3js/3.4.4/d3.min.js"></script>
+<script type="text/javascript" src="/scripts/lib/d3.min.js"></script>
 
 <title>${ requestScope.data.reporter.name }기자</title>
 </head>
