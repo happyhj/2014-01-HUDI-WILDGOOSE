@@ -5,7 +5,7 @@
 
 	// 의존성 선언
 	var Ajax = CAGE.ajax;
-	var Util = CAGE.util.dom;
+	var Dom = CAGE.util.dom;
 	var WILDGOOSE = window.WILDGOOSE || {};
 	WILDGOOSE.ui = WILDGOOSE.ui || {};
 	WILDGOOSE.favorite = WILDGOOSE.favorite || {};
@@ -26,9 +26,9 @@
 					var star = card.querySelector(".star");
 					star.addEventListener("click", this.toggleFav, false);
 					star.addEventListener("click", function(e) {
-						Util.addClass(e.target, "pumping");
+						Dom.addClass(e.target, "pumping");
 						setTimeout(function() {
-							Util.removeClass(e.target, "pumping");
+							Dom.removeClass(e.target, "pumping");
 						}, 300)
 					}, false);
 				}				
@@ -44,15 +44,15 @@
 					+ reporterId;
 
 
-			if (Util.hasClass(target, "on")) {
+			if (Dom.hasClass(target, "on")) {
 				Ajax.DELETE({
 					"url" : url,
 					"callback" : function(data) {
 						var data = JSON.parse(data);
 						if (data.status == 200) {
-							Util.removeClass(target, "on");
-							Util.addClass(target, "off");
-							Util.addClass(card, "blur");
+							Dom.removeClass(target, "on");
+							Dom.addClass(target, "off");
+							Dom.addClass(card, "blur");
 						} else {
 							// react fail
 						}
@@ -64,9 +64,9 @@
 					"callback" : function(data) {
 						var data = JSON.parse(data);
 						if (data.status == 200) {
-							Util.addClass(target, "on");
-							Util.removeClass(target, "off");
-							Util.removeClass(card, "blur");
+							Dom.addClass(target, "on");
+							Dom.removeClass(target, "off");
+							Dom.removeClass(card, "blur");
 
 						} else {
 							// react fail

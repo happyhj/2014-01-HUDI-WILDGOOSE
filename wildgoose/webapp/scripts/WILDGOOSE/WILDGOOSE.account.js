@@ -9,8 +9,8 @@
 	 * validation action
 	 */
 	var Ajax = CAGE.ajax;
-	var DomUtil = CAGE.util.dom;
-	var validCheck = WILDGOOSE.ui.validation.validCheck;
+	var Dom = CAGE.util.dom;
+	var Validation = WILDGOOSE.ui.validation;
 	
 	function addValidationEvent() {
 		var formContainer = document.querySelector(".form-container");
@@ -28,8 +28,7 @@
 	
 	function checkSignUpFrom(e) {
 		var inputEl = e.target;
-		// validCheck는 전역으로 선언
-		if (validCheck(inputEl)) {
+		if (Validation.validCheck(inputEl)) {
 			console.log("validation ok");
 		} else {
 			console.log("validation no");
@@ -47,13 +46,13 @@
 		var btn = form.length-1;
 		var flag = true;
 		for (var i=btn-1; i>=0; --i) {
-			if (!DomUtil.hasClass(form[i], "status-approved")) {
+			if (!Dom.hasClass(form[i], "status-approved")) {
 				flag = false;
 				break;
 			}
 		}
 	
-		(flag) ? DomUtil.removeClass(form[btn], "hidden") : DomUtil.addClass(form[btn], "hidden");
+		(flag) ? Dom.removeClass(form[btn], "hidden") : Dom.addClass(form[btn], "hidden");
 		
 	};
 	
@@ -78,7 +77,7 @@
 	 */
 	function showSignUpResult(response) {
 		var form = document.querySelector(".form-container");
-		DomUtil.removeClass(form, "isProgressing");
+		Dom.removeClass(form, "isProgressing");
 		
 		if (response == "success") {
 			// close modal. and update login panel
@@ -109,7 +108,7 @@
 	function loginHandler(response){
 		
 		var form = document.querySelector(".form-container");
-		DomUtil.removeClass(form, "isProgressing");
+		Dom.removeClass(form, "isProgressing");
 		
 		if (JSON.parse(response).status == 200) {
 			// close modal. and update login panel

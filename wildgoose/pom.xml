@@ -131,32 +131,84 @@
 			</plugin>
 			
 			<!-- minifier -->
+			<!-- <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<warSourceExcludes>**/WILDGOOSE.account.js, **/WILDGOOSE.header.js, **/WILDGOOSE.ui.auto_complement.js, **/WILDGOOSE.ui.favorite.js, **/WILDGOOSE.ui.search_more.js, **/WILDGOOSE.validation_validCheck.js</warSourceExcludes>
+				</configuration>
+			</plugin> -->
+			
 			<plugin>
 				<groupId>com.samaxes.maven</groupId>
 				<artifactId>minify-maven-plugin</artifactId>
 				<version>1.7.2</version>
 				<executions>
 					<execution>
-						<id>default-minify</id>
-						<phase>prepare-package</phase><!-- When omitted defaults to <phase>process-resources</phase> -->
+						<id>WILDGOOSE-minify</id>
+						<!-- <phase>prepare-package</phase> -->
+						<!-- <phase>package</phase> -->
+						<!-- <phase>process-resources</phase> --><!-- default -->
+						<phase>generate-resources</phase>
 						<configuration>
 							<charset>UTF-8</charset>
+							<webappSourceDir>${basedir}/webapp</webappSourceDir>
 							<!-- <cssSourceDir>css</cssSourceDir>
 							<cssSourceFiles>
 								<cssSourceFile>file-1.css</cssSourceFile>
 							</cssSourceFiles>
 							<cssFinalFile>style.css</cssFinalFile> -->
-							<!-- <jsSourceDir>webapp/scripts/WILDGOOSE</jsSourceDir> -->
+							<jsSourceDir>scripts/WILDGOOSE</jsSourceDir>
 							<jsSourceFiles>
-								<jsSourceFile>webapp/scripts/WILDGOOSE.account.js</jsSourceFile>
-								<jsSourceFile>webapp/scripts/WILDGOOSE.header.js</jsSourceFile>
-								<jsSourceFile>webapp/scripts/WILDGOOSE.ui.auto_complement.js</jsSourceFile>
-								<jsSourceFile>webapp/scripts/WILDGOOSE.ui.favorite.js</jsSourceFile>
-								<jsSourceFile>webapp/scripts/WILDGOOSE.ui.search_more.js</jsSourceFile>
-								<jsSourceFile>webapp/scripts/WILDGOOSE.ui.validation_validCheck.js</jsSourceFile>
+								<jsSourceFile>WILDGOOSE.account.js</jsSourceFile>
+								<jsSourceFile>WILDGOOSE.header.js</jsSourceFile>
+								<jsSourceFile>WILDGOOSE.ui.auto_complement.js</jsSourceFile>
+								<jsSourceFile>WILDGOOSE.ui.favorite.js</jsSourceFile>
+								<jsSourceFile>WILDGOOSE.ui.search_more.js</jsSourceFile>
+								<jsSourceFile>WILDGOOSE.ui.validation.validCheck.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>WILDGOOSE.js</jsFinalFile>
 							<jsEngine>CLOSURE</jsEngine>
+							<!-- <closureCompilationLevel>WHITESPACE_ONLY</closureCompilationLevel> -->
+							<!-- <nosuffix>true</nosuffix> --> <!-- ***.min.js 접미사를 안붙인다. -->
+		                    <!-- <skipMerge>true</skipMerge> --> <!-- 모르겠음 -->
+		                    <!-- <verbose>true</verbose> -->
+		                    <yuiPreserveAllSemiColons>true</yuiPreserveAllSemiColons>
+							<webappTargetDir>${basedir}/webapp</webappTargetDir>
+						</configuration>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+					</execution>
+					
+					<execution>
+						<id>CAGE-minify</id>
+						<!-- <phase>prepare-package</phase> -->
+						<!-- <phase>package</phase> -->
+						<!-- <phase>process-resources</phase> --><!-- default -->
+						<phase>generate-resources</phase>
+						<configuration>
+							<charset>UTF-8</charset>
+							<webappSourceDir>${basedir}/webapp</webappSourceDir>
+							<!-- <cssSourceDir>css</cssSourceDir>
+							<cssSourceFiles>
+								<cssSourceFile>file-1.css</cssSourceFile>
+							</cssSourceFiles>
+							<cssFinalFile>style.css</cssFinalFile> -->
+							<jsSourceDir>CAGE/src</jsSourceDir>
+							<jsSourceFiles>
+								<jsSourceFile>CAGE.ajax.js</jsSourceFile>
+								<jsSourceFile>CAGE.ui.popup.js</jsSourceFile>
+								<jsSourceFile>CAGE.util.js</jsSourceFile>
+							</jsSourceFiles>
+							<jsFinalFile>CAGE.js</jsFinalFile>
+							<jsEngine>CLOSURE</jsEngine>
+							<!-- <closureCompilationLevel>WHITESPACE_ONLY</closureCompilationLevel> -->
+							<!-- <nosuffix>true</nosuffix> --> <!-- ***.min.js 접미사를 안붙인다. -->
+		                    <!-- <skipMerge>true</skipMerge> --> <!-- 모르겠음 -->
+		                    <!-- <verbose>true</verbose> -->
+		                    <yuiPreserveAllSemiColons>true</yuiPreserveAllSemiColons>
+							<webappTargetDir>${basedir}/webapp</webappTargetDir>
 						</configuration>
 						<goals>
 							<goal>minify</goal>
