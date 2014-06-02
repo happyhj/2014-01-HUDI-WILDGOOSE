@@ -93,9 +93,7 @@
 		var password = document.querySelector(".form-container input[name=password]").value;
 		var hashedPassword = SHA256(password);	
 		var randomNumber = document.querySelector(".form-container input[name=randomNumber]").value;
-		console.log(randomNumber);
 		var finalPassword = SHA256(hashedPassword+randomNumber);
-		console.log(finalPassword);
 		var url = "/api/v1/session/";
 		var payload = "email="+email+"&password="+finalPassword;
 		Ajax.POST({"url": url, "callback":function(response) {
@@ -107,8 +105,6 @@
 		
 		var form = document.querySelector(".form-container");
 		Dom.removeClass(form, "isProgressing");
-		console.log(response);
-		console.log(JSON.parse(response).status);
 		if (JSON.parse(response).status == 200) {
 			// close modal. and update login panel
 			loginPopup.close();

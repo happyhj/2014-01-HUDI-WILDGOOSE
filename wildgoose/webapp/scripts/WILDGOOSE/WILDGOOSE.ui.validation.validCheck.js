@@ -7,7 +7,7 @@
 	WILDGOOSE.ui.validation = WILDGOOSE.ui.validation || {};
 
 	var Ajax = CAGE.ajax
-	var DomUtil = CAGE.util.dom;
+	var Dom = CAGE.util.dom;
 	
 	var validation_logics = {
 		email : {
@@ -53,7 +53,7 @@
 			var isAjax = true;
 			callback(validity, isAjax);
 		}});
-		Util.addClass(inputEl, "isProgressing");
+		Dom.addClass(inputEl, "isProgressing");
 	}
 	
 	
@@ -64,6 +64,7 @@
 
 		for ( var i = 0; i<checking_sequence.length; ++i) {
 			var cur_sequence = checking_sequence[i];
+			console.log(cur_sequence);
 			var checking_logic = validation_logics[fieldName][cur_sequence];
 			var alert_message = checking_logic[1];
 			
@@ -80,7 +81,7 @@
 				var valid_state = true; 
 				checking_logic[0](inputEl, function(validity, isAjax) {
 					if (isAjax) {
-						Util.removeClass(inputEl, "isProgressing");
+						Dom.removeClass(inputEl, "isProgressing");
 					}
 					if (!validity) {
 						warn(inputEl, alert_message);
@@ -104,17 +105,17 @@
 	 * 상태에 따른 변경될 style을 모음 
 	 */
 	function validStyle(inputEl) {
-		DomUtil.removeClass(inputEl, "status-denied");
-		DomUtil.removeClass(inputEl, "isInvalid");
-		DomUtil.addClass(inputEl, "status-approved");
-		DomUtil.addClass(inputEl, "isValid");
+		Dom.removeClass(inputEl, "status-denied");
+		Dom.removeClass(inputEl, "isInvalid");
+		Dom.addClass(inputEl, "status-approved");
+		Dom.addClass(inputEl, "isValid");
 	}
 	
 	function invalidStyle(inputEl) {
-		DomUtil.removeClass(inputEl, "status-approved");
-		DomUtil.removeClass(inputEl, "isValid");
-		DomUtil.addClass(inputEl, "status-denied");
-		DomUtil.addClass(inputEl, "isInvalid");
+		Dom.removeClass(inputEl, "status-approved");
+		Dom.removeClass(inputEl, "isValid");
+		Dom.addClass(inputEl, "status-denied");
+		Dom.addClass(inputEl, "isInvalid");
 	}
 
 	/*
