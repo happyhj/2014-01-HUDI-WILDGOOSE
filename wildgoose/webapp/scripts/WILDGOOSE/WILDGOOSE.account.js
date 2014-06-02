@@ -120,7 +120,7 @@
 	
 	WILDGOOSE.account = {
 		loginHandler: loginHandler,
-		loginAccount: showSignUpResult,
+		loginAccount: loginAccount,
 		showSignUpResult: showSignUpResult,
 		signUpAccount: signUpAccount,
 		checkFormStatus: checkFormStatus,
