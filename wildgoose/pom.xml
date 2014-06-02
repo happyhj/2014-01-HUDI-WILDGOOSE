@@ -160,6 +160,7 @@
 							<cssFinalFile>style.css</cssFinalFile> -->
 							<jsSourceDir>scripts/WILDGOOSE</jsSourceDir>
 							<jsSourceFiles>
+								<jsSourceFile>WILDGOOSE.ui.graph.js</jsSourceFile>
 								<jsSourceFile>WILDGOOSE.etc.js</jsSourceFile>
 								<jsSourceFile>WILDGOOSE.ui.validation.validCheck.js</jsSourceFile>
 								<jsSourceFile>WILDGOOSE.account.js</jsSourceFile>

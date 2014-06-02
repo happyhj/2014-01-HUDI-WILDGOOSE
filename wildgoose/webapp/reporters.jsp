@@ -12,9 +12,7 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/header.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/articles.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
-<link type="text/css" rel="stylesheet"
-	href="/stylesheet/show_reporter.css" />
-
+<link type="text/css" rel="stylesheet" href="/stylesheet/show_reporter.css" />
 <title>${ requestScope.data.reporter.name }기자</title>
 </head>
 <body>
@@ -80,22 +78,26 @@
 </div>
 <footer class="footer"></footer>
 </div>
-<script type="text/javascript" src="/webjars/d3js/3.4.4/d3.min.js"></script>
-<script type="text/javascript" src="/scripts/graph.js"></script>
-<script type="text/javascript" src="/scripts/graph-donut.js"></script>
-<script type="text/javascript" src="/scripts/graph-brokenline.js"></script>
-<script type="text/javascript" src="/scripts/graph-radar.js"></script>
 
+<script type="text/javascript" src="/scripts/lib/d3.min.js"></script>
 <c:choose>
 	<c:when test="${ initParam.debuggerMode eq 'on' }">
 		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
+		
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.graph.js"></script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
 	</c:otherwise>
 </c:choose>
 
-
+<script>
+window.addEventListener("load", function() {
+	var Graph = WILDGOOSE.ui.graph;
+	Graph.init();
+}, false);
+</script>
 </body>
 </html>
