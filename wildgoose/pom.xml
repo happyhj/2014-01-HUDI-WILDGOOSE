@@ -129,6 +129,41 @@
 					<encoding>utf-8</encoding>
 				</configuration>
 			</plugin>
+			
+			<!-- minifier -->
+			<plugin>
+				<groupId>com.samaxes.maven</groupId>
+				<artifactId>minify-maven-plugin</artifactId>
+				<version>1.7.2</version>
+				<executions>
+					<execution>
+						<id>default-minify</id>
+						<phase>prepare-package</phase><!-- When omitted defaults to <phase>process-resources</phase> -->
+						<configuration>
+							<charset>UTF-8</charset>
+							<!-- <cssSourceDir>css</cssSourceDir>
+							<cssSourceFiles>
+								<cssSourceFile>file-1.css</cssSourceFile>
+							</cssSourceFiles>
+							<cssFinalFile>style.css</cssFinalFile> -->
+							<!-- <jsSourceDir>webapp/scripts/WILDGOOSE</jsSourceDir> -->
+							<jsSourceFiles>
+								<jsSourceFile>webapp/scripts/WILDGOOSE.account.js</jsSourceFile>
+								<jsSourceFile>webapp/scripts/WILDGOOSE.header.js</jsSourceFile>
+								<jsSourceFile>webapp/scripts/WILDGOOSE.ui.auto_complement.js</jsSourceFile>
+								<jsSourceFile>webapp/scripts/WILDGOOSE.ui.favorite.js</jsSourceFile>
+								<jsSourceFile>webapp/scripts/WILDGOOSE.ui.search_more.js</jsSourceFile>
+								<jsSourceFile>webapp/scripts/WILDGOOSE.ui.validation_validCheck.js</jsSourceFile>
+							</jsSourceFiles>
+							<jsFinalFile>WILDGOOSE.js</jsFinalFile>
+							<jsEngine>CLOSURE</jsEngine>
+						</configuration>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
