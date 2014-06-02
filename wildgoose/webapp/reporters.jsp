@@ -13,8 +13,6 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/articles.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/show_reporter.css" />
-<script type="text/javascript" src="/scripts/lib/d3.min.js"></script>
-
 <title>${ requestScope.data.reporter.name }기자</title>
 </head>
 <body>
@@ -80,6 +78,8 @@
 </div>
 <footer class="footer"></footer>
 </div>
+
+<script type="text/javascript" src="/scripts/lib/d3.min.js"></script>
 <c:choose>
 	<c:when test="${ initParam.debuggerMode eq 'on' }">
 		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
@@ -89,6 +89,7 @@
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
 	</c:otherwise>
 </c:choose>
 
