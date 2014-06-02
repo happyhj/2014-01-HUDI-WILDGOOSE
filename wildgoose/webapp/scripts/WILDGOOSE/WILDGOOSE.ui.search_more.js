@@ -6,7 +6,7 @@
 	// 사용할 네임 스페이스 확보	
 	var WILDGOOSE = window.WILDGOOSE || {};
 	WILDGOOSE.ui = WILDGOOSE.ui || {};
-	WILDGOOSE.ui.SearchMore = WILDGOOSE.ui.SearchMore || {};
+	WILDGOOSE.ui.search_more = WILDGOOSE.ui.search_more || {};
 
 	// 의존성 주입
 	var Ajax = CAGE.ajax;
