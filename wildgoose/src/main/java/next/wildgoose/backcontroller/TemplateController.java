@@ -37,12 +37,14 @@ public class TemplateController implements BackController {
 		TemplateResult result = new TemplateResult();
 		String htmlDocument = null;
 	
-		HttpSession session = request.getSession();
-		Random random = new Random();
-		String rand = Double.toString(random.nextDouble());
-		rand = rand.replace("0.", "");
-		session.setAttribute("randNum", rand);
-		
+		if ("login.html".equals(templateFileName)) {
+			HttpSession session = request.getSession();
+			Random random = new Random();
+			String rand = Double.toString(random.nextDouble());
+			rand = rand.replace("0.", "");
+			session.setAttribute("randNum", rand);
+			result.setRand(rand);
+		}
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(path));
 			StringBuilder sb = new StringBuilder();
@@ -61,7 +63,7 @@ public class TemplateController implements BackController {
 			result.setMessage("can't read file");
 		}
 		
-		result.setMessage(rand);
+		
 		return result;
 	}
 }

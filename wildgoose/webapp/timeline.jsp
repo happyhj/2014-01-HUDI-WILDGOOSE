@@ -37,3 +37,4 @@
 	<footer class="footer"></footer>
 </div>
 <script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
+<script type="text/javascript" src="/scripts/WILDGOOSE/etc.js"></script>

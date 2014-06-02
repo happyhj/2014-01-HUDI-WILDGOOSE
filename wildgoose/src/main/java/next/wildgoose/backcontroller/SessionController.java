@@ -5,6 +5,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.SimpleResult;
 import next.wildgoose.framework.BackController;
@@ -13,6 +16,7 @@ import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.SHA256;
 
 public class SessionController implements BackController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(SessionController.class.getName());
 
 	@Override
 	public Result execute(HttpServletRequest request) {
@@ -30,17 +34,17 @@ public class SessionController implements BackController {
 
 	private SimpleResult login(HttpServletRequest request) {
 		SimpleResult simpleResult = new SimpleResult();
-		
 		String email = request.getParameter("email");
 		String hashedPassword = request.getParameter("password");
-		
 		ServletContext context = request.getServletContext();
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
 		
 		HttpSession session = request.getSession();
 		String randNum = (String) session.getAttribute("randNum");
-
+		LOGGER.debug(randNum);
+		
 		String accountPw = signDao.findAccount(email);
+		LOGGER.debug(SHA256.testSHA256(accountPw + randNum));
 		if (accountPw == null) {
 			// 가입되지 않은 아이디입니다. 다시 확인해주세요.
 			return simpleResult;

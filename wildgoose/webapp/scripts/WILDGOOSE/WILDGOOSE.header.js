@@ -35,7 +35,7 @@
 			templateUrl: "/api/v1/templates/login.html",
 			templateLoader: function(AjaxResponse) {
 				var templateStr = JSON.parse(AjaxResponse).data.template;
-				var randNum = JSON.parse(AjaxResponse).message;
+				var randNum = JSON.parse(AjaxResponse).data.rand;
 				var compiler = TemplateUtil.getCompiler(templateStr);
 				return compiler({
 					"randNum": randNum
