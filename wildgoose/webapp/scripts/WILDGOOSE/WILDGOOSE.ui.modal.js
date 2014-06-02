@@ -2,6 +2,7 @@
 	'use strict';
 	var document = window.document;
 	var console = window.console;
+	
 	var WILDGOOSE = window.WILDGOOSE || {};
 	WILDGOOSE.ui = WILDGOOSE.ui || {};
 	WILDGOOSE.ui.modal = WILDGOOSE.ui.modal || {};
