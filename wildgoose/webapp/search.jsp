@@ -68,17 +68,35 @@
 			</div>
 		</div>
 		</c:if>
+		<c:if test="${ initParam.debuggerMode eq 'on' }">
+			mode on
+		</c:if>
 	</div>
 	<footer class="footer"></footer>
 </div>
-<script type="text/javascript" src="/scripts/WILDGOOSE/etc.js"></script>
-<!-- <script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script> -->
-
-<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script>
-<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.js"></script>
-<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.favorite.js"></script>
+<c:choose>
+	<c:when test="${ initParam.debuggerMode eq 'on' }">
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.etc.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.favorite.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.auto_complement.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.search_more.js"></script>
+	</c:when>
+	<c:otherwise>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
+	</c:otherwise>
+</c:choose>
 
 <script>
-//var favs = [];
-//getFavs();
+window.addEventListener("load", function(evt){
+	var SearchMore = WILDGOOSE.ui.search_more;
+	SearchMore.init({button: ".search-more", container: ".search-result > ul", templateUrl: "/api/v1/templates/reporterCard.html", requestNum: 24});
+	
+	var AutoComplement = WILDGOOSE.ui.auto_complement;
+	AutoComplement.init({searchBox: "#query-entry", container: ".search .auto-completion-list", requestNum: 7});
+	
+	var Favorite = WILDGOOSE.ui.favorite;
+	Favorite.init(userId);
+}, false);
 </script>

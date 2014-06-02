@@ -81,10 +81,21 @@
 <footer class="footer"></footer>
 </div>
 <script type="text/javascript" src="/webjars/d3js/3.4.4/d3.min.js"></script>
-<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
 <script type="text/javascript" src="/scripts/graph.js"></script>
 <script type="text/javascript" src="/scripts/graph-donut.js"></script>
 <script type="text/javascript" src="/scripts/graph-brokenline.js"></script>
 <script type="text/javascript" src="/scripts/graph-radar.js"></script>
+
+<c:choose>
+	<c:when test="${ initParam.debuggerMode eq 'on' }">
+		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
+		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
+	</c:when>
+	<c:otherwise>
+		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
+	</c:otherwise>
+</c:choose>
+
+
 </body>
 </html>

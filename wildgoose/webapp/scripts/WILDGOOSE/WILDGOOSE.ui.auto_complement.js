@@ -233,8 +233,3 @@
 	// 공개 메서드 노출
 	WILDGOOSE.ui.auto_complement = AutoComplement;
 })();
-
-window.addEventListener("load", function(evt){
-	var AutoComplement = WILDGOOSE.ui.auto_complement;
-	AutoComplement.init({searchBox: "#query-entry", container: ".search .auto-completion-list", requestNum: 7});
-}, false);

@@ -10,7 +10,6 @@
 	var TemplateUtil = CAGE.util.template;
 	var Dom = CAGE.util.dom;
 	var Popup = CAGE.ui.popup;
-
 	var Account = WILDGOOSE.account;
 	
 	function init(){
@@ -60,13 +59,15 @@
 		
 		var timelineBtn = document.querySelector(".header-btn#timeline");
 		timelineBtn.addEventListener("click", function() {
-			var userId = getUserId();
+			var Etc = WILDGOOSE.etc;
+			var userId = Etc.getUserId();
 			location.href = "/users/?user_id?/timeline".replace("?user_id?", userId);;
 		}, false);
 		
 		var favoriteBtn = document.querySelector(".header-btn#favorite");
 		favoriteBtn.addEventListener("click", function() {
-			var userId = getUserId();
+			var Etc = WILDGOOSE.etc;
+			var userId = Etc.getUserId();
 			location.href = "/users/?user_id?/favorites".replace("?user_id?", userId);
 		}, false);
 		

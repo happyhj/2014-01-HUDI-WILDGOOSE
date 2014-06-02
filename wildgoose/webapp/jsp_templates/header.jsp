@@ -21,13 +21,22 @@
 </c:if>
 
 <link rel="stylesheet" type="text/css" href="/CAGE/src/CAGE.ui.popup.css">
-<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
-<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
-<script type="text/javascript" src="/CAGE/src/CAGE.ui.popup.js"></script>
 <script type="text/javascript" src="/scripts/lib/sha256.js"></script>
-<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.validation.validCheck.js"></script>
-<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script>
-<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.js"></script>
+<c:choose>
+	<c:when test="${ initParam.debuggerMode eq 'on' }">
+		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
+		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
+		<script type="text/javascript" src="/CAGE/src/CAGE.ui.popup.js"></script>
+		
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.validation.validCheck.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.js"></script>
+	</c:when>
+	<c:otherwise>
+		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
+	</c:otherwise>
+</c:choose>
 <script>
 	var header_component = WILDGOOSE.header;
 	header_component.init();

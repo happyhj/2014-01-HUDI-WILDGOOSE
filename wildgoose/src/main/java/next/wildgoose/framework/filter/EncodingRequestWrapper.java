@@ -1,4 +1,4 @@
-package next.wildgoose.filter;
+package next.wildgoose.framework.filter;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

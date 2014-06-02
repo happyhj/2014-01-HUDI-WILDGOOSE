@@ -36,5 +36,21 @@
 	</div>
 	<footer class="footer"></footer>
 </div>
-<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
-<script type="text/javascript" src="/scripts/WILDGOOSE/etc.js"></script>
+
+<c:choose>
+	<c:when test="${ initParam.debuggerMode eq 'on' }">
+		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
+		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
+		
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.etc.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.favorite.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.auto_complement.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.search_more.js"></script>
+	</c:when>
+	<c:otherwise>
+		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
+	</c:otherwise>
+</c:choose>

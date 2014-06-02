@@ -36,6 +36,23 @@
 	<footer class="footer"></footer>
 </div>
 
-<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
-<script type="text/javascript" src="/scripts/WILDGOOSE/etc.js"></script>
-<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
+
+<c:choose>
+	<c:when test="${ initParam.debuggerMode eq 'on' }">
+		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
+		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
+		
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.etc.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.favorite.js"></script>
+	</c:when>
+	<c:otherwise>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
+	</c:otherwise>
+</c:choose>
+
+<script>
+window.addEventListener("load", function() {
+	var Favorite = WILDGOOSE.ui.favorite;
+	Favorite.init(userId);
+}, false);
+</script>

@@ -1,5 +1,160 @@
 (function(window) {
 	'use strict';
+	var document = window.document;
+	var console = window.console;
+	var CAGE = window.CAGE || {};
+	var isClassListExist = false
+	CAGE.util = CAGE.util || {};
+
+	if('classList' in document.createElement('a')) {
+		isClassListExist = true;
+	}
+	
+	var hasClass_common = function(DOM, className) {
+		// DOM에 클래스 존재여부 확인
+		var pattern = new RegExp("^.*" + className + ".*$");
+		if (pattern.test(DOM.className)) {
+			return true;
+		}
+		return false;
+	}
+	
+	var addClass_common = function(DOM, className) {
+		// DOM에 클래스 존재여부 확인
+		if (this.hasClass(DOM, className)) return;
+		
+		// DOM에 class가 없는 경우
+		if (DOM.className == "") {
+			DOM.className = className;
+			return;
+		}
+		
+		// DOM에 class가 있는 경우
+		DOM.className += " " + className;
+	}
+	
+	var removeClass_common = function (DOM, className) {
+		// DOM에 클래스 존재여부 확인
+		if (!this.hasClass(DOM, className)) return;
+		
+		// DOM에 class가 한개만 존재시
+		if (DOM.className == className) {
+			DOM.className = "";
+			return;
+		}
+		
+		// DOM에 class가 두개 이상 존재시
+		if(this.hasClass(DOM," "+className)) {
+			DOM.className = DOM.className.replace(" " + className, "");
+		} else {
+			DOM.className = DOM.className.replace(className + " ", "");
+		}
+	}	
+	
+	var Util = {
+		dom : {
+			hasClass : (function() {
+				if(isClassListExist) {
+					return function(DOM, className) {
+						return DOM.classList.contains(className);
+					}
+				} else return hasClass_common;
+			})(),
+			
+			addClass : (function() {
+				if(isClassListExist) {
+					return function(DOM, className) {
+						return DOM.classList.add(className);
+					}
+				} else return addClass_common;
+			})(),
+			
+			removeClass : (function() {
+				if(isClassListExist) {
+					return function(DOM, className) {
+						return DOM.classList.remove(className);
+					}
+				} else return addClass_common;
+			})()
+		},
+		
+		string: {
+			trim: (function() {
+				if('trim' in String.prototype) {
+					return function(str) {
+						return String.prototype.trim.call(str);
+					};
+				} else return function (str) {
+					return this.ltrim(this.rtrim(str));
+				}
+			})(),
+			
+			rtrim: (function(str) {
+				if('trimRight' in String.prototype) {
+					return function(str) {
+						return String.prototype.trimRight.call(str);
+					};
+				} else return function (str) {
+					return str.replace(/\s*$/, "");
+				}
+			})(),
+			
+			ltrim: (function(str) {
+				if('trimLeft' in String.prototype) {
+					return function(str) {
+						return String.prototype.trimLeft.call(str);
+					};
+				} else return function (str) {
+					return str.replace(/^\s*/, "");
+				}
+			})()
+		},
+		
+		template: {
+			compiler: function(dataObj, templateString) {
+		        var resultStr = Util.string.trim(templateString);
+		        for (var variableName in dataObj) {
+		            if (dataObj[variableName]===0||dataObj[variableName]) {
+		                resultStr = resultStr.replace("<%= "+variableName+" %>", dataObj[variableName]);
+		            }
+		        }
+		        return resultStr;
+		    },
+				
+			getCompiler: function() {
+			    return this.compiler;
+			},
+			
+			// xhr, using synchronized get method
+			get: function(orgs) {
+				var Ajax = CAGE.ajax;
+				var url = orgs.url;
+				var template = null;
+				Ajax.GET({"url":url, "isAsync":false, "callback":function(templateResponse) {
+					template = JSON.parse(templateResponse)["data"]["template"];
+				}});
+				
+				return template;
+			}
+		}
+	};
+	
+	CAGE.util = Util;
+	
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = CAGE;
+		// browser export
+	} else {
+		window.CAGE = CAGE;
+	}    	
+
+}(this));
+
+
+
+(function(window) {
+	'use strict';
 	// 자주 사용하는 글로벌 객체 레퍼런스 확보
 	var document = window.document;
 	var console = window.console;
@@ -197,7 +352,7 @@
 	CAGE.ui.popup = CAGE.ui.popup || {};
 
 
-	var Util = CAGE.util.dom;
+	var Dom = CAGE.util.dom;
 	var Template = CAGE.util.template;
 	var Ajax = CAGE.ajax;
 
@@ -304,8 +459,8 @@
 						var that = this;
 						
 						// 역 애니메이션 걸기
-						Util.removeClass(popupBg, "popup-ready");
-						Util.removeClass(popupWrap, "popup-ready");		
+						Dom.removeClass(popupBg, "popup-ready");
+						Dom.removeClass(popupWrap, "popup-ready");		
 	 				        
 				        popupBg.addEventListener("transitionend", (function(event){
 							if(event.propertyName === "opacity" && status.data === true){	
@@ -338,23 +493,23 @@
 		var transitionEffect = this.transitionEffect;
 		var popupBg = document.createElement("div");
 		
-		Util.addClass(popupBg, "popup-bg");
-		Util.addClass(popupBg, "popup-animation");
+		Dom.addClass(popupBg, "popup-bg");
+		Dom.addClass(popupBg, "popup-animation");
 
 		var popupWrap = document.createElement("div");
-		Util.addClass(popupWrap, "popup-wrap");
-		Util.addClass(popupWrap, "popup-animation");
+		Dom.addClass(popupWrap, "popup-wrap");
+		Dom.addClass(popupWrap, "popup-animation");
 	
 		var popupContainer = document.createElement("div");
-		Util.addClass(popupContainer, "popup-container");
+		Dom.addClass(popupContainer, "popup-container");
 		var popupContent = document.createElement("div");
-		Util.addClass(popupContent, "popup-content");
+		Dom.addClass(popupContent, "popup-content");
 
 		popupContent.innerHTML = this._getTemplate();	
 		popupContainer.appendChild(popupContent);
 		
 		if(transitionEffect != undefined) {
-			Util.addClass(popupContent, transitionEffect + "-animation-dialog");
+			Dom.addClass(popupContent, transitionEffect + "-animation-dialog");
 		}
 		
 		popupWrap.appendChild(popupContainer);			
@@ -377,8 +532,8 @@
 		popupBgAnimation.style.transform="translateY(0px)";
 
 		// start opening animation
-		Util.addClass(popupWrapAnimation, "popup-ready");
-		Util.addClass(popupBgAnimation, "popup-ready");	
+		Dom.addClass(popupWrapAnimation, "popup-ready");
+		Dom.addClass(popupBgAnimation, "popup-ready");	
 	}	    
 	   
 	// POPUP을 상속받은 AJAX POPUP  
@@ -424,158 +579,4 @@
 		window.CAGE = CAGE;
 	}    	
 
-}(this));(function(window) {
-	'use strict';
-	var document = window.document;
-	var console = window.console;
-	var CAGE = window.CAGE || {};
-	var isClassListExist = false
-	CAGE.util = CAGE.util || {};
-
-	if('classList' in document.createElement('a')) {
-		isClassListExist = true;
-	}
-	
-	var hasClass_common = function(DOM, className) {
-		// DOM에 클래스 존재여부 확인
-		var pattern = new RegExp("^.*" + className + ".*$");
-		if (pattern.test(DOM.className)) {
-			return true;
-		}
-		return false;
-	}
-	
-	var addClass_common = function(DOM, className) {
-		// DOM에 클래스 존재여부 확인
-		if (this.hasClass(DOM, className)) return;
-		
-		// DOM에 class가 없는 경우
-		if (DOM.className == "") {
-			DOM.className = className;
-			return;
-		}
-		
-		// DOM에 class가 있는 경우
-		DOM.className += " " + className;
-	}
-	
-	var removeClass_common = function (DOM, className) {
-		// DOM에 클래스 존재여부 확인
-		if (!this.hasClass(DOM, className)) return;
-		
-		// DOM에 class가 한개만 존재시
-		if (DOM.className == className) {
-			DOM.className = "";
-			return;
-		}
-		
-		// DOM에 class가 두개 이상 존재시
-		if(this.hasClass(DOM," "+className)) {
-			DOM.className = DOM.className.replace(" " + className, "");
-		} else {
-			DOM.className = DOM.className.replace(className + " ", "");
-		}
-	}	
-	
-	var Util = {
-		dom : {
-			hasClass : (function() {
-				if(isClassListExist) {
-					return function(DOM, className) {
-						return DOM.classList.contains(className);
-					}
-				} else return hasClass_common;
-			})(),
-			
-			addClass : (function() {
-				if(isClassListExist) {
-					return function(DOM, className) {
-						return DOM.classList.add(className);
-					}
-				} else return addClass_common;
-			})(),
-			
-			removeClass : (function() {
-				if(isClassListExist) {
-					return function(DOM, className) {
-						return DOM.classList.remove(className);
-					}
-				} else return addClass_common;
-			})()
-		},
-		
-		string: {
-			trim: (function() {
-				if('trim' in String.prototype) {
-					return function(str) {
-						return String.prototype.trim.call(str);
-					};
-				} else return function (str) {
-					return this.ltrim(this.rtrim(str));
-				}
-			})(),
-			
-			rtrim: (function(str) {
-				if('trimRight' in String.prototype) {
-					return function(str) {
-						return String.prototype.trimRight.call(str);
-					};
-				} else return function (str) {
-					return str.replace(/\s*$/, "");
-				}
-			})(),
-			
-			ltrim: (function(str) {
-				if('trimLeft' in String.prototype) {
-					return function(str) {
-						return String.prototype.trimLeft.call(str);
-					};
-				} else return function (str) {
-					return str.replace(/^\s*/, "");
-				}
-			})()
-		},
-		
-		template: {
-			compiler: function(dataObj, templateString) {
-		        var resultStr = Util.string.trim(templateString);
-		        for (var variableName in dataObj) {
-		            if (dataObj[variableName]===0||dataObj[variableName]) {
-		                resultStr = resultStr.replace("<%= "+variableName+" %>", dataObj[variableName]);
-		            }
-		        }
-		        return resultStr;
-		    },
-				
-			getCompiler: function() {
-			    return this.compiler;
-			},
-			
-			// xhr, using synchronized get method
-			get: function(orgs) {
-				var Ajax = CAGE.ajax;
-				var url = orgs.url;
-				var template = null;
-				Ajax.GET({"url":url, "isAsync":false, "callback":function(templateResponse) {
-					template = JSON.parse(templateResponse)["data"]["template"];
-				}});
-				
-				return template;
-			}
-		}
-	};
-	
-	CAGE.util = Util;
-	
-	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
-	if (typeof module !== 'undefined' && module.exports) {
-		module.exports = CAGE;
-		// browser export
-	} else {
-		window.CAGE = CAGE;
-	}    	
-
 }(this));
-
-
-

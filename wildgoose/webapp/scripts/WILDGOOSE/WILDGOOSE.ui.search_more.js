@@ -34,7 +34,6 @@
 				this._attachRecievedData(cards);
 				var metaData = this._updateMetaData(cards.length);
 				this._selectStatusOfSearchMoreBtn(metaData.curNum);
-				debugger;
 				Fav.updateFavs(metaData.curNum, this.requestNum);
 				Fav.attatchEventToFavBtn(metaData.curNum, this.requestNum);
 			}
@@ -126,9 +125,3 @@
 	// 공개 메서드 노출
 	WILDGOOSE.ui.search_more = SearchMore;
 })();
-
-window.addEventListener("load", function(evt){
-	var SearchMore = WILDGOOSE.ui.search_more;
-	SearchMore.init({button: ".search-more", container: ".search-result > ul", templateUrl: "/api/v1/templates/reporterCard.html", requestNum: 24});
-}, false);
-
