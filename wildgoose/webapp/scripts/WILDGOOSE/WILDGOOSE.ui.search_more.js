@@ -10,8 +10,8 @@
 
 	// 의존성 주입
 	var Ajax = CAGE.ajax;
-	var Fav = WILDGOOSE.ui.favorite;
 	var Template = CAGE.util.template;
+	var Fav = WILDGOOSE.ui.favorite;
 	
 	var SearchMore = {
 		_more: function(evt) {

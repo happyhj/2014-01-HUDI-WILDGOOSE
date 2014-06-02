@@ -8,7 +8,7 @@
 	// 의존성 선언 
 	var Popup = CAGE.ui.popup;
 	var TemplateUtil = CAGE.util.template;
-	var DomUtil = CAGE.util.dom;
+	var Dom = CAGE.util.dom;
 	var Account = WILDGOOSE.account;
 	
 	function init(){

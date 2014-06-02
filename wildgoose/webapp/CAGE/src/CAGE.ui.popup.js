@@ -8,7 +8,7 @@
 	CAGE.ui.popup = CAGE.ui.popup || {};
 
 
-	var Util = CAGE.util.dom;
+	var Dom = CAGE.util.dom;
 	var Template = CAGE.util.template;
 	var Ajax = CAGE.ajax;
 
@@ -115,8 +115,8 @@
 						var that = this;
 						
 						// 역 애니메이션 걸기
-						Util.removeClass(popupBg, "popup-ready");
-						Util.removeClass(popupWrap, "popup-ready");		
+						Dom.removeClass(popupBg, "popup-ready");
+						Dom.removeClass(popupWrap, "popup-ready");		
 	 				        
 				        popupBg.addEventListener("transitionend", (function(event){
 							if(event.propertyName === "opacity" && status.data === true){	
@@ -149,23 +149,23 @@
 		var transitionEffect = this.transitionEffect;
 		var popupBg = document.createElement("div");
 		
-		Util.addClass(popupBg, "popup-bg");
-		Util.addClass(popupBg, "popup-animation");
+		Dom.addClass(popupBg, "popup-bg");
+		Dom.addClass(popupBg, "popup-animation");
 
 		var popupWrap = document.createElement("div");
-		Util.addClass(popupWrap, "popup-wrap");
-		Util.addClass(popupWrap, "popup-animation");
+		Dom.addClass(popupWrap, "popup-wrap");
+		Dom.addClass(popupWrap, "popup-animation");
 	
 		var popupContainer = document.createElement("div");
-		Util.addClass(popupContainer, "popup-container");
+		Dom.addClass(popupContainer, "popup-container");
 		var popupContent = document.createElement("div");
-		Util.addClass(popupContent, "popup-content");
+		Dom.addClass(popupContent, "popup-content");
 
 		popupContent.innerHTML = this._getTemplate();	
 		popupContainer.appendChild(popupContent);
 		
 		if(transitionEffect != undefined) {
-			Util.addClass(popupContent, transitionEffect + "-animation-dialog");
+			Dom.addClass(popupContent, transitionEffect + "-animation-dialog");
 		}
 		
 		popupWrap.appendChild(popupContainer);			
@@ -188,8 +188,8 @@
 		popupBgAnimation.style.transform="translateY(0px)";
 
 		// start opening animation
-		Util.addClass(popupWrapAnimation, "popup-ready");
-		Util.addClass(popupBgAnimation, "popup-ready");	
+		Dom.addClass(popupWrapAnimation, "popup-ready");
+		Dom.addClass(popupBgAnimation, "popup-ready");	
 	}	    
 	   
 	// POPUP을 상속받은 AJAX POPUP  
