@@ -71,9 +71,12 @@
 	</div>
 	<footer class="footer"></footer>
 </div>
-
 <script type="text/javascript" src="/scripts/WILDGOOSE/etc.js"></script>
-<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
+<!-- <script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script> -->
+
+<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script>
+<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.js"></script>
+<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.favorite.js"></script>
 
 <script>
 //var favs = [];
