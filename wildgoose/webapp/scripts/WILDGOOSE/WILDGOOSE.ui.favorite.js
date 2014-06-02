@@ -3,12 +3,14 @@
 	var document = window.document;
 	var console = window.console;
 
-	// 의존성 선언
-	var Ajax = CAGE.ajax;
-	var Dom = CAGE.util.dom;
 	var WILDGOOSE = window.WILDGOOSE || {};
 	WILDGOOSE.ui = WILDGOOSE.ui || {};
 	WILDGOOSE.favorite = WILDGOOSE.favorite || {};
+	
+	// 의존성 선언
+	var Ajax = CAGE.ajax;
+	var Dom = CAGE.util.dom;
+	var Etc = WILDGOOSE.etc;
 
 	var Favorite = {
 		favoriteList : [],
@@ -39,7 +41,7 @@
 			var target = e.target;
 			var card = target.parentElement.parentElement.parentElement;
 			var reporterId = card.firstElementChild.dataset.reporter_id;
-			var userId = getUserId();
+			var userId = Etc.getUserId();
 			var url = "/api/v1/users/" + userId + "/favorites/?reporter_id="
 					+ reporterId;
 
@@ -92,35 +94,36 @@
 					}
 				}				
 			}
+		},
+		
+		init: function() {
+			// 초기화
+			if (Etc.isUserLogined()) {
+				// userID 확인
+				var userId = Etc.getUserId();
+				
+				// 모든 별에 eventlistener 붙이기
+				this.attatchEventToFavBtn();
+				
+				// user의 Favorite 목록 획득
+				var url = "/api/v1/users/" + userId + "/favorites/";
+				Ajax.GET({
+					"url" : url,
+					"callback" : function(jsonStr) {
+						var result = JSON.parse(jsonStr);
+						var reporterCards = result["data"]["reporterCards"]
+						for (var i=0; i<reporterCards.length; i++) {
+							var card = reporterCards[i];
+							Favorite.favoriteList.push(card["id"]);
+						}
+						// 불러온 목록 내부에 존재하는 favorite 업데이트
+						// 인자가 없으면 모두!
+						this.updateFavs();
+					}.bind(this)
+				});
+			}
 		}
 	};
-	
-	// 초기화
-	if (isUserLogined()) {
-		// userID 확인
-		var userId = getUserId();
-		
-		// 모든 별에 eventlistener 붙이기
-		Favorite.attatchEventToFavBtn();
-		
-		// user의 Favorite 목록 획득
-		var url = "/api/v1/users/" + userId + "/favorites/";
-		Ajax.GET({
-			"url" : url,
-			"callback" : function(jsonStr) {
-				var result = JSON.parse(jsonStr);
-				var reporterCards = result["data"]["reporterCards"]
-				for (var i=0; i<reporterCards.length; i++) {
-					var card = reporterCards[i];
-					Favorite.favoriteList.push(card["id"]);
-				}
-				// 불러온 목록 내부에 존재하는 favorite 업데이트
-				// 인자가 없으면 모두!
-				Favorite.updateFavs();
-			}
-		});
-	}
-
 	WILDGOOSE.ui.favorite = Favorite;
 
 })();

@@ -1,4 +1,4 @@
-package next.wildgoose.filter;
+package next.wildgoose.framework.filter;
 
 import java.io.IOException;
 
@@ -18,12 +18,9 @@ public class QueryFilter implements Filter {
 	
 	public void init(FilterConfig filterConfig) throws ServletException {
 		// TODO Auto-generated method stub
-		
 	}
 
-	public void doFilter(ServletRequest req, ServletResponse res,
-			FilterChain chain) throws IOException, ServletException {
-		
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		
@@ -39,7 +36,6 @@ public class QueryFilter implements Filter {
 
 	public void destroy() {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

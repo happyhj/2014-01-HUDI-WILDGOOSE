@@ -1,3 +1,176 @@
+(function() {	
+	// 자주 사용하는 글로벌 객체 레퍼런스 확보
+	var document = window.document;
+
+	// 사용할 네임 스페이스 확보	
+	var WILDGOOSE = window.WILDGOOSE || {};
+	WILDGOOSE.etc = WILDGOOSE.etc || {};	
+	
+	var Etc = {			
+		getUserId: function() {
+			this.userId = document.getElementById("userId").innerText;
+			return this.userId;
+		},
+		isUserLogined: function() {
+			if (this.getUserId() == "") {
+				return false;
+			}
+			return true;
+		}
+	};
+	
+	// 공개 메서드 노출
+	WILDGOOSE.etc = Etc;
+})();(function(window) {
+	'use strict';
+	var document = window.document;
+	var console = window.console;
+	var WILDGOOSE = window.WILDGOOSE || {};
+	WILDGOOSE.ui = WILDGOOSE.ui || {};
+	WILDGOOSE.ui.validation = WILDGOOSE.ui.validation || {};
+
+	var Ajax = CAGE.ajax
+	var Dom = CAGE.util.dom;
+	
+	var validation_logics = {
+		email : {
+			sequence : [ "required", "format", "usable" ],
+			required : [ /.+/, "email을 입력해주세요" ],
+			format : [ /^[\w\.-_\+]+@[\w-]+(\.\w{2,4})+$/, "email형식을 지켜주세요" ],
+			usable : [ function(inputEl, callback) {
+				existInServer(inputEl, callback);
+			}, "이미 등록된 email입니다" ]
+		},
+		password : {
+			sequence : [ "required", "letter", "size", "ampleNumber", "ampleLetter" ],
+			required : [ /.+/, "비밀번호를 입력해주세요" ],
+			letter : [
+					/[a-zA-Z0-9\`\~\!\@\#\$\%\^\&|*\(\)\-\_\=\=\+\\\|\,\.\<\>\/\?\[\]\{\}\;\:\'\"]/,
+					"숫자, 영문자 대소문자, 특수문자만 사용해주세요" ],
+			size : [ /^.{8,15}$/, "8~15자 사이로 입력해주세요" ],
+			ampleNumber : [ /(.*\d{1}.*){4,}/, "숫자는 4자리 이상 포함되어야 합니다" ],
+			ampleLetter : [ /(.*\D{1}.*){4,}/, "문자는 4자리 이상 포함되어야 합니다" ]
+		},
+		confirm : {
+			sequence : [ "required", "equal" ],
+			required : [ /.+/, "다시 입력해주세요" ],
+			equal : [ function(inputEl, callback) {
+				ckeckEquality(inputEl, callback);
+			}, "다시 확인해주세요" ]
+		}		
+	};	
+
+	function ckeckEquality(inputEl, callback) {
+		var parent = inputEl.parentNode;
+		var password = document.querySelector("." + parent.className
+				+ " input[name=password]");
+		
+		callback(inputEl.value == password.value);
+	}
+
+	function existInServer(inputEl, callback) {
+		var url = "api/v1/accounts/?email=" + inputEl.value;
+		Ajax.GET({"url":url, "callback":function(response) {
+			console.log(response);
+			var validity = (JSON.parse(response).status===200)?true:false;
+			var isAjax = true;
+			callback(validity, isAjax);
+		}});
+		Dom.addClass(inputEl, "isProgressing");
+	}
+	
+	
+	function validCheck(inputEl) {
+		var fieldName = inputEl.name;
+		var fieldValue = inputEl.value;
+		var checking_sequence = validation_logics[fieldName]["sequence"];
+
+		for ( var i = 0; i<checking_sequence.length; ++i) {
+			var cur_sequence = checking_sequence[i];
+			console.log(cur_sequence);
+			var checking_logic = validation_logics[fieldName][cur_sequence];
+			var alert_message = checking_logic[1];
+			
+			if (checking_logic[0] instanceof RegExp) {
+				console.log("RegExp");
+				console.log(checking_logic[0].test(fieldValue));
+				if (!checking_logic[0].test(fieldValue)) {
+					warn(inputEl, alert_message);
+					invalidStyle(inputEl);
+					return false;
+				}
+			} else if (checking_logic[0] instanceof Function) {
+				console.log("Function");
+				var valid_state = true; 
+				checking_logic[0](inputEl, function(validity, isAjax) {
+					if (isAjax) {
+						Dom.removeClass(inputEl, "isProgressing");
+					}
+					if (!validity) {
+						warn(inputEl, alert_message);
+						invalidStyle(inputEl);
+						valid_state = false;
+						return false;
+					}
+				});
+				if (!valid_state) {
+					return false;
+				}
+			}
+		}
+		unwarn(inputEl);
+		validStyle(inputEl);
+		return true;
+	}
+	
+	
+	/*
+	 * 상태에 따른 변경될 style을 모음 
+	 */
+	function validStyle(inputEl) {
+		Dom.removeClass(inputEl, "status-denied");
+		Dom.removeClass(inputEl, "isInvalid");
+		Dom.addClass(inputEl, "status-approved");
+		Dom.addClass(inputEl, "isValid");
+	}
+	
+	function invalidStyle(inputEl) {
+		Dom.removeClass(inputEl, "status-approved");
+		Dom.removeClass(inputEl, "isValid");
+		Dom.addClass(inputEl, "status-denied");
+		Dom.addClass(inputEl, "isInvalid");
+	}
+
+	/*
+	 * 사용에게 메시지를 전달하기 위한 함수 
+	 */
+	function warn(inputEl, warningMsg) {
+		var name = inputEl.name;
+		var target = document.querySelector(".form-container .msg-" + name);
+
+		target.innerText = warningMsg;
+	}
+
+	function unwarn(inputEl) {
+		var name = inputEl.name;
+		var target = document.querySelector(".form-container .msg-" + name);
+
+		target.innerText = "";
+	}
+	
+	WILDGOOSE.ui.validation = {
+		validCheck: validCheck
+	};
+	
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = WILDGOOSE;
+		// browser export
+	} else {
+		window.WILDGOOSE = WILDGOOSE;
+	}    	
+
+}(this));
 (function(window) {
 	'use strict';
 	var document = window.document;
@@ -52,7 +225,7 @@
 			}
 		}
 	
-		(flag) ? Dom.removeClass(form[btn], "hidden") : Dom.addClass(form[btn], "hidden");
+		flag ? Dom.removeClass(form[btn], "hidden") : Dom.addClass(form[btn], "hidden");
 		
 	};
 	
@@ -88,20 +261,23 @@
 	};
 	
 	
-	function loginAccount() {
-			
+	function loginAccount(popup) {
 		var email = document.querySelector(".form-container input[name=email]").value;
 		var password = document.querySelector(".form-container input[name=password]").value;
-		
 		var hashedPassword = SHA256(password);	
 		var randomNumber = document.querySelector(".form-container input[name=randomNumber]").value;
-		
 		var finalPassword = SHA256(hashedPassword+randomNumber);
-		
 		var url = "/api/v1/session/";
 		var payload = "email="+email+"&password="+finalPassword;
 		Ajax.POST({"url": url, "callback":function(response) {
-			loginHandler(response);
+			var form = document.querySelector(".form-container");
+			Dom.removeClass(form, "isProgressing");
+			console.log(response);
+			console.log(JSON.parse(response).status);
+			if (JSON.parse(response).status == 200) {
+				popup.afterclose.add(function() {location.reload();});
+				popup.close();
+			}
 		}, "data":payload});
 	};
 	
@@ -109,7 +285,6 @@
 		
 		var form = document.querySelector(".form-container");
 		Dom.removeClass(form, "isProgressing");
-		
 		if (JSON.parse(response).status == 200) {
 			// close modal. and update login panel
 			loginPopup.close();
@@ -119,10 +294,9 @@
 	
 	
 	WILDGOOSE.account = {
-		loginHandler: loginHandler,
-		loginAccount: showSignUpResult,
-		showSignUpResult: showSignUpResult,
+		loginAccount: loginAccount,
 		signUpAccount: signUpAccount,
+		showSignUpResult: showSignUpResult,
 		checkFormStatus: checkFormStatus,
 		checkSignUpFrom: checkSignUpFrom,
 		addValidationEvent: addValidationEvent
@@ -136,7 +310,8 @@
 		window.WILDGOOSE = WILDGOOSE;
 	}    	
 
-}(this));(function(window) {
+}(this));
+(function(window) {
 	'use strict';
 	var document = window.document;
 	var console = window.console;
@@ -144,9 +319,10 @@
 	WILDGOOSE.header = WILDGOOSE.header || {};
 
 	// 의존성 선언 
-	var Popup = CAGE.ui.popup;
+	var Ajax = CAGE.ajax;
 	var TemplateUtil = CAGE.util.template;
 	var Dom = CAGE.util.dom;
+	var Popup = CAGE.ui.popup;
 	var Account = WILDGOOSE.account;
 	
 	function init(){
@@ -173,7 +349,7 @@
 			templateUrl: "/api/v1/templates/login.html",
 			templateLoader: function(AjaxResponse) {
 				var templateStr = JSON.parse(AjaxResponse).data.template;
-				var randNum = JSON.parse(AjaxResponse).message;
+				var randNum = JSON.parse(AjaxResponse).data.rand;
 				var compiler = TemplateUtil.getCompiler(templateStr);
 				return compiler({
 					"randNum": randNum
@@ -183,27 +359,28 @@
 		
 		loginPopup.afteropen.add(function() {
 			var btn = arguments[0].querySelector("#create");
-			btn.addEventListener("click", Account.loginAccount, false);
-		});
-		loginPopup.afterclose.add(function() {
-			location.reload();
+			btn.addEventListener("click", Account.loginAccount.bind(this, loginPopup), false);
 		});
 		
 		var logoutBtn = document.querySelector(".header-btn#logout");
 		logoutBtn.addEventListener("click", function() {
-			Ajax.DELETE({"url":'/api/v1/session'});
-			updateTopbar(false);
+			Ajax.DELETE({
+				"url":'/api/v1/session',
+				"callback":function() {location.href="/";}
+			});
 		}, false);
 		
 		var timelineBtn = document.querySelector(".header-btn#timeline");
 		timelineBtn.addEventListener("click", function() {
-			var userId = getUserId();
+			var Etc = WILDGOOSE.etc;
+			var userId = Etc.getUserId();
 			location.href = "/users/?user_id?/timeline".replace("?user_id?", userId);;
 		}, false);
 		
 		var favoriteBtn = document.querySelector(".header-btn#favorite");
 		favoriteBtn.addEventListener("click", function() {
-			var userId = getUserId();
+			var Etc = WILDGOOSE.etc;
+			var userId = Etc.getUserId();
 			location.href = "/users/?user_id?/favorites".replace("?user_id?", userId);
 		}, false);
 		
@@ -242,7 +419,135 @@
 		window.WILDGOOSE = WILDGOOSE;
 	}    	
 
-}(this));(function() {	
+}(this));(function() {
+	'use strict';
+	var document = window.document;
+	var console = window.console;
+
+	var WILDGOOSE = window.WILDGOOSE || {};
+	WILDGOOSE.ui = WILDGOOSE.ui || {};
+	WILDGOOSE.favorite = WILDGOOSE.favorite || {};
+	
+	// 의존성 선언
+	var Ajax = CAGE.ajax;
+	var Dom = CAGE.util.dom;
+	var Etc = WILDGOOSE.etc;
+
+	var Favorite = {
+		favoriteList : [],
+
+		attatchEventToFavBtn : function(curNum, reqNum) {
+			var reporterCards = document.querySelectorAll(".card");
+			if (reporterCards.length != 0) {
+				(curNum == undefined) ? curNum = reporterCards.length : true;
+				(reqNum == undefined) ? reqNum = reporterCards.length : true;
+				for (var i = curNum - reqNum ; i < curNum; i++) {
+					var card = reporterCards[i];
+					if (card == undefined) {
+						continue;
+					}
+					var star = card.querySelector(".star");
+					star.addEventListener("click", this.toggleFav, false);
+					star.addEventListener("click", function(e) {
+						Dom.addClass(e.target, "pumping");
+						setTimeout(function() {
+							Dom.removeClass(e.target, "pumping");
+						}, 300)
+					}, false);
+				}				
+			}
+		},
+
+		toggleFav : function(e) {
+			var target = e.target;
+			var card = target.parentElement.parentElement.parentElement;
+			var reporterId = card.firstElementChild.dataset.reporter_id;
+			var userId = Etc.getUserId();
+			var url = "/api/v1/users/" + userId + "/favorites/?reporter_id="
+					+ reporterId;
+
+
+			if (Dom.hasClass(target, "on")) {
+				Ajax.DELETE({
+					"url" : url,
+					"callback" : function(data) {
+						var data = JSON.parse(data);
+						if (data.status == 200) {
+							Dom.removeClass(target, "on");
+							Dom.addClass(target, "off");
+							Dom.addClass(card, "blur");
+						} else {
+							// react fail
+						}
+					}
+				});
+			} else {
+				Ajax.POST({
+					"url" : url,
+					"callback" : function(data) {
+						var data = JSON.parse(data);
+						if (data.status == 200) {
+							Dom.addClass(target, "on");
+							Dom.removeClass(target, "off");
+							Dom.removeClass(card, "blur");
+
+						} else {
+							// react fail
+						}
+					}
+				});
+			}
+		},
+
+		updateFavs : function(curNum, reqNum) {
+			var reporterCards = document.querySelectorAll(".card-section-identity");
+			if (reporterCards.length != 0) {
+				(curNum == undefined) ? curNum = reporterCards.length : true;
+				(reqNum == undefined) ? reqNum = reporterCards.length : true;
+				for (var i = curNum - reqNum ; i < curNum; i++) {
+					var card = reporterCards[i];
+					if (card == undefined) {
+						continue;
+					}
+					var reporterId = card.dataset.reporter_id;
+					if (this.favoriteList.indexOf(parseInt(reporterId)) >= 0) {
+						card.querySelector(".star").className = "star on";
+					}
+				}				
+			}
+		},
+		
+		init: function() {
+			// 초기화
+			if (Etc.isUserLogined()) {
+				// userID 확인
+				var userId = Etc.getUserId();
+				
+				// 모든 별에 eventlistener 붙이기
+				this.attatchEventToFavBtn();
+				
+				// user의 Favorite 목록 획득
+				var url = "/api/v1/users/" + userId + "/favorites/";
+				Ajax.GET({
+					"url" : url,
+					"callback" : function(jsonStr) {
+						var result = JSON.parse(jsonStr);
+						var reporterCards = result["data"]["reporterCards"]
+						for (var i=0; i<reporterCards.length; i++) {
+							var card = reporterCards[i];
+							Favorite.favoriteList.push(card["id"]);
+						}
+						// 불러온 목록 내부에 존재하는 favorite 업데이트
+						// 인자가 없으면 모두!
+						this.updateFavs();
+					}.bind(this)
+				});
+			}
+		}
+	};
+	WILDGOOSE.ui.favorite = Favorite;
+
+})();(function() {	
 	// 자주 사용하는 글로벌 객체 레퍼런스 확보
 	var document = window.document;
 	var console = window.console;
@@ -476,137 +781,6 @@
 	
 	// 공개 메서드 노출
 	WILDGOOSE.ui.auto_complement = AutoComplement;
-})();
-
-window.addEventListener("load", function(evt){
-	var AutoComplement = WILDGOOSE.ui.auto_complement;
-	AutoComplement.init({searchBox: "#query-entry", container: ".search .auto-completion-list", requestNum: 7});
-}, false);(function() {
-	'use strict';
-	var document = window.document;
-	var console = window.console;
-
-	// 의존성 선언
-	var Ajax = CAGE.ajax;
-	var Dom = CAGE.util.dom;
-	var WILDGOOSE = window.WILDGOOSE || {};
-	WILDGOOSE.ui = WILDGOOSE.ui || {};
-	WILDGOOSE.favorite = WILDGOOSE.favorite || {};
-
-	var Favorite = {
-		favoriteList : [],
-
-		attatchEventToFavBtn : function(curNum, reqNum) {
-			var reporterCards = document.querySelectorAll(".card");
-			if (reporterCards.length != 0) {
-				(curNum == undefined) ? curNum = reporterCards.length : true;
-				(reqNum == undefined) ? reqNum = reporterCards.length : true;
-				for (var i = curNum - reqNum ; i < curNum; i++) {
-					var card = reporterCards[i];
-					if (card == undefined) {
-						continue;
-					}
-					var star = card.querySelector(".star");
-					star.addEventListener("click", this.toggleFav, false);
-					star.addEventListener("click", function(e) {
-						Dom.addClass(e.target, "pumping");
-						setTimeout(function() {
-							Dom.removeClass(e.target, "pumping");
-						}, 300)
-					}, false);
-				}				
-			}
-		},
-
-		toggleFav : function(e) {
-			var target = e.target;
-			var card = target.parentElement.parentElement.parentElement;
-			var reporterId = card.firstElementChild.dataset.reporter_id;
-			var userId = getUserId();
-			var url = "/api/v1/users/" + userId + "/favorites/?reporter_id="
-					+ reporterId;
-
-
-			if (Dom.hasClass(target, "on")) {
-				Ajax.DELETE({
-					"url" : url,
-					"callback" : function(data) {
-						var data = JSON.parse(data);
-						if (data.status == 200) {
-							Dom.removeClass(target, "on");
-							Dom.addClass(target, "off");
-							Dom.addClass(card, "blur");
-						} else {
-							// react fail
-						}
-					}
-				});
-			} else {
-				Ajax.POST({
-					"url" : url,
-					"callback" : function(data) {
-						var data = JSON.parse(data);
-						if (data.status == 200) {
-							Dom.addClass(target, "on");
-							Dom.removeClass(target, "off");
-							Dom.removeClass(card, "blur");
-
-						} else {
-							// react fail
-						}
-					}
-				});
-			}
-		},
-
-		updateFavs : function(curNum, reqNum) {
-			var reporterCards = document.querySelectorAll(".card-section-identity");
-			if (reporterCards.length != 0) {
-				(curNum == undefined) ? curNum = reporterCards.length : true;
-				(reqNum == undefined) ? reqNum = reporterCards.length : true;
-				for (var i = curNum - reqNum ; i < curNum; i++) {
-					var card = reporterCards[i];
-					if (card == undefined) {
-						continue;
-					}
-					var reporterId = card.dataset.reporter_id;
-					if (this.favoriteList.indexOf(parseInt(reporterId)) >= 0) {
-						card.querySelector(".star").className = "star on";
-					}
-				}				
-			}
-		}
-	};
-	
-	// 초기화
-	if (isUserLogined()) {
-		// userID 확인
-		var userId = getUserId();
-		
-		// 모든 별에 eventlistener 붙이기
-		Favorite.attatchEventToFavBtn();
-		
-		// user의 Favorite 목록 획득
-		var url = "/api/v1/users/" + userId + "/favorites/";
-		Ajax.GET({
-			"url" : url,
-			"callback" : function(jsonStr) {
-				console.log(url);
-				var result = JSON.parse(jsonStr);
-				var reporterCards = result["data"]["reporterCards"]
-				for (var i=0; i<reporterCards.length; i++) {
-					var card = reporterCards[i];
-					Favorite.favoriteList.push(card["id"]);
-				}
-				// 불러온 목록 내부에 존재하는 favorite 업데이트
-				// 인자가 없으면 모두!
-				Favorite.updateFavs();
-			}
-		});
-	}
-
-	WILDGOOSE.ui.favorite = Favorite;
-
 })();(function() {	
 	// 자주 사용하는 글로벌 객체 레퍼런스 확보
 	var document = window.document;
@@ -643,7 +817,6 @@ window.addEventListener("load", function(evt){
 				this._attachRecievedData(cards);
 				var metaData = this._updateMetaData(cards.length);
 				this._selectStatusOfSearchMoreBtn(metaData.curNum);
-				debugger;
 				Fav.updateFavs(metaData.curNum, this.requestNum);
 				Fav.attatchEventToFavBtn(metaData.curNum, this.requestNum);
 			}
@@ -735,158 +908,3 @@ window.addEventListener("load", function(evt){
 	// 공개 메서드 노출
 	WILDGOOSE.ui.search_more = SearchMore;
 })();
-
-window.addEventListener("load", function(evt){
-	var SearchMore = WILDGOOSE.ui.search_more;
-	SearchMore.init({button: ".search-more", container: ".search-result > ul", templateUrl: "/api/v1/templates/reporterCard.html", requestNum: 24});
-}, false);
-
-(function(window) {
-	'use strict';
-	var document = window.document;
-	var console = window.console;
-	var WILDGOOSE = window.WILDGOOSE || {};
-	WILDGOOSE.ui = WILDGOOSE.ui || {};
-	WILDGOOSE.ui.validation = WILDGOOSE.ui.validation || {};
-
-	var Ajax = CAGE.ajax
-	var DomUtil = CAGE.util.dom;
-	
-	var validation_logics = {
-		email : {
-			sequence : [ "required", "format", "usable" ],
-			required : [ /.+/, "email을 입력해주세요" ],
-			format : [ /^[\w\.-_\+]+@[\w-]+(\.\w{2,4})+$/, "email형식을 지켜주세요" ],
-			usable : [ function(inputEl, callback) {
-				existInServer(inputEl, callback);
-			}, "이미 등록된 email입니다" ]
-		},
-		password : {
-			sequence : [ "required", "letter", "size", "ampleNumber", "ampleLetter" ],
-			required : [ /.+/, "비밀번호를 입력해주세요" ],
-			letter : [
-					/[a-zA-Z0-9\`\~\!\@\#\$\%\^\&|*\(\)\-\_\=\=\+\\\|\,\.\<\>\/\?\[\]\{\}\;\:\'\"]/,
-					"숫자, 영문자 대소문자, 특수문자만 사용해주세요" ],
-			size : [ /^.{8,15}$/, "8~15자 사이로 입력해주세요" ],
-			ampleNumber : [ /(.*\d{1}.*){4,}/, "숫자는 4자리 이상 포함되어야 합니다" ],
-			ampleLetter : [ /(.*\D{1}.*){4,}/, "문자는 4자리 이상 포함되어야 합니다" ]
-		},
-		confirm : {
-			sequence : [ "required", "equal" ],
-			required : [ /.+/, "다시 입력해주세요" ],
-			equal : [ function(inputEl, callback) {
-				ckeckEquality(inputEl, callback);
-			}, "다시 확인해주세요" ]
-		}		
-	};	
-
-	function ckeckEquality(inputEl, callback) {
-		var parent = inputEl.parentNode;
-		var password = document.querySelector("." + parent.className
-				+ " input[name=password]");
-		
-		callback(inputEl.value == password.value);
-	}
-
-	function existInServer(inputEl, callback) {
-		var url = "api/v1/accounts/?email=" + inputEl.value;
-		Ajax.GET({"url":url, "callback":function(response) {
-			console.log(response);
-			var validity = (JSON.parse(response).status===200)?true:false;
-			var isAjax = true;
-			callback(validity, isAjax);
-		}});
-		Util.addClass(inputEl, "isProgressing");
-	}
-	
-	
-	function validCheck(inputEl) {
-		var fieldName = inputEl.name;
-		var fieldValue = inputEl.value;
-		var checking_sequence = validation_logics[fieldName]["sequence"];
-
-		for ( var i = 0; i<checking_sequence.length; ++i) {
-			var cur_sequence = checking_sequence[i];
-			var checking_logic = validation_logics[fieldName][cur_sequence];
-			var alert_message = checking_logic[1];
-			
-			if (checking_logic[0] instanceof RegExp) {
-				console.log("RegExp");
-				console.log(checking_logic[0].test(fieldValue));
-				if (!checking_logic[0].test(fieldValue)) {
-					warn(inputEl, alert_message);
-					invalidStyle(inputEl);
-					return false;
-				}
-			} else if (checking_logic[0] instanceof Function) {
-				console.log("Function");
-				var valid_state = true; 
-				checking_logic[0](inputEl, function(validity, isAjax) {
-					if (isAjax) {
-						Util.removeClass(inputEl, "isProgressing");
-					}
-					if (!validity) {
-						warn(inputEl, alert_message);
-						invalidStyle(inputEl);
-						valid_state = false;
-						return false;
-					}
-				});
-				if (!valid_state) {
-					return false;
-				}
-			}
-		}
-		unwarn(inputEl);
-		validStyle(inputEl);
-		return true;
-	}
-	
-	
-	/*
-	 * 상태에 따른 변경될 style을 모음 
-	 */
-	function validStyle(inputEl) {
-		DomUtil.removeClass(inputEl, "status-denied");
-		DomUtil.removeClass(inputEl, "isInvalid");
-		DomUtil.addClass(inputEl, "status-approved");
-		DomUtil.addClass(inputEl, "isValid");
-	}
-	
-	function invalidStyle(inputEl) {
-		DomUtil.removeClass(inputEl, "status-approved");
-		DomUtil.removeClass(inputEl, "isValid");
-		DomUtil.addClass(inputEl, "status-denied");
-		DomUtil.addClass(inputEl, "isInvalid");
-	}
-
-	/*
-	 * 사용에게 메시지를 전달하기 위한 함수 
-	 */
-	function warn(inputEl, warningMsg) {
-		var name = inputEl.name;
-		var target = document.querySelector(".form-container .msg-" + name);
-
-		target.innerText = warningMsg;
-	}
-
-	function unwarn(inputEl) {
-		var name = inputEl.name;
-		var target = document.querySelector(".form-container .msg-" + name);
-
-		target.innerText = "";
-	}
-	
-	WILDGOOSE.ui.validation = {
-		validCheck: validCheck
-	};
-	
-	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
-	if (typeof module !== 'undefined' && module.exports) {
-		module.exports = WILDGOOSE;
-		// browser export
-	} else {
-		window.WILDGOOSE = WILDGOOSE;
-	}    	
-
-}(this));

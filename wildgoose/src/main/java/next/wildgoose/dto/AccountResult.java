@@ -6,7 +6,6 @@ public class AccountResult extends Result{
 	
 	public AccountResult() {
 		super();
-		
 	}
 	
 	public String getEmail() {

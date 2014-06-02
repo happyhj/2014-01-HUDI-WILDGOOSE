@@ -35,12 +35,7 @@
 	<servlet>
 		<display-name>FrontController</display-name>
 		<servlet-name>FrontController</servlet-name>
-		<servlet-class>next.wildgoose.web.FrontController</servlet-class>
-	</servlet>
-	<servlet>
-		<display-name>ApiController</display-name>
-		<servlet-name>ApiController</servlet-name>
-		<servlet-class>next.wildgoose.web.ApiController</servlet-class>
+		<servlet-class>next.wildgoose.framework.FrontController</servlet-class>
 	</servlet>
 	
 
@@ -92,8 +87,14 @@
 	<context-param>
 		<param-name>encoding</param-name>
 		<param-value>UTF-8</param-value>
-	
 	</context-param>
+	<!-- Front End Debugging Mode -->
+	<!-- value가 on이 아닌 경우만 *.min.js로 로딩 -->
+	<context-param>
+		<param-name>debuggerMode</param-name>
+		<param-value>on</param-value>
+	</context-param>
+	
 
 	<!-- Listeners -->
 	<listener>
@@ -102,9 +103,6 @@
 	<listener>
 		<listener-class>next.wildgoose.dao.DaoListener</listener-class>
 	</listener>
-	<!-- <listener>
-		<listener-class>next.wildgoose.service.ServiceListener</listener-class>
-	</listener> -->
 	<listener>
 		<listener-class>next.wildgoose.backcontroller.BackControllerListener</listener-class>
 	</listener>
@@ -117,12 +115,12 @@
 	<filter>
 		<display-name>EncodingFilter</display-name>
 		<filter-name>EncodingFilter</filter-name>
-		<filter-class>next.wildgoose.filter.EncodingFilter</filter-class>
+		<filter-class>next.wildgoose.framework.filter.EncodingFilter</filter-class>
 	</filter>
 	<filter>
 		<display-name>QueryFilter</display-name>
 		<filter-name>QueryFilter</filter-name>
-		<filter-class>next.wildgoose.filter.QueryFilter</filter-class>
+		<filter-class>next.wildgoose.framework.filter.QueryFilter</filter-class>
 	</filter>
 	
 	<!-- Filter Mapping -->
