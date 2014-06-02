@@ -1,5 +1,8 @@
 @CHARSET "UTF-8";
 /* Base rule */
+body{
+	-webkit-font-smoothing : antialiased;
+}
 .card {
 	-webkit-user-select: NONE;
 	-khtml-user-select: NONE;
@@ -136,6 +139,8 @@
     -moz-transition: -moz-transform 0.5s ease;    
     -o-transition: transform 0.5s ease;    
     transition: transform 0.5s ease;
+    /* -webkit-transform : translateZ(0);
+    transform : translateZ(0); */
     
     background-image: url('/image/graystar.png');
 	background-repeat: no-repeat;

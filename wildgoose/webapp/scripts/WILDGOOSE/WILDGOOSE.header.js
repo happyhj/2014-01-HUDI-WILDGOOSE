@@ -6,11 +6,12 @@
 	WILDGOOSE.header = WILDGOOSE.header || {};
 
 	// 의존성 선언 
-	var Popup = CAGE.ui.popup;
+	var Ajax = CAGE.ajax;
 	var TemplateUtil = CAGE.util.template;
 	var Dom = CAGE.util.dom;
+	var Popup = CAGE.ui.popup;
+
 	var Account = WILDGOOSE.account;
-	var Ajax = CAGE.ajax;
 	
 	function init(){
 		var joinBtn = document.querySelector("#join");
@@ -46,16 +47,15 @@
 		
 		loginPopup.afteropen.add(function() {
 			var btn = arguments[0].querySelector("#create");
-			btn.addEventListener("click", Account.loginAccount, false);
-		});
-		loginPopup.afterclose.add(function() {
-			location.reload();
+			btn.addEventListener("click", Account.loginAccount.bind(this, loginPopup), false);
 		});
 		
 		var logoutBtn = document.querySelector(".header-btn#logout");
 		logoutBtn.addEventListener("click", function() {
-			Ajax.DELETE({"url":'/api/v1/session'});
-			updateTopbar(false);
+			Ajax.DELETE({
+				"url":'/api/v1/session',
+				"callback":function() {location.href="/";}
+			});
 		}, false);
 		
 		var timelineBtn = document.querySelector(".header-btn#timeline");
