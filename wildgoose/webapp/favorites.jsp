@@ -38,4 +38,4 @@
 
 <script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
 <script type="text/javascript" src="/scripts/WILDGOOSE/etc.js"></script>
-<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.favorite.js"></script>
+<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
