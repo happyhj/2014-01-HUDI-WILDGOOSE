@@ -68,13 +68,13 @@ public class FrontController extends HttpServlet {
 		return result;
 	}
 	
-	private String getPrimeResource(String uri) {
-		String result = uri;
+	private String getPrimeResource(String reqPath) {
+		String result = reqPath;
 		
-		if (uri.startsWith("/api/v1/")) {
-			result = uri.replaceFirst("/api/v1/", "");
+		if (reqPath.startsWith("/api/v1/")) {
+			result = reqPath.replaceFirst("/api/v1/", "");
 		} else {
-			result = uri.replaceFirst("/", "");
+			result = reqPath.replaceFirst("/", "");
 		}
 		
 		if( result.indexOf("/") >= 0 ) {

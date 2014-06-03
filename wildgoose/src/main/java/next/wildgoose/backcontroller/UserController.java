@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import next.wildgoose.dao.ArticleDAO;
 import next.wildgoose.dao.FavoriteDAO;
+import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Article;
 import next.wildgoose.dto.FavoriteResult;
 import next.wildgoose.dto.Reporter;
@@ -30,6 +31,14 @@ public class UserController implements BackController {
 		String pageName = uri.get(2);
 		String method = request.getMethod();
 		LOGGER.debug(uri.toString());
+		
+		if (isValidUserId(request, userId) == false) {
+			result = new SimpleResult();
+			result.setStatus(404);
+			result.setMessage("User Id Doesn't exists");
+			return result;
+		}
+		
 		if ("timeline".equals(pageName)) {
 			result = getTimeline(request, userId);
 		} else if ("favorites".equals(pageName)) {
@@ -44,6 +53,15 @@ public class UserController implements BackController {
 		return result;
 	}
 	
+	private boolean isValidUserId(HttpServletRequest request, String userId) {
+		ServletContext context = request.getServletContext();
+		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
+		if (signDao.findEmail(userId)) {
+			return true;
+		}
+		return false;
+	}
+
 	private TimelineResult getTimeline(HttpServletRequest request, String userId) {
 		ServletContext context = request.getServletContext();
 
@@ -93,5 +111,14 @@ public class UserController implements BackController {
 			simpleResult.setMessage("success");
 		}
 		return simpleResult;
+	}
+	
+	private String dollarSignToAtMark(String dollarSignedId) {
+		String atMarkedId = null;
+		if (dollarSignedId == null) {
+			return null;
+		}
+		atMarkedId = dollarSignedId.replace("$", "@");
+		return atMarkedId;
 	}
 }

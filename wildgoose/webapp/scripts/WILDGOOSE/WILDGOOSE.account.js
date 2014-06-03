@@ -51,8 +51,7 @@
 				break;
 			}
 		}
-	
-		flag ? Dom.removeClass(form[btn], "hidden") : Dom.addClass(form[btn], "hidden");
+		Dom[flag?"removeClass":"addClass"](form[btn], "hidden");
 		
 	};
 	
