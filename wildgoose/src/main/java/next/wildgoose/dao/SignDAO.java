@@ -93,4 +93,17 @@ public class SignDAO {
 		
 		return (Boolean) t.execute(query, pss);
 	}
+	
+	public boolean withdrawAccount (final String email) {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+
+			@Override
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, email);
+			}
+		};
+		String query = "DELETE FROM user_account WHERE email =?";
+		return (Boolean) t.execute(query, pss);
+	}
 }

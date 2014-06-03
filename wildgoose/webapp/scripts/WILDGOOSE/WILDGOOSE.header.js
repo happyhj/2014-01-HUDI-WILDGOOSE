@@ -26,7 +26,7 @@
 		joinPopup.afteropen.add(function() {
 			Account.addValidationEvent();
 			var btn = arguments[0].querySelector("#create");
-			btn.addEventListener("click", Account.signUpAccount, false);
+			btn.addEventListener("click", Account.signUpAccount.bind(this, joinPopup), false);
 		});
 		
 		var loginBtn = document.querySelector("#login");
@@ -48,6 +48,13 @@
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", Account.loginAccount.bind(this, loginPopup), false);
 		});
+		
+		var leaveBtn = document.querySelector("#leave");
+		leaveBtn.addEventListener("click", function(){
+			console.log("탈퇴시킴. 확인창 뜨는건 다음 스텝에서");
+			Account.withdrawAccount();
+		}, false);
+		
 		
 		var logoutBtn = document.querySelector(".header-btn#logout");
 		logoutBtn.addEventListener("click", function() {
