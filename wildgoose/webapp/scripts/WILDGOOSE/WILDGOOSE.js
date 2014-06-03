@@ -548,22 +548,28 @@
 				break;
 			}
 		}
-	
-		flag ? Dom.removeClass(form[btn], "hidden") : Dom.addClass(form[btn], "hidden");
+		Dom[flag?"removeClass":"addClass"](form[btn], "hidden");
 		
 	};
 	
 	/*
 	 * 모두 작성된 정보를 Ajax POST로 서버에 전달
 	 */
-	function signUpAccount() {
+	function signUpAccount(popup) {
 		var url = "/api/v1/accounts/";
 		var form = document.querySelector(".form-container");
 		
 		var email = escape(form[0].value)
 		var password = escape(form[1].value);
 		var payload = "email=" + email + "&password=" + SHA256(password);
-		Ajax.POST({"url":url, "callback":showSignUpResult, "data":payload});
+		Ajax.POST({"url":url, "callback":function(response) {
+			var form = document.querySelector(".form-container");
+			Dom.removeClass(form, "isProgressing");
+			if (JSON.parse(response).status == 200) {
+				popup.afterclose.add(function() {location.reload();});
+				popup.close();
+			}
+		}, "data":payload});
 	//	domUtil.addClass(form, "isProgressing");
 	
 	};
@@ -573,8 +579,6 @@
 	 * 서버에서 전달된 결과값 확인
 	 */
 	function showSignUpResult(response) {
-		var form = document.querySelector(".form-container");
-		Dom.removeClass(form, "isProgressing");
 		
 		if (response == "success") {
 			// close modal. and update login panel
@@ -596,8 +600,8 @@
 		Ajax.POST({"url": url, "callback":function(response) {
 			var form = document.querySelector(".form-container");
 			Dom.removeClass(form, "isProgressing");
-			console.log(response);
-			console.log(JSON.parse(response).status);
+//			console.log(response);
+//			console.log(JSON.parse(response).status);
 			if (JSON.parse(response).status == 200) {
 				popup.afterclose.add(function() {location.reload();});
 				popup.close();
@@ -605,17 +609,13 @@
 		}, "data":payload});
 	};
 	
-	function loginHandler(response){
-		
-		var form = document.querySelector(".form-container");
-		Dom.removeClass(form, "isProgressing");
-		if (JSON.parse(response).status == 200) {
-			// close modal. and update login panel
-			loginPopup.close();
-			updateTopbar(true);
-		}
-	};
-	
+	function withdrawAccount(){
+		var user_email = document.getElementById("userId").innerText;
+		Ajax.DELETE({
+			"url":'/api/v1/accounts?email=' + user_email,
+			"callback":function() {location.href="/";}
+		});
+	}
 	
 	WILDGOOSE.account = {
 		loginAccount: loginAccount,
@@ -623,7 +623,8 @@
 		showSignUpResult: showSignUpResult,
 		checkFormStatus: checkFormStatus,
 		checkSignUpFrom: checkSignUpFrom,
-		addValidationEvent: addValidationEvent
+		addValidationEvent: addValidationEvent,
+		withdrawAccount: withdrawAccount
 	};
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
@@ -663,7 +664,7 @@
 		joinPopup.afteropen.add(function() {
 			Account.addValidationEvent();
 			var btn = arguments[0].querySelector("#create");
-			btn.addEventListener("click", Account.signUpAccount, false);
+			btn.addEventListener("click", Account.signUpAccount.bind(this, joinPopup), false);
 		});
 		
 		var loginBtn = document.querySelector("#login");
@@ -685,6 +686,13 @@
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", Account.loginAccount.bind(this, loginPopup), false);
 		});
+		
+		var leaveBtn = document.querySelector("#leave");
+		leaveBtn.addEventListener("click", function(){
+			console.log("탈퇴시킴. 확인창 뜨는건 다음 스텝에서");
+			Account.withdrawAccount();
+		}, false);
+		
 		
 		var logoutBtn = document.querySelector(".header-btn#logout");
 		logoutBtn.addEventListener("click", function() {
@@ -878,8 +886,8 @@
 
 	// 사용할 네임 스페이스 확보	
 	var WILDGOOSE = window.WILDGOOSE || {};
-	WILDGOOSE.ui = WILDGOOSE.ui || {};
-	WILDGOOSE.ui.auto_complement = WILDGOOSE.ui.auto_complement || {};
+	WILDGOOSE.search = WILDGOOSE.search || {};
+	WILDGOOSE.search.auto_complement = WILDGOOSE.search.auto_complement || {};
 
 	// 의존성 주입
 	var Ajax = CAGE.ajax;
@@ -900,10 +908,12 @@
 				pressedEnter : false,
 				listing : false,
 				highlighting : false
-			};
-					
-			this.box = document.querySelector(args.searchBox);
-			this.list = document.querySelector(args.container);
+			};	
+//			this.box = document.querySelector(args.searchBox);
+//			this.list = document.querySelector(args.container);
+			this.box = args.searchBox;
+			this.list = args.container;
+			
 			this.cache = {
 				searchedQuery : this.box.value,
 				row : null,
@@ -1104,7 +1114,7 @@
 	};
 	
 	// 공개 메서드 노출
-	WILDGOOSE.ui.auto_complement = AutoComplement;
+	WILDGOOSE.search.auto_complement = AutoComplement;
 })();(function() {	
 	// 자주 사용하는 글로벌 객체 레퍼런스 확보
 	var document = window.document;
@@ -1112,15 +1122,32 @@
 
 	// 사용할 네임 스페이스 확보	
 	var WILDGOOSE = window.WILDGOOSE || {};
-	WILDGOOSE.ui = WILDGOOSE.ui || {};
-	WILDGOOSE.ui.search_more = WILDGOOSE.ui.search_more || {};
+	WILDGOOSE.search = WILDGOOSE.search || {};
+	WILDGOOSE.search.more = WILDGOOSE.search.more || {};
 
 	// 의존성 주입
 	var Ajax = CAGE.ajax;
 	var Template = CAGE.util.template;
 	var Fav = WILDGOOSE.ui.favorite;
 	
-	var SearchMore = {
+	var More = {
+		init: function(args) {
+//			this.searchMoreBtn = document.querySelector(args.button);
+//			this.searchResult = document.querySelector(args.container);
+//			this.requestNum = args.requestNum;
+//			this.template = Template.get({"url":args.templateUrl});
+			this.searchMoreBtn = args.button;
+			this.searchResult = args.container;
+			this.requestNum = args.requestNum;
+			this.template = args.template;
+			
+			
+			// 더보기 버튼 클릭이벤트 설정
+			if (this.searchMoreBtn != null) {
+				this.searchMoreBtn.addEventListener("click", this._more.bind(this), false);
+				this._selectStatusOfSearchMoreBtn();
+			}
+		},
 		_more: function(evt) {
 			// click evt
 			var searchQuery = document.querySelector(".search-more .state-search-query").innerText;
@@ -1213,22 +1240,68 @@
 		
 		_attachRecievedData: function(cards) {
 			this.searchResult.innerHTML += cards.join("");
-		},
-		
-		init: function(args) {
-			this.searchMoreBtn = document.querySelector(args.button);
-			this.searchResult = document.querySelector(args.container);
-			this.requestNum = args.requestNum;
-			this.template = Template.get({"url":args.templateUrl});
-			
-			// 더보기 버튼 클릭이벤트 설정
-			if (this.searchMoreBtn != null) {
-				this.searchMoreBtn.addEventListener("click", this._more.bind(this), false);
-				this._selectStatusOfSearchMoreBtn();
-			}
 		}	
 	};
 	
 	// 공개 메서드 노출
-	WILDGOOSE.ui.search_more = SearchMore;
+	WILDGOOSE.search.more = More;
+})();
+(function() {	
+	// 자주 사용하는 글로벌 객체 레퍼런스 확보
+	var document = window.document;
+	var console = window.console;
+
+	// 사용할 네임 스페이스 확보	
+	var WILDGOOSE = window.WILDGOOSE || {};
+	WILDGOOSE.search = WILDGOOSE.search || {};
+
+	// 의존성 주입
+	var Ajax = CAGE.ajax;
+	var Template = CAGE.util.template;
+	var More = WILDGOOSE.search.more;
+	var AutoComplement = WILDGOOSE.search.auto_complement;
+	
+	var Search = {
+		init: function(args) {
+			// search
+			var search = args.search;
+			if (search !== undefined) {
+				this.form = {
+					box: document.querySelector(search.box),
+					container: document.querySelector(search.container)
+				}
+				
+				this.search = {
+					submit: document.querySelector(search.submit),
+					requestNum: search.requestNum,
+					templateURL: search.templateURL,
+					template: Template.get({"url":search.templateURL})
+				}
+			}
+			
+			// autocompletion
+			var autocompletion = args.autocompletion;
+			if (autocompletion !== undefined) {
+				this.auto = {
+					list: document.querySelector(args.autocompletion.list),
+					requestNum: autocompletion.requestNum
+				}
+				AutoComplement.init({searchBox: this.form.box, container: this.auto.list, requestNum: this.auto.requestNum});
+			}
+			
+			// more
+			var more = args.more;
+			if (more !== undefined) {
+				this.more = {
+					button: document.querySelector(more.button)
+				}
+				More.init({button: this.more.button, container: this.form.container, template: this.search.template, requestNum: this.search.requestNum});
+			}
+		}
+	};
+	
+	// 공개 메서드 노출
+	WILDGOOSE.search = {
+		init: Search.init
+	}
 })();

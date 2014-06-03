@@ -5,15 +5,32 @@
 
 	// 사용할 네임 스페이스 확보	
 	var WILDGOOSE = window.WILDGOOSE || {};
-	WILDGOOSE.ui = WILDGOOSE.ui || {};
-	WILDGOOSE.ui.search_more = WILDGOOSE.ui.search_more || {};
+	WILDGOOSE.search = WILDGOOSE.search || {};
+	WILDGOOSE.search.more = WILDGOOSE.search.more || {};
 
 	// 의존성 주입
 	var Ajax = CAGE.ajax;
 	var Template = CAGE.util.template;
 	var Fav = WILDGOOSE.ui.favorite;
 	
-	var SearchMore = {
+	var More = {
+		init: function(args) {
+//			this.searchMoreBtn = document.querySelector(args.button);
+//			this.searchResult = document.querySelector(args.container);
+//			this.requestNum = args.requestNum;
+//			this.template = Template.get({"url":args.templateUrl});
+			this.searchMoreBtn = args.button;
+			this.searchResult = args.container;
+			this.requestNum = args.requestNum;
+			this.template = args.template;
+			
+			
+			// 더보기 버튼 클릭이벤트 설정
+			if (this.searchMoreBtn != null) {
+				this.searchMoreBtn.addEventListener("click", this._more.bind(this), false);
+				this._selectStatusOfSearchMoreBtn();
+			}
+		},
 		_more: function(evt) {
 			// click evt
 			var searchQuery = document.querySelector(".search-more .state-search-query").innerText;
@@ -106,22 +123,9 @@
 		
 		_attachRecievedData: function(cards) {
 			this.searchResult.innerHTML += cards.join("");
-		},
-		
-		init: function(args) {
-			this.searchMoreBtn = document.querySelector(args.button);
-			this.searchResult = document.querySelector(args.container);
-			this.requestNum = args.requestNum;
-			this.template = Template.get({"url":args.templateUrl});
-			
-			// 더보기 버튼 클릭이벤트 설정
-			if (this.searchMoreBtn != null) {
-				this.searchMoreBtn.addEventListener("click", this._more.bind(this), false);
-				this._selectStatusOfSearchMoreBtn();
-			}
 		}	
 	};
 	
 	// 공개 메서드 노출
-	WILDGOOSE.ui.search_more = SearchMore;
+	WILDGOOSE.search.more = More;
 })();

@@ -21,10 +21,10 @@
 			<a href="/"><img src="image/logo.png" alt="wildgoose logo" class="logo-image"/></a>
 		</div>
 		<div class="search search-column">
-			<form class="search_form" action="./search" method="get" >
+			<form class="search_form" action="./search" method="get">
 			<ul class="search-column-box">
 				<li class="search-query-entry">
-					<input type="search" autocomplete="off" id="query-entry" name="q" placeholder="기자, URL검색" value="${ requestScope.data.searchQuery }" />
+					<input type="search" id="query-entry" autocomplete="off" name="q" placeholder="기자, URL검색" value="${ requestScope.data.searchQuery }" />
 				</li>
 				<li class="search-button">
 					<input type="submit" id="search-action" value ="Search"/>
@@ -80,8 +80,10 @@
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.favorite.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.auto_complement.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.search_more.js"></script>
+		
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.search.more.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.search.auto_complement.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.search.js"></script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
@@ -90,11 +92,22 @@
 
 <script>
 window.addEventListener("load", function(evt){
-	var SearchMore = WILDGOOSE.ui.search_more;
-	SearchMore.init({button: ".search-more", container: ".search-result > ul", templateUrl: "/api/v1/templates/reporterCard.html", requestNum: 24});
-	
-	var AutoComplement = WILDGOOSE.ui.auto_complement;
-	AutoComplement.init({searchBox: "#query-entry", container: ".search .auto-completion-list", requestNum: 7});
+	var Search = WILDGOOSE.search;
+	Search.init({
+		search: {
+			box: "#query-entry",
+			container: ".search-result > ul",
+			templateURL: "/api/v1/templates/reporterCard.html",
+			requestNum: 24
+		},
+		autocompletion: {
+			list: ".search .auto-completion-list",
+			requestNum: 7
+		},
+		more: {
+			button: ".search-more"
+		}
+	});
 	
 	var Favorite = WILDGOOSE.ui.favorite;
 	Favorite.init(userId);
