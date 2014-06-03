@@ -166,8 +166,9 @@
 								<jsSourceFile>WILDGOOSE.account.js</jsSourceFile>
 								<jsSourceFile>WILDGOOSE.header.js</jsSourceFile>
 								<jsSourceFile>WILDGOOSE.ui.favorite.js</jsSourceFile>
-								<jsSourceFile>WILDGOOSE.ui.auto_complement.js</jsSourceFile>
-								<jsSourceFile>WILDGOOSE.ui.search_more.js</jsSourceFile>
+								<jsSourceFile>WILDGOOSE.search.auto_complement.js</jsSourceFile>
+								<jsSourceFile>WILDGOOSE.search.more.js</jsSourceFile>
+								<jsSourceFile>WILDGOOSE.search.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>WILDGOOSE.js</jsFinalFile>
 							<jsEngine>CLOSURE</jsEngine>

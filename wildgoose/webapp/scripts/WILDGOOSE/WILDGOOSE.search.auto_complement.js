@@ -5,8 +5,8 @@
 
 	// 사용할 네임 스페이스 확보	
 	var WILDGOOSE = window.WILDGOOSE || {};
-	WILDGOOSE.ui = WILDGOOSE.ui || {};
-	WILDGOOSE.ui.auto_complement = WILDGOOSE.ui.auto_complement || {};
+	WILDGOOSE.search = WILDGOOSE.search || {};
+	WILDGOOSE.search.auto_complement = WILDGOOSE.search.auto_complement || {};
 
 	// 의존성 주입
 	var Ajax = CAGE.ajax;
@@ -27,10 +27,12 @@
 				pressedEnter : false,
 				listing : false,
 				highlighting : false
-			};
-					
-			this.box = document.querySelector(args.searchBox);
-			this.list = document.querySelector(args.container);
+			};	
+//			this.box = document.querySelector(args.searchBox);
+//			this.list = document.querySelector(args.container);
+			this.box = args.searchBox;
+			this.list = args.container;
+			
 			this.cache = {
 				searchedQuery : this.box.value,
 				row : null,
@@ -231,5 +233,5 @@
 	};
 	
 	// 공개 메서드 노출
-	WILDGOOSE.ui.auto_complement = AutoComplement;
+	WILDGOOSE.search.auto_complement = AutoComplement;
 })();
