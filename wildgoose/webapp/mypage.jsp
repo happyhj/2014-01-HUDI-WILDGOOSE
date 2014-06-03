@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-zoom=1, user-scalable=no">
 <link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/basic_layout.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/mypage.css" />
 
 <title>mypage</title>
 
@@ -40,6 +41,7 @@
 		
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.etc.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.mypage.js"></script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
@@ -47,4 +49,3 @@
 	</c:otherwise>
 </c:choose>
 
-<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.mypage.js"></script>
