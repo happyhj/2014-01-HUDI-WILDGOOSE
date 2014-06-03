@@ -23,6 +23,7 @@ public class WebListener implements ServletContextListener {
 		jspMap.put("reporters", "reporters.jsp");
 		jspMap.put("users/favorites", "favorites.jsp");
 		jspMap.put("users/timeline", "timeline.jsp");
+		jspMap.put("users/mypage", "mypage.jsp");
 		
 		context.setAttribute("jspMap", jspMap);
 	}

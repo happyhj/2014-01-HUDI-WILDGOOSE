@@ -49,14 +49,7 @@
 			btn.addEventListener("click", Account.loginAccount.bind(this, loginPopup), false);
 		});
 		
-		var leaveBtn = document.querySelector("#leave");
-		leaveBtn.addEventListener("click", function(){
-			console.log("탈퇴시킴. 확인창 뜨는건 다음 스텝에서");
-			Account.withdrawAccount();
-		}, false);
-		
-		
-		var logoutBtn = document.querySelector(".header-btn#logout");
+		var logoutBtn = document.querySelector("#logout");
 		logoutBtn.addEventListener("click", function() {
 			Ajax.DELETE({
 				"url":'/api/v1/session',
@@ -64,26 +57,34 @@
 			});
 		}, false);
 		
-		var timelineBtn = document.querySelector(".header-btn#timeline");
+		var timelineBtn = document.querySelector("#timeline");
 		timelineBtn.addEventListener("click", function() {
 			var Etc = WILDGOOSE.etc;
 			var userId = Etc.getUserId();
 			location.href = "/users/?user_id?/timeline".replace("?user_id?", userId);;
 		}, false);
 		
-		var favoriteBtn = document.querySelector(".header-btn#favorite");
+		var favoriteBtn = document.querySelector("#favorite");
 		favoriteBtn.addEventListener("click", function() {
 			var Etc = WILDGOOSE.etc;
 			var userId = Etc.getUserId();
 			location.href = "/users/?user_id?/favorites".replace("?user_id?", userId);
 		}, false);
 		
+		var mypageBtn = document.querySelector("#mypage");
+		console.log(mypageBtn);
+		mypageBtn.addEventListener("click", function() {
+			var Etc = WILDGOOSE.etc;
+			var userId = Etc.getUserId();
+			location.href = "/users/?user_id?/mypage".replace("?user_id?", userId);
+		}, false);
+		
 		function updateTopbar(isLogined) {
-			var joinBtn = document.querySelector(".header-btn#join");
-			var loginBtn = document.querySelector(".header-btn#login");
-			var logoutBtn = document.querySelector(".header-btn#logout");
-			var timelineBtn = document.querySelector(".header-btn#timeline");
-			var favoriteBtn = document.querySelector(".header-btn#favorite");
+			var joinBtn = document.querySelector("#join");
+			var loginBtn = document.querySelector("n#login");
+			var logoutBtn = document.querySelector("#logout");
+			var timelineBtn = document.querySelector("#timeline");
+			var favoriteBtn = document.querySelector("#favorite");
 			console.log(logoutBtn);
 			if (isLogined == true) {
 				joinBtn.className = "header-btn hidden";
