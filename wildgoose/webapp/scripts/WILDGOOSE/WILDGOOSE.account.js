@@ -116,7 +116,7 @@
 		var user_email = document.getElementById("userId").innerText;
 		Ajax.DELETE({
 			"url":'/api/v1/accounts?email=' + user_email,
-			"callback":function() {location.href="/";},
+			"callback":function() {location.href="/";}
 		});
 	}
 	

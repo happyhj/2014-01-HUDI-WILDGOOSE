@@ -548,22 +548,28 @@
 				break;
 			}
 		}
-	
-		flag ? Dom.removeClass(form[btn], "hidden") : Dom.addClass(form[btn], "hidden");
+		Dom[flag?"removeClass":"addClass"](form[btn], "hidden");
 		
 	};
 	
 	/*
 	 * 모두 작성된 정보를 Ajax POST로 서버에 전달
 	 */
-	function signUpAccount() {
+	function signUpAccount(popup) {
 		var url = "/api/v1/accounts/";
 		var form = document.querySelector(".form-container");
 		
 		var email = escape(form[0].value)
 		var password = escape(form[1].value);
 		var payload = "email=" + email + "&password=" + SHA256(password);
-		Ajax.POST({"url":url, "callback":showSignUpResult, "data":payload});
+		Ajax.POST({"url":url, "callback":function(response) {
+			var form = document.querySelector(".form-container");
+			Dom.removeClass(form, "isProgressing");
+			if (JSON.parse(response).status == 200) {
+				popup.afterclose.add(function() {location.reload();});
+				popup.close();
+			}
+		}, "data":payload});
 	//	domUtil.addClass(form, "isProgressing");
 	
 	};
@@ -573,8 +579,6 @@
 	 * 서버에서 전달된 결과값 확인
 	 */
 	function showSignUpResult(response) {
-		var form = document.querySelector(".form-container");
-		Dom.removeClass(form, "isProgressing");
 		
 		if (response == "success") {
 			// close modal. and update login panel
@@ -596,8 +600,8 @@
 		Ajax.POST({"url": url, "callback":function(response) {
 			var form = document.querySelector(".form-container");
 			Dom.removeClass(form, "isProgressing");
-			console.log(response);
-			console.log(JSON.parse(response).status);
+//			console.log(response);
+//			console.log(JSON.parse(response).status);
 			if (JSON.parse(response).status == 200) {
 				popup.afterclose.add(function() {location.reload();});
 				popup.close();
@@ -605,17 +609,13 @@
 		}, "data":payload});
 	};
 	
-	function loginHandler(response){
-		
-		var form = document.querySelector(".form-container");
-		Dom.removeClass(form, "isProgressing");
-		if (JSON.parse(response).status == 200) {
-			// close modal. and update login panel
-			loginPopup.close();
-			updateTopbar(true);
-		}
-	};
-	
+	function withdrawAccount(){
+		var user_email = document.getElementById("userId").innerText;
+		Ajax.DELETE({
+			"url":'/api/v1/accounts?email=' + user_email,
+			"callback":function() {location.href="/";}
+		});
+	}
 	
 	WILDGOOSE.account = {
 		loginAccount: loginAccount,
@@ -623,7 +623,8 @@
 		showSignUpResult: showSignUpResult,
 		checkFormStatus: checkFormStatus,
 		checkSignUpFrom: checkSignUpFrom,
-		addValidationEvent: addValidationEvent
+		addValidationEvent: addValidationEvent,
+		withdrawAccount: withdrawAccount
 	};
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
@@ -663,7 +664,7 @@
 		joinPopup.afteropen.add(function() {
 			Account.addValidationEvent();
 			var btn = arguments[0].querySelector("#create");
-			btn.addEventListener("click", Account.signUpAccount, false);
+			btn.addEventListener("click", Account.signUpAccount.bind(this, joinPopup), false);
 		});
 		
 		var loginBtn = document.querySelector("#login");
@@ -685,6 +686,13 @@
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", Account.loginAccount.bind(this, loginPopup), false);
 		});
+		
+		var leaveBtn = document.querySelector("#leave");
+		leaveBtn.addEventListener("click", function(){
+			console.log("탈퇴시킴. 확인창 뜨는건 다음 스텝에서");
+			Account.withdrawAccount();
+		}, false);
+		
 		
 		var logoutBtn = document.querySelector(".header-btn#logout");
 		logoutBtn.addEventListener("click", function() {
