@@ -8,6 +8,7 @@
 	<button class="header-btn" id="join">가입하기</button>
 	<button class="header-btn" id="login">로그인하기</button>
 	<button class="header-btn hidden" id="logout">로그아웃</button>
+	<button class="header-btn hidden" id="leave">탈퇴하기</button>
 	<button class="header-btn hidden" id="timeline">Timeline</button>
 	<button class="header-btn hidden" id="favorite">favorite</button>
 </c:if>

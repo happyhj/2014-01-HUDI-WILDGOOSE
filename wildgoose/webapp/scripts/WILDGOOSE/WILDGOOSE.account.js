@@ -108,17 +108,13 @@
 		}, "data":payload});
 	};
 	
-	function loginHandler(response){
-		
-		var form = document.querySelector(".form-container");
-		Dom.removeClass(form, "isProgressing");
-		if (JSON.parse(response).status == 200) {
-			// close modal. and update login panel
-			loginPopup.close();
-			updateTopbar(true);
-		}
-	};
-	
+	function withdrawAccount(){
+		var user_email = document.getElementById("userId").innerText;
+		Ajax.DELETE({
+			"url":'/api/v1/accounts?email=' + user_email,
+			"callback":function() {location.href="/";},
+		});
+	}
 	
 	WILDGOOSE.account = {
 		loginAccount: loginAccount,
@@ -126,7 +122,8 @@
 		showSignUpResult: showSignUpResult,
 		checkFormStatus: checkFormStatus,
 		checkSignUpFrom: checkSignUpFrom,
-		addValidationEvent: addValidationEvent
+		addValidationEvent: addValidationEvent,
+		withdrawAccount: withdrawAccount
 	};
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.

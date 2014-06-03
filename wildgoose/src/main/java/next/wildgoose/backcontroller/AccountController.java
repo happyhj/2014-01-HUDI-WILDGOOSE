@@ -27,9 +27,33 @@ public class AccountController implements BackController {
 		} else if("GET".equals(method)){
 			email = request.getParameter("email");
 			result = usedEmail(request, email);
+		} else if("DELETE".equals(method)){
+			result = leave(request);
 		}
 		
 		return result;
+	}
+
+	private Result leave(HttpServletRequest request) {
+		String email = request.getParameter("email");
+		
+		ServletContext context = request.getServletContext();
+		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
+		AccountResult accountResult = new AccountResult();
+		
+		// 기본 세팅 fail
+		accountResult.setMessage("withdrawing user account failed");
+				
+		if (signDao.withdrawAccount(email) == true) {
+			// 탈퇴 성공
+			accountResult.setStatus(200);
+			accountResult.setMessage("withdrawing user account succeed");
+			
+			HttpSession session = request.getSession();
+			session.removeAttribute("userId");
+		}
+			
+		return accountResult;
 	}
 
 	private AccountResult usedEmail(HttpServletRequest request, String email) {
