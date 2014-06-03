@@ -119,5 +119,4 @@ transform: translateY(-20px) perspective( 600px ) rotateX( 20deg );
 
 .popup-content > * {
 	max-width: 800px;
-	background: white;
 }
