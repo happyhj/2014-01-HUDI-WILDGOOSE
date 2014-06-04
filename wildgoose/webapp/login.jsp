@@ -35,7 +35,7 @@
 				<div class="card-section card-section-submit">
 					<button class="button" id="create">로그인하기</button>
 				</div>
-				<input name="randomNumber" type="hidden" value="300" />
+				<input name="randomNumber" type="hidden" value="${ sessionScope.randNum }" />
 			</form>
 		</div>
 	</div>

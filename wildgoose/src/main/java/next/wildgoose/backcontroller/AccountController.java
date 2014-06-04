@@ -6,15 +6,14 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.AccountResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Uri;
-import next.wildgoose.utility.Utility;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AccountController implements BackController {
 	
@@ -41,8 +40,10 @@ public class AccountController implements BackController {
 		}
 		else if (uri.check(1, "login")) {
 			LOGGER.debug("this is login");
+			
 			result = new AccountResult();
 			result.setStatus(200);
+			
 		}
 		else if (uri.check(1, "signup")) {
 			LOGGER.debug("this is signup");
