@@ -19,7 +19,10 @@
 		<div class="card card-login">
 			<form class="form-container">
 				<div class="card-section card-section-profile">
-					profile
+					<div class="profile-circle">
+						<div class="profile-circle-photo"><img src="/image/logo.png" alt="photo" class="profile-photo"/></div>
+					</div>
+					
 				</div>
 				<div class="card-section card-section-email">
 					<input class="input" type="email" id="email" name="email" placeholder="이메일" />
