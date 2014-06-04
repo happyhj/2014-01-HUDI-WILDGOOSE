@@ -23,8 +23,7 @@ import org.slf4j.LoggerFactory;
 
 public class ReporterController implements BackController {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ReporterController.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReporterController.class.getName());
 
 	@Override
 	public Result execute(HttpServletRequest request) {

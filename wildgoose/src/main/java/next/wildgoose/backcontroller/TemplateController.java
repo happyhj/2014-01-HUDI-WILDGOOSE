@@ -63,7 +63,6 @@ public class TemplateController implements BackController {
 			result.setMessage("can't read file");
 		}
 		
-		
 		return result;
 	}
 }

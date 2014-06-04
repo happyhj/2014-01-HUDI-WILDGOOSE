@@ -1,12 +1,8 @@
 package next.wildgoose.backcontroller;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.SimpleResult;
@@ -14,6 +10,9 @@ import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.SHA256;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SessionController implements BackController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SessionController.class.getName());

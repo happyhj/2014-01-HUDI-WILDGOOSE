@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import next.wildgoose.utility.Uri;
+
 public interface View {
-	public void show(Result resultData, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
+	public void show(HttpServletRequest request, HttpServletResponse response, Uri uri, Result resultData) throws ServletException, IOException;
 }
