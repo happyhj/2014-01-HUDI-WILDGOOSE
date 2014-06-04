@@ -6,29 +6,48 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.AccountResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Uri;
+import next.wildgoose.utility.Utility;
 
 public class AccountController implements BackController {
-
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class.getName());
+	
 	@Override
 	public Result execute(HttpServletRequest request) {
 		Result result = null;
 		Uri uri = new Uri(request);
 		String method = request.getMethod();
 		String email;
+		LOGGER.debug("uri: " + uri.get(0) + ",  " + uri.get(1));
 		
-		if("POST".equals(method)){
-			// 체크하고 유효한 경우 가입
-			result = join(request);
-		} else if("GET".equals(method)){
-			email = request.getParameter("email");
-			result = usedEmail(request, email);
-		} else if("DELETE".equals(method)){
-			result = leave(request);
+		if (uri.check(1, null)) {
+			if("POST".equals(method)){
+				// 체크하고 유효한 경우 가입
+				result = join(request);
+			} else if("GET".equals(method)){
+				email = request.getParameter("email");
+				result = usedEmail(request, email);
+			} else if("DELETE".equals(method)){
+				result = leave(request);
+			}			
+		}
+		else if (uri.check(1, "login")) {
+			LOGGER.debug("this is login");
+			result = new AccountResult();
+			result.setStatus(200);
+		}
+		else if (uri.check(1, "signup")) {
+			LOGGER.debug("this is signup");
+			result = new AccountResult();
+			result.setStatus(200);
 		}
 		
 		return result;

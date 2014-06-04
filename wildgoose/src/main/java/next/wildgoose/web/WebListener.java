@@ -7,6 +7,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import next.wildgoose.utility.Uri;
+
 public class WebListener implements ServletContextListener {
 	
 	
@@ -15,15 +17,18 @@ public class WebListener implements ServletContextListener {
 		// 단순한 Map으로 처리할 수 없음.
 		ServletContext context = event.getServletContext();
 		
-		Map<String, String> jspMap;
+		Map<Uri, String> jspMap;
 
-		jspMap = new HashMap<String, String>();
-		jspMap.put("", "search.jsp");
-		jspMap.put("search", "search.jsp");
-		jspMap.put("reporters", "reporters.jsp");
-		jspMap.put("users/favorites", "favorites.jsp");
-		jspMap.put("users/timeline", "timeline.jsp");
-		jspMap.put("users/mypage", "mypage.jsp");
+		jspMap = new HashMap<Uri, String>();
+		jspMap.put(new Uri(""), "search.jsp");
+		jspMap.put(new Uri("search"), "search.jsp");
+		jspMap.put(new Uri("reporters/[reporter_id]"), "reporters.jsp");
+		jspMap.put(new Uri("users/[user_id]/favorites"), "favorites.jsp");
+		jspMap.put(new Uri("users/[user_id]/timeline"), "timeline.jsp");
+		jspMap.put(new Uri("users/[user_id]/mypage"), "mypage.jsp");
+		jspMap.put(new Uri("accounts/login"), "login.jsp");
+		jspMap.put(new Uri("accounts/signup"), "signup.jsp");
+		jspMap.put(null, "error.jsp");
 		
 		context.setAttribute("jspMap", jspMap);
 	}

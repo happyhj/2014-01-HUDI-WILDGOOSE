@@ -1,9 +1,9 @@
 package next.wildgoose.framework;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import next.wildgoose.utility.Uri;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,42 +20,58 @@ public class JSPView implements View {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JSPView.class.getName());
 
 	@Override
-	public void show(Result resultData, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		String jspName = "error.jsp";
-		if (resultData != null && resultData.getStatus() == 200) {
-			jspName = pickJsp(request);	
-		}
+	public void show(HttpServletRequest request, HttpServletResponse response, Uri uri, Result resultData) throws ServletException, IOException{
+		ServletContext context = request.getServletContext();
+		String jspName = pickJsp(context, uri, resultData);
+		LOGGER.debug("jspFileName " + jspName);
 		
 		request.setAttribute("data", resultData);
 		RequestDispatcher reqDispatcher = request.getRequestDispatcher("/" + jspName);
 		reqDispatcher.forward(request, response);
 	}
 
-	private String pickJsp(HttpServletRequest request) {
+	private String pickJsp(ServletContext context, Uri uri, Result resultData) {
+		Map<Uri, String> jspMap = (Map<Uri, String>) context.getAttribute("jspMap");
+		
 		//// JSPView의 경우 이 과정에서 내부적으로 대응하는 .jsp 파일을 멤버로 확보하도록 한다.
-		ServletContext context = request.getServletContext();
-		Map<String, String> jspMap = (Map<String, String>) context.getAttribute("jspMap");
-		Uri uri = new Uri(request);
-
-		String uriResourceSchema = getUriResourceSchema(uri);
-		LOGGER.debug("uriResourceSchema " + uriResourceSchema);
-		String jspFileName = jspMap.get(uriResourceSchema);
-		LOGGER.debug("jspFileName " + jspFileName);
-		if(jspFileName == null) {
-			jspFileName = "error.jsp";
+		if (resultData == null || resultData.getStatus() != 200) {
+			return jspMap.get(null);
 		}
 		
-		return jspFileName;
+		Uri keyUri = getKey(jspMap.keySet(), uri);
+		String result = jspMap.get(keyUri);
+		
+		return result;
 	}
 
-	private String getUriResourceSchema(Uri uri) {
-		int uriSize = uri.size();
-		List<String> resourceList = new ArrayList<String>();
-		for(int i=0; i<uriSize ;i+=2) {
-			resourceList.add(uri.get(i));
+	private Uri getKey(Set<Uri> keySet, Uri uri) {
+		Uri keySchema = null;
+		Iterator<Uri> schemaIr = keySet.iterator();
+		
+		while (keySchema == null && schemaIr.hasNext()) {
+			Uri schema = schemaIr.next();
+			if (schema == null) {
+				continue;
+			}
+			
+			if (schema.size() != uri.size()) {
+				continue;
+			}
+			for (int i=schema.size()-1; i>=0; --i) {
+				String subSchema = schema.get(i);
+				
+				if ("*".equals(subSchema)) {
+					continue;
+				}
+				
+				if (subSchema.equals(uri.get(i)) == false) {
+					break;
+				}
+				
+				keySchema = schema;
+			}
 		}
-		String joinedResourceList = StringUtils.join(resourceList, "/");
-		return joinedResourceList;
+		return keySchema;
 	}
 
 }

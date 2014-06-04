@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import next.wildgoose.utility.Constants;
+import next.wildgoose.utility.Uri;
 import next.wildgoose.utility.Utility;
 
 import org.slf4j.Logger;
@@ -16,7 +17,7 @@ public class JSONView implements View {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JSONView.class.getName());
 
 	@Override
-	public void show(Result resultData, HttpServletRequest request, HttpServletResponse response){
+	public void show(HttpServletRequest request, HttpServletResponse response, Uri uri, Result resultData){
 		// TODO Auto-generated method stub
 		ServletContext context = request.getServletContext();
 		String jsonString = Utility.toJsonString(resultData);
