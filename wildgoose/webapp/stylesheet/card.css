@@ -13,8 +13,6 @@ body{
 
 /* Layout rule */
 .card {
-	display: inline-block;
-	position: relative;
 	border-width: 1px;
 	margin: 6px 3px;
 	padding: 0;
@@ -22,6 +20,8 @@ body{
 
 .card-reporter {
 	width: 309px;
+	display: inline-block;
+	position: relative;
 }
 
 .card-section { 
