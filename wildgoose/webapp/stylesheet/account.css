@@ -1,3 +1,11 @@
+.join-container {
+	width: 500px;
+	height: 300px;
+}
+.login-container {
+	width: 500px;
+	height: 300px;
+}
 .form-container {
 	padding: 20px;
 	height: 100%;

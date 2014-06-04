@@ -1,5 +1,8 @@
 @CHARSET "UTF-8";
 /* Base rule */
+body{
+	-webkit-font-smoothing : antialiased;
+}
 .card {
 	-webkit-user-select: NONE;
 	-khtml-user-select: NONE;
@@ -69,12 +72,22 @@
 
 .card-section-identity > .favorite {
 	position: absolute;
-	top: 8px;
-	right: 40px;
-	width: 20px;
-	height: 20px;	
+	display: table-cell;
+	top: 12px;
+	right: 38px;
+	width: 25px;
+	height: 25px;
+	vertical-align: middle;	
 }
-.card-section-identity > .favorite.invisible {
+
+.card-section-identity .star {
+	height: 20px;
+	width: 20px;
+	margin: 0 auto;
+	background-size: 20px 20px;
+}
+
+.card-section-identity .star.invisible {
 	visibility: hidden;
 }
 
@@ -121,21 +134,30 @@
 	color: #BBB;
 }
 
-.card-section-identity > .favorite {
-	font-size: 24px;
+.card-section-identity .star {
+	-webkit-transition: -webkit-transform 0.5s ease; 
+    -moz-transition: -moz-transform 0.5s ease;    
+    -o-transition: transform 0.5s ease;    
+    transition: transform 0.5s ease;
+    /* -webkit-transform : translateZ(0);
+    transform : translateZ(0); */
+    
+    background-image: url('/image/graystar.png');
+	background-repeat: no-repeat;
 }
 
-.card-section-identity > .favorite.on {
-	color: #FD2;
-}
-
-.card-section-identity > .favorite.off {
-	color: #BBB;
-}
-
-.card-section-identity > .favorite:hover {
-	color: #ED9;
+.card-section-identity .star:hover {
+	background-image: url('/image/lemonstar.png');
 	cursor: pointer;
+}
+.card-section-identity .star.pumping {
+	-webkit-transform: scale(1.2,1.2); /* Chrome, Safari, Opera */
+    -moz-transform: scale(1.2,1.2); /* Chrome, Safari, Opera */
+	-ms-transform: scale(1.2,1.2); /* IE 9 */
+	transform: scale(1.2,1.2);
+}
+.card-section-identity .star.on {
+	background-image: url('/image/yellowstar.png');
 }
 
 .card-section-identity > .press-tag {	
@@ -155,27 +177,6 @@
 	-webkit-box-orient:vertical;
 	-webkit-line-clamp:1;
 }
-
-.favorite-card-blur {
-	background: rgba(255,255,255,0.3);
-}
-.card .card-section > .blur {
-	color: #ccc;
-}
-
-.card-section-identity > .press-tag.hankyung-blur {
-	background: rgba(19,60,110,0.3);	
-}
-.card-section-identity > .press-tag.donga-blur {
-	background: rgba(251,65,42,0.3);	
-}
-.card-section-identity > .press-tag.hani-blur {
-	background: rgba(0,140,133,0.3);	
-}
-.card-section-identity > .press-tag.joongang-blur {
-	background: rgba(255,170,51,0.3);	
-}
-
 
 /* Press Color */
 .card-section-identity > .press-tag.hankyung {

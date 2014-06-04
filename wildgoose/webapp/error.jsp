@@ -5,17 +5,19 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-zoom=1, user-scalable=no">
 <link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/search_reporter.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/basic_layout.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/search.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
 <title>Wildgoose</title>
 
 <div class="wrap">
-	<header class="header"></header>
+	<header class="header">
+		<%@ include file ="jsp_templates/header.jsp" %>
+	</header>
 	<div class="container">
 		<div class="logo">
-			<a href="/"><img src="image/logo.png" alt="wildgoose logo" class="logo-image"/></a>
+			<a href="/"><img src="/image/logo.png" alt="wildgoose logo" class="logo-image"/></a>
 		</div>
 		<div class="search search-column">
 			<form action="./" method="get" >
@@ -27,22 +29,22 @@
 				</li>
 			</form>
 		</div>
+		<c:if test="${ not empty requestScope.data }">
 		<div class="search-result">
-			
+			<span>${ requestScope.data.status }</span>
+			<span>${ requestScope.data.message }</span>
 		</div>
+		</c:if>
+		<c:if test="${ empty requestScope.data }">
+		<div class="search-result">
+			<span>404</span>
+			<span>잘못된 접근입니다</span>
+		</div>
+		</c:if>
 	</div>
 	<footer class="footer"></footer>
 </div>
 <script>
-
 var inputEl = document.getElementById("query-entry");
-//var linkEl = document.getElementById("search-action");
 inputEl.focus();
-/*
-inputEl.addEventListener("keyup",function(e) {	
-	if(document.activeElement === this && e.keyCode === 13) {
-		linkEl.click();
-	}
-},false);
-*/
 </script>
