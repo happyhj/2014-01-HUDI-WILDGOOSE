@@ -57,16 +57,21 @@
 				now.setDate(now.getDate() + 1);
 				var month = now.getMonth() + 1;
 				if (month < 10) { month = '0' + month; }
-				keys.push(month + "/" + now.getDate());
+				var date = now.getDate();
+				if (date < 10) { date = '0' + date; }
+				keys.push(month + "/" + date);
 			}
 
 			var getValue = function(date) {
-				var result = sampleData[date];
-				if (result == null) {
-					return 0;
+				for (var i=0; i<sampleData.length; i++) {
+					var data = sampleData[i];
+					if (data.date == date) {
+						return data.count;
+					}
 				}
-				return result;
+				return 0;
 			}
+			
 			// graph
 			var graphData = [ {
 				"x" : graphPositionX[0],
@@ -91,7 +96,7 @@
 				"y" : matching[0][getValue(keys[6])]
 			} ]
 
-
+			console.log(graphData);
 
 			var lineFunction = d3.svg.line().x(function(d) {return d.x;})
 					.y(function(d) {return d.y;}).interpolate("linear");
