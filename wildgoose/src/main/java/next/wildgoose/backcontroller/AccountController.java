@@ -8,8 +8,11 @@ import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.AccountResult;
+import next.wildgoose.dto.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
+import next.wildgoose.utility.Constants;
+import next.wildgoose.utility.SHA256;
 import next.wildgoose.utility.Uri;
 
 public class AccountController implements BackController {
@@ -23,18 +26,45 @@ public class AccountController implements BackController {
 		
 		if("POST".equals(method)){
 			// 체크하고 유효한 경우 가입
-			result = join(request);
+			if(request.getParameter("check") == null){
+				result = join(request);
+			} else {
+				result = withdraw(request);
+			}
 		} else if("GET".equals(method)){
 			email = request.getParameter("email");
 			result = usedEmail(request, email);
-		} else if("DELETE".equals(method)){
-			result = leave(request);
 		}
 		
 		return result;
 	}
 
+	private Result withdraw(HttpServletRequest request) {
+		AccountResult simpleResult = new AccountResult();
+		String email = request.getParameter("email");
+		String hashedPassword = request.getParameter("password");
+		ServletContext context = request.getServletContext();
+		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
+		
+		HttpSession session = request.getSession();
+		String randNum = (String) session.getAttribute("randNum");
+		
+		String accountPw = signDao.findAccount(email);
+		if (accountPw == null) {
+			// 비밀번호 틀려서 탈퇴 못함! 
+			return simpleResult;
+		}
+		// H(db_password+random)
+		if(SHA256.testSHA256(accountPw + randNum).equals(hashedPassword)){
+			simpleResult = (AccountResult) leave(request);
+		} else {
+			simpleResult.setMessage("getting user authentication failed");
+		}
+		return simpleResult;
+	}
+
 	private Result leave(HttpServletRequest request) {
+		//확인하기 추가
 		String email = request.getParameter("email");
 		
 		ServletContext context = request.getServletContext();

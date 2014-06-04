@@ -169,7 +169,7 @@
 								<jsSourceFile>WILDGOOSE.search.auto_complement.js</jsSourceFile>
 								<jsSourceFile>WILDGOOSE.search.more.js</jsSourceFile>
 								<jsSourceFile>WILDGOOSE.search.js</jsSourceFile>
-								<jsSourceFile>WILDGOOSE.ui.mypage.js</jsSourceFile>
+								<jsSourceFile>WILDGOOSE.mypage.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>WILDGOOSE.js</jsFinalFile>
 							<jsEngine>CLOSURE</jsEngine>

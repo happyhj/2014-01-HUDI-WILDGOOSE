@@ -112,12 +112,27 @@
 		}, "data":payload});
 	};
 	
-	function withdrawAccount(){
+	function withdrawAccount(popup){
 		var user_email = document.getElementById("userId").innerText;
-		Ajax.DELETE({
-			"url":'/api/v1/accounts?email=' + user_email,
-			"callback":function() {location.href="/";}
-		});
+		var password = document.querySelector(".form-container input[name=password]").value;
+		var randomNumber = document.querySelector(".form-container input[name=randomNumber]").value;
+		var hashedPassword = SHA256(password);
+		var finalPassword = SHA256(hashedPassword+randomNumber);
+		var url = "/api/v1/accounts/";
+		var payload = "email="+user_email+"&password="+finalPassword+"&check=withdraw";
+
+		Ajax.POST({"url": url, "callback":function(response) {
+			if (JSON.parse(response).status == 200) {
+				popup.afterclose.add(function() {location.reload();});
+				popup.close();
+			}
+		}, "data":payload});
+		
+		
+//		Ajax.DELETE({
+//			"url":'/api/v1/accounts?email=' + user_email,
+//			"callback":function() {location.href="/";}
+//		});
 	}
 	
 	WILDGOOSE.account = {

@@ -41,7 +41,7 @@
 		
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.etc.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.mypage.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.mypage.js"></script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
