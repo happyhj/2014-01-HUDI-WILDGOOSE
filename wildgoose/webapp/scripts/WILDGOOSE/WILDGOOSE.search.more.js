@@ -28,7 +28,9 @@
 			// 더보기 버튼 클릭이벤트 설정
 			if (this.searchMoreBtn != null) {
 				this.searchMoreBtn.addEventListener("click", this._more.bind(this), false);
-				this._selectStatusOfSearchMoreBtn();
+				var curNumDiv = document.querySelector(".search-more .state-search-curNum");
+				var curNum = parseInt(curNumDiv.innerText);
+				this._selectStatusOfSearchMoreBtn(curNum);
 			}
 		},
 		_more: function(evt) {
@@ -73,7 +75,6 @@
 				searchMore.setAttribute("style", "display: none;");
 				return;
 			}
-			
 			var totalNum = parseInt(totalNumDiv.innerText);
 			if (totalNum <= curNum) {
 				searchMore.setAttribute("style", "display: none;");
