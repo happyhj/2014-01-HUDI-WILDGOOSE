@@ -23,7 +23,7 @@ public class JSPView implements View {
 	@Override
 	public void show(Result resultData, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		String jspName = "error.jsp";
-		if (resultData.getStatus() == 200) {
+		if (resultData != null && resultData.getStatus() == 200) {
 			jspName = pickJsp(request);	
 		}
 		

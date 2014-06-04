@@ -30,6 +30,7 @@
 		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.ui.popup.js"></script>
 		
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.etc.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.validation.validCheck.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.js"></script>

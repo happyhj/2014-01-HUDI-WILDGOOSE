@@ -21,4 +21,5 @@
 	
 	// 공개 메서드 노출
 	WILDGOOSE.etc = Etc;
+	window.WILDGOOSE = WILDGOOSE;
 })();

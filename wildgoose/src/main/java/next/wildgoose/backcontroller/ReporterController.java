@@ -95,6 +95,7 @@ public class ReporterController implements BackController {
 
 		reporterResult.setReporter(reporter);
 		reporterResult.setArticles(articles);
+		reporterResult.setStatus(200);
 		reporterResult.setMessage("getting Reporter Info success");
 		
 		return reporterResult;

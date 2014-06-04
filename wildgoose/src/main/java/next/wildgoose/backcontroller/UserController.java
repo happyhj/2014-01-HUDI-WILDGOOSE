@@ -81,6 +81,8 @@ public class UserController implements BackController {
 		List<Article> articles = articleDao.findArticlesByFavorite(userId);
 		
 		TimelineResult timelineResult = new TimelineResult();
+		timelineResult.setStatus(200);
+		timelineResult.setMessage("OK");
 		timelineResult.setArticles("articles", articles);
 		return timelineResult;
 	}
