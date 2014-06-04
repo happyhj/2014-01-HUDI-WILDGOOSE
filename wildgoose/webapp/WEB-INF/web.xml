@@ -78,13 +78,13 @@
 	</context-param>
 	<context-param>
 		<param-name>dbUrl</param-name>
-		<!-- <param-value>jdbc:mysql://10.73.45.134:3306/wildgoose_dev</param-value> -->
-		<param-value>jdbc:mysql://localhost:3306/wildgoose_dev</param-value>
+		<param-value>jdbc:mysql://10.73.45.134:3306/wildgoose_dev</param-value>
+		<!-- <param-value>jdbc:mysql://localhost:3306/wildgoose_dev</param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>userName</param-name>
-		<!-- <param-value>viewer</param-value> -->
-		<param-value>root</param-value>
+		<param-value>viewer</param-value>
+		<!-- <param-value>root</param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>userPassword</param-name>
@@ -98,7 +98,7 @@
 	<!-- value가 on이 아닌 경우만 *.min.js로 로딩 -->
 	<context-param>
 		<param-name>debuggerMode</param-name>
-		<param-value>off</param-value>
+		<param-value>on</param-value>
 	</context-param>
 	
 

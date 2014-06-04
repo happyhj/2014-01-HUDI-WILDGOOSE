@@ -51,7 +51,6 @@ public class SignDAO {
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, email);
-				
 			}
 			
 		};
