@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.ArticleDAO;
 import next.wildgoose.dao.FavoriteDAO;
@@ -35,10 +36,21 @@ public class UserController implements BackController {
 		if (isValidUserId(request, userId) == false) {
 			result = new SimpleResult();
 			result.setStatus(404);
-			result.setMessage("User Id Doesn't exists");
+			result.setMessage("존재하지 않는 유저입니다");
 			return result;
 		}
 		
+		HttpSession session = request.getSession();
+		String visitor = (String) session.getAttribute("userId");
+		if (visitor == null) {
+			// 로그인 하도록 유도하기
+			SimpleResult sResult = new SimpleResult();
+			sResult.setStatus(401);
+			sResult.setMessage("로그인이 필요합니다");
+			sResult.setData("requestedUri", uri.toString());
+			return sResult;
+		}
+		 
 		if ("timeline".equals(pageName)) {
 			result = getTimeline(request, userId);
 		} else if ("favorites".equals(pageName)) {

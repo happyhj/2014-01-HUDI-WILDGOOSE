@@ -16,7 +16,7 @@ public class JSONView implements View {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JSONView.class.getName());
 
 	@Override
-	public void show(Object resultData, HttpServletRequest request, HttpServletResponse response){
+	public void show(Result resultData, HttpServletRequest request, HttpServletResponse response){
 		// TODO Auto-generated method stub
 		ServletContext context = request.getServletContext();
 		String jsonString = Utility.toJsonString(resultData);

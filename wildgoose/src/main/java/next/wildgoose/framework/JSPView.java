@@ -21,8 +21,11 @@ public class JSPView implements View {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JSPView.class.getName());
 
 	@Override
-	public void show(Object resultData, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		String jspName = pickJsp(request);	
+	public void show(Result resultData, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		String jspName = "error.jsp";
+		if (resultData.getStatus() == 200) {
+			jspName = pickJsp(request);	
+		}
 		
 		request.setAttribute("data", resultData);
 		RequestDispatcher reqDispatcher = request.getRequestDispatcher("/" + jspName);
