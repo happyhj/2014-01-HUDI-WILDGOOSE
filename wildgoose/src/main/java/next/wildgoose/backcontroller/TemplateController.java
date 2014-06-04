@@ -37,7 +37,7 @@ public class TemplateController implements BackController {
 		TemplateResult result = new TemplateResult();
 		String htmlDocument = null;
 	
-		if ("login.html".equals(templateFileName)) {
+		if ("login.html".equals(templateFileName) || "withdraw.html".equals(templateFileName)) {
 			HttpSession session = request.getSession();
 			Random random = new Random();
 			String rand = Double.toString(random.nextDouble());

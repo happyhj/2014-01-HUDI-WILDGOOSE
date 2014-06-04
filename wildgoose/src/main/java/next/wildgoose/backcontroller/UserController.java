@@ -61,6 +61,8 @@ public class UserController implements BackController {
 			} else if ("DELETE".equals(method)) {
 				result = removeFavorites(request, userId);
 			}
+		} else if ("mypage".equals(pageName)){
+			result = new SimpleResult(true);
 		}
 		return result;
 	}

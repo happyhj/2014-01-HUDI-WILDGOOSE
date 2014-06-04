@@ -33,7 +33,6 @@ public class FrontController extends HttpServlet {
 		LOGGER.debug("reqPath: " + reqPath);
 		BackController backController = getBackController(context, reqPath);
 		Result resultData = backController.execute(request);
-		
 		View view = createView(reqPath);
 		view.show(resultData, request, response);
 	}
