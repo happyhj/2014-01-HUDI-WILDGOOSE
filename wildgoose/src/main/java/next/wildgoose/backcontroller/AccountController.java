@@ -1,5 +1,10 @@
 package next.wildgoose.backcontroller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
@@ -33,8 +38,7 @@ public class AccountController implements BackController {
 				// 체크하고 유효한 경우 가입
 				if(request.getParameter("check") == null){
 					result = join(request);
-				}
-				else {
+				} else {
 					result = withdraw(request);
 				}
 			} else if("GET".equals(method)){
@@ -63,29 +67,47 @@ public class AccountController implements BackController {
 	private Result changePassword(HttpServletRequest request) {
 		Result result = new AccountResult();
 
-		String email = request.getParameter("email");
-		String oldPassword = request.getParameter("old_pw");
-		String newPassword = request.getParameter("new_pw");
+		// PUT method doesn't parse request parameter
+		HashMap<String,String> parameterMap = getParameterMap(request);
+
+		String email = parameterMap.get("email");
+		String oldPassword = parameterMap.get("old_pw");
+		String newPassword = parameterMap.get("new_pw");
 		
-		LOGGER.debug("email: " + email + ", old: " + oldPassword + ", new : " + newPassword);
 		ServletContext context = request.getServletContext();
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
 		
 		HttpSession session = request.getSession();
 		String randNum = (String) session.getAttribute("randNum");
-		
 		String accountPw = signDao.findAccount(email);
-		LOGGER.debug("accountpw : " + accountPw);
+		
 		// 비밀번호 확인
 		if(SHA256.testSHA256(accountPw + randNum).equals(oldPassword)){
-			LOGGER.debug("OK");
-			SignDAO.changePassword(email, newPassword);
-			result = new SimpleResult(true);
+			boolean changed = SignDAO.changePassword(email, newPassword);
+			result = new SimpleResult(changed);
 		} else {
-			LOGGER.debug("NOT OK");
 			result.setMessage("getting user authentication failed");
 		}
-		return null;
+		return result;
+	}
+
+	private HashMap<String, String> getParameterMap(HttpServletRequest request) {
+		HashMap<String,String> parameterMap = new HashMap<String, String>();
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+			String data = br.readLine();
+			data = URLDecoder.decode(data, "UTF-8"); // 한글 처리
+			String parameter[] = data.split("&");
+			for(int i = 0; i < parameter.length; i++) {
+				String parameterTemp[] = parameter[i].split("=");
+				String name = parameterTemp[0];
+				String value = parameterTemp[1];
+				parameterMap.put(name, value);
+			}
+		} catch (IOException e) {
+			LOGGER.debug(e.getMessage());
+		}
+		return parameterMap;
 	}
 
 	private Result withdraw(HttpServletRequest request) {

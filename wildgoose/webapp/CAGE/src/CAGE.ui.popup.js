@@ -1,5 +1,5 @@
 (function(window) {
-	'use strict';
+//	'use strict';
 	var document = window.document;
 	var console = window.console;
 	var CAGE = window.CAGE || {};
@@ -52,7 +52,7 @@
 		this.status = {
 			data: false
 		};
-		
+
 		this._init();
     }
     
@@ -63,24 +63,32 @@
 		var status = this.status;
 		
 		var close = this.close;
-		
+
 		el.addEventListener("click", openHandler.bind(this), false);
 
 		function openHandler(event) {
-			event.preventDefault();
-			event.stopPropagation();
+			Ajax.GET({
+				url: this.templateUrl,
+				callback: (function(response){
+					console.log(response)
+					this.template = this.templateLoader(response);
+					event.preventDefault();
+					event.stopPropagation();
+					
+					var originalTarget;
+					if(event.toElement) {
+						originalTarget = event.toElement;
+					} else if(event.originalTarget){
+						originalTarget = event.originalTarget;
+					}
+					if(originalTarget === el) {
+						this._counstructDOM();
+						var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");	
+						popupWrapAnimation.addEventListener("transitionend", afteropenCallbackRef, false);
+					}
+				}).bind(this)
+			});
 			
-			var originalTarget;
-			if(event.toElement) {
-				originalTarget = event.toElement;
-			} else if(event.originalTarget){
-				originalTarget = event.originalTarget;
-			}
-			if(originalTarget === el) {
-				this._counstructDOM();
-				var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");	
-		        popupWrapAnimation.addEventListener("transitionend", afteropenCallbackRef, false);
-		    }
 		}
 
 		function afteropenCallbackRef(event){
@@ -210,14 +218,8 @@
 		this.status = {
 			data: false
 		};
-		// preload 기능이 필요하다.		
-		Ajax.GET({
-			url: this.templateUrl,
-			callback: (function(response){
-				this.template = this.templateLoader(response);
-				this._init();
-			}).bind(this)
-		});				
+		// preload 되면 session에 어떤 randNum이 저장될 지 알 수가 없다ㅠ
+		this._init();
 	}	
 	
 	ajaxPopup.prototype = popup.prototype;	

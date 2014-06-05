@@ -156,17 +156,23 @@
 		var randomNumber = document.querySelector(".form-container input[name=randomNumber]").value;
 		var hashedPassword = SHA256(old_pw);
 		var finalPassword = SHA256(hashedPassword+randomNumber);
+		console.log(randomNumber);
+		console.log(hashedPassword);
+		console.log(finalPassword);
 		var newHashedPassword = SHA256(new_pw);
 		var url = "/api/v1/accounts";
 		var payload = "email="+user_email+"&old_pw="+finalPassword+"&new_pw="+newHashedPassword;
 
-		Ajax.PUT({"url": url, "callback":function(response) {
-			if (JSON.parse(response).status == 200) {
-				popup.afterclose.add(function() {location.reload();});
-				popup.close();
-			}
-		}, "data":payload});
-		
+		Ajax.PUT({
+			"url": url,
+			"callback": function(response) {
+				if (JSON.parse(response).status == 200) {
+					popup.afterclose.add(function() {location.reload();});
+					popup.close();
+				}
+			},
+			"data":payload
+		});
 	}
 	
 	WILDGOOSE.account = {

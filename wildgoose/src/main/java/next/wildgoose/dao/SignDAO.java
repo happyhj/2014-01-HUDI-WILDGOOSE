@@ -106,7 +106,7 @@ public class SignDAO {
 		return (Boolean) t.execute(query, pss);
 	}
 
-	public static void changePassword(final String email, final String newPassword) {
+	public static boolean changePassword(final String email, final String newPassword) {
 		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
@@ -115,10 +115,10 @@ public class SignDAO {
 				psmt.setString(1, newPassword);
 				psmt.setString(2, email);
 			}
-			
 		};
 
 		String query = "UPDATE user_account SET password=? WHERE email=?";
 		
+		return (Boolean) t.execute(query, pss);
 	}
 }

@@ -58,7 +58,6 @@
 	function existInServer(inputEl, callback) {
 		var url = "api/v1/accounts/?email=" + inputEl.value;
 		Ajax.GET({"url":url, "callback":function(response) {
-			console.log(response);
 			var validity = (JSON.parse(response).status===200)?true:false;
 			var isAjax = true;
 			callback(validity, isAjax);
@@ -71,23 +70,19 @@
 		var fieldName = inputEl.name;
 		var fieldValue = inputEl.value;
 		var checking_sequence = validation_logics[fieldName]["sequence"];
-		console.log("field="+fieldName+", checking_seq="+checking_sequence);
+//		console.log("field="+fieldName+", checking_seq="+checking_sequence);
 		for ( var i = 0; i<checking_sequence.length; ++i) {
 			var cur_sequence = checking_sequence[i];
-			console.log(cur_sequence);
 			var checking_logic = validation_logics[fieldName][cur_sequence];
 			var alert_message = checking_logic[1];
 			
 			if (checking_logic[0] instanceof RegExp) {
-				console.log("RegExp");
-				console.log(checking_logic[0].test(fieldValue));
 				if (!checking_logic[0].test(fieldValue)) {
 					warn(inputEl, alert_message);
 					invalidStyle(inputEl);
 					return false;
 				}
 			} else if (checking_logic[0] instanceof Function) {
-				console.log("Function");
 				var valid_state = true; 
 				checking_logic[0](inputEl, function(validity, isAjax) {
 					if (isAjax) {

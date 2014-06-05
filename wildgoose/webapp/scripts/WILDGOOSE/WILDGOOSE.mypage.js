@@ -42,6 +42,8 @@
 		templateLoader: function(AjaxResponse) {
 			var templateStr = JSON.parse(AjaxResponse).data.template;
 			var randNum = JSON.parse(AjaxResponse).data.rand;
+			console.log(AjaxResponse);
+			console.log("template Rand: " + randNum);
 			var compiler = TemplateUtil.getCompiler(templateStr);
 			return compiler({
 				"randNum": randNum
