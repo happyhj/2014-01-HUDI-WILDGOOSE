@@ -11,6 +11,7 @@
 	var Dom = CAGE.util.dom;
 	var Popup = CAGE.ui.popup;
 	var Account = WILDGOOSE.account;
+	var Validation = WILDGOOSE.ui.validation;
 	
 	function init(){
 		var joinBtn = document.querySelector("#join");
@@ -24,7 +25,8 @@
 		});
 		
 		joinPopup.afteropen.add(function() {
-			Account.addValidationEvent();
+			var params = ["email", "password"];
+			Account.addValidationEvent(params);
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", Account.signUpAccount.bind(this, joinPopup), false);
 		});

@@ -28,7 +28,8 @@
 	});
 	
 	leavePopup.afteropen.add(function() {
-		Account.addValidationEvent();
+		var params = ["password"];
+		Account.addValidationEvent(params);
 		//예외처리 
 		if(document.querySelector('#password').value == document.querySelector('#confirm').value) {
 			var btn = arguments[0].querySelector("#withdraw");
