@@ -8,6 +8,7 @@
 
 	var Ajax = CAGE.ajax
 	var Dom = CAGE.util.dom;
+//	var Account = WILDGOOSE.account;
 	
 	var validation_logics = {
 		email : {
@@ -35,7 +36,16 @@
 				ckeckEquality(inputEl, callback);
 			}, "다시 확인해주세요" ]
 		}		
-	};	
+	};
+	
+//	var Validation = {
+//		init: function(args) {
+//			this.types = args;
+//			Account.addValidationEvent(args);
+//			
+//		}
+//	}
+//	
 
 	function ckeckEquality(inputEl, callback) {
 		var parent = inputEl.parentNode;

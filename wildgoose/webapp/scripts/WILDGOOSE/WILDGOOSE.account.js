@@ -12,16 +12,20 @@
 	var Dom = CAGE.util.dom;
 	var Validation = WILDGOOSE.ui.validation;
 	
-	function addValidationEvent() {
+	var selectedDoms = [];
+	var button = null;
+	function addValidationEvent(args) {
 		var formContainer = document.querySelector(".form-container");
 		for (var i = formContainer.length - 1; i >= 0; --i) {
 			var input = formContainer[i];
-			if (input.type == "email" || input.type == "password") {
-				// blur event
-	//			var dataCheck = input.getAttribute("data-check");
-		//		if(dataCheck == "true") {
-					input.addEventListener("blur", checkSignUpFrom, false);
-			//	}
+			if (input.type == "button") {
+				button = input;
+				continue;
+			}
+//			debugger;
+			if (args !== undefined && args.indexOf(input.type) != -1) {
+				selectedDoms.push(input);
+				input.addEventListener("blur", checkSignUpFrom, false);
 			}
 		}
 	};
@@ -42,16 +46,25 @@
 	/*
 	 * form에 입력된 내용이 valid한지를 확인하여 회원가입 버튼 활성화 / 비활성화
 	*/
-	function checkFormStatus(form) {
-		var btn = form.length-1;
+	function checkFormStatus() {
+//		var btnIndex = form.length-1;
 		var flag = true;
-		for (var i=btn-1; i>=0; --i) {
-			if (!Dom.hasClass(form[i], "status-approved")) {
+		
+		for (var i=0; i<selectedDoms.length; i++) {
+			if (!Dom.hasClass(selectedDoms[i], "status-approved")) {
 				flag = false;
 				break;
 			}
 		}
-		Dom[flag?"removeClass":"addClass"](form[btn], "hidden");
+		
+//		
+//		for (var i=btn-1; i>=0; --i) {
+//			if (!Dom.hasClass(form[i], "status-approved")) {
+//				flag = false;
+//				break;
+//			}
+//		}
+		Dom[flag?"removeClass":"addClass"](button, "hidden");
 		
 	};
 	
