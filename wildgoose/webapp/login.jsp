@@ -35,22 +35,13 @@
 				<div class="card-section card-section-submit">
 					<button class="button" id="create">로그인하기</button>
 				</div>
-				<input name="randomNumber" type="hidden" value="${ sessionScope.randNum }" />
+				<div class="card-section card-section-other">
+					<a href="/accounts/signup">회원가입하기</a>
+					<input name="randomNumber" type="hidden" value="${ sessionScope.randNum }" />
+				</div>
+				
 			</form>
 		</div>
 	</div>
 	<footer class="footer"></footer>
 </div>
-
-
-<%-- <div class="card-section card-section-identity">
-	<h3 class="name">
-		<a href="/reporters/<%= id %>"><%= name %></a>
-	</h3>
-	<p class="email"><%= email %></p>
-	<div class="favorite"><div class="star invisible"></div></div>
-	<div class="<%= pressName %> press-tag"></div>
-</div>
-<div class="card-section card-section-headline">
-	<h4 class="headline"><%= articleTitle %></h4>
-</div> --%>
