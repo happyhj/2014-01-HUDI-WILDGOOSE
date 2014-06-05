@@ -105,4 +105,20 @@ public class SignDAO {
 		String query = "DELETE FROM user_account WHERE email =?";
 		return (Boolean) t.execute(query, pss);
 	}
+
+	public static void changePassword(final String email, final String newPassword) {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+
+			@Override
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, newPassword);
+				psmt.setString(2, email);
+			}
+			
+		};
+
+		String query = "UPDATE user_account SET password=? WHERE email=?";
+		
+	}
 }

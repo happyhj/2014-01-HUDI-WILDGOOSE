@@ -14,6 +14,7 @@
 	
 	var selectedDoms = [];
 	var button = null;
+	
 	function addValidationEvent(args) {
 		var formContainer = document.querySelector(".form-container");
 		for (var i = formContainer.length - 1; i >= 0; --i) {
@@ -25,12 +26,12 @@
 //			debugger;
 			if (args !== undefined && args.indexOf(input.type) != -1) {
 				selectedDoms.push(input);
-				input.addEventListener("blur", checkSignUpFrom, false);
+				input.addEventListener("blur", checkSignUpForm, false);
 			}
 		}
 	};
 	
-	function checkSignUpFrom(e) {
+	function checkSignUpForm(e) {
 		var inputEl = e.target;
 		if (Validation.validCheck(inputEl)) {
 			console.log("validation ok");
@@ -64,7 +65,7 @@
 //				break;
 //			}
 //		}
-		Dom[flag?"removeClass":"addClass"](button, "hidden");
+		Dom[flag?"removeClass":"addClass"](button, "disable");
 		
 	};
 	
@@ -111,7 +112,7 @@
 		var hashedPassword = SHA256(password);	
 		var randomNumber = document.querySelector(".form-container input[name=randomNumber]").value;
 		var finalPassword = SHA256(hashedPassword+randomNumber);
-		var url = "/api/v1/session/";
+		var url = "/api/v1/session";
 		var payload = "email="+email+"&password="+finalPassword;
 		Ajax.POST({"url": url, "callback":function(response) {
 			var form = document.querySelector(".form-container");
@@ -131,7 +132,7 @@
 		var randomNumber = document.querySelector(".form-container input[name=randomNumber]").value;
 		var hashedPassword = SHA256(password);
 		var finalPassword = SHA256(hashedPassword+randomNumber);
-		var url = "/api/v1/accounts/";
+		var url = "/api/v1/accounts";
 		var payload = "email="+user_email+"&password="+finalPassword+"&check=withdraw";
 
 		Ajax.POST({"url": url, "callback":function(response) {
@@ -148,14 +149,35 @@
 //		});
 	}
 	
+	function changePassword(popup){
+		var user_email = document.getElementById("userId").innerText;
+		var old_pw = document.querySelector(".form-container input[name=old-pw]").value;
+		var new_pw = document.querySelector(".form-container input[name=password]").value;
+		var randomNumber = document.querySelector(".form-container input[name=randomNumber]").value;
+		var hashedPassword = SHA256(old_pw);
+		var finalPassword = SHA256(hashedPassword+randomNumber);
+		var newHashedPassword = SHA256(new_pw);
+		var url = "/api/v1/accounts";
+		var payload = "email="+user_email+"&old_pw="+finalPassword+"&new_pw="+newHashedPassword;
+
+		Ajax.PUT({"url": url, "callback":function(response) {
+			if (JSON.parse(response).status == 200) {
+				popup.afterclose.add(function() {location.reload();});
+				popup.close();
+			}
+		}, "data":payload});
+		
+	}
+	
 	WILDGOOSE.account = {
 		loginAccount: loginAccount,
 		signUpAccount: signUpAccount,
 		showSignUpResult: showSignUpResult,
 		checkFormStatus: checkFormStatus,
-		checkSignUpFrom: checkSignUpFrom,
+		checkSignUpForm: checkSignUpForm,
 		addValidationEvent: addValidationEvent,
-		withdrawAccount: withdrawAccount
+		withdrawAccount: withdrawAccount,
+		changePassword: changePassword
 	};
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.

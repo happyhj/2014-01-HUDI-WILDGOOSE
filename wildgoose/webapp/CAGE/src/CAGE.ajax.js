@@ -123,7 +123,7 @@
 		request.open("PUT", url, isAsync);
 		if (callback !== undefined) {
 			request.addEventListener("readystatechange", function (e) {
-				_responseData(e, request, func);
+				_responseData(e, request, callback);
 			}, false);
 		}
 		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");

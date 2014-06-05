@@ -30,11 +30,31 @@
 	leavePopup.afteropen.add(function() {
 		var params = ["password"];
 		Account.addValidationEvent(params);
-		//예외처리 
-		if(document.querySelector('#password').value == document.querySelector('#confirm').value) {
-			var btn = arguments[0].querySelector("#withdraw");
-			btn.addEventListener("click", Account.withdrawAccount.bind(this, leavePopup), false);
+		var btn = arguments[0].querySelector("#withdraw");
+		btn.addEventListener("click", Account.withdrawAccount.bind(this, leavePopup), false);
+	});
+	
+	var changePwBtn = document.querySelector("#change-password");
+	
+	var changePwPopup = new Popup.ajaxPopup({
+		element: changePwBtn,
+		templateUrl: "/api/v1/templates/changePassword.html",
+		templateLoader: function(AjaxResponse) {
+			var templateStr = JSON.parse(AjaxResponse).data.template;
+			var randNum = JSON.parse(AjaxResponse).data.rand;
+			var compiler = TemplateUtil.getCompiler(templateStr);
+			return compiler({
+				"randNum": randNum
+			}, templateStr);		
 		}
 	});
+	
+	changePwPopup.afteropen.add(function() {
+		var params = ["password"];
+		Account.addValidationEvent(params);
+		var btn = arguments[0].querySelector("#change");
+		btn.addEventListener("click", Account.changePassword.bind(this, changePwPopup), false);
+	});
+	
 	
 }(this));

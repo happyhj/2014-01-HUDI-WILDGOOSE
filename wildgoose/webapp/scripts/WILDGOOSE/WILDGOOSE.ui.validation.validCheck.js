@@ -71,7 +71,7 @@
 		var fieldName = inputEl.name;
 		var fieldValue = inputEl.value;
 		var checking_sequence = validation_logics[fieldName]["sequence"];
-
+		console.log("field="+fieldName+", checking_seq="+checking_sequence);
 		for ( var i = 0; i<checking_sequence.length; ++i) {
 			var cur_sequence = checking_sequence[i];
 			console.log(cur_sequence);

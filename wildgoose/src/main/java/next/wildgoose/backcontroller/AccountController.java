@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.AccountResult;
+import next.wildgoose.dto.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.utility.SHA256;
@@ -25,7 +26,6 @@ public class AccountController implements BackController {
 		Result result = null;
 		Uri uri = new Uri(request);
 		String method = request.getMethod();
-		String email;
 		LOGGER.debug("uri: " + uri.get(0) + ",  " + uri.get(1));
 
 		if (uri.check(1, null)) {
@@ -37,10 +37,12 @@ public class AccountController implements BackController {
 				else {
 					result = withdraw(request);
 				}
-			}
-			else if("GET".equals(method)){
-				email = request.getParameter("email");
+			} else if("GET".equals(method)){
+				String email = request.getParameter("email");
 				result = usedEmail(request, email);
+			} else if("PUT".equals(method)){
+				result = changePassword(request);
+				
 			}
 		}
 		else if (uri.check(1, "login")) {
@@ -58,6 +60,34 @@ public class AccountController implements BackController {
 		return result;
 	}
 
+	private Result changePassword(HttpServletRequest request) {
+		Result result = new AccountResult();
+
+		String email = request.getParameter("email");
+		String oldPassword = request.getParameter("old_pw");
+		String newPassword = request.getParameter("new_pw");
+		
+		LOGGER.debug("email: " + email + ", old: " + oldPassword + ", new : " + newPassword);
+		ServletContext context = request.getServletContext();
+		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
+		
+		HttpSession session = request.getSession();
+		String randNum = (String) session.getAttribute("randNum");
+		
+		String accountPw = signDao.findAccount(email);
+		LOGGER.debug("accountpw : " + accountPw);
+		// 비밀번호 확인
+		if(SHA256.testSHA256(accountPw + randNum).equals(oldPassword)){
+			LOGGER.debug("OK");
+			SignDAO.changePassword(email, newPassword);
+			result = new SimpleResult(true);
+		} else {
+			LOGGER.debug("NOT OK");
+			result.setMessage("getting user authentication failed");
+		}
+		return null;
+	}
+
 	private Result withdraw(HttpServletRequest request) {
 		AccountResult simpleResult = new AccountResult();
 		String email = request.getParameter("email");
@@ -69,14 +99,12 @@ public class AccountController implements BackController {
 		String randNum = (String) session.getAttribute("randNum");
 		
 		String accountPw = signDao.findAccount(email);
-		if (accountPw == null) {
-			// 비밀번호 틀려서 탈퇴 못함! 
-			return simpleResult;
-		}
+
 		// H(db_password+random)
 		if(SHA256.testSHA256(accountPw + randNum).equals(hashedPassword)){
 			simpleResult = (AccountResult) leave(request);
 		} else {
+			// 비밀번호 틀려서 탈퇴 못함! 
 			simpleResult.setMessage("getting user authentication failed");
 		}
 		return simpleResult;
