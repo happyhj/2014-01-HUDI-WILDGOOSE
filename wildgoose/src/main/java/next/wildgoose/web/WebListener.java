@@ -26,6 +26,7 @@ public class WebListener implements ServletContextListener {
 		jspMap.put(new Uri("users/[user_id]/favorites"), "favorites.jsp");
 		jspMap.put(new Uri("users/[user_id]/timeline"), "timeline.jsp");
 		jspMap.put(new Uri("users/[user_id]/mypage"), "mypage.jsp");
+		jspMap.put(new Uri("accounts"), "search.jsp");
 		jspMap.put(new Uri("accounts/login"), "login.jsp");
 		jspMap.put(new Uri("accounts/signup"), "signup.jsp");
 		jspMap.put(null, "error.jsp");

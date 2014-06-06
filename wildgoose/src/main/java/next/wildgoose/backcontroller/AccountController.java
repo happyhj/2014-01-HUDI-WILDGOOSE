@@ -18,6 +18,7 @@ import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.utility.SHA256;
 import next.wildgoose.utility.Uri;
+import next.wildgoose.utility.Utility;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +62,8 @@ public class AccountController implements BackController {
 			result = new AccountResult();
 			result.setStatus(200);
 		}
+		
+		LOGGER.debug("result: " + Utility.toJsonString(result));
 		return result;
 	}
 
@@ -175,6 +178,8 @@ public class AccountController implements BackController {
 	private AccountResult join(HttpServletRequest request) {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
+		
+		LOGGER.debug("email: " + email + ",  passw: " + password);
 		ServletContext context = request.getServletContext();
 		
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");

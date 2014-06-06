@@ -19,7 +19,7 @@
 		var formContainer = document.querySelector(".form-container");
 		for (var i = formContainer.length - 1; i >= 0; --i) {
 			var input = formContainer[i];
-			if (input.type == "button") {
+			if (input.type == "button" || input.type == "submit") {
 				button = input;
 				continue;
 			}
