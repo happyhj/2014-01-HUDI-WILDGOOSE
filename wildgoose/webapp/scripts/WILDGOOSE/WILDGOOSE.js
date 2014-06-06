@@ -57,16 +57,21 @@
 				now.setDate(now.getDate() + 1);
 				var month = now.getMonth() + 1;
 				if (month < 10) { month = '0' + month; }
-				keys.push(month + "/" + now.getDate());
+				var date = now.getDate();
+				if (date < 10) { date = '0' + date; }
+				keys.push(month + "/" + date);
 			}
 
 			var getValue = function(date) {
-				var result = sampleData[date];
-				if (result == null) {
-					return 0;
+				for (var i=0; i<sampleData.length; i++) {
+					var data = sampleData[i];
+					if (data.date == date) {
+						return data.count;
+					}
 				}
-				return result;
+				return 0;
 			}
+			
 			// graph
 			var graphData = [ {
 				"x" : graphPositionX[0],
@@ -91,7 +96,7 @@
 				"y" : matching[0][getValue(keys[6])]
 			} ]
 
-
+			console.log(graphData);
 
 			var lineFunction = d3.svg.line().x(function(d) {return d.x;})
 					.y(function(d) {return d.y;}).interpolate("linear");
@@ -345,6 +350,7 @@
 	
 	// 공개 메서드 노출
 	WILDGOOSE.etc = Etc;
+	window.WILDGOOSE = WILDGOOSE;
 })();(function(window) {
 	'use strict';
 	var document = window.document;
@@ -355,6 +361,7 @@
 
 	var Ajax = CAGE.ajax
 	var Dom = CAGE.util.dom;
+//	var Account = WILDGOOSE.account;
 	
 	var validation_logics = {
 		email : {
@@ -382,7 +389,16 @@
 				ckeckEquality(inputEl, callback);
 			}, "다시 확인해주세요" ]
 		}		
-	};	
+	};
+	
+//	var Validation = {
+//		init: function(args) {
+//			this.types = args;
+//			Account.addValidationEvent(args);
+//			
+//		}
+//	}
+//	
 
 	function ckeckEquality(inputEl, callback) {
 		var parent = inputEl.parentNode;
@@ -509,16 +525,20 @@
 	var Dom = CAGE.util.dom;
 	var Validation = WILDGOOSE.ui.validation;
 	
-	function addValidationEvent() {
+	var selectedDoms = [];
+	var button = null;
+	function addValidationEvent(args) {
 		var formContainer = document.querySelector(".form-container");
 		for (var i = formContainer.length - 1; i >= 0; --i) {
 			var input = formContainer[i];
-			if (input.type == "email" || input.type == "password") {
-				// blur event
-	//			var dataCheck = input.getAttribute("data-check");
-		//		if(dataCheck == "true") {
-					input.addEventListener("blur", checkSignUpFrom, false);
-			//	}
+			if (input.type == "button") {
+				button = input;
+				continue;
+			}
+//			debugger;
+			if (args !== undefined && args.indexOf(input.type) != -1) {
+				selectedDoms.push(input);
+				input.addEventListener("blur", checkSignUpFrom, false);
 			}
 		}
 	};
@@ -539,16 +559,25 @@
 	/*
 	 * form에 입력된 내용이 valid한지를 확인하여 회원가입 버튼 활성화 / 비활성화
 	*/
-	function checkFormStatus(form) {
-		var btn = form.length-1;
+	function checkFormStatus() {
+//		var btnIndex = form.length-1;
 		var flag = true;
-		for (var i=btn-1; i>=0; --i) {
-			if (!Dom.hasClass(form[i], "status-approved")) {
+		
+		for (var i=0; i<selectedDoms.length; i++) {
+			if (!Dom.hasClass(selectedDoms[i], "status-approved")) {
 				flag = false;
 				break;
 			}
 		}
-		Dom[flag?"removeClass":"addClass"](form[btn], "hidden");
+		
+//		
+//		for (var i=btn-1; i>=0; --i) {
+//			if (!Dom.hasClass(form[i], "status-approved")) {
+//				flag = false;
+//				break;
+//			}
+//		}
+		Dom[flag?"removeClass":"addClass"](button, "hidden");
 		
 	};
 	
@@ -609,12 +638,27 @@
 		}, "data":payload});
 	};
 	
-	function withdrawAccount(){
+	function withdrawAccount(popup){
 		var user_email = document.getElementById("userId").innerText;
-		Ajax.DELETE({
-			"url":'/api/v1/accounts?email=' + user_email,
-			"callback":function() {location.href="/";}
-		});
+		var password = document.querySelector(".form-container input[name=password]").value;
+		var randomNumber = document.querySelector(".form-container input[name=randomNumber]").value;
+		var hashedPassword = SHA256(password);
+		var finalPassword = SHA256(hashedPassword+randomNumber);
+		var url = "/api/v1/accounts/";
+		var payload = "email="+user_email+"&password="+finalPassword+"&check=withdraw";
+
+		Ajax.POST({"url": url, "callback":function(response) {
+			if (JSON.parse(response).status == 200) {
+				popup.afterclose.add(function() {location.reload();});
+				popup.close();
+			}
+		}, "data":payload});
+		
+		
+//		Ajax.DELETE({
+//			"url":'/api/v1/accounts?email=' + user_email,
+//			"callback":function() {location.href="/";}
+//		});
 	}
 	
 	WILDGOOSE.account = {
@@ -649,6 +693,7 @@
 	var Dom = CAGE.util.dom;
 	var Popup = CAGE.ui.popup;
 	var Account = WILDGOOSE.account;
+	var Validation = WILDGOOSE.ui.validation;
 	
 	function init(){
 		var joinBtn = document.querySelector("#join");
@@ -662,7 +707,8 @@
 		});
 		
 		joinPopup.afteropen.add(function() {
-			Account.addValidationEvent();
+			var params = ["email", "password"];
+			Account.addValidationEvent(params);
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", Account.signUpAccount.bind(this, joinPopup), false);
 		});
@@ -1146,7 +1192,9 @@
 			// 더보기 버튼 클릭이벤트 설정
 			if (this.searchMoreBtn != null) {
 				this.searchMoreBtn.addEventListener("click", this._more.bind(this), false);
-				this._selectStatusOfSearchMoreBtn();
+				var curNumDiv = document.querySelector(".search-more .state-search-curNum");
+				var curNum = parseInt(curNumDiv.innerText);
+				this._selectStatusOfSearchMoreBtn(curNum);
 			}
 		},
 		_more: function(evt) {
@@ -1191,7 +1239,6 @@
 				searchMore.setAttribute("style", "display: none;");
 				return;
 			}
-			
 			var totalNum = parseInt(totalNumDiv.innerText);
 			if (totalNum <= curNum) {
 				searchMore.setAttribute("style", "display: none;");
@@ -1315,10 +1362,34 @@
 
 	// 의존성 선언 
 	var Account = WILDGOOSE.account;
+	var Popup = CAGE.ui.popup;
+	var TemplateUtil = CAGE.util.template;
+	var Dom = CAGE.util.dom;
+	
 	
 	var leaveBtn = document.querySelector("#leave");
-	leaveBtn.addEventListener("click", function(){
-		console.log("탈퇴시킴. 확인창 뜨는건 다음 스텝에서");
-		Account.withdrawAccount();
-	}, false);
+	
+	var leavePopup = new Popup.ajaxPopup({
+		element: leaveBtn,
+		templateUrl: "/api/v1/templates/withdraw.html",
+		templateLoader: function(AjaxResponse) {
+			var templateStr = JSON.parse(AjaxResponse).data.template;
+			var randNum = JSON.parse(AjaxResponse).data.rand;
+			var compiler = TemplateUtil.getCompiler(templateStr);
+			return compiler({
+				"randNum": randNum
+			}, templateStr);		
+		}
+	});
+	
+	leavePopup.afteropen.add(function() {
+		var params = ["password"];
+		Account.addValidationEvent(params);
+		//예외처리 
+		if(document.querySelector('#password').value == document.querySelector('#confirm').value) {
+			var btn = arguments[0].querySelector("#withdraw");
+			btn.addEventListener("click", Account.withdrawAccount.bind(this, leavePopup), false);
+		}
+	});
+	
 }(this));

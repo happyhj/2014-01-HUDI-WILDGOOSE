@@ -4,14 +4,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import next.wildgoose.dao.template.JdbcTemplate;
 import next.wildgoose.dao.template.PreparedStatementSetter;
 import next.wildgoose.dao.template.RowMapper;
+import next.wildgoose.framework.FrontController;
 
 
 public class SignDAO {
-		
-	public boolean findEmail (final String email) {		
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(SignDAO.class.getName());
+	
+	public boolean findEmail (final String email) {	
 		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 

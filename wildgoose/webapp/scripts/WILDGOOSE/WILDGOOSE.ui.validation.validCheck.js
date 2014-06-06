@@ -48,17 +48,17 @@
 //	
 
 	function ckeckEquality(inputEl, callback) {
-		var parent = inputEl.parentNode;
+		var parent = inputEl.form;
 		var password = document.querySelector("." + parent.className
 				+ " input[name=password]");
-		
 		callback(inputEl.value == password.value);
 	}
 
 	function existInServer(inputEl, callback) {
-		var url = "api/v1/accounts/?email=" + inputEl.value;
+		var url = "/api/v1/accounts?email=" + inputEl.value;
 		Ajax.GET({"url":url, "callback":function(response) {
 			console.log(response);
+			debugger;
 			var validity = (JSON.parse(response).status===200)?true:false;
 			var isAjax = true;
 			callback(validity, isAjax);
