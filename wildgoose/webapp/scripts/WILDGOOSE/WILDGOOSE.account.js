@@ -10,64 +10,69 @@
 	 */
 	var Ajax = CAGE.ajax;
 	var Dom = CAGE.util.dom;
-	var Validation = WILDGOOSE.validation.info;
+	var Validator = WILDGOOSE.validation.validator;
 	
-	var selectedDoms = [];
-	var button = null;
 	
-	function addValidationEvent(args) {
-		var formContainer = document.querySelector(".form-container");
-		for (var i = formContainer.length - 1; i >= 0; --i) {
-			var input = formContainer[i];
-			if (input.type == "button" || input.type == "submit") {
-				button = input;
-				continue;
+	var Account = {
+		init: function(args) {
+			this.form = document.querySelector(args.form);
+			this.extract(args.types);
+			this.addValidationEvent();
+			
+			this.selected = {};
+			this.submit = null;
+		},
+		extract: function(types) {
+			for (var i = this.form.length - 1; i >= 0; --i) {
+				var input = this.form[i];
+				if (input.type == "button" || input.type == "submit") {
+					this.submit = input;
+					continue;
+				}
+				if (types !== undefined && types.indexOf(input.type) != -1) {
+					this.selected[input.type] = input;
+				}
 			}
-//			debugger;
-			if (args !== undefined && args.indexOf(input.type) != -1) {
-				selectedDoms.push(input);
-				input.addEventListener("blur", checkSignUpForm, false);
+		},
+			
+		addValidationEvent: function(types) {
+			for (var type in this.selected) {
+				var el = this.selected.type;
+				el.addEventListener("blur", this.checkValidation.bind(this), false);
 			}
+		},
+		
+		checkValidation: function(evt) {
+			var inputEl = evt.target;
+			if (Validator.check(inputEl)) {
+				console.log("validation ok");
+			} else {
+				console.log("validation no");
+			}
+			
+			// 각 input의 className을 확인하여 sumbit 버튼 활성화
+			this.checkStatusOfSubmit.call(this);
+		},
+		
+		
+		/*
+		 * form에 입력된 내용이 valid한지를 확인하여 회원가입 버튼 활성화 / 비활성화
+		*/
+		checkStatusOfSubmit: function() {
+			var flag = true;
+			
+			for (var type in this.selected) {
+				if (!Dom.hasClass(this.selected.type, "status-approved")) {
+					flag = false;
+					break;
+				}
+			}
+
+			Dom[flag?"removeClass":"addClass"](this.selected.submit, "disable");
 		}
 	};
+
 	
-	function checkSignUpForm(e) {
-		var inputEl = e.target;
-		if (Validation.check(inputEl)) {
-			console.log("validation ok");
-		} else {
-			console.log("validation no");
-		}
-		
-		// 각 input의 className을 확인하여 sumbit 버튼 활성화
-		checkFormStatus(inputEl.parentNode);
-	};
-	
-	
-	/*
-	 * form에 입력된 내용이 valid한지를 확인하여 회원가입 버튼 활성화 / 비활성화
-	*/
-	function checkFormStatus() {
-//		var btnIndex = form.length-1;
-		var flag = true;
-		
-		for (var i=0; i<selectedDoms.length; i++) {
-			if (!Dom.hasClass(selectedDoms[i], "status-approved")) {
-				flag = false;
-				break;
-			}
-		}
-		
-//		
-//		for (var i=btn-1; i>=0; --i) {
-//			if (!Dom.hasClass(form[i], "status-approved")) {
-//				flag = false;
-//				break;
-//			}
-//		}
-		Dom[flag?"removeClass":"addClass"](button, "disable");
-		
-	};
 	
 	/*
 	 * 모두 작성된 정보를 Ajax POST로 서버에 전달
@@ -122,14 +127,14 @@
 			"data":payload
 		});
 	}
-	
-	WILDGOOSE.account = {
-		checkFormStatus: checkFormStatus,
-		checkSignUpForm: checkSignUpForm,
-		addValidationEvent: addValidationEvent,
-		withdrawAccount: withdrawAccount,
-		changePassword: changePassword
-	};
+	WILDGOOSE.account = Account;
+//	WILDGOOSE.account = {
+//		checkFormStatus: checkFormStatus,
+//		checkSignUpForm: checkSignUpForm,
+//		addValidationEvent: addValidationEvent,
+//		withdrawAccount: withdrawAccount,
+//		changePassword: changePassword
+//	};
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
 	if (typeof module !== 'undefined' && module.exports) {

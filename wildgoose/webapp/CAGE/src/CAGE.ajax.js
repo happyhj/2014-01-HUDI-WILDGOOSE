@@ -38,19 +38,21 @@
 			}
 		}
 	}
+	
+	function _exec(config){
+		var method = config.method,
+		headerObj = config.headers,
+		url = config.url,
+		callback = config.callback,
+		data = config.data,
+		isAsync = config.isAsync;
 
-	// 공개 메서드 선언	
-	function GET(config) {
-		var url = config.url,
-			callback = config.callback,
-			isAsync = config.isAsync;
-
-		if (isAsync == undefined) {
-			isAsync = true;
-		}
-		
 		if (url == undefined) {
 			return;
+		}
+		
+		if (isAsync == undefined) {
+			isAsync = true;
 		}
 				
 		var request = _createRequest();
@@ -59,107 +61,49 @@
 			return;
 		}
 		
-		request.open("GET", url, isAsync);
+		request.open(method, url, isAsync);
 		if (callback !== undefined) {
 			request.addEventListener("readystatechange", function (e) {
 				_responseData(e, request, callback);
 			}, false);
 		}
+		
+		if (headerObj !== undefined) {
+			for (var header in headerObj) {
+				var content = headerObj[header];
+				request.setRequestHeader(header, content);
+			}
+		}
+		
 		// send
-		request.send();
+		request.send(data);
+	}
+
+	// 공개 메서드 선언	
+	function GET(config) {
+		config.method = "GET";
+		_exec(config);
 	}
 		
 	function POST(config) {
-		var url = config.url,
-			callback = config.callback,
-			data = config.data,
-			isAsync = config.isAsync;
-		
-		if (isAsync === undefined) {
-			isAsync = true;
-		}
-
-		if (url == undefined) {
-			return;
-		}
-				
-		var request = _createRequest();
-		if (request === undefined) {
-			console.log("Unable to create request");
-			return;
-		}
-
-		request.open("POST", url, isAsync);
-		if (callback !== undefined) {
-			request.addEventListener("readystatechange", function (e) {
-				_responseData(e, request, callback);
-			}, false);
-		}
-		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		// send
-		request.send(data);
+		config.method = "POST";
+		config.headers = {
+			"Content-Type": "application/x-www-form-urlencoded"
+		};
+		_exec(config);
 	}
 
 	function PUT(config) {
-		var url = config.url,
-			callback = config.callback,
-			data = config.data,
-			isAsync = config.isAsync;
-		
-		if (isAsync === undefined) {
-			isAsync = true;
-		}
-
-		if (url === undefined) {
-			return;
-		}
-				
-		var request = _createRequest();
-		if (request === undefined) {
-			console.log("Unable to create request");
-			return;
-		}
-
-		request.open("PUT", url, isAsync);
-		if (callback !== undefined) {
-			request.addEventListener("readystatechange", function (e) {
-				_responseData(e, request, callback);
-			}, false);
-		}
-		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		// send
-		request.send(data);
+		config.method = "PUT";
+		config.headers = {
+			"Content-Type": "application/x-www-form-urlencoded"
+		};
+		_exec(config);
 	}
 		
 	function DELETE(config) {
-		var url = config.url,
-			callback = config.callback,
-			data = config.data,
-			isAsync = config.isAsync;
-		
-		if (isAsync === undefined) {
-			isAsync = true;
-		}
-
-		if (url === undefined) {
-			return;
-		}
-				
-		var request = _createRequest();
-		if (request === undefined) {
-			console.log("Unable to create request");
-			return;
-		}
-
-		request.open("DELETE", url, isAsync);
-		
-		if (callback !== undefined) {
-			request.addEventListener("readystatechange", function (e) {
-				_responseData(e, request, callback);
-			}, false);
-		}
-		// send
-		request.send();
+		config.method = "DELETE";
+		_exec(config);
 	}
 	
 	
@@ -176,6 +120,7 @@
 		POST: POST,
 		PUT: PUT,
 		DELETE: DELETE
+//		_exec: _exec
 	};
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.

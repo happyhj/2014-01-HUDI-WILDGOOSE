@@ -36,7 +36,8 @@
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.validation.logics.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.validation.ui.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.validation.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.join.js"></script>
+		<!-- <script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script> -->
 		<!-- <script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.sign.up.js"></script> -->
 		
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.join.js"></script>

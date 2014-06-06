@@ -9,7 +9,7 @@
 	// 의존성 선언
 	var Ajax = CAGE.ajax; 
 	var Popup = CAGE.ui.popup;
-	var Account = WILDGOOSE.account;
+	var JoinAccount = WILDGOOSE.account.join;
 
 	function init() {
 
@@ -28,36 +28,47 @@
 		// 가입창에 스크립트를 적용한다.
 		// Ajax로 불러온 팝업창에는 스크립트를 넣을 수 없기 때문이다.
 		joinPopup.afteropen.add(function() {
-			var params = ["email", "password"];
-			Account.addValidationEvent(params);
+			var args = {
+				form: ".form-container",
+				types: ["email", "password", "confirm"]
+			}
+			JoinAccount.init(args);
 		
 
 			var btn = arguments[0].querySelector("#create");
-			btn.addEventListener("click", joinAccount, false);
+			btn.addEventListener("click", function(evt) {
+				
+				JoinAccount.exec(function() {
+					joinPopup.afterclose.add(function() {location.reload();});
+					joinPopup.close();
+				}.bind(this));
+				
+			}, false);
 		});
 
-		// 가입하기 버튼을 눌렀을 때 실행될 내용을 담는다.
-		function joinAccount() {
-			var url = "/api/v1/accounts/";
-			var form = document.querySelector(".form-container");
-			
-			var email = escape(form[0].value)
-			var password = escape(form[1].value);
-			var payload = "email=" + email + "&password=" + SHA256(password);
-			Ajax.POST({
-				"url": url,
-				"callback": function(response) {
-					var form = document.querySelector(".form-container");
-					if (JSON.parse(response).status == 200) {
-						joinPopup.afterclose.add(function() {location.reload();});
-						joinPopup.close();
-					} else {
-						console.log("FAIL!");
-					}
-				},
-				"data": payload
-			});
-		};
+//		// 가입하기 버튼을 눌렀을 때 실행될 내용을 담는다.
+//		function joinAccount() {
+//			var url = "/api/v1/accounts/";
+//			var form = document.querySelector(".form-container");
+//			
+//			var email = escape(form[0].value)
+//			var password = escape(form[1].value);
+//			var payload = "email=" + email + "&password=" + SHA256(password);
+//			Ajax.POST({
+//				"url": url,
+//				"callback": function(response) {
+//					var form = document.querySelector(".form-container");
+//					if (JSON.parse(response).status == 200) {
+//		joinPopup.afterclose.add(function() {location.reload();});
+//		joinPopup.close();				
+		
+//					} else {
+//						console.log("FAIL!");
+//					}
+//				},
+//				"data": payload
+//			});
+//		};
 	}
 
 	WILDGOOSE.header.join = {

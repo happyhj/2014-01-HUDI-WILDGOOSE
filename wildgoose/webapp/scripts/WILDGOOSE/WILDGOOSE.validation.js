@@ -56,7 +56,7 @@
 		}
 	};
 	
-	WILDGOOSE.validation.info = Validation;
+	WILDGOOSE.validation.validator = Validation;
 //	WILDGOOSE.validation = {
 //			check: Validation.check
 //	}
