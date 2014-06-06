@@ -72,59 +72,7 @@
 	/*
 	 * 모두 작성된 정보를 Ajax POST로 서버에 전달
 	 */
-	function signUpAccount(popup) {
-		var url = "/api/v1/accounts/";
-		var form = document.querySelector(".form-container");
-		
-		var email = escape(form[0].value)
-		var password = escape(form[1].value);
-		var payload = "email=" + email + "&password=" + SHA256(password);
-		Ajax.POST({"url":url, "callback":function(response) {
-			var form = document.querySelector(".form-container");
-			Dom.removeClass(form, "isProgressing");
-			if (JSON.parse(response).status == 200) {
-				popup.afterclose.add(function() {location.reload();});
-				popup.close();
-			}
-		}, "data":payload});
-	//	domUtil.addClass(form, "isProgressing");
 	
-	};
-	
-	/*
-	 * signUpAccount 실행 후
-	 * 서버에서 전달된 결과값 확인
-	 */
-	function showSignUpResult(response) {
-		
-		if (response == "success") {
-			// close modal. and update login panel
-			WILDGOOSE.ui.modal.closeModal(function(){
-				updateTopbar(true);
-			});
-		}
-	};
-	
-	
-	function loginAccount(popup) {
-		var email = document.querySelector(".form-container input[name=email]").value;
-		var password = document.querySelector(".form-container input[name=password]").value;
-		var hashedPassword = SHA256(password);	
-		var randomNumber = document.querySelector(".form-container input[name=randomNumber]").value;
-		var finalPassword = SHA256(hashedPassword+randomNumber);
-		var url = "/api/v1/session";
-		var payload = "email="+email+"&password="+finalPassword;
-		Ajax.POST({"url": url, "callback":function(response) {
-			var form = document.querySelector(".form-container");
-			Dom.removeClass(form, "isProgressing");
-//			console.log(response);
-//			console.log(JSON.parse(response).status);
-			if (JSON.parse(response).status == 200) {
-				popup.afterclose.add(function() {location.reload();});
-				popup.close();
-			}
-		}, "data":payload});
-	};
 	
 	function withdrawAccount(popup){
 		var user_email = document.getElementById("userId").innerText;
@@ -176,9 +124,6 @@
 	}
 	
 	WILDGOOSE.account = {
-		loginAccount: loginAccount,
-		signUpAccount: signUpAccount,
-		showSignUpResult: showSignUpResult,
 		checkFormStatus: checkFormStatus,
 		checkSignUpForm: checkSignUpForm,
 		addValidationEvent: addValidationEvent,
