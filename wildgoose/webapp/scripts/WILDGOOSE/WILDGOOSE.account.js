@@ -10,7 +10,7 @@
 	 */
 	var Ajax = CAGE.ajax;
 	var Dom = CAGE.util.dom;
-	var Validation = WILDGOOSE.ui.validation;
+	var Validation = WILDGOOSE.validation.info;
 	
 	var selectedDoms = [];
 	var button = null;
@@ -33,7 +33,7 @@
 	
 	function checkSignUpForm(e) {
 		var inputEl = e.target;
-		if (Validation.validCheck(inputEl)) {
+		if (Validation.check(inputEl)) {
 			console.log("validation ok");
 		} else {
 			console.log("validation no");
