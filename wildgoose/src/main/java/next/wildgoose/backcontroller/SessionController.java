@@ -35,6 +35,7 @@ public class SessionController implements BackController {
 		SimpleResult simpleResult = new SimpleResult();
 		String email = request.getParameter("email");
 		String hashedPassword = request.getParameter("password");
+		LOGGER.debug("email: " + email + ", passw: " + hashedPassword);
 		ServletContext context = request.getServletContext();
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
 		
@@ -43,6 +44,7 @@ public class SessionController implements BackController {
 		LOGGER.debug(randNum);
 		
 		String accountPw = signDao.findAccount(email);
+		LOGGER.debug(accountPw + randNum);
 		LOGGER.debug(SHA256.testSHA256(accountPw + randNum));
 		if (accountPw == null) {
 			// 가입되지 않은 아이디입니다. 다시 확인해주세요.

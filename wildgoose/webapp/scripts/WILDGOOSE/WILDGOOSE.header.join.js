@@ -45,30 +45,6 @@
 				
 			}, false);
 		});
-
-//		// 가입하기 버튼을 눌렀을 때 실행될 내용을 담는다.
-//		function joinAccount() {
-//			var url = "/api/v1/accounts/";
-//			var form = document.querySelector(".form-container");
-//			
-//			var email = escape(form[0].value)
-//			var password = escape(form[1].value);
-//			var payload = "email=" + email + "&password=" + SHA256(password);
-//			Ajax.POST({
-//				"url": url,
-//				"callback": function(response) {
-//					var form = document.querySelector(".form-container");
-//					if (JSON.parse(response).status == 200) {
-//		joinPopup.afterclose.add(function() {location.reload();});
-//		joinPopup.close();				
-		
-//					} else {
-//						console.log("FAIL!");
-//					}
-//				},
-//				"data": payload
-//			});
-//		};
 	}
 
 	WILDGOOSE.header.join = {

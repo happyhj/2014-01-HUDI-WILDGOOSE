@@ -2,10 +2,11 @@
 <div class="withdraw-container">
 <form class="form-container">
 	<input name="randomNumber" type="hidden" value="<%= randNum %>" />
+	<input class="input" type="email" id="email" name="email" readonly="readonly"  data-check="true" value="<%= email %>"/>
 	<input class="input" type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" data-check="true"/>
 	<label for="password" class="form-msg msg-password"></label>
 	<input class="input" type="password" id="confirm" name="confirm" placeholder="다시 한 번 입력해주세요" data-check="true"/>
 	<label for="confirm" class="form-msg msg-confirm"></label>
-	<input class="button disable" type="button" id="withdraw" value="탈퇴하기"/>
+	<input class="button disable" type="button" name="submit" id="withdraw" value="탈퇴하기"/>
 </form>
 </div>

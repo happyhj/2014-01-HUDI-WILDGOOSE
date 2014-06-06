@@ -10,12 +10,10 @@
 	var Ajax = CAGE.ajax; 
 	var Popup = CAGE.ui.popup;
 	var TemplateUtil = CAGE.util.template;
-	var Account = WILDGOOSE.account;
+	var LoginAccount = WILDGOOSE.account.login;
 
 	function init() {
-
 		var loginBtn = document.querySelector("#login");
-		
 		var loginPopup = new Popup.ajaxPopup({
 			element: loginBtn,
 			templateUrl: "/api/v1/templates/login.html",
@@ -28,32 +26,24 @@
 				}, templateStr);		
 			}
 		});
-		
+				
 		loginPopup.afteropen.add(function() {
+			var args = {
+				form: ".form-container",
+				types: ["email", "password"]
+			};
+			LoginAccount.init(args);
+			
 			var btn = arguments[0].querySelector("#create");
-			btn.addEventListener("click", loginAccount, false);
+			btn.addEventListener("click", function(evt) {
+				
+				LoginAccount.exec(function() {
+					loginPopup.afterclose.add(function() {location.reload();});
+					loginPopup.close();
+				}.bind(this));
+				
+			}, false);
 		});
-
-		function loginAccount(popup) {
-			var email = document.querySelector(".form-container input[name=email]").value;
-			var password = document.querySelector(".form-container input[name=password]").value;
-			var hashedPassword = SHA256(password);	
-			var randomNumber = document.querySelector(".form-container input[name=randomNumber]").value;
-			var finalPassword = SHA256(hashedPassword+randomNumber);
-			var url = "/api/v1/session";
-			var payload = "email="+email+"&password="+finalPassword;
-			Ajax.POST({
-				"url": url,
-				"callback": function(response) {
-					var form = document.querySelector(".form-container");
-					if (JSON.parse(response).status == 200) {
-						popup.afterclose.add(function() {location.reload();});
-						popup.close();
-					}
-				},
-				"data": payload
-			});
-		};
 	}
 
 	WILDGOOSE.header.login = {
