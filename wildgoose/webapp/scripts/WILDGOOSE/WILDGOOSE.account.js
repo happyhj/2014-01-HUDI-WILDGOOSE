@@ -10,7 +10,7 @@
 	 */
 	var Ajax = CAGE.ajax;
 	var Dom = CAGE.util.dom;
-	var Validation = WILDGOOSE.validation;
+	var Validation = WILDGOOSE.validation.info;
 	
 	var selectedDoms = [];
 	var button = null;
