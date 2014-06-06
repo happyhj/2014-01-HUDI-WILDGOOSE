@@ -29,7 +29,9 @@
 		// Ajax로 불러온 팝업창에는 스크립트를 넣을 수 없기 때문이다.
 		joinPopup.afteropen.add(function() {
 			var params = ["email", "password"];
-/*    */	Account.addValidationEvent(params);
+			Account.addValidationEvent(params);
+		
+
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", joinAccount, false);
 		});

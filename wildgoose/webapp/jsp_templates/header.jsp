@@ -32,10 +32,13 @@
 		
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.etc.js"></script>
 		<!-- <script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.validation.validCheck.js"></script> -->
+		<!-- <script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.validation.validator.js"></script> -->
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.validation.logics.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.validation.ui.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.validation.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script>
+		<!-- <script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.sign.up.js"></script> -->
+		
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.join.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.login.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.logout.js"></script>
