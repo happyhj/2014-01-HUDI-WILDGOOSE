@@ -57,9 +57,6 @@
 	};
 	
 	WILDGOOSE.validation.validator = Validation;
-//	WILDGOOSE.validation = {
-//			check: Validation.check
-//	}
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
 	if (typeof module !== 'undefined' && module.exports) {
@@ -67,6 +64,6 @@
 		// browser export
 	} else {
 		window.WILDGOOSE = WILDGOOSE;
-	}    	
+	}	
 
 }(this));

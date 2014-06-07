@@ -10,7 +10,6 @@
 	// 의존성 선언
 	var Ajax = CAGE.ajax;
 	var Dom = CAGE.util.dom;
-	var Etc = WILDGOOSE.etc;
 
 	var Favorite = {
 		favoriteList : [],
@@ -41,8 +40,7 @@
 			var target = e.target;
 			var card = target.parentElement.parentElement.parentElement;
 			var reporterId = card.firstElementChild.dataset.reporter_id;
-			var userId = Etc.getUserId();
-			var url = "/api/v1/users/" + userId + "/favorites/?reporter_id="
+			var url = "/api/v1/users/" + this.userId + "/favorites/?reporter_id="
 					+ reporterId;
 
 
@@ -96,17 +94,17 @@
 			}
 		},
 		
-		init: function() {
+		init: function(args) {
+			this.userId = args.userId;
+			
 			// 초기화
-			if (Etc.isUserLogined()) {
-				// userID 확인
-				var userId = Etc.getUserId();
+			if (this.userId !== undefined) {
 				
 				// 모든 별에 eventlistener 붙이기
 				this.attatchEventToFavBtn();
 				
 				// user의 Favorite 목록 획득
-				var url = "/api/v1/users/" + userId + "/favorites/";
+				var url = "/api/v1/users/" + this.userId + "/favorites/";
 				Ajax.GET({
 					"url" : url,
 					"callback" : function(jsonStr) {
@@ -124,6 +122,15 @@
 			}
 		}
 	};
+	
 	WILDGOOSE.ui.favorite = Favorite;
+	
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = WILDGOOSE;
+		// browser export
+	} else {
+		window.WILDGOOSE = WILDGOOSE;
+	}	
 
 })();

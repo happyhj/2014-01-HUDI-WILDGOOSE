@@ -47,7 +47,3 @@
 	</div>
 	<footer class="footer"></footer>
 </div>
-<script>
-var inputEl = document.getElementById("query-entry");
-inputEl.focus();
-</script>

@@ -30,28 +30,27 @@
 		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.ui.popup.js"></script>
 		
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.etc.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/user/WILDGOOSE.user.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/validation/WILDGOOSE.validation.logics.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/validation/WILDGOOSE.validation.ui.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/validation/WILDGOOSE.validation.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.login.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.logout.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.join.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/modal/WILDGOOSE.modal.join.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/modal/WILDGOOSE.modal.login.js"></script>
 		
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.validation.logics.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.validation.ui.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.validation.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.login.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.join.js"></script>
-		
-		
-		
-		<script type="text/javascript" src="/scripts/APP/APP.modal.join.js"></script>
-		<script type="text/javascript" src="/scripts/APP/APP.modal.login.js"></script>
-		<script type="text/javascript" src="/scripts/APP/APP.header.logout.js"></script>
-		<script type="text/javascript" src="/scripts/APP/APP.header.userpage.js"></script>
-		<script type="text/javascript" src="/scripts/APP/APP.header.js"></script>
+		<script type="text/javascript" src="/scripts/APP/APP.page.header.js"></script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
 	</c:otherwise>
 </c:choose>
+
 <script>
-	var header_component = APP.header;
-	header_component.init();
+window.addEventListener("load", function(evt){
+	APP.page.header.init();
+}, false);
+
 </script>

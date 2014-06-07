@@ -53,9 +53,9 @@
 		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
 		
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.etc.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.validation.validCheck.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/user/WILDGOOSE.user.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.ui.validation.validCheck.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.js"></script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
@@ -68,22 +68,4 @@ window.addEventListener("load", function() {
 	var Account = WILDGOOSE.account;
 	Account.addValidationEvent(["email", "password"]);
 }, false);
-
-/* var signupForm = document.querySelector(".form-container");
-
-
-signupForm.addEventListener("submit", function(evt) {
-	evt.preventDefault();
-	var target = evt.target;
-	
-	for (var i=0; i<target.length; i++) {
-		if (target[i].type == "password") {
-			var pw = target[i];
-			pw.value = SHA256(pw.value);
-			break;
-		}	
-	}
-
-	target.submit();
-}, false); */
 </script>
