@@ -39,13 +39,21 @@
 		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
 		
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.etc.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.mypage.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/user/WILDGOOSE.user.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.withdraw.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.change.pw.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/modal/WILDGOOSE.modal.withdraw.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/modal/WILDGOOSE.modal.change.pw.js"></script>
+		
+		<script type="text/javascript" src="/scripts/APP/APP.page.mypage.js"></script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
 	</c:otherwise>
 </c:choose>
-
+<script>
+window.addEventListener("load", function(evt){
+	APP.page.mypage.init();
+}, false);
+</script>

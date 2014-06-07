@@ -76,14 +76,14 @@
 </div>
 <c:choose>
 	<c:when test="${ initParam.debuggerMode eq 'on' }">
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.etc.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.account.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.header.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.favorite.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/user/WILDGOOSE.user.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.ui.favorite.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/search/WILDGOOSE.search.more.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/search/WILDGOOSE.search.auto_complement.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/search/WILDGOOSE.search.js"></script>
 		
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.search.more.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.search.auto_complement.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.search.js"></script>
+		<script type="text/javascript" src="/scripts/APP/APP.page.search.js"></script>
+		
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
@@ -92,24 +92,6 @@
 
 <script>
 window.addEventListener("load", function(evt){
-	var Search = WILDGOOSE.search;
-	Search.init({
-		search: {
-			box: "#query-entry",
-			container: ".search-result > ul",
-			templateURL: "/api/v1/templates/reporterCard.html",
-			requestNum: 24
-		},
-		autocompletion: {
-			list: ".search .auto-completion-list",
-			requestNum: 7
-		},
-		more: {
-			button: ".search-more"
-		}
-	});
-	
-	var Favorite = WILDGOOSE.ui.favorite;
-	Favorite.init(userId);
+	APP.page.search.init();
 }, false);
 </script>

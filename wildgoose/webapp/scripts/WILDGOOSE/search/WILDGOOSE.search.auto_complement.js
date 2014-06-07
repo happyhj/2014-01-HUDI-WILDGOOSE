@@ -93,7 +93,7 @@
 		drawList : function(response) {
 			this.is.pressedEnter = false;
 			var data = JSON.parse(response).data.reporters;
-			console.log(data)
+			console.log(data);
 			if (data === undefined || data.length == 0) {
 				return;
 			}

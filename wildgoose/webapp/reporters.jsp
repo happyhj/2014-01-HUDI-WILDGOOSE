@@ -85,7 +85,9 @@
 		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
 		
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.graph.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.ui.graph.js"></script>
+		
+		<script type="text/javascript" src="/scripts/APP/APP.page.reporter.js"></script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
@@ -95,8 +97,7 @@
 
 <script>
 window.addEventListener("load", function() {
-	var Graph = WILDGOOSE.ui.graph;
-	Graph.init();
+	APP.page.reporter.init();
 }, false);
 </script>
 </body>
