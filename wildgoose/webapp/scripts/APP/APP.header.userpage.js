@@ -2,9 +2,9 @@
 	'use strict';
 	var document = window.document;
 	var console = window.console;
-	var WILDGOOSE = window.WILDGOOSE || {};
-	WILDGOOSE.header = WILDGOOSE.header || {};
-	WILDGOOSE.header.userpage = WILDGOOSE.header.userpage || {};
+	var APP = window.APP || {};
+	APP.header = APP.header || {};
+	APP.header.userpage = APP.header.userpage || {};
 
 	// 의존성 선언
 	var Ajax = CAGE.ajax; 
@@ -30,9 +30,9 @@
 		}, false);
 	}
 
-	WILDGOOSE.header.userpage = {
+	APP.header.userpage = {
 		init: init
 	}
 
-	window.WILDGOOSE = WILDGOOSE;
+	window.APP = APP;
 }(this));
