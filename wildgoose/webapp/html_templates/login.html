@@ -1,4 +1,38 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/account.css" />
+<div class="join-container">
+<form class="form-container">
+	<div class="profile-circle">
+		<div class="profile-circle-photo"><img src="/image/logo.png" alt="photo" class="profile-photo"/></div>
+	</div>
+	
+	<div class="input input-column">
+		<ul class="input-column-box">
+			<li class="input-query-entry">
+				<input type="email" id="email" name="email" placeholder="이메일을 입력하세요" data-check="true"/>
+			</li>
+			<li class="input-error-label">
+				<label for="email" class="form-msg msg-email"></label>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="input input-column">
+		<ul class="input-column-box">
+			<li class="input-query-entry">
+				<input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" data-check="true"/>
+			</li>
+			<li class="input-error-label">
+				<label for="password" class="form-msg msg-password"></label>
+			</li>
+		</ul>
+	</div>
+
+	<button type="button" name="submit" id="create">로그인하기</button>
+	<input name="randomNumber" type="hidden" value="<%= randNum %>" />
+</form>
+</div>
+
+<!-- <link type="text/css" rel="stylesheet" href="/stylesheet/account.css" />
 <div class="ajax-text-and-image white-popup-block card">
 	<style>
 	.ajax-text-and-image {
@@ -49,4 +83,4 @@
 		</form>
 	</div>
 	<div style="clear:both; line-height: 0;"></div>
-</div>
+</div> -->

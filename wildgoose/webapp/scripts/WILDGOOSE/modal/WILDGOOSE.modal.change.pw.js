@@ -96,7 +96,7 @@
 	
 	WILDGOOSE.modal.change.pw = {
 		init: init
-	}
+	};
 
 	window.WILDGOOSE = WILDGOOSE;
 	

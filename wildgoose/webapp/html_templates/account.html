@@ -1,12 +1,42 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/account.css" />
 <div class="join-container">
 <form class="form-container">
-	<input class="input" type="email" id="email" name="email" placeholder="이메일을 입력하세요" data-check="true"/>
-	<label for="name" class="form-msg msg-email"></label>
-	<input class="input" type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" data-check="true"/>
-	<label for="password" class="form-msg msg-password"></label>
-	<input class="input" type="password" id="confirm" name="confirm" placeholder="다시 한 번 입력해주세요" data-check="true"/>
-	<label for="confirm" class="form-msg msg-confirm"></label>
-	<input class="button disable" type="button" name="submit" id="create" value="가입하기"/>
+	<div class="profile-circle">
+		<div class="profile-circle-photo"><img src="/image/logo.png" alt="photo" class="profile-photo"/></div>
+	</div>
+	
+	<div class="input input-column">
+		<ul class="input-column-box">
+			<li class="input-query-entry">
+				<input type="email" id="email" name="email" placeholder="이메일을 입력하세요" data-check="true"/>
+			</li>
+			<li class="input-error-label">
+				<label for="email" class="form-msg msg-email"></label>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="input input-column">
+		<ul class="input-column-box">
+			<li class="input-query-entry">
+				<input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" data-check="true"/>
+			</li>
+			<li class="input-error-label">
+				<label for="password" class="form-msg msg-password"></label>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="input input-column">
+		<ul class="input-column-box">
+			<li class="input-query-entry">
+				<input type="password" id="confirm" name="confirm" placeholder="다시 한 번 입력해주세요" data-check="true"/>
+			</li>
+			<li class="input-error-label">
+				<label for="confirm" class="form-msg msg-confirm"></label>
+			</li>
+		</ul>
+	</div>
+	<button type="button" name="submit" id="create">가입하기</button>
 </form>
 </div>

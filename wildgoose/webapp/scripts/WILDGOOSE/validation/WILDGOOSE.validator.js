@@ -181,17 +181,21 @@
 			 * 상태에 따른 변경될 style을 모음 
 			 */
 			_validStyle: function(inputEl) {
-				Dom.removeClass(inputEl, "status-denied");
-				Dom.removeClass(inputEl, "isInvalid");
-				Dom.addClass(inputEl, "status-approved");
-				Dom.addClass(inputEl, "isValid");
+				var inputColumnEl = inputEl.parentNode.parentNode.parentNode;
+				console.log(inputColumnEl);
+//				Dom.removeClass(inputColumnEl, "status-denied");
+				Dom.removeClass(inputColumnEl, "is-invalid");
+//				Dom.addClass(inputColumnEl, "status-approved");
+				Dom.addClass(inputColumnEl, "is-valid");
 			},
 			
 			_invalidStyle: function(inputEl) {
-				Dom.removeClass(inputEl, "status-approved");
-				Dom.removeClass(inputEl, "isValid");
-				Dom.addClass(inputEl, "status-denied");
-				Dom.addClass(inputEl, "isInvalid");
+				var inputColumnEl = inputEl.parentNode.parentNode.parentNode;
+				console.log(inputColumnEl);
+//				Dom.removeClass(inputColumnEl, "status-approved");
+				Dom.removeClass(inputColumnEl, "is-valid");
+//				Dom.addClass(inputColumnEl, "status-denied");
+				Dom.addClass(inputColumnEl, "is-invalid");
 			},
 
 			/*
