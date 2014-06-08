@@ -14,25 +14,24 @@
 	var Ajax = CAGE.ajax;
 	var Validator = WILDGOOSE.validation.validator;
 	
-	var ChangePW = {
-		init: function(args) {
-			this.selected = {};
-			this.submit = null;
-			this.randomNumber = null;
-			
-			this.form = document.querySelector(args.form);
-			this._extract(args.types);
-			this._addValidationEvent();
-			this.url = "/api/v1/accounts/";
-		},
+	function ChangePw(args) {
+		this.selected = {};
+		this.submit = null;
+		this.randomNumber = null;
 		
+		this.method = args.method;
+		this.names = args.names;
+		this.form = document.querySelector(args.form);
+		this.url = args.url;
+		
+		this._extract();
+		this._addValidationEvent();
+	};
+	
+	ChangePw.prototype = {
+		constructor: "ChangePw",
 		exec: function(callback) {
-			var email = escape(document.getElementById("userId").textContent);
-			var oldPassword = SHA256(SHA256(escape(this.selected.password.value)) + this.randomNumber);
-			var newPassword = SHA256(escape(this.selected.newPassword.value));
-			var payload = "email=" + user_email + "&old_pw=" + oldPassword + "&new_pw="+newPassword;
-			
-			Ajax.PUT({
+			Ajax[this.method]({
 				"url": this.url,
 				"success": function() {
 					callback();
@@ -41,11 +40,18 @@
 				"failure": function() {
 					console.log("FAIL!");
 				},
-				"data": payload
+				"data": this._getPayload()
 			});
 		},
+		_getPayload: function() {
+			var email = escape(document.getElementById("userId").textContent);
+			var oldPassword = SHA256(SHA256(escape(this.selected.oldPassword.value)) + this.randomNumber);
+			var newPassword = SHA256(escape(this.selected.newPassword.value));
+			var payload = "email=" + email + "&old_pw=" + oldPassword + "&new_pw="+newPassword;
+			return payload;
+		},
 	
-		_extract: function(names) {
+		_extract: function() {
 			for (var i = this.form.length - 1; i >= 0; --i) {
 				var el = this.form[i];
 				if (el.name == "submit") {
@@ -57,13 +63,13 @@
 					continue;
 				}
 				
-				if (names !== undefined && names.indexOf(el.type) != -1) {
+				if (this.names !== undefined && this.names.indexOf(el.name) != -1) {
 					this.selected[el.name] = el;
 				}
 			}
 		},
 			
-		_addValidationEvent: function(types) {
+		_addValidationEvent: function() {
 			for (var name in this.selected) {
 				var el = this.selected[name];
 				el.addEventListener("blur", this._checkValidation.bind(this), false);
@@ -91,10 +97,10 @@
 			}
 			Dom[flag?"removeClass":"addClass"](this.submit, "disable");
 		}
+		
 	};
-
 	
-	WILDGOOSE.account.change.pw = ChangePW;
+	WILDGOOSE.account.change.pw = ChangePw;
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
 	if (typeof module !== 'undefined' && module.exports) {

@@ -9,10 +9,15 @@
 	// 의존성 주입
 	var Ajax = CAGE.ajax;
 	
-	var Logout = {
+	function Logout(args) {
+		this.method = args.method;
+		this.url = args.url;
+	};
+	Logout.prototype = {
+		constructor: "Logout",
 		exec: function(callback) {
-			Ajax.DELETE({
-				"url":'/api/v1/session',
+			Ajax[this.method]({
+				"url":this.url,
 				"success": function() {
 					callback();
 				},
@@ -22,6 +27,7 @@
 			});
 		}
 	};
+	
 	
 	WILDGOOSE.account.logout = Logout;
 	

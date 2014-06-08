@@ -13,24 +13,24 @@
 	var Ajax = CAGE.ajax;
 	var Validator = WILDGOOSE.validation.validator;
 	
-	var Login = {
-		init: function(args) {
-			this.selected = {};
-			this.submit = null;
-			this.randomNumber = null;
-			
-			this.form = document.querySelector(args.form);
-			this._extract(args.types);
-			this._addValidationEvent();
-			this.url = "/api/v1/session/";
-		},
+	function Login(args) {
+		this.selected = {};
+		this.submit = null;
+		this.method = args.method;
+		this.names = args.names;
+		this.form = document.querySelector(args.form);
+		this.url = args.url;
 		
+		this.randomNumber = null;
+		
+		this._extract();
+		this._addValidationEvent();
+	};
+	
+	Login.prototype = {
+		constructor: "Login",
 		exec: function(callback) {
-			var email = escape(this.selected.email.value);
-			var password = SHA256(SHA256(escape(this.selected.password.value)) + this.randomNumber);
-			var payload = "email=" + email + "&password=" + password;
-			
-			Ajax.POST({
+			Ajax[this.method]({
 				"url": this.url,
 				"success": function() {
 					callback();
@@ -38,11 +38,17 @@
 				"failure": function() {
 					console.log("FAIL!");
 				},
-				"data": payload
+				"data": this._getPayload()
 			});
 		},
+		_getPayload: function() {
+			var email = escape(this.selected.email.value);
+			var password = SHA256(SHA256(escape(this.selected.password.value)) + this.randomNumber);
+			var payload = "email=" + email + "&password=" + password;
+			return payload;
+		},
 		
-		_extract: function(names) {
+		_extract: function() {
 			for (var i = this.form.length - 1; i >= 0; --i) {
 				var el = this.form[i];
 				if (el.name == "submit") {
@@ -54,7 +60,7 @@
 					continue;
 				}
 				
-				if (names !== undefined && names.indexOf(el.type) != -1) {
+				if (this.names !== undefined && this.names.indexOf(el.name) != -1) {
 					this.selected[el.name] = el;
 				}
 			}

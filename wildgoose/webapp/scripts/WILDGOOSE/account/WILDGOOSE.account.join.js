@@ -13,21 +13,22 @@
 	var Dom = CAGE.util.dom;
 	var Validator = WILDGOOSE.validation.validator;
 	
-	var Join = {
-		init: function(args) {
-			this.selected = {};
-			this.submit = null;
-			this.form = document.querySelector(args.form);
-			this._extract(args.types);
-			this._addValidationEvent();
-			this.url = "/api/v1/accounts/";
-		},
+	function Join(args) {
+		this.selected = {};
+		this.submit = null;
+		this.method = args.method;
+		this.names = args.names;
+		this.form = document.querySelector(args.form);
+		this.url = args.url;
 		
+		this._extract();
+		this._addValidationEvent();
+	};
+	
+	Join.prototype = {
+		constructor: "Join",
 		exec: function(callback) {
-			var email = escape(this.selected.email.value);
-			var password = SHA256(escape(this.selected.password.value));
-			var payload = "email=" + email + "&password=" + password;
-			Ajax.POST({
+			Ajax[this.method]({
 				"url": this.url,
 				"success": function() {
 					callback();
@@ -35,45 +36,30 @@
 				"failure": function() {
 					console.log("FAIL!");
 				},
-				"data": payload
+				"data": this._getPayload()
 			});
 		},
+		_getPayload: function() {
+			var email = escape(this.selected.email.value);
+			var password = SHA256(escape(this.selected.password.value));
+			var payload = "email=" + email + "&password=" + password;
+			return payload;
+		},
 		
-//		
-//		function withdrawAccount(popup){
-//			var user_email = document.getElementById("userId").innerText;
-//			var password = document.querySelector(".form-container input[name=password]").value;
-//			var randomNumber = document.querySelector(".form-container input[name=randomNumber]").value;
-//			var hashedPassword = SHA256(password);
-//			var finalPassword = SHA256(hashedPassword+randomNumber);
-//			var url = "/api/v1/accounts";
-//			var payload = "email="+user_email+"&password="+finalPassword+"&check=withdraw";
-//
-//			Ajax.POST({"url": url, "callback":function(response) {
-//				if (JSON.parse(response).status == 200) {
-//					popup.afterclose.add(function() {location.reload();});
-//					popup.close();
-//				}
-//			}, "data":payload});
-//		},
-//			
-//		
-		
-		
-		_extract: function(names) {
+		_extract: function() {
 			for (var i = this.form.length - 1; i >= 0; --i) {
 				var el = this.form[i];
 				if (el.name == "submit") {
 					this.submit = el;
 					continue;
 				}
-				if (names !== undefined && names.indexOf(el.type) != -1) {
+				if (this.names !== undefined && this.names.indexOf(el.name) != -1) {
 					this.selected[el.name] = el;
 				}
 			}
 		},
 			
-		_addValidationEvent: function(types) {
+		_addValidationEvent: function() {
 			for (var name in this.selected) {
 				var el = this.selected[name];
 				el.addEventListener("blur", this._checkValidation.bind(this), false);
@@ -102,6 +88,7 @@
 			Dom[flag?"removeClass":"addClass"](this.submit, "disable");
 		}
 	};
+	
 	
 	WILDGOOSE.account.join = Join;
 	

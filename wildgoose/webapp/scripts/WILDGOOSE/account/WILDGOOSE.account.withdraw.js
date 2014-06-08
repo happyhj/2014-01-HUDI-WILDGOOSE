@@ -13,24 +13,24 @@
 	var Ajax = CAGE.ajax;
 	var Validator = WILDGOOSE.validation.validator;
 	
-	var Withdraw = {
-		init: function(args) {
-			this.selected = {};
-			this.submit = null;
-			this.randomNumber = null;
-			
-			this.form = document.querySelector(args.form);
-			this._extract(args.types);
-			this._addValidationEvent();
-			this.url = "/api/v1/accounts/";
-		},
+	function Withdraw(args) {
+		this.selected = {};
+		this.submit = null;
+		this.method = args.method;
+		this.names = args.names;
+		this.form = document.querySelector(args.form);
+		this.url = args.url;
 		
+		this.randomNumber = null;
+		
+		this._extract();
+		this._addValidationEvent();
+	};
+	
+	Withdraw.prototype = {
+		constructor: "Withdraw",
 		exec: function(callback) {
-			var email = escape(document.getElementById("userId").textContent);
-			var password = SHA256(SHA256(escape(this.selected.password.value)) + this.randomNumber);
-			var payload = "email=" + email + "&password=" + password + "&check=withdraw";
-			
-			Ajax.POST({
+			Ajax[this.method]({
 				"url": this.url,
 				"success": function() {
 					callback();
@@ -39,11 +39,18 @@
 				"failure": function() {
 					console.log("FAIL!");
 				},
-				"data": payload
+				"data": this._getPayload()
 			});
 		},
 		
-		_extract: function(names) {
+		_getPayload: function() {
+			var email = escape(document.getElementById("userId").textContent);
+			var password = SHA256(SHA256(escape(this.selected.password.value)) + this.randomNumber);
+			var payload = "email=" + email + "&password=" + password + "&check=withdraw";
+			return payload;
+		},
+		
+		_extract: function() {
 			for (var i = this.form.length - 1; i >= 0; --i) {
 				var el = this.form[i];
 				if (el.name == "submit") {
@@ -55,13 +62,13 @@
 					continue;
 				}
 				
-				if (names !== undefined && names.indexOf(el.type) != -1) {
+				if (this.names !== undefined && this.names.indexOf(el.name) != -1) {
 					this.selected[el.name] = el;
 				}
 			}
 		},
 			
-		_addValidationEvent: function(types) {
+		_addValidationEvent: function() {
 			for (var name in this.selected) {
 				var el = this.selected[name];
 				el.addEventListener("blur", this._checkValidation.bind(this), false);
@@ -90,7 +97,7 @@
 			Dom[flag?"removeClass":"addClass"](this.submit, "disable");
 		}
 	};
-
+	
 	
 	WILDGOOSE.account.withdraw = Withdraw;
 	
