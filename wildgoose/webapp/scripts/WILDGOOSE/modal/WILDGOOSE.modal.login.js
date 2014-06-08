@@ -35,7 +35,25 @@
 				form: ".form-container",
 				rule: {
 					email: {
-						type: "email"
+						type: "email",
+						extend: {
+							usable: [ function(inputEl, callback) {
+								Ajax.GET({
+									isAsync: false,
+									url: "/api/v1/session?email=" + inputEl.value,
+									success: function(responseObj) {
+										var validity = true;
+										var isProgressing = true;
+										callback(validity, isProgressing);
+									},
+									failure: function(responseObj) {
+										var validity = false;
+										var isProgressing = true;
+										callback(validity, isProgressing);
+									}
+								});
+							}, "가입되지 않은 이메일입니다."]
+						}
 					},
 					password: {
 						type: "password"

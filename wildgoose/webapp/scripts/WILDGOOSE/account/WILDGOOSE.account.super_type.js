@@ -11,7 +11,7 @@
 	 */
 	var Dom = CAGE.util.dom;
 	var Ajax = CAGE.ajax;
-	var Validator = WILDGOOSE.validation.validator;
+	var Validator = WILDGOOSE.validator;
 	
 	function Account(args) {
 		this.selected = {};
@@ -39,7 +39,7 @@
 					this.names = Object.keys(this.rule);
 					this._extract();
 					this._addValidationEvent();
-					this.validator = new Validator(this.rule);
+					this.validator = new Validator(this.form, this.rule);
 				}
 			}
 		},

@@ -1,15 +1,19 @@
 package next.wildgoose.backcontroller;
 
+import java.util.regex.Pattern;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.SignDAO;
+import next.wildgoose.dto.AccountResult;
 import next.wildgoose.dto.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.SHA256;
+import next.wildgoose.utility.Uri;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +24,62 @@ public class SessionController implements BackController {
 	@Override
 	public Result execute(HttpServletRequest request) {
 		Result result = null;
+		Uri uri = new Uri(request);
 		String method = request.getMethod();
-
-		if ("POST".equals(method)) {
-			result = login(request);
-		} else if ("DELETE".equals(method)) {
-			result = logout(request);
+		
+		if (uri.check(1, null)) {
+			if ("POST".equals(method)) {
+				result = login(request);
+			}
+			else if ("DELETE".equals(method)) {
+				result = logout(request);
+			}
+			else if ("GET".equals(method)) {
+				String email = request.getParameter("email");
+				result = joinedEmail(request, email);
+			}
 		}
 		
 		return result;
+	}
+	private AccountResult joinedEmail(HttpServletRequest request, String email) {
+		ServletContext context = request.getServletContext();
+		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
+		AccountResult accountResult = new AccountResult();
+		
+		if(isJoinable(signDao, email)){
+			accountResult.setStatus(500);
+			accountResult.setMessage("fetching email info failed");
+		} else {
+			accountResult.setStatus(200);
+			accountResult.setMessage("fetching email info succeed");
+		}
+		accountResult.setEmail(email);
+
+		return accountResult;
+	}
+	
+	private boolean isJoinable(SignDAO signDao, String email) {
+		if (isValidEmail(email)) {
+			return !signDao.findEmail(email);
+		}
+		return false;
+	}
+	
+	private boolean isValidEmail(String email) {
+		String regex = "^[\\w\\.-_\\+]+@[\\w-]+(\\.\\w{2,4})+$";
+
+		return isFilled(email) && Pattern.matches(regex, email);
+	}
+	
+	private boolean isFilled(String data) {
+		
+		if (data != null && data.length() > 0) {
+			return true;
+		}
+		
+		return false;
+		
 	}
 
 	private SimpleResult login(HttpServletRequest request) {

@@ -49,9 +49,17 @@
 		} else {
 			DOM.className = DOM.className.replace(className + " ", "");
 		}
-	}	
+	};
 	
 	var Util = {
+		object : {
+			extend: function(dest, src) {
+				for (var property in src) {
+					dest[property] = src[property];
+				}
+				return dest;
+			}
+		},
 		dom : {
 			hasClass : (function() {
 				if(isClassListExist) {
