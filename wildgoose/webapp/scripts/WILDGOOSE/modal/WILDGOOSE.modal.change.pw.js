@@ -40,16 +40,20 @@
 				method: "PUT",
 				url: "/api/v1/accounts/",
 				form: ".form-container",
-				names: ["oldPassword", "newPassword", "newConfirm"]
+				rule: {
+					oldPassword: {
+						type: "password"
+					},
+					newPassword:{
+						type: "password"
+					},
+					newConfirm: {
+						type: "confirm",
+						target: "newPassword"
+					}
+				}
 			};
-			var ChangePwAccount = new ChangePw(args);
-			
-//			var args = {
-//				form: ".form-container",
-//				types: ["oldPassword", "newPassword", "newConfirm"]
-//			}
-//			ChangePwAccount.init(args);
-		
+			var ChangePwAccount = new ChangePw(args);		
 
 			var btn = arguments[0].querySelector("#change");
 			btn.addEventListener("click", function(evt) {

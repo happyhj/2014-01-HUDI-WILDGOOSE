@@ -33,11 +33,20 @@
 				method: "POST",
 				url: "/api/v1/accounts/",
 				form: ".form-container",
-				names: ["email", "password", "confirm"]
+				rule: {
+					email: {
+						type: "email"
+					},
+					password: {
+						type: "password"
+					},
+					confirm: {
+						type: "confirm",
+						target: "password"
+					}
+				}
 			};
 			var JoinAccount = new Join(args);
-//			JoinAccount.init(args);
-		
 
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", function(evt) {
