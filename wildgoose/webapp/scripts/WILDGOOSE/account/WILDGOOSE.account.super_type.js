@@ -11,7 +11,7 @@
 	 */
 	var Dom = CAGE.util.dom;
 	var Ajax = CAGE.ajax;
-	var Validator = WILDGOOSE.validation.validator;
+	var Validator = WILDGOOSE.validator;
 	
 	function Account(args) {
 		this.selected = {};
