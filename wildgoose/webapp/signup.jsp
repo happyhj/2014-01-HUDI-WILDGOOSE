@@ -21,7 +21,6 @@
 						<div class="profile-circle-photo"><img src="/image/logo.png" alt="photo" class="profile-photo"/></div>
 					</div>
 				</div>
-				
 				<div class="card-section card-section-email">
 					<input class="input" type="email" id="email" name="email" placeholder="이메일" />
 					<label for="name" class="form-msg msg-email"></label>

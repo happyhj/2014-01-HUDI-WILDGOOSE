@@ -1,135 +1,64 @@
 @CHARSET "UTF-8";
 
-/* Layout rules */
-html, 
-body {
-	height: 100%;
+/** Layout rules **/
+
+/*** join-container ***/
+.join-container {
+	width: 500px;
+	border-radius: 10px;
+	-webkit-box-shadow: 0 0 100px 0 rgba(255, 255, 255, .3);
+	   -moz-box-shadow: 0 0 100px 0 rgba(255, 255, 255, .3);
+			box-shadow: 0 0 100px 0 rgba(255, 255, 255, .3);
 }
 
-.wrap {
-	position: relative;
-	width: 100%;
-	min-height: 100%;	
-}
-
-.header {
-	width: 100%;
-	height: 120px;
-}
-
-.container {
-	width: 960px;
-	margin: 0 auto;
-	padding-bottom: 70px;
-}
-
-
-/* Theme rules */
-.wrap {
-	background-color: rgba(0,0,0,.1);
-}
-
-.header {
-	width: 100%;
-	heigth: 50px;
-}
-
-.profile-circle {
-	margin: 0 auto;
+/*** profile ***/
+.join-container .profile-circle {
+	margin: 0 auto 30px auto;
 	width: 100px;
 	height: 100px;
+
 	background-color:#ddd;
-	/* background-color:rgba(255,255,255,255.0.6); */
-	border-radius:50px;
-	box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);
+	/* margin-bottom: 30px; */
+	
 	border: 1px;
+	border-radius:50px;
+	
+	-webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);
+	   -moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);
+			box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);	
 }
 
-.profile-circle-photo {
+.join-container .profile-circle-photo {
 	position: relative;
+	top: 8px;
 	left: 20px;
-	top: 8px
 }
 
-.profile-photo {
+.join-container .profile-photo {
 	height: 90px;
 	opacity: .2;
 }
-.logo {
-	width: 38px;
-	padding-left: 19px;
-	margin: auto;
-}
-.logo-image {
-	height: 60px;
-	opacity: .4;
-}
 
-
-
-.card-login {
-	width: 500px;
-	margin: 30px auto;
-	padding: 20px;
-}
-
-.card-login .form-container {
+/*** form-container ***/
+.join-container .form-container {
 	padding: 20px;
 	height: 100%;
 	border-radius: 10px;
-	-webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,.15);
-	box-shadow: 0 2px 4px 0 rgba(0,0,0,.15);
 	background: #f5f5f5;
-}
-.card-login .input {
-	display: block;
-	width: 94%;
-	height: 44px;
-	margin: 20px auto;
-	padding-left: 5px;
-	border-radius: 3px;
+	-webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,.15);
+	   -moz-box-shadow: 0 2px 4px 0 rgba(0,0,0,.15);
+			box-shadow: 0 2px 4px 0 rgba(255, 255, 255, .3);
 }
 
-.card-login .button {
+/* button */
+.form-container button {
 	width: 100%;
 	height: 50px;
 	margin: 20px auto;
 	border-radius: 3px;
 }
 
-.card-login .input {
-	
-	-webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	   -moz-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-		-ms-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-		 -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  
-	outline: none;
-	padding: 0 3%;
-	border: 1px solid #f5f5f5;
-	
-  	font-size: 1.3em;
-	color: #777;
-	
-	-webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);
-	-moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);
-	box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);
-}
-
-.card-login .input:hover {
-	border: 1px solid #ccc;
-}
-
-.card-login .input:focus {
-  	border: 1px solid rgba(81, 203, 238, 1);
-  	
-  	-webkit-box-shadow: inset 0 1px 4px rgba(81, 203, 238, .15), 0 0 2px 0px rgba(81, 203, 238, .7);
-	-moz-box-shadow: inset 0 1px 4px rgba(81, 203, 238, .15), 0 0 2px 0px rgba(81, 203, 238, .7);
-	box-shadow: inset 0 1px 4px rgba(81, 203, 238, .15), 0 0 2px 0px rgba(81, 203, 238, .7);
-}
-
-
-.card-login .button {
+.form-container button {
 	-webkit-transition: box-shadow 0.15s ease-in-out;
 	   -moz-transition: box-shadow 0.15s ease-in-out;
 		-ms-transition: box-shadow 0.15s ease-in-out;
@@ -147,63 +76,148 @@ body {
 	border-left: 1px solid white;
 }
 
-.card-login .button:hover {
+.form-container button:hover {
 	-webkit-box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
-	-moz-box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
-	box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
+	   -moz-box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
+			box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
 }
 
-.card-login .button:active {
+.form-container button:active {
 	background-color: #3872DD;
 	-webkit-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
-	-moz-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
-	box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
-}
-
-.card-login .card-section-other a {
-	text-decorate: none;
+	   -moz-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+			box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
 }
 
 
-.status-approved {
-	color:green;
+
+
+
+/*** input container ***/
+.form-container .input {
+	max-width: 400px;
+	height: 44px;  /* search height */
+	margin: 20px auto;
+	
+	border-width: 2px;
+	padding-right: 66px;  /* search button width */
 }
 
-.status-denied {
-	color:red;
+/*** input-column layout sub module ***/
+.form-container .input-column {
+	list-style-type: none;
 }
 
-.form-msg {
+.form-container .input-column input{
+	padding-left: 10px; /* query entry margin left */
+}
+
+.form-container .input-column .input-column-box li {
+	float: left;
+	height: 100%;
+}
+
+
+/*** input query entry ***/ 
+.form-container .input-query-entry  {
+    width: 100%;
+}
+.form-container .input-query-entry > input { 
+	border: 0;
+	height: 44px;  /* search height */
+	width: 100% !important;
+}
+
+/*** input error label ***/
+.form-container .input-error-label {
+	width: 66px;          /* search button width */
+  	margin-right: -66px;  /* search button width */
+}
+
+.form-container .input-error-label > input {
+	margin: 0;
 	width: 100%;
+	height: 35px;  /* Search Component height */
+
+	outline: none;
+	border: 0 none;
+}
+
+
+/** Theme rules **/
+
+/*** input sub module ***/
+.form-container .input {
+    -webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	   -moz-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+		-ms-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+		 -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  
+	outline: none;
+	/* padding: 0 3%; */
+	border: 1px solid #f5f5f5;
+	border-radius: 3px;
+	background-color: white;
+	
+	-webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);
+	   -moz-box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);
+			box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);
+    
+}
+
+.form-container .input:hover {
+	/* border-color: #B3B3B3; */
+	border: 1px solid #ccc;
+}
+
+.form-container .input:focus {
+	border: 1px solid rgba(81, 203, 238, 1);
+  	
+  	-webkit-box-shadow: inset 0 1px 4px rgba(81, 203, 238, .15), 0 0 2px 0px rgba(81, 203, 238, .7);
+	   -moz-box-shadow: inset 0 1px 4px rgba(81, 203, 238, .15), 0 0 2px 0px rgba(81, 203, 238, .7);
+			box-shadow: inset 0 1px 4px rgba(81, 203, 238, .15), 0 0 2px 0px rgba(81, 203, 238, .7);
+}
+
+.form-container .is-valid {
+	border:1px solid rgba(102,236,102,.6) !important;
+	-webkit-box-shadow: inset 1px 1px 1px 0 rgba(102,236,102,.39) !important;
+	   -moz-box-shadow: inset 1px 1px 1px 0 rgba(102,236,102,.39) !important;
+			box-shadow: inset 1px 1px 1px 0 rgba(102,236,102,.39) !important;
+}
+.form-container .is-invalid {	
+	border:1px solid rgba(210,76,127,.6) !important;
+	-webkit-box-shadow: inset 1px 1px 1px 0 rgba(210,76,127,.29) !important;
+	   -moz-box-shadow: inset 1px 1px 1px 0 rgba(210,76,127,.29) !important;
+			box-shadow: inset 1px 1px 1px 0 rgba(210,76,127,.29) !important;
+}
+
+
+
+
+.form-container .input-query-entry > input {
+	font-size: 1.3em;
+	color: #777;
+	
+	outline: none;
+	background-color:transparent;
+}
+
+/*** input error label ***/
+.form-container .input-error-label .form-msg {
 	color: #777;
 	font-size:0.9em;
-	margin:0 auto;
 }
 
-.isProgressing {
-	background:url('/image/progress.gif');
-	background-color: #fff;
-	background-repeat: no-repeat;
-	background-size: contain;
-	background-position: right center;
-}
 
-.isValid {
-	background:url('/image/ok.png');
-	background-color: #fff;
-	background-repeat: no-repeat;
-	background-size: contain;
-	background-position: right center;
+.form-container .input ::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #999;
 }
-
-.isInvalid {
-	background:url('/image/no.png');
-	background-color: #fff;
-	background-repeat: no-repeat;
-	background-size: contain;
-	background-position: right center;
+.form-container .input :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #999;
 }
-
-.form-container .hidden {
-	display: none !important;
+.form-container .input ::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #999;
+}
+.form-container .input :-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #999;
 }
