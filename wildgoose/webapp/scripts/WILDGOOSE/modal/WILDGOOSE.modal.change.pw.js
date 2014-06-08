@@ -10,6 +10,7 @@
 	// 의존성 선언 
 //	var Account = WILDGOOSE.account;
 	var Popup = CAGE.ui.popup;
+	var Ajax = CAGE.ajax;
 	var TemplateUtil = CAGE.util.template;
 	var Dom = CAGE.util.dom;
 //	var ChangePwAccount = WILDGOOSE.account.change.pw;
@@ -42,7 +43,25 @@
 				form: ".form-container",
 				rule: {
 					oldPassword: {
-						type: "password"
+						type: "password",
+						extend: {
+							exist: [ function(inputEl, callback) {
+								Ajax.GET({
+									isAsync: false,
+									url: "/api/v1/accounts?email=" + inputEl.value,
+									success: function(responseObj) {
+										var validity = true;
+										var isProgressing = true;
+										callback(validity, isProgressing);
+									},
+									failure: function(responseObj) {
+										var validity = false;
+										var isProgressing = true;
+										callback(validity, isProgressing);
+									}
+								});
+							}, "비밀번호가 다릅니다."]
+						}
 					},
 					newPassword:{
 						type: "password"

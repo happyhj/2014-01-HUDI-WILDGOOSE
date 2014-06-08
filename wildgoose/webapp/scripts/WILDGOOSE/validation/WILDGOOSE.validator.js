@@ -26,20 +26,37 @@
 				var curRule = this.rule[name];
 				var curType = curRule.type; 
 				this.myLogics[name] = this.normLogics[curType];
-				this.mySequence[name] = this.normSequence[curType];
-				this.defineFunction(name);
+				this.defineSequence(name, curType, this.rule[name].extend);
+				this.defineFunction(name, this.rule[name].extend);
 
 				if (curType == "confirm") {
 					this.myLogics[name].target = this.rule[name].target;						
 				}
 			}
 		},
-		defineFunction: function(name) {
-			var sequences = this.mySequence[name];
-			
-			for (var i in sequences) {
-				var curSeq = sequences[i];
-				if (this.myLogics[name][curSeq][0] == null) {
+		
+		defineSequence: function(name, type, extendObj) {
+			this.mySequence[name] = this.normSequence[type];
+			// extendObj가 존재할 경우만 concat
+			if (extendObj !== undefined) {
+				var extendSeq = Object.keys(extendObj);
+				for(var i=0; i<extendSeq.length; ++i) {
+					var curSeq = extendSeq[i];
+					if (this.mySequence[name].indexOf(curSeq) == -1) {
+						this.mySequence[name].push(curSeq);
+					}
+				}
+			}
+		},
+		
+		defineFunction: function(name, extendObj) {
+			for (var i in this.mySequence[name]) {
+				var curSeq = this.mySequence[name][i];
+				// curSeq가 확장되었을 경우., extendObj에 존재.
+				if (extendObj !== undefined && extendObj.hasOwnProperty(curSeq)) {
+					this.myLogics[name][curSeq] = extendObj[curSeq];
+				}
+				else if (this.myLogics[name][curSeq][0] == null){
 					this.myLogics[name][curSeq][0] = this.normFunction[curSeq];
 				}
 			}
