@@ -5,11 +5,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.SignDAO;
+import next.wildgoose.dto.AccountResult;
 import next.wildgoose.dto.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Constants;
 import next.wildgoose.utility.SHA256;
+import next.wildgoose.utility.Uri;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,13 +22,21 @@ public class SessionController implements BackController {
 	@Override
 	public Result execute(HttpServletRequest request) {
 		Result result = null;
+		Uri uri = new Uri(request);
 		String method = request.getMethod();
-
-		if ("POST".equals(method)) {
-			result = login(request);
-		} else if ("DELETE".equals(method)) {
-			result = logout(request);
+		
+		if (uri.check(1, null)) {
+			if ("POST".equals(method)) {
+				result = login(request);
+			} else if ("DELETE".equals(method)) {
+				result = logout(request);
+			}
 		}
+//		else if (uri.check(1, "search")) {
+//			if ("POST".equals(method)) {
+//				result = login(request);
+//			}
+//		}
 		
 		return result;
 	}

@@ -18,13 +18,13 @@
 	
 	function init() {
 		var changePwBtn = document.querySelector("#change-password");
-		
+		var randNum = null;
 		var changePwPopup = new Popup.ajaxPopup({
 			element: changePwBtn,
 			templateUrl: "/api/v1/templates/changePassword.html",
 			templateLoader: function(AjaxResponse) {
 				var templateStr = JSON.parse(AjaxResponse).data.template;
-				var randNum = JSON.parse(AjaxResponse).data.rand;
+				randNum = JSON.parse(AjaxResponse).data.rand;
 				var userId = document.getElementById("userId").textContent;
 //				console.log(AjaxResponse);
 //				console.log("template Rand: " + randNum);
@@ -46,19 +46,26 @@
 						type: "password",
 						extend: {
 							exist: [ function(inputEl, callback) {
-								Ajax.GET({
+								Ajax.POST({
 									isAsync: false,
-									url: "/api/v1/accounts?email=" + inputEl.value,
+									url: "/api/v1/session",
 									success: function(responseObj) {
+										console.log("Success!");
 										var validity = true;
 										var isProgressing = true;
 										callback(validity, isProgressing);
 									},
 									failure: function(responseObj) {
+										console.log("Failure!");
 										var validity = false;
 										var isProgressing = true;
 										callback(validity, isProgressing);
-									}
+									},
+									data: (function() {
+										var email = escape(document.getElementById("userId").textContent);
+										var password = SHA256(SHA256(escape(inputEl.value)) + randNum);
+										return "email=" + email + "&password=" + password;
+									}())
 								});
 							}, "비밀번호가 다릅니다."]
 						}

@@ -5,6 +5,7 @@
 	var WILDGOOSE = window.WILDGOOSE || {};
 	WILDGOOSE.validator = WILDGOOSE.validator || {};
 	
+	var Extend = CAGE.util.object.extend;
 	var Dom = CAGE.util.dom;
 	var Ajax = CAGE.ajax;
 	
@@ -24,8 +25,9 @@
 		defineLogics: function() {
 			for (var name in this.rule) {
 				var curRule = this.rule[name];
-				var curType = curRule.type; 
-				this.myLogics[name] = this.normLogics[curType];
+				var curType = curRule.type;
+				this.myLogics[name] = Extend({}, this.normLogics[curType]);
+				
 				this.defineSequence(name, curType, this.rule[name].extend);
 				this.defineFunction(name, this.rule[name].extend);
 
@@ -36,7 +38,9 @@
 		},
 		
 		defineSequence: function(name, type, extendObj) {
-			this.mySequence[name] = this.normSequence[type];
+			this.mySequence[name] = [];
+			this.mySequence[name].concat(this.normSequence[type]);
+			
 			// extendObj가 존재할 경우만 concat
 			if (extendObj !== undefined) {
 				var extendSeq = Object.keys(extendObj);
@@ -53,10 +57,11 @@
 			for (var i in this.mySequence[name]) {
 				var curSeq = this.mySequence[name][i];
 				// curSeq가 확장되었을 경우., extendObj에 존재.
+
 				if (extendObj !== undefined && extendObj.hasOwnProperty(curSeq)) {
 					this.myLogics[name][curSeq] = extendObj[curSeq];
 				}
-				else if (this.myLogics[name][curSeq][0] == null){
+				else if (this.myLogics[name][curSeq] !== undefined && this.myLogics[name][curSeq][0] === null){
 					this.myLogics[name][curSeq][0] = this.normFunction[curSeq];
 				}
 			}
