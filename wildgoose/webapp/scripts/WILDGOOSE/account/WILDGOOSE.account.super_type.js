@@ -18,6 +18,7 @@
 		this.submit = null;
 		this.randomNumber = null;
 		this.method = null;
+		this.rule = null;
 		this.names = null;
 		this.form = null;
 		this.url = null;
@@ -30,13 +31,15 @@
 		account: function(args) {
 			if (args !== undefined) {
 				this.method = args.method;
-				this.names = args.names;
+				this.rule = args.rule;
 				this.form = document.querySelector(args.form);
 				this.url = args.url;
 				
-				if (this.names !== undefined) {
+				if (this.rule !== undefined) {
+					this.names = Object.keys(this.rule);
 					this._extract();
 					this._addValidationEvent();
+					this.validator = new Validator(this.rule);
 				}
 			}
 		},
@@ -88,7 +91,7 @@
 		
 		_checkValidation: function(evt) {
 			var inputEl = evt.target;
-			if (Validator.check(inputEl)) {
+			if (this.validator.check(inputEl)) {
 				console.log("validation ok");
 			}
 			

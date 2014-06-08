@@ -22,8 +22,6 @@
 		return payload;
 	};
 	
-	
-	
 	WILDGOOSE.account.join = Join;
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.

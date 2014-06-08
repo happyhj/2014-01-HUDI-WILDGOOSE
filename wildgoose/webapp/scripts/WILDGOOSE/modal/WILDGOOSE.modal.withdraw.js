@@ -34,19 +34,20 @@
 		
 		leavePopup.afteropen.add(function() {
 			var args = {
-					method: "POST",
-					url: "/api/v1/accounts/",
-					form: ".form-container",
-					names: ["password", "confirm"]
-				};
-				var LeaveAccount = new Leave(args);
-			
-//			var args = {
-//				form: ".form-container",
-//				types: ["password", "confirm"]
-//			};
-//			LeaveAccount.init(args);
-		
+				method: "POST",
+				url: "/api/v1/accounts/",
+				form: ".form-container",
+				rule: {
+					password: {
+						type: "password"
+					},
+					confirm: {
+						type: "confirm",
+						target: "password"
+					}
+				}
+			};
+			var LeaveAccount = new Leave(args);
 
 			var btn = arguments[0].querySelector("#withdraw");
 			btn.addEventListener("click", function(evt) {

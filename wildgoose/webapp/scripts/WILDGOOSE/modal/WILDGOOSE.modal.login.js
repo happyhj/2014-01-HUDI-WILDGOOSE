@@ -29,20 +29,20 @@
 		});
 				
 		loginPopup.afteropen.add(function() {
-			
 			var args = {
-					method: "POST",
-					url: "/api/v1/session/",
-					form: ".form-container",
-					names: ["email", "password"]
-				};
+				method: "POST",
+				url: "/api/v1/session/",
+				form: ".form-container",
+				rule: {
+					email: {
+						type: "email"
+					},
+					password: {
+						type: "password"
+					}
+				}
+			};
 			var LoginAccount = new Login(args);
-			
-//			var args = {
-//				form: ".form-container",
-//				types: ["email", "password"]
-//			};
-//			LoginAccount.init(args);
 			
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", function(evt) {
