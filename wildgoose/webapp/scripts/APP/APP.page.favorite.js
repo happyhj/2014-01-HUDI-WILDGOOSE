@@ -14,7 +14,7 @@
 	
 	var FavoritePage = {
 		init: function() {
-			Favorite.init(User.getId());
+			Favorite.init({"userId":User.getId()});
 		}		
 	}
 		

@@ -11,6 +11,7 @@
 	// 하위 모듈 import
 	var Search = WILDGOOSE.search;
 	var Favorite = WILDGOOSE.ui.favorite;
+	var User = WILDGOOSE.user;
 	
 	var SearchPage = {
 		init: function() {
@@ -37,7 +38,7 @@
 		},
 		
 		_favoriteModule: function() {
-			Favorite.init(userId);
+			Favorite.init({"userId":User.getId()});
 		}
 	}
 		

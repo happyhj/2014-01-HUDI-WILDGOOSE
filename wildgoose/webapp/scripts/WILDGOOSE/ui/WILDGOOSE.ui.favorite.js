@@ -96,7 +96,7 @@
 		
 		init: function(args) {
 			this.userId = args.userId;
-			
+
 			// 초기화
 			if (this.userId !== undefined) {
 				
@@ -108,6 +108,7 @@
 				Ajax.GET({
 					"url" : url,
 					"callback" : function(jsonStr) {
+						console.log(jsonStr);
 						var result = JSON.parse(jsonStr);
 						var reporterCards = result["data"]["reporterCards"]
 						for (var i=0; i<reporterCards.length; i++) {
