@@ -31,8 +31,8 @@
 		<script type="text/javascript" src="/CAGE/src/CAGE.ui.popup.js"></script>
 		
 		<script type="text/javascript" src="/scripts/WILDGOOSE/user/WILDGOOSE.user.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/validation/WILDGOOSE.validation.logics.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/validation/WILDGOOSE.validation.ui.js"></script>
+		<!-- <script type="text/javascript" src="/scripts/WILDGOOSE/validation/WILDGOOSE.validation.logics.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/validation/WILDGOOSE.validation.ui.js"></script> -->
 		<!-- <script type="text/javascript" src="/scripts/WILDGOOSE/validation/WILDGOOSE.validation.js"></script> -->
 		<script type="text/javascript" src="/scripts/WILDGOOSE/validation/WILDGOOSE.validation.validator.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.super_type.js"></script>
