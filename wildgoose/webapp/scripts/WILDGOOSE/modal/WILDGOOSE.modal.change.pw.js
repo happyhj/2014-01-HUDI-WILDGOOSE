@@ -12,7 +12,8 @@
 	var Popup = CAGE.ui.popup;
 	var TemplateUtil = CAGE.util.template;
 	var Dom = CAGE.util.dom;
-	var ChangePwAccount = WILDGOOSE.account.change.pw;
+//	var ChangePwAccount = WILDGOOSE.account.change.pw;
+	var ChangePw = WILDGOOSE.account.change.pw;
 	
 	function init() {
 		var changePwBtn = document.querySelector("#change-password");
@@ -36,10 +37,18 @@
 		
 		changePwPopup.afteropen.add(function() {
 			var args = {
+				method: "PUT",
+				url: "/api/v1/accounts/",
 				form: ".form-container",
-				types: ["oldPassword", "newPassword", "newConfirm"]
-			}
-			ChangePwAccount.init(args);
+				names: ["oldPassword", "newPassword", "newConfirm"]
+			};
+			var ChangePwAccount = new ChangePw(args);
+			
+//			var args = {
+//				form: ".form-container",
+//				types: ["oldPassword", "newPassword", "newConfirm"]
+//			}
+//			ChangePwAccount.init(args);
 		
 
 			var btn = arguments[0].querySelector("#change");

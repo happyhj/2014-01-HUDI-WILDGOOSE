@@ -24,10 +24,17 @@
 		},
 		
 		_logout: function() {
+			var args = {
+				method: "DELETE",
+				url: "/api/v1/session"
+			};
+			var LogoutAccount = new Logout(args);
+			
+			
 			var logoutBtn = document.querySelector("#logout");
 			logoutBtn.addEventListener("click", function() {
 				
-				Logout.exec(function() {
+				LogoutAccount.exec(function() {
 					location.href="/";
 				});
 				

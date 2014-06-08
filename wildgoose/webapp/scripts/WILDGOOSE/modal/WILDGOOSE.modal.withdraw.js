@@ -11,7 +11,8 @@
 	var Popup = CAGE.ui.popup;
 	var TemplateUtil = CAGE.util.template;
 	var Dom = CAGE.util.dom;
-	var LeaveAccount = WILDGOOSE.account.withdraw;
+//	var LeaveAccount = WILDGOOSE.account.withdraw;
+	var Leave = WILDGOOSE.account.withdraw;
 	
 	function init() {
 		var leaveBtn = document.querySelector("#leave");
@@ -33,10 +34,18 @@
 		
 		leavePopup.afteropen.add(function() {
 			var args = {
-				form: ".form-container",
-				types: ["password", "confirm"]
-			}
-			LeaveAccount.init(args);
+					method: "POST",
+					url: "/api/v1/accounts/",
+					form: ".form-container",
+					names: ["password", "confirm"]
+				};
+				var LeaveAccount = new Leave(args);
+			
+//			var args = {
+//				form: ".form-container",
+//				types: ["password", "confirm"]
+//			};
+//			LeaveAccount.init(args);
 		
 
 			var btn = arguments[0].querySelector("#withdraw");

@@ -193,19 +193,57 @@
 			}
 		}
 	}
-
-	// 공개 메서드 선언	
-	function GET(config) {
-		var url = config.url,
-			callback = config.callback,
-			isAsync = config.isAsync;
-
-		if (isAsync == undefined) {
-			isAsync = true;
+	function removeNewLine(str) {
+		if(str.substring(str.length - 1) === "\n") {
+			return str.substring(0, str.length - 1);					
+		}
+		return str;
+	}
+	
+	function _error(evt, request, failure) {
+		if (request.detail !== undefined) {
+			failure(request.detail);
+			return;
 		}
 		
+		var responseText = removeNewLine(request.responseText);
+		var responseObj = JSON.parse(request.responseText);
+		failure(responseObj);
+	}
+	
+	function _load(evt, request, success) {
+		var targetEl = evt.target;
+		if (request.status >= 200 && request.status < 300 || request.status == 304) {
+			var response = removeNewLine(request.responseText);
+			var responseObj = JSON.parse(request.responseText);
+			var apiStatus = responseObj.status;
+			if (apiStatus >= 200 && apiStatus < 300 || apiStatus == 304) {
+				success(responseObj);
+			}
+			else {
+				var errorEvt = new CustomEvent("error", { "detail": responseObj });
+				targetEl.dispatchEvent(errorEvt);
+			}
+		}
+	}
+	
+	
+	function _exec(config){
+		var method = config.method,
+		headerObj = config.headers,
+		url = config.url,
+		callback = config.callback,
+		data = config.data,
+		isAsync = config.isAsync,
+		success = config.success,
+		failure = config.failure;
+
 		if (url == undefined) {
 			return;
+		}
+		
+		if (isAsync == undefined) {
+			isAsync = true;
 		}
 				
 		var request = _createRequest();
@@ -214,107 +252,64 @@
 			return;
 		}
 		
-		request.open("GET", url, isAsync);
+		request.open(method, url, isAsync);
+		////////  success, failure로 변경 완료시 삭제 필요함.  /////////
 		if (callback !== undefined) {
 			request.addEventListener("readystatechange", function (e) {
 				_responseData(e, request, callback);
 			}, false);
 		}
+		/////////////////////////////////////////////////////////
+		
+		if (success !== undefined){ 
+			request.addEventListener("load", function(evt){
+				_load(evt, request, success);
+			}, false);
+		}
+		
+		if (failure !== undefined) {
+			request.addEventListener("error", function(evt){
+				_error(evt, request, failure);
+			}, false);
+		}
+		
+		
+		if (headerObj !== undefined) {
+			for (var header in headerObj) {
+				var content = headerObj[header];
+				request.setRequestHeader(header, content);
+			}
+		}
+		
 		// send
-		request.send();
+		request.send(data);
+	}
+
+	// 공개 메서드 선언	
+	function GET(config) {
+		config.method = "GET";
+		_exec(config);
 	}
 		
 	function POST(config) {
-		var url = config.url,
-			callback = config.callback,
-			data = config.data,
-			isAsync = config.isAsync;
-		
-		if (isAsync === undefined) {
-			isAsync = true;
-		}
-
-		if (url == undefined) {
-			return;
-		}
-				
-		var request = _createRequest();
-		if (request === undefined) {
-			console.log("Unable to create request");
-			return;
-		}
-
-		request.open("POST", url, isAsync);
-		if (callback !== undefined) {
-			request.addEventListener("readystatechange", function (e) {
-				_responseData(e, request, callback);
-			}, false);
-		}
-		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		// send
-		request.send(data);
+		config.method = "POST";
+		config.headers = {
+			"Content-Type": "application/x-www-form-urlencoded"
+		};
+		_exec(config);
 	}
 
 	function PUT(config) {
-		var url = config.url,
-			callback = config.callback,
-			data = config.data,
-			isAsync = config.isAsync;
-		
-		if (isAsync === undefined) {
-			isAsync = true;
-		}
-
-		if (url === undefined) {
-			return;
-		}
-				
-		var request = _createRequest();
-		if (request === undefined) {
-			console.log("Unable to create request");
-			return;
-		}
-
-		request.open("PUT", url, isAsync);
-		if (callback !== undefined) {
-			request.addEventListener("readystatechange", function (e) {
-				_responseData(e, request, func);
-			}, false);
-		}
-		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		// send
-		request.send(data);
+		config.method = "PUT";
+		config.headers = {
+			"Content-Type": "application/x-www-form-urlencoded"
+		};
+		_exec(config);
 	}
 		
 	function DELETE(config) {
-		var url = config.url,
-			callback = config.callback,
-			data = config.data,
-			isAsync = config.isAsync;
-		
-		if (isAsync === undefined) {
-			isAsync = true;
-		}
-
-		if (url === undefined) {
-			return;
-		}
-				
-		var request = _createRequest();
-		if (request === undefined) {
-			console.log("Unable to create request");
-			return;
-		}
-
-		request.open("DELETE", url, isAsync);
-		
-		if (callback !== undefined) {
-			request.addEventListener("readystatechange", function (e) {
-				_responseData(e, request, callback);
-			}, false);
-		}
-		// send
-		request.send();
+		config.method = "DELETE";
+		_exec(config);
 	}
 	
 	
@@ -331,6 +326,7 @@
 		POST: POST,
 		PUT: PUT,
 		DELETE: DELETE
+//		_exec: _exec
 	};
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
@@ -343,7 +339,7 @@
 
 }(this));
 (function(window) {
-	'use strict';
+//	'use strict';
 	var document = window.document;
 	var console = window.console;
 	var CAGE = window.CAGE || {};
@@ -396,7 +392,7 @@
 		this.status = {
 			data: false
 		};
-		
+
 		this._init();
     }
     
@@ -407,24 +403,32 @@
 		var status = this.status;
 		
 		var close = this.close;
-		
+
 		el.addEventListener("click", openHandler.bind(this), false);
 
 		function openHandler(event) {
-			event.preventDefault();
-			event.stopPropagation();
+			Ajax.GET({
+				url: this.templateUrl,
+				callback: (function(response){
+					console.log(response)
+					this.template = this.templateLoader(response);
+					event.preventDefault();
+					event.stopPropagation();
+					
+					var originalTarget;
+					if(event.toElement) {
+						originalTarget = event.toElement;
+					} else if(event.originalTarget){
+						originalTarget = event.originalTarget;
+					}
+					if(originalTarget === el) {
+						this._counstructDOM();
+						var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");	
+						popupWrapAnimation.addEventListener("transitionend", afteropenCallbackRef, false);
+					}
+				}).bind(this)
+			});
 			
-			var originalTarget;
-			if(event.toElement) {
-				originalTarget = event.toElement;
-			} else if(event.originalTarget){
-				originalTarget = event.originalTarget;
-			}
-			if(originalTarget === el) {
-				this._counstructDOM();
-				var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");	
-		        popupWrapAnimation.addEventListener("transitionend", afteropenCallbackRef, false);
-		    }
 		}
 
 		function afteropenCallbackRef(event){
@@ -554,14 +558,8 @@
 		this.status = {
 			data: false
 		};
-		// preload 기능이 필요하다.		
-		Ajax.GET({
-			url: this.templateUrl,
-			callback: (function(response){
-				this.template = this.templateLoader(response);
-				this._init();
-			}).bind(this)
-		});				
+		// preload 되면 session에 어떤 randNum이 저장될 지 알 수가 없다ㅠ
+		this._init();
 	}	
 	
 	ajaxPopup.prototype = popup.prototype;	

@@ -9,7 +9,8 @@
 	// 의존성 선언
 	var Ajax = CAGE.ajax; 
 	var Popup = CAGE.ui.popup;
-	var JoinAccount = WILDGOOSE.account.join;
+//	var JoinAccount = WILDGOOSE.account.join;
+	var Join = WILDGOOSE.account.join;
 
 	function init() {
 
@@ -29,10 +30,13 @@
 		// Ajax로 불러온 팝업창에는 스크립트를 넣을 수 없기 때문이다.
 		joinPopup.afteropen.add(function() {
 			var args = {
+				method: "POST",
+				url: "/api/v1/accounts/",
 				form: ".form-container",
-				types: ["email", "password", "confirm"]
-			}
-			JoinAccount.init(args);
+				names: ["email", "password", "confirm"]
+			};
+			var JoinAccount = new Join(args);
+//			JoinAccount.init(args);
 		
 
 			var btn = arguments[0].querySelector("#create");

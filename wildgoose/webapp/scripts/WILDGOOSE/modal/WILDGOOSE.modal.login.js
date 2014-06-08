@@ -10,7 +10,8 @@
 	var Ajax = CAGE.ajax; 
 	var Popup = CAGE.ui.popup;
 	var TemplateUtil = CAGE.util.template;
-	var LoginAccount = WILDGOOSE.account.login;
+//	var LoginAccount = WILDGOOSE.account.login;
+	var Login = WILDGOOSE.account.login;
 
 	function init() {
 		var loginBtn = document.querySelector("#login");
@@ -28,11 +29,20 @@
 		});
 				
 		loginPopup.afteropen.add(function() {
+			
 			var args = {
-				form: ".form-container",
-				types: ["email", "password"]
-			};
-			LoginAccount.init(args);
+					method: "POST",
+					url: "/api/v1/session/",
+					form: ".form-container",
+					names: ["email", "password"]
+				};
+			var LoginAccount = new Login(args);
+			
+//			var args = {
+//				form: ".form-container",
+//				types: ["email", "password"]
+//			};
+//			LoginAccount.init(args);
 			
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", function(evt) {
