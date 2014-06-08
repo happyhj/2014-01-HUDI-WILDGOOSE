@@ -38,8 +38,7 @@
 		},
 		
 		defineSequence: function(name, type, extendObj) {
-			this.mySequence[name] = [];
-			this.mySequence[name].concat(this.normSequence[type]);
+			this.mySequence[name] = [].concat(this.normSequence[type]);
 			
 			// extendObj가 존재할 경우만 concat
 			if (extendObj !== undefined) {
@@ -125,7 +124,6 @@
 						var isProgressing = true;
 						callback(validity, isProgressing);
 					}
-					
 				});
 //					Dom.addClass(inputEl, "isProgressing");
 			},
