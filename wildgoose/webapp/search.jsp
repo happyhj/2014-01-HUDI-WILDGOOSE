@@ -80,6 +80,7 @@
 		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.ui.favorite.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/search/WILDGOOSE.search.more.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/search/WILDGOOSE.search.auto_complement.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/search/WILDGOOSE.search.submit.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/search/WILDGOOSE.search.js"></script>
 		
 		<script type="text/javascript" src="/scripts/APP/APP.page.search.js"></script>

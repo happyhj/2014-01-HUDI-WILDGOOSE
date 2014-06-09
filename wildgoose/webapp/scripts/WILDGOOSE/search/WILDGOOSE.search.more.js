@@ -15,10 +15,6 @@
 	
 	var More = {
 		init: function(args) {
-//			this.searchMoreBtn = document.querySelector(args.button);
-//			this.searchResult = document.querySelector(args.container);
-//			this.requestNum = args.requestNum;
-//			this.template = Template.get({"url":args.templateUrl});
 			this.searchMoreBtn = args.button;
 			this.searchResult = args.container;
 			this.requestNum = args.requestNum;
@@ -91,22 +87,6 @@
 			// card template을 cards array에 담음
 			for (var i=0; i<reporterNum; i++) {
 				var cardData = reporters[i];
-				
-				/*
-				 * 로그인 상태에 따른 별을 보여주는 로직 추가 필요
-				 * 
-				if logined
-				favorited reporter card's star must be turn on
-				and stars have their own event-handler
-				else
-				stars have to be invisible
-				 */
-				if(isLogined){
-//					var star = card.querySelector(".star");
-//					console.log(star);
-//					Util.removeClass(star, "invisible");
-//					star.addEventListener("click", Fav.toggleFav, false);
-				}
 				var newLi = '<li class="' + className + '">' + templateCompiler(cardData, this.template) + '</li>';
 				cards.push(newLi);
 			}

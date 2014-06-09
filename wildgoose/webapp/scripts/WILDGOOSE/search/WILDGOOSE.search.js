@@ -12,6 +12,7 @@
 	var Template = CAGE.util.template;
 	var More = WILDGOOSE.search.more;
 	var AutoComplement = WILDGOOSE.search.auto_complement;
+	var Submit = WILDGOOSE.search.submit;
 	
 	var Search = {
 		init: function(args) {
@@ -21,27 +22,36 @@
 				this.form = {
 					box: document.querySelector(search.box),
 					container: document.querySelector(search.container)
-				}
+				};
 				
 				this.search = {
 					submit: document.querySelector(search.submit),
 					requestNum: search.requestNum,
 					templateURL: search.templateURL,
 					template: Template.get({"url":search.templateURL})
-				}
+				};
+				
+				// initialize submit button
+				var submitArgs = {
+					box: this.form.box,
+					submit: this.search.submit
+				};
+				Submit.init(submitArgs);
+				
 			}
 			
-			// autocompletion
+			// initialize auto completion list
 			var autocompletion = args.autocompletion;
 			if (autocompletion !== undefined) {
-				this.auto = {
-					list: document.querySelector(args.autocompletion.list),
-					requestNum: autocompletion.requestNum
-				}
-				AutoComplement.init({searchBox: this.form.box, container: this.auto.list, requestNum: this.auto.requestNum});
+				this.list = {
+					element: document.querySelector(args.autocompletion.list),
+					requestNum: autocompletion.requestNum,
+					interval: 100
+				};
+				AutoComplement.init({searchBox: this.form.box, list: this.list});
 			}
 			
-			// more
+			// initialize more button
 			var more = args.more;
 			if (more !== undefined) {
 				this.more = {
@@ -49,6 +59,9 @@
 				}
 				More.init({button: this.more.button, container: this.form.container, template: this.search.template, requestNum: this.search.requestNum});
 			}
+			
+			// box focus status
+			this.form.box.focus();
 		}
 	};
 	
