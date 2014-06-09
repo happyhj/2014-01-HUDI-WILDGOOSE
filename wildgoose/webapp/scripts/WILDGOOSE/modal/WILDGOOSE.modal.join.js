@@ -25,7 +25,6 @@
 				return JSON.parse(AjaxResponse).data.template;
 			}
 		});
-		
 		// 가입창에 스크립트를 적용한다.
 		// Ajax로 불러온 팝업창에는 스크립트를 넣을 수 없기 때문이다.
 		joinPopup.afteropen.add(function() {
@@ -46,7 +45,9 @@
 					}
 				}
 			};
+			
 			var JoinAccount = new Join(args);
+			joinPopup.afterclose.add(JoinAccount.stop.bind(JoinAccount));
 
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", function(evt) {

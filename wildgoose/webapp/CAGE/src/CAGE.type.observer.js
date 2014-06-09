@@ -13,19 +13,27 @@
 	var Dom = CAGE.util.dom;
 
 	function Observer(args) {
-		this.status = null;
 		this.interval = 100;
-		if (args.interval !== undefined) {
-			this.interval = args.interval;
-		}
+		this.status = null;
+		this.observerEl = null;
+		this.targetElObj = null; 
+		this.usable = false;
 		
-		this.observerEl = args.observerEl;
-		this.targerElArr = args.targetElArr;
-		this.usable = (this.observerEl === undefined || this.targetElArr === undefined)? false: true;
+		this._observer(args);
 	};
 	
 	Observer.prototype = {
 		constructor: "Observer",
+		_observer: function(args) {
+			if (args !== undefined) {
+				if (args.interval !== undefined) {
+					this.interval = args.interval;
+				}
+				this.observerEl = args.observerEl;
+				this.targetElObj = args.targetElObj;
+				this.usable = (this.observerEl === null || this.targetElObj === null)? false: true;
+			}
+		},
 		activate: function() {
 			if (this.usable === true && this.status === null) {
 				this.status = setInterval(this._handler.bind(this), this.interval);
@@ -43,19 +51,8 @@
 			this.observerEl.dispatchEvent(observeEvt);
 		},
 		observe: function() {
-			
 			// interface
-			
 			return true;
-			var flag = true;
-			for (var i=this.targetElArr.length-1; i>=0; --i) {
-				var el = this.targetElArr[i];
-				if (!Dom.hasClass(el, "status-approved")) {
-					flag = false;
-					break;
-				}
-			}
-			return flag;
 		}
 	};
 

@@ -13,6 +13,7 @@
 //	var Observer = CAGE.type.observer;
 	var Ajax = CAGE.ajax;
 	var Validator = WILDGOOSE.validator;
+	var AccountObserver = WILDGOOSE.account.observer;
 	
 	function Account(args) {
 		this.selectedEl = {};
@@ -24,12 +25,12 @@
 		this.form = null;
 		this.url = null;
 		
-		this.account(args);
+		this._account(args);
 	};
 	
 	Account.prototype = {
 		constructor: "Account",
-		account: function(args) {
+		_account: function(args) {
 			if (args !== undefined) {
 				this.method = args.method;
 				this.rule = args.rule;
@@ -39,38 +40,62 @@
 				if (this.rule !== undefined) {
 					this.names = Object.keys(this.rule);
 					this._extract();
-					this._addValidationEvent();
-					this.validator = new Validator(this.form, this.rule);
-				}
-				
-				// account submit버튼을 serInterval을 이용하여 계속적 탐지
-				if (this.submitEl !== undefined) {
-					var obArgs = {
-						targetElArr: Object.valueOf(this.selectedEl),
-						observerEl: this.submit
-					};
-					this.observer = new Observer(obArgs);
-					this.observer.activate();
-//					this.observer.deactivate();
 					
-//					this.submitEl.setObserver(this.);
-//					this.submitEl.addEventListener("observe", )
+					// account submit버튼을 serInterval을 이용하여 계속적 탐지
+					this._setObserver();
+					this._activateObserver();
 				}
 			}
 		},
-		exec: function(callback) {
-			Ajax[this.method]({
-				"url": this.url,
-				"success": function() {
-					callback();
-					console.log("Success!");
-				},
-				"failure": function() {
-					console.log("FAIL!");
-				},
-				"data": this._getPayload()
-			});
+		stop: function() {
+			this._deactivateObserver();
 		},
+		
+		exec: function(callback) {
+			debugger;
+			if (Dom.hasClass(this.submitEl, "disable")) {
+				console.log("누르지마 바보야");
+			}
+			else {
+				Ajax[this.method]({
+					"url": this.url,
+					"success": function() {
+						callback();
+						console.log("Success!");
+					},
+					"failure": function() {
+						console.log("FAIL!");
+					},
+					"data": this._getPayload()
+				});
+			}
+		},
+		
+		_deactivateObserver: function() {
+			this.observer.deactivate();
+			this.submitEl.removeEventListener("observe", this._observeEvtHandler, false);
+		},
+		
+		_activateObserver: function() {
+			this.submitEl.addEventListener("observe", this._observeEvtHandler, false);
+			this.observer.activate();
+		},
+		
+		_setObserver: function() {
+			var obArgs = {
+				targetElObj: this.selectedEl.valueOf(),
+				observerEl: this.submitEl,
+				interval: 100,
+				validator: new Validator(this.form, this.rule)
+			};
+			this.observer = new AccountObserver(obArgs);
+		},
+		
+		_observeEvtHandler: function(evt) {
+			console.log("flag: " + evt.detail.flag);
+			Dom[evt.detail.flag?"removeClass":"addClass"](this, "disable");
+		},
+		
 		_getPayload: function() {
 			/*
 			 * interface
@@ -95,36 +120,7 @@
 					this.selectedEl[el.name] = el;
 				}
 			}
-		},
-			
-		_addValidationEvent: function() {
-			for (var name in this.selectedEl) {
-				var el = this.selectedEl[name];
-				el.addEventListener("blur", this._checkValidation.bind(this), false);
-			}
-		},
-		
-		_checkValidation: function(evt) {
-			var inputEl = evt.target;
-			if (this.validator.check(inputEl)) {
-				console.log("validation ok");
-			}
-			
-			// 각 input의 className을 확인하여 sumbit 버튼 활성화
-			this._checkStatusOfSubmit.call(this);
-		},
-		
-		// form에 입력된 내용이 valid한지를 확인하여 회원가입 버튼 활성화 / 비활성화
-		_checkStatusOfSubmit: function() {
-			var flag = true;
-			for (var name in this.selectedEl) {
-				if (!Dom.hasClass(this.selectedEl[name], "status-approved")) {
-					flag = false;
-					break;
-				}
-			}
-			Dom[flag?"removeClass":"addClass"](this.submitEl, "disable");
-		}
+		}		
 	};
 	
 	
@@ -136,6 +132,7 @@
 		// browser export
 	} else {
 		window.WILDGOOSE = WILDGOOSE;
-	}    	
+	}
 
 }(this));
+
