@@ -14,12 +14,12 @@
 	var AutoComplement = {
 		init : function(args) {
 			this.row = {
-				requestCount : args.requestNum,
+				requestCount : args.list.requestNum,
 				currentCount : 0
 			};
 			
 			// ms
-			this.interval = 100;
+			this.interval = args.list.interval;
 
 			this.is = {
 				searching : false,
@@ -28,10 +28,8 @@
 				listing : false,
 				highlighting : false
 			};	
-//			this.box = document.querySelector(args.searchBox);
-//			this.list = document.querySelector(args.container);
 			this.box = args.searchBox;
-			this.list = args.container;
+			this.list = args.list.element;
 			
 			this.cache = {
 				searchedQuery : this.box.value,
@@ -47,8 +45,6 @@
 			};
 			this.box.addEventListener("focus", this.cache.callbackRef.notify);
 			this.box.addEventListener("blur", this.cache.callbackRef.expired);
-			
-			this.box.focus();
 		},
 
 		expired : function(evt) {
