@@ -1,0 +1,75 @@
+(function(window) {
+	'use strict';
+	// 자주 사용하는 글로벌 객체 레퍼런스 확보
+	var document = window.document;
+	var console = window.console;
+
+	// 사용할 네임 스페이스 확보	
+	var CAGE = window.CAGE || {};
+	CAGE.type = CAGE.type || {};
+	CAGE.type.observer = CAGE.type.observer || {};
+	
+	
+	var Dom = CAGE.util.dom;
+
+	function Observer(args) {
+		this.status = null;
+		this.interval = 100;
+		if (args.interval !== undefined) {
+			this.interval = args.interval;
+		}
+		
+		this.observerEl = args.observerEl;
+		this.targerElArr = args.targetElArr;
+		this.usable = (this.observerEl === undefined || this.targetElArr === undefined)? false: true;
+	};
+	
+	Observer.prototype = {
+		constructor: "Observer",
+		activate: function() {
+			if (this.usable === true && this.status === null) {
+				this.status = setInterval(this._handler.bind(this), this.interval);
+			}
+		},
+		deactivate: function() {
+			clearInterval(this.status);
+			this.status = null;
+		},
+		_handler: function() {
+			this._trigger(this.observe());
+		},
+		_trigger: function(flag) {
+			var observeEvt = new CustomEvent("observe", { "detail": { "flag": flag } });
+			this.observerEl.dispatchEvent(observeEvt);
+		},
+		observe: function() {
+			
+			// interface
+			
+			return true;
+			var flag = true;
+			for (var i=this.targetElArr.length-1; i>=0; --i) {
+				var el = this.targetElArr[i];
+				if (!Dom.hasClass(el, "status-approved")) {
+					flag = false;
+					break;
+				}
+			}
+			return flag;
+		}
+	};
+
+
+	
+	// 공개 메서드 노출
+	CAGE.type.observer = Observer;
+	
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = CAGE;
+		// browser export
+	} else {
+		window.CAGE = CAGE;
+	}    	
+
+}(this));

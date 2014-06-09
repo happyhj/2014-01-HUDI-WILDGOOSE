@@ -10,12 +10,13 @@
 	 * validation action
 	 */
 	var Dom = CAGE.util.dom;
+//	var Observer = CAGE.type.observer;
 	var Ajax = CAGE.ajax;
 	var Validator = WILDGOOSE.validator;
 	
 	function Account(args) {
-		this.selected = {};
-		this.submit = null;
+		this.selectedEl = {};
+		this.submitEl = null;
 		this.randomNumber = null;
 		this.method = null;
 		this.rule = null;
@@ -40,6 +41,20 @@
 					this._extract();
 					this._addValidationEvent();
 					this.validator = new Validator(this.form, this.rule);
+				}
+				
+				// account submit버튼을 serInterval을 이용하여 계속적 탐지
+				if (this.submitEl !== undefined) {
+					var obArgs = {
+						targetElArr: Object.valueOf(this.selectedEl),
+						observerEl: this.submit
+					};
+					this.observer = new Observer(obArgs);
+					this.observer.activate();
+//					this.observer.deactivate();
+					
+//					this.submitEl.setObserver(this.);
+//					this.submitEl.addEventListener("observe", )
 				}
 			}
 		},
@@ -68,7 +83,7 @@
 			for (var i = this.form.length - 1; i >= 0; --i) {
 				var el = this.form[i];
 				if (el.name == "submit") {
-					this.submit = el;
+					this.submitEl = el;
 					continue;
 				}
 				if (el.name == "randomNumber") {
@@ -77,14 +92,14 @@
 				}
 				
 				if (this.names !== undefined && this.names.indexOf(el.name) != -1) {
-					this.selected[el.name] = el;
+					this.selectedEl[el.name] = el;
 				}
 			}
 		},
 			
 		_addValidationEvent: function() {
-			for (var name in this.selected) {
-				var el = this.selected[name];
+			for (var name in this.selectedEl) {
+				var el = this.selectedEl[name];
 				el.addEventListener("blur", this._checkValidation.bind(this), false);
 			}
 		},
@@ -102,13 +117,13 @@
 		// form에 입력된 내용이 valid한지를 확인하여 회원가입 버튼 활성화 / 비활성화
 		_checkStatusOfSubmit: function() {
 			var flag = true;
-			for (var name in this.selected) {
-				if (!Dom.hasClass(this.selected[name], "status-approved")) {
+			for (var name in this.selectedEl) {
+				if (!Dom.hasClass(this.selectedEl[name], "status-approved")) {
 					flag = false;
 					break;
 				}
 			}
-			Dom[flag?"removeClass":"addClass"](this.submit, "disable");
+			Dom[flag?"removeClass":"addClass"](this.submitEl, "disable");
 		}
 	};
 	
