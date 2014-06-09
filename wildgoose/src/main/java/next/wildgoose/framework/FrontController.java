@@ -1,7 +1,9 @@
 package next.wildgoose.framework;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -24,18 +26,17 @@ public class FrontController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		Uri uri = new Uri(request);
 
 		// 로그인 유지(3일)를 위한 쿠키만료기간 재설정 
 		if (session.getAttribute("userId") != null) {
 			renewAuth(request, response);
 		}
 		
-		BackController backController = getBackController(request.getServletContext(), uri);
+		BackController backController = getBackController(request);
 		Result resultData = backController.execute(request);
 
-		View view = createView(uri);
-		view.show(request, response, uri, resultData);
+		View view = createView(request, resultData);
+		view.show(request, response, resultData);
 	}
 	
 	private void renewAuth(HttpServletRequest request, HttpServletResponse response) {
@@ -57,9 +58,11 @@ public class FrontController extends HttpServlet {
 	}
 	
 	// 요청(request path)에 해당하는 BackController 구현체를 받아오기
-	private BackController getBackController(ServletContext context, Uri uri) {
-		BackController result = null;
+	private BackController getBackController(HttpServletRequest request) {
+		ServletContext context = request.getServletContext();
 		Map<String, BackController> controllerMap = (Map<String, BackController>) context.getAttribute("controllerMap");
+		Uri uri = new Uri(request);
+		BackController result = null;
 		result = controllerMap.get(uri.getPrimeResource());
 		if (result == null) {
 			result = controllerMap.get("error");
@@ -67,11 +70,64 @@ public class FrontController extends HttpServlet {
 		return result;
 	}
 	
-	private View createView(Uri uri) {
+	private View createView(HttpServletRequest request, Result resultData) {
+		Uri uri = new Uri(request);
 		// 요청종류에 따라 뷰 구현체의 인스턴스를 마련한다.
 		if (uri.isAPI()) {
 			return new JSONView();
-		} 
+		}
+		String jspFileName = pickJsp(request, uri, resultData);
+		request.setAttribute("jspName", jspFileName);
 		return new JSPView();
+	}
+	
+	private String pickJsp(HttpServletRequest request, Uri uri, Result resultData) {
+		ServletContext context = request.getServletContext();
+		Map<Uri, String> jspMap = (Map<Uri, String>) context.getAttribute("jspMap");
+		String result = null;
+		
+		//// JSPView의 경우 이 과정에서 내부적으로 대응하는 .jsp 파일을 멤버로 확보하도록 한다.
+		if (resultData == null) {
+			result = jspMap.get(null);
+		} else if (resultData.getStatus() == 200) {			
+			Uri keyUri = getKey(jspMap.keySet(), uri);
+			result = jspMap.get(keyUri);
+		} else if (resultData.getStatus() == 404) {
+			result = "404.jsp";
+		} else {
+			result = "error.jsp";
+		}
+		
+		return result;
+	}
+
+	private Uri getKey(Set<Uri> keySet, Uri uri) {
+		Uri keySchema = null;
+		Iterator<Uri> schemaIr = keySet.iterator();
+		
+		while (keySchema == null && schemaIr.hasNext()) {
+			Uri schema = schemaIr.next();
+			if (schema == null) {
+				continue;
+			}
+			
+			if (schema.size() != uri.size()) {
+				continue;
+			}
+			for (int i=schema.size()-1; i>=0; --i) {
+				String subSchema = schema.get(i);
+				
+				if ("*".equals(subSchema)) {
+					continue;
+				}
+				
+				if (subSchema.equals(uri.get(i)) == false) {
+					break;
+				}
+				
+				keySchema = schema;
+			}
+		}
+		return keySchema;
 	}
 }

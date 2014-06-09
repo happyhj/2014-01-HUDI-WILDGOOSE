@@ -9,5 +9,5 @@ import javax.servlet.http.HttpServletResponse;
 import next.wildgoose.utility.Uri;
 
 public interface View {
-	public void show(HttpServletRequest request, HttpServletResponse response, Uri uri, Result resultData) throws ServletException, IOException;
+	public void show(HttpServletRequest request, HttpServletResponse response, Result resultData) throws ServletException, IOException;
 }

@@ -20,14 +20,11 @@
 			this.requestNum = args.requestNum;
 			this.template = args.template;
 			
-			// 더보기 버튼을 보여줄지 말지 결정
-			var curNumDiv = document.querySelector(".search-more .state-search-curNum");
-			var curNum = parseInt(curNumDiv.innerText);
-			this._selectStatusOfSearchMoreBtn(curNum);
-			
 			// 더보기 버튼 클릭이벤트 설정
 			if (this.searchMoreBtn != null) {
 				this.searchMoreBtn.addEventListener("click", this._more.bind(this), false);
+				var curNumDiv = document.querySelector(".search-more .state-search-curNum");
+				var curNum = parseInt(curNumDiv.innerText);
 				this._selectStatusOfSearchMoreBtn(curNum);
 			}
 		},
