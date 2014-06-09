@@ -36,6 +36,7 @@
 		<display-name>FrontController</display-name>
 		<servlet-name>FrontController</servlet-name>
 		<servlet-class>next.wildgoose.framework.FrontController</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 
