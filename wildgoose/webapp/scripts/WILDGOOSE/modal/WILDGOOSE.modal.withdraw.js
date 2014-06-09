@@ -48,6 +48,7 @@
 				}
 			};
 			var LeaveAccount = new Leave(args);
+			leavePopup.afterclose.add(LeaveAccount.stop.bind(LeaveAccount));
 
 			var btn = arguments[0].querySelector("#withdraw");
 			btn.addEventListener("click", function(evt) {

@@ -61,6 +61,7 @@
 				}
 			};
 			var LoginAccount = new Login(args);
+			loginPopup.afterclose.add(LoginAccount.stop.bind(LoginAccount));
 			
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", function(evt) {

@@ -79,7 +79,8 @@
 					}
 				}
 			};
-			var ChangePwAccount = new ChangePw(args);		
+			var ChangePwAccount = new ChangePw(args);
+			changePwPopup.afterclose.add(ChangePwAccount.stop.bind(ChangePwAccount));
 
 			var btn = arguments[0].querySelector("#change");
 			btn.addEventListener("click", function(evt) {

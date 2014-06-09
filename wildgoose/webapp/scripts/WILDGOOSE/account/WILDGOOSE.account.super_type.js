@@ -52,8 +52,7 @@
 		},
 		
 		exec: function(callback) {
-			debugger;
-			if (Dom.hasClass(this.submitEl, "disable")) {
+			if (this.rule !== undefined && Dom.hasClass(this.submitEl, "disable")) {
 				console.log("누르지마 바보야");
 			}
 			else {
