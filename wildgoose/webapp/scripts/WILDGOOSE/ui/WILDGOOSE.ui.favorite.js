@@ -98,7 +98,7 @@
 			this.userId = args.userId;
 
 			// 초기화
-			if (this.userId !== undefined) {
+			if (this.userId !== "") {
 				
 				// 모든 별에 eventlistener 붙이기
 				this.attatchEventToFavBtn();
