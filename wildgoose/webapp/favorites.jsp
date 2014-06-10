@@ -45,12 +45,12 @@
 		<script type="text/javascript" src="/scripts/WILDGOOSE/user/WILDGOOSE.user.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.ui.favorite.js"></script>
 		
-		<script type="text/javascript" src="/scripts/APP/APP.page.favorite.js"></script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
 	</c:otherwise>
 </c:choose>
+<script type="text/javascript" src="/scripts/APP/APP.page.favorite.js"></script>
 
 <script>
 window.addEventListener("load", function() {

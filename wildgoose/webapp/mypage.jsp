@@ -45,13 +45,13 @@
 		<script type="text/javascript" src="/scripts/WILDGOOSE/modal/WILDGOOSE.modal.withdraw.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/modal/WILDGOOSE.modal.change.pw.js"></script>
 		
-		<script type="text/javascript" src="/scripts/APP/APP.page.mypage.js"></script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
 	</c:otherwise>
 </c:choose>
+<script type="text/javascript" src="/scripts/APP/APP.page.mypage.js"></script>
 <script>
 window.addEventListener("load", function(evt){
 	APP.page.mypage.init();

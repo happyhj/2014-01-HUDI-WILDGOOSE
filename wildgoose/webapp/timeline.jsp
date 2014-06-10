@@ -41,10 +41,8 @@
 	<c:when test="${ initParam.debuggerMode eq 'on' }">
 		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
-		
 		<script type="text/javascript" src="/scripts/WILDGOOSE/user/WILDGOOSE.user.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.ui.favorite.js"></script>
-	
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
