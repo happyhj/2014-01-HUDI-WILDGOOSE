@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <link type="text/css" rel="stylesheet" href="/stylesheet/header.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/modal.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/account.css" />
 
 <a href="/"><img src="/image/logo.png" alt="wildgoose logo" class="header-logo-image"/></a>
 <c:if test="${ empty sessionScope.userId }">
