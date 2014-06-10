@@ -16,8 +16,8 @@
 	Join.prototype = new Account();
 	Join.prototype.constructor = Join;
 	Join.prototype._getPayload = function(){
-		var email = escape(this.selected.email.value);
-		var password = SHA256(escape(this.selected.password.value));
+		var email = escape(this.selectedEl.email.value);
+		var password = SHA256(escape(this.selectedEl.password.value));
 		var payload = "email=" + email + "&password=" + password;
 		return payload;
 	};

@@ -30,10 +30,9 @@
 			};
 			var LogoutAccount = new Logout(args);
 			
-			
 			var logoutBtn = document.querySelector("#logout");
 			logoutBtn.addEventListener("click", function() {
-				
+//				LogoutAccount.stop();
 				LogoutAccount.exec(function() {
 					location.href="/";
 				});

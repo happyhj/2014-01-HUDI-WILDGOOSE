@@ -18,8 +18,8 @@
 	ChangePw.prototype.constructor = ChangePw;
 	ChangePw.prototype._getPayload = function() {
 		var email = escape(document.getElementById("userId").textContent);
-		var oldPassword = SHA256(SHA256(escape(this.selected.oldPassword.value)) + this.randomNumber);
-		var newPassword = SHA256(escape(this.selected.newPassword.value));
+		var oldPassword = SHA256(SHA256(escape(this.selectedEl.oldPassword.value)) + this.randNum);
+		var newPassword = SHA256(escape(this.selectedEl.newPassword.value));
 		var payload = "email=" + email + "&old_pw=" + oldPassword + "&new_pw="+newPassword;
 		return payload;
 	};

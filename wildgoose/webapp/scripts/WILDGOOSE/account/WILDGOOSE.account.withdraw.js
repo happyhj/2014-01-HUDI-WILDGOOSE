@@ -17,7 +17,7 @@
 	Withdraw.prototype.constructor = Withdraw;
 	Withdraw.prototype._getPayload = function() {
 		var email = escape(document.getElementById("userId").textContent);
-		var password = SHA256(SHA256(escape(this.selected.password.value)) + this.randomNumber);
+		var password = SHA256(SHA256(escape(this.selectedEl.password.value)) + this.randNum);
 		var payload = "email=" + email + "&password=" + password + "&check=withdraw";
 		return payload;
 	};
