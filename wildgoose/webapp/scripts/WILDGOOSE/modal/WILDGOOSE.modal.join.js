@@ -34,7 +34,7 @@
 				form: ".form-container",
 				rule: {
 					email: {
-						type: "email",
+						type: "email"
 					},
 					password: {
 						type: "password"

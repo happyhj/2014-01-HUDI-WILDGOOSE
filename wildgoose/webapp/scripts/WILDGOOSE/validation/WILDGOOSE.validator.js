@@ -146,7 +146,7 @@
 			email : {
 				required : [ /.+/, "email을 입력해주세요" ],
 				format : [ /^[\w\.-_\+]+@[\w-]+(\.\w{2,4})+$/, "email형식을 지켜주세요" ],
-				usable : [ null, "이미 등록된 email입니다" ],
+				usable : [ null, "이미 등록된 email입니다" ]
 			},
 			password : {
 				required : [ /.+/, "비밀번호를 입력해주세요" ],
@@ -161,7 +161,7 @@
 			confirm : {
 				required : [ /.+/, "다시 입력해주세요" ],
 				equal : [ null, "다시 확인해주세요" ]
-			},
+			}
 			
 			
 		},

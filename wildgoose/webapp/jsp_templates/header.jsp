@@ -39,13 +39,15 @@
 		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.join.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/modal/WILDGOOSE.modal.join.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/modal/WILDGOOSE.modal.login.js"></script>
+		<script type="text/javascript" src="/scripts/APP/APP.page.header.js"></script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
+		<script type="text/javascript" src="/scripts/APP/APP.min.js"></script>
 	</c:otherwise>
 </c:choose>
-<script type="text/javascript" src="/scripts/APP/APP.page.header.js"></script>
+
 
 <script>
 window.addEventListener("load", function(evt){

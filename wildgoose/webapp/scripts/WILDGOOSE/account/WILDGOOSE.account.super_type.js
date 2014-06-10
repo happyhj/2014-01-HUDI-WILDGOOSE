@@ -25,7 +25,7 @@
 		this.validator = null;
 		this.accountObserver = null;
 		this.cache = {
-			keyEvtHandler: this._keyEvtHandler.bind(this),
+			keyEvtHandler: this._keyEvtHandler.bind(this)
 		};
 		
 		this._account(args);
