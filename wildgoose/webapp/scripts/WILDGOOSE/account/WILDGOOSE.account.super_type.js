@@ -18,7 +18,7 @@
 	function Account(args) {
 		this.selectedEl = {};
 		this.submitEl = null;
-		this.randomNumber = null;
+		this.randNum = null;
 		this.method = null;
 		this.rule = null;
 		this.names = null;
@@ -36,6 +36,7 @@
 				this.rule = args.rule;
 				this.form = document.querySelector(args.form);
 				this.url = args.url;
+				this.randNum = args.randNum;
 				
 				if (this.rule !== undefined) {
 					this.names = Object.keys(this.rule);
@@ -49,6 +50,7 @@
 		},
 		stop: function() {
 			this._deactivateObserver();
+			this._removeEnterEvent();
 		},
 		
 		exec: function(callback) {
@@ -89,10 +91,14 @@
 			};
 			this.observer = new AccountObserver(obArgs);
 		},
-		
 		_observeEvtHandler: function(evt) {
 			console.log("flag: " + evt.detail.flag);
 			Dom[evt.detail.flag?"removeClass":"addClass"](this, "disable");
+			if (evt.detail.flag && evt.detail.keycode == 13) {
+				debugger;
+				var clickEvt = new CustomEvent("click");
+				this.dispatchEvent(clickEvt);
+			}
 		},
 		
 		_getPayload: function() {
@@ -108,10 +114,6 @@
 				var el = this.form[i];
 				if (el.name == "submit") {
 					this.submitEl = el;
-					continue;
-				}
-				if (el.name == "randomNumber") {
-					this.randomNumber = el.value;
 					continue;
 				}
 				

@@ -14,13 +14,14 @@
 	var Login = WILDGOOSE.account.login;
 
 	function init() {
+		var randNum = null;
 		var loginBtn = document.querySelector("#login");
 		var loginPopup = new Popup.ajaxPopup({
 			element: loginBtn,
 			templateUrl: "/api/v1/templates/login.html",
 			templateLoader: function(AjaxResponse) {
 				var templateStr = JSON.parse(AjaxResponse).data.template;
-				var randNum = JSON.parse(AjaxResponse).data.rand;
+				randNum = JSON.parse(AjaxResponse).data.rand;
 				var compiler = TemplateUtil.getCompiler(templateStr);
 				return compiler({
 					"randNum": randNum
@@ -58,7 +59,8 @@
 					password: {
 						type: "password"
 					}
-				}
+				},
+				randNum: randNum
 			};
 			var LoginAccount = new Login(args);
 			loginPopup.afterclose.add(LoginAccount.stop.bind(LoginAccount));
@@ -72,6 +74,9 @@
 				}.bind(this));
 				
 			}, false);
+			
+			var emailDom = document.querySelector(".form-container input[name=email]");
+			emailDom.focus();
 		});
 	}
 

@@ -58,6 +58,9 @@
 				}.bind(this));
 				
 			}, false);
+			
+			var emailDom = document.querySelector(".form-container input[name=email]");
+			emailDom.focus();
 		});
 	}
 

@@ -18,6 +18,7 @@
 		this.observerEl = null;
 		this.targetElObj = null; 
 		this.usable = false;
+		this.infoObj = {};
 		
 		this._observer(args);
 	};
@@ -44,13 +45,13 @@
 			this.status = null;
 		},
 		_handler: function() {
-			this._trigger(this.observe());
+			this._trigger(this._observe());
 		},
 		_trigger: function(flag) {
-			var observeEvt = new CustomEvent("observe", { "detail": { "flag": flag } });
+			var observeEvt = new CustomEvent("observe");
 			this.observerEl.dispatchEvent(observeEvt);
 		},
-		observe: function() {
+		_observe: function() {
 			// interface
 			return true;
 		}

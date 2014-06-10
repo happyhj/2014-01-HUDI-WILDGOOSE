@@ -13,45 +13,65 @@
 	function AccountObserver(args) {
 		Observer.call(this, args);
 		this.validator = args.validator;
-		this.keypressedEl = null;
-		this.evtHandler = this.eventHandler.bind(this);
+		this.targetEl = null;
+		this._bindedKeyEventHandler = this._keyEventHandler.bind(this);
+		this.keyCode = null;
+		this.statusObj = {};
 		
-		this.addKeypressEvent();
+		this._addKeyEvent();
 	};
 	
 	AccountObserver.prototype = new Observer();
 	AccountObserver.prototype.constructor = AccountObserver;
-	AccountObserver.prototype.observe = function() {
+	AccountObserver.prototype._observe = function() {
+		// keydown된 el의 validation작업 수행
+		if (this.targetEl !== null) {
+			this.validator.check(this.targetEl);
+			this.targetEl = null;
+		}
+		
+		// 관찰대상인 targetElObj가 validation작업을 수행하지 않았거나, 적절한 내용이 아닐 경우 flag는 false
+		for (var name in this.targetElObj) {
+			var el = this.targetElObj[name];
+			this.statusObj[name] = Dom.hasClass(el, "is-valid");
+		}
+		
 		var flag = true;
-		if (this.keypressedEl !== null) {
-			if (!this.validator.check(this.keypressedEl)) {
+		for (var name in this.statusObj) {
+			if (this.statusObj[name] == false) {
 				flag = false;
+				break;
 			}
-			this.keypressedEl = null;
 		}
 		return flag;
 	};
 	AccountObserver.prototype.deactivate = function() {
 		Observer.prototype.deactivate.call(this);
-		this.removeKeypressEvent();
+		this._removeKeyEvent();
 	};
 	
-	AccountObserver.prototype.eventHandler = function(evt) {
-		var targetEl = evt.target;
-		this.keypressedEl = targetEl;
+	AccountObserver.prototype._keyEventHandler = function(evt) {
+		this.targetEl = evt.target;
+		this.keyCode = evt.keyCode;
 	};
-	AccountObserver.prototype.addKeypressEvent = function() {
+	AccountObserver.prototype._addKeyEvent = function() {
 		for (var name in this.targetElObj) {
 			var el = this.targetElObj[name];
-			el.addEventListener("keypress", this.evtHandler, false);
+			el.addEventListener("keydown", this._bindedKeyEventHandler, false);
 		}
 	};
-	AccountObserver.prototype.removeKeypressEvent = function() {
+	AccountObserver.prototype._removeKeyEvent = function() {
 		for (var name in this.targetElObj) {
 			var el = this.targetElObj[name];
-			el.removeEventListener("keypress", this.evtHandler, false);
+			el.removeEventListener("keydown", this._bindedKeyEventHandler, false);
 		}
 	};
+	AccountObserver.prototype._trigger = function(flag) {
+		var observeEvt = new CustomEvent("observe", { "detail": { "flag": flag, "keycode": this.keyCode } });
+		this.observerEl.dispatchEvent(observeEvt);
+		this.keyCode = null;
+	},
+	
 
 	WILDGOOSE.account.observer = AccountObserver;
 	
