@@ -29,11 +29,9 @@
 		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.ui.popup.js"></script>
-		<script type="text/javascript" src="/CAGE/src/CAGE.type.observer.js"></script>
 		
 		<script type="text/javascript" src="/scripts/WILDGOOSE/user/WILDGOOSE.user.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/validation/WILDGOOSE.validator.js"></script>
-		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.observer.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.super_type.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.login.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.logout.js"></script>

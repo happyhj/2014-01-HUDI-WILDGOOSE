@@ -10,10 +10,8 @@
 	 * validation action
 	 */
 	var Dom = CAGE.util.dom;
-//	var Observer = CAGE.type.observer;
 	var Ajax = CAGE.ajax;
 	var Validator = WILDGOOSE.validator;
-//	var AccountObserver = WILDGOOSE.account.observer;
 	
 	function Account(args) {
 		this.selectedEl = {};
@@ -43,19 +41,19 @@
 					this._extract();
 					this.validator = new Validator(this.form, this.rule);
 					this._addKeyEvent();
-					
-					// account submit버튼을 serInterval을 이용하여 계속적 탐지
-//					this._setObserver();
-//					this._addKeyEvent();
-//					this._addObserveEvent();
-					
-//					this._activateObserver();
 				}
 			}
 		},
+		_getPayload: function() {
+			/*
+			 * interface
+			 * subType에서 _getPayload를 구현해야함.
+			 */ 
+			return null;
+		},
+		
 		stop: function() {
 			this._removeKeyEvent();
-//			this._removeEnterEvent();
 		},
 		
 		exec: function(callback) {
@@ -92,49 +90,35 @@
 		},
 		
 		_validateField: function(evt) {
-//			debugger;
+			var enter = (evt.keyCode == 13)? true : false;
 			var targetEl = evt.target;
-			this.validator.check(targetEl);			
+			this.validator.check(targetEl);
+			this._updateSubmit();
+			
+			if (enter) {
+				var clickEvt = new CustomEvent("click", {detail: {"enter": enter}});
+				this.submitEl.dispatchEvent(clickEvt);
+			}
 		},
 		
-//		_deactivateObserver: function() {
-//		this.observer.deactivate();
-//		this.submitEl.removeEventListener("observe", this._observeEvtHandler, false);
-//	},
-		
-//		_setObserver: function() {
-//			var obArgs = {
-//				targetElObj: this.selectedEl.valueOf(),
-//				observerEl: this.submitEl,
-////				interval: 100,
-//				validator: new Validator(this.form, this.rule)
-//			};
-//			this.observer = new AccountObserver(obArgs);
-//		},
-		
-//		_addObserveEvent: function() {
-//			this.submitEl.addEventListener("observe", this._observeEvtHandler, false);
-//		},
-//		_activateObserver: function() {
-//			this.submitEl.addEventListener("observe", this._observeEvtHandler, false);
-//			this.observer.activate();
-//		},
-//		_observeEvtHandler: function(evt) {
-//			console.log("flag: " + evt.detail.flag);
-//			Dom[evt.detail.flag?"removeClass":"addClass"](this, "disable");
-//			if (evt.detail.flag && evt.detail.keycode == 13) {
-//				debugger;
-//				var clickEvt = new CustomEvent("click");
-//				this.dispatchEvent(clickEvt);
-//			}
-//		},
-		
-		_getPayload: function() {
-			/*
-			 * interface
-			 * subType에서 _getPayload를 구현해야함.
-			 */ 
-			return null;
+		_updateSubmit: function(enter) {
+			var flag = true;
+			for(var name in this.selectedEl) {
+				var el = this.selectedEl[name].parentNode.parentNode.parentNode;
+				if (!Dom.hasClass(el, "is-valid") || Dom.hasClass(el, "is-invalid")) {
+					flag = false;
+					break;
+				}
+			}
+			
+			if (flag) {
+				Dom.removeClass(this.submitEl, "disable");
+				Dom.addClass(this.submitEl, "able");
+			}
+			else {
+				Dom.removeClass(this.submitEl, "able");
+				Dom.addClass(this.submitEl, "disable");
+			}
 		},
 		
 		_extract: function() {
@@ -149,26 +133,7 @@
 					this.selectedEl[el.name] = el;
 				}
 			}
-		},
-		
-//		_keyEventHandler: function(evt) {
-//			this.targetEl = evt.target;
-//			this.keyCode = evt.keyCode;
-//		},
-//		_addKeyEvent: function() {
-//			for (var name in this.targetElObj) {
-//				var el = this.targetElObj[name];
-//				el.addEventListener("keydown", this._bindedKeyEventHandler, false);
-//			}
-//		},
-//		_removeKeyEvent: function() {
-//			for (var name in this.targetElObj) {
-//				var el = this.targetElObj[name];
-//				el.removeEventListener("keydown", this._bindedKeyEventHandler, false);
-//			}
-//		}
-		
-		
+		}		
 	};
 	
 	

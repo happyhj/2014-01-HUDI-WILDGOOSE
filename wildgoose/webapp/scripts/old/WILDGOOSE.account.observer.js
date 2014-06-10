@@ -55,8 +55,6 @@
 		return detailObj;
 	};
 	AccountObserver.prototype._keyEventHandler = function(evt) {
-		debugger;
-//		this.targetEl = evt.target;
 		this.keyCode = evt.keyCode;
 		this.activate();
 	};
@@ -73,13 +71,6 @@
 		}
 	};
 
-	
-//	AccountObserver.prototype._trigger = function(flag) {
-//		var observeEvt = new CustomEvent("observe", { "detail": { "flag": flag, "keycode": this.keyCode } });
-//		this.observerEl.dispatchEvent(observeEvt);
-//		this.keyCode = null;
-//	},
-	
 
 	WILDGOOSE.account.observer = AccountObserver;
 	
