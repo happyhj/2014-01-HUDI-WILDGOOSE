@@ -22,6 +22,11 @@
 		this.names = null;
 		this.form = null;
 		this.url = null;
+		this.validator = null;
+		this.accountObserver = null;
+		this.cache = {
+			keyEvtHandler: this._keyEvtHandler.bind(this),
+		};
 		
 		this._account(args);
 	};
@@ -40,7 +45,18 @@
 					this.names = Object.keys(this.rule);
 					this._extract();
 					this.validator = new Validator(this.form, this.rule);
+//					this.accountObserver = new AccountObserver(
+//						{ 
+//							observerEl: this.form,
+//							targetEl: this.submitEl,
+//							interval: 100
+//						}
+//					);
 					this._addKeyEvent();
+					this._init();
+					
+					
+//					this._ckeckSubmitStatus();
 				}
 			}
 		},
@@ -75,49 +91,12 @@
 			}
 		},
 		
-		_addKeyEvent: function() {
+		_init: function() {
 			for (var name in this.selectedEl) {
 				var el = this.selectedEl[name];
-				el.addEventListener("keyup", this._validateField.bind(this), false);
-			}
-		},
-		
-		_removeKeyEvent: function() {
-			for (var name in this.selectedEl) {
-				var el = this.selectedEl[name];
-				el.removeEventListener("keyup", this._validateField.bind(this), false);
-			}
-		},
-		
-		_validateField: function(evt) {
-			var enter = (evt.keyCode == 13)? true : false;
-			var targetEl = evt.target;
-			this.validator.check(targetEl);
-			this._updateSubmit();
-			
-			if (enter) {
-				var clickEvt = new CustomEvent("click", {detail: {"enter": enter}});
-				this.submitEl.dispatchEvent(clickEvt);
-			}
-		},
-		
-		_updateSubmit: function(enter) {
-			var flag = true;
-			for(var name in this.selectedEl) {
-				var el = this.selectedEl[name].parentNode.parentNode.parentNode;
-				if (!Dom.hasClass(el, "is-valid") || Dom.hasClass(el, "is-invalid")) {
-					flag = false;
-					break;
+				if (el.value != "") {
+					this._validateField(el, false);
 				}
-			}
-			
-			if (flag) {
-				Dom.removeClass(this.submitEl, "disable");
-				Dom.addClass(this.submitEl, "able");
-			}
-			else {
-				Dom.removeClass(this.submitEl, "able");
-				Dom.addClass(this.submitEl, "disable");
 			}
 		},
 		
@@ -133,7 +112,68 @@
 					this.selectedEl[el.name] = el;
 				}
 			}
-		}		
+		},
+		
+		_addKeyEvent: function() {
+			for (var name in this.selectedEl) {
+				var el = this.selectedEl[name];
+				el.addEventListener("keyup", this.cache.keyEvtHandler, false);
+			}
+		},
+		
+		_removeKeyEvent: function() {
+			for (var name in this.selectedEl) {
+				var el = this.selectedEl[name];
+				el.removeEventListener("keyup", this.cache.keyEvtHandler, false);
+			}
+		},
+		
+//		_addObserveEvent: function() {
+//			this.form.addEventListener("observe", ,false);
+//		},
+//		_removeObserveEvnet: function() {
+//			this.form.addEventListener("observe", ,false);
+//		},
+//		_observeSubmitStatus
+		_keyEvtHandler: function(evt) {
+			var enter = (evt.keyCode == 13)? true : false;
+			
+			this._validateField(evt.target, enter);
+			
+			if (enter) {
+				var clickEvt = new CustomEvent("click", {detail: {"enter": enter}});
+				this.submitEl.dispatchEvent(clickEvt);
+			}
+		},
+		
+		_validateField: function(targetEl, pressedEnterKey) {
+			this.validator.check(targetEl);
+			this._updateUI(this._ckeckSubmitStatus(pressedEnterKey));
+		},
+		
+		_ckeckSubmitStatus: function(enter) {
+			var flag = true;
+			for(var name in this.selectedEl) {
+				var el = this.selectedEl[name].parentNode.parentNode.parentNode;
+				if (!Dom.hasClass(el, "is-valid") || Dom.hasClass(el, "is-invalid")) {
+					flag = false;
+					break;
+				}
+			}
+			return flag;
+		},
+		
+		
+		_updateUI: function(flag) {
+			if (flag) {
+				Dom.removeClass(this.submitEl, "disable");
+				Dom.addClass(this.submitEl, "able");
+			}
+			else {
+				Dom.removeClass(this.submitEl, "able");
+				Dom.addClass(this.submitEl, "disable");
+			}
+		}
 	};
 	
 	

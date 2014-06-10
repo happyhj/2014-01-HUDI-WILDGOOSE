@@ -13,12 +13,12 @@
 	var Dom = CAGE.util.dom;
 
 	function Observer(args) {
-//		this.interval = null;
-//		this.status = null;
+		this.interval = null;
 		this.observerEl = null;
-		this.targetElObj = null; 
+		this.targetEl = null;
+		
+		this.status = null;
 		this.usable = false;
-//		this.infoObj = {};
 		
 		this._observer(args);
 	};
@@ -27,25 +27,25 @@
 		constructor: "Observer",
 		_observer: function(args) {
 			if (args !== undefined) {
-//				if (args.interval !== undefined) {
-//					this.interval = args.interval;
-//				}
+				if (args.interval !== undefined) {
+					this.interval = args.interval;
+				}
 				this.observerEl = args.observerEl;
-				this.targetElObj = args.targetElObj;
-				this.usable = (this.observerEl === null || this.targetElObj === null)? false: true;
+				this.targetEl = args.targetEl;
+				this.usable = (this.observerEl === null || this.targetEl === null)? false: true;
 			}
 		},
 		activate: function() {
-//			if (this.usable === true && this.status === null) {
-//				this.status = setInterval(this._handler.bind(this), this.interval);
-//			}
-			if (this.usable === true) {
-				setTimeout(this._handler.bind(this));
+			if (this.usable === true && this.status === null) {
+				this.status = setInterval(this._handler.bind(this), this.interval);
 			}
+//			if (this.usable === true) {
+//				setTimeout(this._handler.bind(this));
+//			}
 		},
 		deactivate: function() {
-//			clearInterval(this.status);
-//			this.status = null;
+			clearInterval(this.status);
+			this.status = null;
 			/*
 			 * interface
 			 * do - something;
@@ -56,8 +56,10 @@
 			this.deactivate();
 		},
 		_trigger: function(detailObj) {
-			var observeEvt = new CustomEvent("observe", {detail: detailObj});
-			this.observerEl.dispatchEvent(observeEvt);
+			if (detailObj.flag) {
+				var observeEvt = new CustomEvent("observe", {detail: detailObj});
+				this.observerEl.dispatchEvent(observeEvt);				
+			}
 		},
 		_observe: function() {
 			// interface
