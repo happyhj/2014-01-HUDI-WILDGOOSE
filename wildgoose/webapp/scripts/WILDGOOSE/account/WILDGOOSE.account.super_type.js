@@ -45,18 +45,9 @@
 					this.names = Object.keys(this.rule);
 					this._extract();
 					this.validator = new Validator(this.form, this.rule);
-//					this.accountObserver = new AccountObserver(
-//						{ 
-//							observerEl: this.form,
-//							targetEl: this.submitEl,
-//							interval: 100
-//						}
-//					);
+					
 					this._addKeyEvent();
 					this._init();
-					
-					
-//					this._ckeckSubmitStatus();
 				}
 			}
 		},
@@ -91,6 +82,7 @@
 			}
 		},
 		
+		// 기존에 저장된 정보가 있는 경에도 validation이 가능토록하는 로직
 		_init: function() {
 			for (var name in this.selectedEl) {
 				var el = this.selectedEl[name];
@@ -127,14 +119,7 @@
 				el.removeEventListener("keyup", this.cache.keyEvtHandler, false);
 			}
 		},
-		
-//		_addObserveEvent: function() {
-//			this.form.addEventListener("observe", ,false);
-//		},
-//		_removeObserveEvnet: function() {
-//			this.form.addEventListener("observe", ,false);
-//		},
-//		_observeSubmitStatus
+
 		_keyEvtHandler: function(evt) {
 			var enter = (evt.keyCode == 13)? true : false;
 			
