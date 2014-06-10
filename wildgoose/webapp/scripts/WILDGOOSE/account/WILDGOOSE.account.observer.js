@@ -13,9 +13,10 @@
 	function AccountObserver(args) {
 		Observer.call(this, args);
 		this.validator = args.validator;
+		
 		this.targetEl = null;
-		this._bindedKeyEventHandler = this._keyEventHandler.bind(this);
 		this.keyCode = null;
+		this._bindedKeyEventHandler = this._keyEventHandler.bind(this);
 		this.statusObj = {};
 		
 		this._addKeyEvent();
@@ -23,6 +24,10 @@
 	
 	AccountObserver.prototype = new Observer();
 	AccountObserver.prototype.constructor = AccountObserver;
+	AccountObserver.prototype.deactivate = function() {
+		Observer.prototype.deactivate.call(this);
+		this._removeKeyEvent();
+	};
 	AccountObserver.prototype._observe = function() {
 		// keydown된 el의 validation작업 수행
 		if (this.targetEl !== null) {
@@ -37,40 +42,43 @@
 		}
 		
 		var flag = true;
+		var detailObj = {};
+		detailObj.flag = true;
+		
 		for (var name in this.statusObj) {
 			if (this.statusObj[name] == false) {
-				flag = false;
+				detailObj.flag = false;
 				break;
 			}
 		}
-		return flag;
+		detailObj.keyCode = this.keyCode;
+		return detailObj;
 	};
-	AccountObserver.prototype.deactivate = function() {
-		Observer.prototype.deactivate.call(this);
-		this._removeKeyEvent();
-	};
-	
 	AccountObserver.prototype._keyEventHandler = function(evt) {
-		this.targetEl = evt.target;
+		debugger;
+//		this.targetEl = evt.target;
 		this.keyCode = evt.keyCode;
+		this.activate();
 	};
 	AccountObserver.prototype._addKeyEvent = function() {
 		for (var name in this.targetElObj) {
 			var el = this.targetElObj[name];
-			el.addEventListener("keydown", this._bindedKeyEventHandler, false);
+			el.addEventListener("keyup", this._bindedKeyEventHandler, false);
 		}
 	};
 	AccountObserver.prototype._removeKeyEvent = function() {
 		for (var name in this.targetElObj) {
 			var el = this.targetElObj[name];
-			el.removeEventListener("keydown", this._bindedKeyEventHandler, false);
+			el.removeEventListener("keyup", this._bindedKeyEventHandler, false);
 		}
 	};
-	AccountObserver.prototype._trigger = function(flag) {
-		var observeEvt = new CustomEvent("observe", { "detail": { "flag": flag, "keycode": this.keyCode } });
-		this.observerEl.dispatchEvent(observeEvt);
-		this.keyCode = null;
-	},
+
+	
+//	AccountObserver.prototype._trigger = function(flag) {
+//		var observeEvt = new CustomEvent("observe", { "detail": { "flag": flag, "keycode": this.keyCode } });
+//		this.observerEl.dispatchEvent(observeEvt);
+//		this.keyCode = null;
+//	},
 	
 
 	WILDGOOSE.account.observer = AccountObserver;

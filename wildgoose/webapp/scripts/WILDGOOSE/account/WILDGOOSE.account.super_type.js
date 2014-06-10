@@ -13,7 +13,7 @@
 //	var Observer = CAGE.type.observer;
 	var Ajax = CAGE.ajax;
 	var Validator = WILDGOOSE.validator;
-	var AccountObserver = WILDGOOSE.account.observer;
+//	var AccountObserver = WILDGOOSE.account.observer;
 	
 	function Account(args) {
 		this.selectedEl = {};
@@ -27,7 +27,7 @@
 		
 		this._account(args);
 	};
-	
+
 	Account.prototype = {
 		constructor: "Account",
 		_account: function(args) {
@@ -41,16 +41,21 @@
 				if (this.rule !== undefined) {
 					this.names = Object.keys(this.rule);
 					this._extract();
+					this.validator = new Validator(this.form, this.rule);
+					this._addKeyEvent();
 					
 					// account submit버튼을 serInterval을 이용하여 계속적 탐지
-					this._setObserver();
-					this._activateObserver();
+//					this._setObserver();
+//					this._addKeyEvent();
+//					this._addObserveEvent();
+					
+//					this._activateObserver();
 				}
 			}
 		},
 		stop: function() {
-			this._deactivateObserver();
-			this._removeEnterEvent();
+			this._removeKeyEvent();
+//			this._removeEnterEvent();
 		},
 		
 		exec: function(callback) {
@@ -72,34 +77,57 @@
 			}
 		},
 		
-		_deactivateObserver: function() {
-			this.observer.deactivate();
-			this.submitEl.removeEventListener("observe", this._observeEvtHandler, false);
-		},
-		
-		_activateObserver: function() {
-			this.submitEl.addEventListener("observe", this._observeEvtHandler, false);
-			this.observer.activate();
-		},
-		
-		_setObserver: function() {
-			var obArgs = {
-				targetElObj: this.selectedEl.valueOf(),
-				observerEl: this.submitEl,
-				interval: 100,
-				validator: new Validator(this.form, this.rule)
-			};
-			this.observer = new AccountObserver(obArgs);
-		},
-		_observeEvtHandler: function(evt) {
-			console.log("flag: " + evt.detail.flag);
-			Dom[evt.detail.flag?"removeClass":"addClass"](this, "disable");
-			if (evt.detail.flag && evt.detail.keycode == 13) {
-				debugger;
-				var clickEvt = new CustomEvent("click");
-				this.dispatchEvent(clickEvt);
+		_addKeyEvent: function() {
+			for (var name in this.selectedEl) {
+				var el = this.selectedEl[name];
+				el.addEventListener("keyup", this._validateField.bind(this), false);
 			}
 		},
+		
+		_removeKeyEvent: function() {
+			for (var name in this.selectedEl) {
+				var el = this.selectedEl[name];
+				el.removeEventListener("keyup", this._validateField.bind(this), false);
+			}
+		},
+		
+		_validateField: function(evt) {
+//			debugger;
+			var targetEl = evt.target;
+			this.validator.check(targetEl);			
+		},
+		
+//		_deactivateObserver: function() {
+//		this.observer.deactivate();
+//		this.submitEl.removeEventListener("observe", this._observeEvtHandler, false);
+//	},
+		
+//		_setObserver: function() {
+//			var obArgs = {
+//				targetElObj: this.selectedEl.valueOf(),
+//				observerEl: this.submitEl,
+////				interval: 100,
+//				validator: new Validator(this.form, this.rule)
+//			};
+//			this.observer = new AccountObserver(obArgs);
+//		},
+		
+//		_addObserveEvent: function() {
+//			this.submitEl.addEventListener("observe", this._observeEvtHandler, false);
+//		},
+//		_activateObserver: function() {
+//			this.submitEl.addEventListener("observe", this._observeEvtHandler, false);
+//			this.observer.activate();
+//		},
+//		_observeEvtHandler: function(evt) {
+//			console.log("flag: " + evt.detail.flag);
+//			Dom[evt.detail.flag?"removeClass":"addClass"](this, "disable");
+//			if (evt.detail.flag && evt.detail.keycode == 13) {
+//				debugger;
+//				var clickEvt = new CustomEvent("click");
+//				this.dispatchEvent(clickEvt);
+//			}
+//		},
 		
 		_getPayload: function() {
 			/*
@@ -121,7 +149,26 @@
 					this.selectedEl[el.name] = el;
 				}
 			}
-		}		
+		},
+		
+//		_keyEventHandler: function(evt) {
+//			this.targetEl = evt.target;
+//			this.keyCode = evt.keyCode;
+//		},
+//		_addKeyEvent: function() {
+//			for (var name in this.targetElObj) {
+//				var el = this.targetElObj[name];
+//				el.addEventListener("keydown", this._bindedKeyEventHandler, false);
+//			}
+//		},
+//		_removeKeyEvent: function() {
+//			for (var name in this.targetElObj) {
+//				var el = this.targetElObj[name];
+//				el.removeEventListener("keydown", this._bindedKeyEventHandler, false);
+//			}
+//		}
+		
+		
 	};
 	
 	
