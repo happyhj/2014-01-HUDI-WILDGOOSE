@@ -14,47 +14,35 @@
 	var Validator = WILDGOOSE.validator;
 	
 	function Account(args) {
-		this.selected = {};
-		this.submit = null;
-		this.randomNumber = null;
+		this.selectedEl = {};
+		this.submitEl = null;
+		this.randNum = null;
 		this.method = null;
 		this.rule = null;
 		this.names = null;
 		this.form = null;
 		this.url = null;
 		
-		this.account(args);
+		this._account(args);
 	};
-	
+
 	Account.prototype = {
 		constructor: "Account",
-		account: function(args) {
+		_account: function(args) {
 			if (args !== undefined) {
 				this.method = args.method;
 				this.rule = args.rule;
 				this.form = document.querySelector(args.form);
 				this.url = args.url;
+				this.randNum = args.randNum;
 				
 				if (this.rule !== undefined) {
 					this.names = Object.keys(this.rule);
 					this._extract();
-					this._addValidationEvent();
 					this.validator = new Validator(this.form, this.rule);
+					this._addKeyEvent();
 				}
 			}
-		},
-		exec: function(callback) {
-			Ajax[this.method]({
-				"url": this.url,
-				"success": function() {
-					callback();
-					console.log("Success!");
-				},
-				"failure": function() {
-					console.log("FAIL!");
-				},
-				"data": this._getPayload()
-			});
 		},
 		_getPayload: function() {
 			/*
@@ -64,52 +52,88 @@
 			return null;
 		},
 		
-		_extract: function() {
-			for (var i = this.form.length - 1; i >= 0; --i) {
-				var el = this.form[i];
-				if (el.name == "submit") {
-					this.submit = el;
-					continue;
-				}
-				if (el.name == "randomNumber") {
-					this.randomNumber = el.value;
-					continue;
-				}
-				
-				if (this.names !== undefined && this.names.indexOf(el.name) != -1) {
-					this.selected[el.name] = el;
-				}
-			}
+		stop: function() {
+			this._removeKeyEvent();
 		},
-			
-		_addValidationEvent: function() {
-			for (var name in this.selected) {
-				var el = this.selected[name];
-				el.addEventListener("blur", this._checkValidation.bind(this), false);
+		
+		exec: function(callback) {
+			if (this.rule !== undefined && Dom.hasClass(this.submitEl, "disable")) {
+				console.log("누르지마 바보야");
+			}
+			else {
+				Ajax[this.method]({
+					"url": this.url,
+					"success": function() {
+						callback();
+						console.log("Success!");
+					},
+					"failure": function() {
+						console.log("FAIL!");
+					},
+					"data": this._getPayload()
+				});
 			}
 		},
 		
-		_checkValidation: function(evt) {
-			var inputEl = evt.target;
-			if (this.validator.check(inputEl)) {
-				console.log("validation ok");
+		_addKeyEvent: function() {
+			for (var name in this.selectedEl) {
+				var el = this.selectedEl[name];
+				el.addEventListener("keyup", this._validateField.bind(this), false);
 			}
-			
-			// 각 input의 className을 확인하여 sumbit 버튼 활성화
-			this._checkStatusOfSubmit.call(this);
 		},
 		
-		// form에 입력된 내용이 valid한지를 확인하여 회원가입 버튼 활성화 / 비활성화
-		_checkStatusOfSubmit: function() {
+		_removeKeyEvent: function() {
+			for (var name in this.selectedEl) {
+				var el = this.selectedEl[name];
+				el.removeEventListener("keyup", this._validateField.bind(this), false);
+			}
+		},
+		
+		_validateField: function(evt) {
+			var enter = (evt.keyCode == 13)? true : false;
+			var targetEl = evt.target;
+			this.validator.check(targetEl);
+			this._updateSubmit();
+			
+			if (enter) {
+				var clickEvt = new CustomEvent("click", {detail: {"enter": enter}});
+				this.submitEl.dispatchEvent(clickEvt);
+			}
+		},
+		
+		_updateSubmit: function(enter) {
 			var flag = true;
-			for (var name in this.selected) {
-				if (!Dom.hasClass(this.selected[name], "status-approved")) {
+			for(var name in this.selectedEl) {
+				var el = this.selectedEl[name].parentNode.parentNode.parentNode;
+				if (!Dom.hasClass(el, "is-valid") || Dom.hasClass(el, "is-invalid")) {
 					flag = false;
 					break;
 				}
 			}
-			Dom[flag?"removeClass":"addClass"](this.submit, "disable");
-		}
+			
+			if (flag) {
+				Dom.removeClass(this.submitEl, "disable");
+				Dom.addClass(this.submitEl, "able");
+			}
+			else {
+				Dom.removeClass(this.submitEl, "able");
+				Dom.addClass(this.submitEl, "disable");
+			}
+		},
+		
+		_extract: function() {
+			for (var i = this.form.length - 1; i >= 0; --i) {
+				var el = this.form[i];
+				if (el.name == "submit") {
+					this.submitEl = el;
+					continue;
+				}
+				
+				if (this.names !== undefined && this.names.indexOf(el.name) != -1) {
+					this.selectedEl[el.name] = el;
+				}
+			}
+		}		
 	};
 	
 	
@@ -121,6 +145,7 @@
 		// browser export
 	} else {
 		window.WILDGOOSE = WILDGOOSE;
-	}    	
+	}
 
 }(this));
+

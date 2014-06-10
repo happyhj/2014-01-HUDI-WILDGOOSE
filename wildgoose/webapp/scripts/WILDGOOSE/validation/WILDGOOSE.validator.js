@@ -182,7 +182,6 @@
 			 */
 			_validStyle: function(inputEl) {
 				var inputColumnEl = inputEl.parentNode.parentNode.parentNode;
-				console.log(inputColumnEl);
 //				Dom.removeClass(inputColumnEl, "status-denied");
 				Dom.removeClass(inputColumnEl, "is-invalid");
 //				Dom.addClass(inputColumnEl, "status-approved");
@@ -191,7 +190,6 @@
 			
 			_invalidStyle: function(inputEl) {
 				var inputColumnEl = inputEl.parentNode.parentNode.parentNode;
-				console.log(inputColumnEl);
 //				Dom.removeClass(inputColumnEl, "status-approved");
 				Dom.removeClass(inputColumnEl, "is-valid");
 //				Dom.addClass(inputColumnEl, "status-denied");

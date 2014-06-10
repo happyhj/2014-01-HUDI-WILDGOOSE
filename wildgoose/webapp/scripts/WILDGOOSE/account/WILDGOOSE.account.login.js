@@ -16,8 +16,8 @@
 	Login.prototype = new Account();
 	Login.prototype.constructor = Login;
 	Login.prototype._getPayload = function() {
-		var email = escape(this.selected.email.value);
-		var password = SHA256(SHA256(escape(this.selected.password.value)) + this.randomNumber);
+		var email = escape(this.selectedEl.email.value);
+		var password = SHA256(SHA256(escape(this.selectedEl.password.value)) + this.randNum);
 		var payload = "email=" + email + "&password=" + password;
 		return payload;
 	};

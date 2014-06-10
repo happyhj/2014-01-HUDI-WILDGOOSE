@@ -16,13 +16,13 @@
 	
 	function init() {
 		var leaveBtn = document.querySelector("#leave");
-		
+		var randNum = null;
 		var leavePopup = new Popup.ajaxPopup({
 			element: leaveBtn,
 			templateUrl: "/api/v1/templates/withdraw.html",
 			templateLoader: function(AjaxResponse) {
 				var templateStr = JSON.parse(AjaxResponse).data.template;
-				var randNum = JSON.parse(AjaxResponse).data.rand;
+				randNum = JSON.parse(AjaxResponse).data.rand;
 				var userId = document.getElementById("userId").textContent;
 				var compiler = TemplateUtil.getCompiler(templateStr);
 				return compiler({
@@ -45,9 +45,11 @@
 						type: "confirm",
 						target: "password"
 					}
-				}
+				},
+				randNum: randNum
 			};
 			var LeaveAccount = new Leave(args);
+			leavePopup.afterclose.add(LeaveAccount.stop.bind(LeaveAccount));
 
 			var btn = arguments[0].querySelector("#withdraw");
 			btn.addEventListener("click", function(evt) {
@@ -58,6 +60,9 @@
 				}.bind(this));
 				
 			}, false);
+			
+			var pwDom = document.querySelector(".form-container input[name=password]");
+			pwDom.focus();
 			
 		});
 	}

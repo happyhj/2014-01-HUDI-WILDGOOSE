@@ -32,7 +32,7 @@
 				return compiler({
 					"randNum": randNum,
 					"email": userId
-				}, templateStr);		
+				}, templateStr);
 			}
 		});
 		
@@ -77,9 +77,11 @@
 						type: "confirm",
 						target: "newPassword"
 					}
-				}
+				},
+				randNum: randNum
 			};
-			var ChangePwAccount = new ChangePw(args);		
+			var ChangePwAccount = new ChangePw(args);
+			changePwPopup.afterclose.add(ChangePwAccount.stop.bind(ChangePwAccount));
 
 			var btn = arguments[0].querySelector("#change");
 			btn.addEventListener("click", function(evt) {
@@ -90,6 +92,9 @@
 				}.bind(this));
 				
 			}, false);
+			
+			var oldPwDom = document.querySelector(".form-container input[name=oldPassword]");
+			oldPwDom.focus();
 			
 		});
 	}
