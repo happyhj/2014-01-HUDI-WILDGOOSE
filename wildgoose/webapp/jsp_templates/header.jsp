@@ -17,7 +17,9 @@
 a {
 	text-decoration: none;
 }
-
+.topBar-wrapper {
+	-webkit-font-smoothing: antialiased;
+}
 .topBar-wrapper .topBar-left-nav,
 .topBar-wrapper .topBar-right-nav {
 	display: inline-block;
@@ -79,6 +81,9 @@ li[class*='nav'] a  {
 
 .hidden {
 	display: none;
+}
+[class*="nav-"] {
+	cursor: pointer;
 }
 </style>
 <div class="topBar-wrapper">

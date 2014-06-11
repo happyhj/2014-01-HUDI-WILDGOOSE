@@ -70,7 +70,6 @@
 			Ajax.GET({
 				url: this.templateUrl,
 				callback: (function(response){
-					console.log(response)
 					this.template = this.templateLoader(response);
 					event.preventDefault();
 					event.stopPropagation();
@@ -81,11 +80,11 @@
 					} else if(event.originalTarget){
 						originalTarget = event.originalTarget;
 					}
-					if(originalTarget === el) {
+//					if(originalTarget === el) {
 						this._counstructDOM();
 						var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");	
 						popupWrapAnimation.addEventListener("transitionend", afteropenCallbackRef, false);
-					}
+//					}
 				}).bind(this)
 			});
 			
