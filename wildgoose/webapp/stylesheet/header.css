@@ -1,25 +1,43 @@
 /* header : 로그인 버튼이 존재하는 상단 바 */
 /* Layout rules */
+.topBar-wrapper {
+	width: 100%;
+	height: 50px;
+}
+.topBar-inner-wrapper {
+	width: 960px;
+	margin: 0 auto;
+}
 .header-btn {
-	width: 100px;
+	1width: 100px;
 	height: 50px;
 	float: right;
-	margin-left: 4px;
 }
 
 .header-logo-image {
 	margin: 5px;
-	height: 60px;
+	height: 50px;
 	opacity: .4;
 }
 
 /* Theme rules */
 .header-btn {
-	background: #4882FD;
+	1background: #4882FD;
 	color: #fff;
 	font-size: 1em;
 	border: 0;
 }
-.header-btn.hidden {
+
+.nav-global li.hidden,
+li[class*='nav-'].hidden {
 	display: none;
+}
+
+
+/** ipad **/
+@media only screen
+and (max-width : 1024px)  {
+	.topBar-inner-wrapper {
+		width: 100%;
+	}
 }
