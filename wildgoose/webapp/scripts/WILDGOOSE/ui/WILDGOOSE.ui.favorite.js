@@ -40,9 +40,8 @@
 			var target = e.target;
 			var card = target.parentElement.parentElement.parentElement;
 			var reporterId = card.firstElementChild.dataset.reporter_id;
-			var url = "/api/v1/users/" + this.userId + "/favorites/?reporter_id="
+			var url = "/api/v1/users/" + Favorite.userId + "/favorites/?reporter_id="
 					+ reporterId;
-
 
 			if (Dom.hasClass(target, "on")) {
 				Ajax.DELETE({
@@ -62,6 +61,7 @@
 				Ajax.POST({
 					"url" : url,
 					"callback" : function(data) {
+						console.log(data)
 						var data = JSON.parse(data);
 						if (data.status == 200) {
 							Dom.addClass(target, "on");
@@ -98,7 +98,7 @@
 			this.userId = args.userId;
 
 			// 초기화
-			if (this.userId !== "") {
+			if (this.userId !== "" || this.userId !== undefined) {
 				
 				// 모든 별에 eventlistener 붙이기
 				this.attatchEventToFavBtn();
@@ -108,7 +108,6 @@
 				Ajax.GET({
 					"url" : url,
 					"callback" : function(jsonStr) {
-						console.log(jsonStr);
 						var result = JSON.parse(jsonStr);
 						var reporterCards = result["data"]["reporterCards"]
 						for (var i=0; i<reporterCards.length; i++) {

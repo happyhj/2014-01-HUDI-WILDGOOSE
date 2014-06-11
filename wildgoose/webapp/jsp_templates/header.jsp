@@ -14,7 +14,9 @@
 	<button class="header-btn hidden" id="favorite">favorite</button>
 </c:if>
 <c:if test="${ not empty sessionScope.userId }">
-	<span id ="userId" class="hidden">${sessionScope.userId}</span>
+	<c:if test="${ initParam.debuggerMode eq 'on' }">
+		<span id ="userId" class="hidden">${sessionScope.userId}</span>
+	</c:if>
 	<button class="header-btn hidden" id="join">가입하기</button>
 	<button class="header-btn hidden" id="login">로그인하기</button>
 	<button class="header-btn" id="logout">로그아웃</button>
