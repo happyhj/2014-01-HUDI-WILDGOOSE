@@ -13,9 +13,10 @@ body{
 
 /* Layout rule */
 .card {
-	display: inline-block;
+	
 	position: relative;
 	border-width: 1px;
+	display: inline-block;
 	margin: 6px 3px;
 	padding: 0;
 }
