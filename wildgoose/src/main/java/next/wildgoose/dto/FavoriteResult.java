@@ -18,4 +18,12 @@ public class FavoriteResult extends Result {
 		super.setData("reporterCards", reporters);
 	}
 
+	public void setPageName(String pageName) {
+		super.setData("pageName", pageName);
+	}
+	
+	public String getPageName() {
+		return (String) super.getData("pageName");
+	}
+
 }

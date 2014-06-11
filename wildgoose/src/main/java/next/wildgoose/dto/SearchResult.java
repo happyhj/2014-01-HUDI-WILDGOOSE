@@ -33,10 +33,18 @@ public class SearchResult extends Result {
 	
 	public int getTotalNum() {
 		return (Integer) super.getData("totalNum");
-
 	}
+	
 	public void setTotalNum(int totalNum) {
 		super.setData("totalNum", totalNum);
+	}
+
+	public void setPageName(String pageName) {
+		super.setData("pageName", pageName);
+	}
+	
+	public String getPageName() {
+		return (String) super.getData("pageName");
 	}
 	
 }

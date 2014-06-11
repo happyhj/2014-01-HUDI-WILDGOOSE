@@ -62,7 +62,7 @@ public class UserController implements BackController {
 				result = removeFavorites(request, userId);
 			}
 		} else if ("mypage".equals(pageName)){
-			result = new SimpleResult(true);
+			result = new SimpleResult(true, "me");
 		}
 		return result;
 	}
@@ -84,6 +84,7 @@ public class UserController implements BackController {
 		
 		TimelineResult timelineResult = new TimelineResult();
 		timelineResult.setStatus(200);
+		timelineResult.setPageName("timeline");
 		timelineResult.setMessage("OK");
 		timelineResult.setArticles("articles", articles);
 		return timelineResult;
@@ -97,6 +98,7 @@ public class UserController implements BackController {
 		
 		FavoriteResult favoriteResult = new FavoriteResult();
 		favoriteResult.setStatus(200);
+		favoriteResult.setPageName("timeline");
 		favoriteResult.setMessage("success");
 		LOGGER.debug(""+reporters.size());
 		favoriteResult.setFavorites("reporters", reporters);
