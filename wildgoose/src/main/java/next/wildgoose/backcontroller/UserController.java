@@ -6,14 +6,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import next.wildgoose.dao.ArticleDAO;
 import next.wildgoose.dao.FavoriteDAO;
 import next.wildgoose.dao.SignDAO;
-import next.wildgoose.dto.Article;
 import next.wildgoose.dto.FavoriteResult;
 import next.wildgoose.dto.Reporter;
 import next.wildgoose.dto.SimpleResult;
-import next.wildgoose.dto.TimelineResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Uri;
@@ -51,9 +48,7 @@ public class UserController implements BackController {
 			return sResult;
 		}
 		 
-		if ("timeline".equals(pageName)) {
-			result = getTimeline(request, userId);
-		} else if ("favorites".equals(pageName)) {
+		if ("favorites".equals(pageName)) {
 			if ("GET".equals(method)) {
 				result = getFavorites(request, userId);
 			} else if ("POST".equals(method)) {
@@ -61,9 +56,8 @@ public class UserController implements BackController {
 			} else if ("DELETE".equals(method)) {
 				result = removeFavorites(request, userId);
 			}
-		} else if ("mypage".equals(pageName)){
-			result = new SimpleResult(true, "me");
 		}
+		
 		return result;
 	}
 	
@@ -74,19 +68,6 @@ public class UserController implements BackController {
 			return true;
 		}
 		return false;
-	}
-
-	private TimelineResult getTimeline(HttpServletRequest request, String userId) {
-		ServletContext context = request.getServletContext();
-
-		ArticleDAO articleDao =  (ArticleDAO) context.getAttribute("ArticleDAO");
-		List<Article> articles = articleDao.findArticlesByFavorite(userId);
-		
-		TimelineResult timelineResult = new TimelineResult("timeline");
-		timelineResult.setStatus(200);
-		timelineResult.setMessage("OK");
-		timelineResult.setArticles("articles", articles);
-		return timelineResult;
 	}
 	
 	private Result getFavorites(HttpServletRequest request, String userId) {
@@ -127,14 +108,5 @@ public class UserController implements BackController {
 			simpleResult.setMessage("success");
 		}
 		return simpleResult;
-	}
-	
-	private String dollarSignToAtMark(String dollarSignedId) {
-		String atMarkedId = null;
-		if (dollarSignedId == null) {
-			return null;
-		}
-		atMarkedId = dollarSignedId.replace("$", "@");
-		return atMarkedId;
 	}
 }
