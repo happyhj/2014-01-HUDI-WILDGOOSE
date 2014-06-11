@@ -18,4 +18,12 @@ public class TimelineResult extends Result {
 		super.setData("articles", articles);
 	}
 
+	public void setPageName(String pageName) {
+		super.setData("pageName", pageName);
+	}
+	
+	public String getPageName() {
+		return (String) super.getData("pageName");
+	}
+
 }

@@ -29,7 +29,6 @@ public class SearchController implements BackController {
 		int startItem = (request.getParameter("start_item") != null)? Integer.parseInt(request.getParameter("start_item")) : -1;
 		SearchResult searchResult = checkQuery(request, searchQuery);
 		
-		
 		// 결과 반환
 		// 에러 혹은 root인 경우 반환
 		if (searchResult != null) {
@@ -80,6 +79,7 @@ public class SearchController implements BackController {
 		
 		reporters = getReporters(reporterDao, searchQuery, start, howMany);
 		searchResult.setStatus(200);
+		searchResult.setPageName("home");
 		searchResult.setMessage("getting search result success");
 		searchResult.setReporters(reporters);
 		searchResult.setSearchQuery(searchQuery);
@@ -117,6 +117,7 @@ public class SearchController implements BackController {
 		if (searchQuery == null) {
 			searchResult = new SearchResult();
 			searchResult.setStatus(200);
+			searchResult.setPageName("home");
 			searchResult.setMessage("welcome to search page! This path is not provided as API.");
 			return searchResult;
 		}

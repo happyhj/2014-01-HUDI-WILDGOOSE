@@ -85,7 +85,7 @@ li[class*='nav'] a  {
 <div class="topBar-inner-wrapper">
 <div class="topBar-left-nav">
 <c:if test="${ empty sessionScope.userId }">
-<ul class="nav-global ${ requestScope.pageName }">
+<ul class="nav-global ${ requestScope.data.pageName }">
 	<li class="nav-global-home"><a class="header-btn" href="/"><span class="text">Home</span></a></li>
 	<li class="nav-global-favorite hidden"><a class="header-btn" id="favorite"><span class="text">Favorite</span></a></li>
 	<li class="nav-global-timeline hidden"><a class="header-btn" id="timeline"><span class="text">Timeline</span></a></li>
