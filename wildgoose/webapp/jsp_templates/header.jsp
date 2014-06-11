@@ -102,7 +102,7 @@ li[class*='nav'] a  {
 </c:if>
 <c:if test="${ not empty sessionScope.userId }">
 <ul class="nav-global">
-	<li class="nav-global-home"><a href="/">Home</a></li>
+	<li class="nav-global-home"><a href="/"><span class="text">Home</span></a></li>
 	<li class="nav-global-favorite"><a class="header-btn" id="favorite"><span class="text">favorite</span></a></li>
 	<li class="nav-global-timeline"><a class="header-btn" id="timeline"><span class="text">Timeline</span></a></li>
 	<li class="nav-global-me"><a class="header-btn" id="mypage"><span class="text">Me</span></a></li>
@@ -113,9 +113,9 @@ li[class*='nav'] a  {
 	<c:if test="${ initParam.debuggerMode eq 'on' }">
 		<span id ="userId" class="hidden">${sessionScope.userId}</span>
 	</c:if>
-	<li class="nav-login hidden"><a class="header-btn" id="login">로그인</a></li>
-	<li class="nav-join hidden"><a class="header-btn" id="join">가입</a></li>
-	<li class="nav-logout"><a class="header-btn" id="logout">로그아웃</a></li>
+	<li class="nav-login hidden"><a class="header-btn" id="login"><span class="text">로그인</span></a></li>
+	<li class="nav-join hidden"><a class="header-btn" id="join"><span class="text">가입</span></a></li>
+	<li class="nav-logout"><a class="header-btn" id="logout"><span class="text">로그아웃</span></a></li>
 </ul>
 </c:if>
 </div>
