@@ -32,32 +32,44 @@
 				};
 				
 				// initialize submit button
-				var submitArgs = {
+				Submit.init({
 					box: this.form.box,
 					submit: this.search.submit
-				};
-				Submit.init(submitArgs);
+				});
 				
 			}
 			
 			// initialize auto completion list
 			var autocompletion = args.autocompletion;
-			if (autocompletion !== undefined) {
-				this.list = {
-					element: document.querySelector(args.autocompletion.list),
-					requestNum: autocompletion.requestNum,
-					interval: 100
-				};
-				AutoComplement.init({searchBox: this.form.box, list: this.list});
+			var autoEl = document.querySelector(args.autocompletion.list);
+			if (autocompletion !== undefined && autoEl !== null) {
+				AutoComplement.init({
+					searchBox: this.form.box,
+					list: {
+						element: autoEl,
+						requestNum: autocompletion.requestNum,
+						interval: 100
+					}
+				});
 			}
 			
 			// initialize more button
 			var more = args.more;
-			if (more !== undefined) {
-				this.more = {
-					button: document.querySelector(more.button)
-				}
-				More.init({button: this.more.button, container: this.form.container, template: this.search.template, requestNum: this.search.requestNum});
+			var moreEl = document.querySelector(more.button);
+			if (more !== undefined && moreEl !== null) {
+				var curNumDiv = document.querySelector(args.more.curNum);
+				var totalNumDiv = document.querySelector(args.more.totalNum);
+				More.init({
+					more: {
+						button: moreEl,
+						curNum: (curNumDiv !== undefined)? parseInt(curNumDiv.innerText) : 0,
+						totalNum: (totalNumDiv !== undefined)? parseInt(totalNumDiv.innerText) : 0
+					},
+					container: this.form.container,
+					template: this.search.template,
+					searchQuery: this.form.box.value,
+					requestNum: this.search.requestNum
+				});
 			}
 			
 			// box focus status
