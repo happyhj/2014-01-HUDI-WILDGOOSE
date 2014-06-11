@@ -155,18 +155,19 @@
     }
 	popup.prototype._counstructDOM = function(){
 		var transitionEffect = this.transitionEffect;
-		var popupBg = document.createElement("div");
+		var tempDiv = document.createElement("div");
+		var popupBg = tempDiv.cloneNode(false);
+		var popupWrap = tempDiv.cloneNode(false);
+		var popupContainer = tempDiv.cloneNode(false);
+		var popupContent = tempDiv.cloneNode(false);
 		
 		Dom.addClass(popupBg, "popup-bg");
 		Dom.addClass(popupBg, "popup-animation");
 
-		var popupWrap = document.createElement("div");
 		Dom.addClass(popupWrap, "popup-wrap");
 		Dom.addClass(popupWrap, "popup-animation");
 	
-		var popupContainer = document.createElement("div");
 		Dom.addClass(popupContainer, "popup-container");
-		var popupContent = document.createElement("div");
 		Dom.addClass(popupContent, "popup-content");
 
 		popupContent.innerHTML = this._getTemplate();	
