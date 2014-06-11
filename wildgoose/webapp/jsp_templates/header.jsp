@@ -94,9 +94,7 @@ li[class*='nav'] a  {
 <ul class="nav-global <c:if test="${ not empty requestScope.data.pageName }">
 ${ requestScope.data.pageName }</c:if>">
 	<li class="nav-global-home"><a class="header-btn" href="/"><span class="text">Home</span></a></li>
-	<li class="nav-global-favorite hidden"><a class="header-btn" id="favorite"><span class="text">Favorite</span></a></li>
-	<li class="nav-global-timeline hidden"><a class="header-btn" id="timeline"><span class="text">Timeline</span></a></li>
-	<li class="nav-global-me hidden"><a class="header-btn" id="mypage"><span class="text">Me</span></a></li>
+	<li class="nav-global-me hidden"><a class="header-btn" id="me"><span class="text">Me</span></a></li>
 </ul>
 </div>
 <div class="topBar-right-nav">
@@ -111,9 +109,7 @@ ${ requestScope.data.pageName }</c:if>">
 <ul class="nav-global <c:if test="${ not empty requestScope.data.pageName }">
 ${ requestScope.data.pageName }</c:if>">
 	<li class="nav-global-home"><a href="/"><span class="text">Home</span></a></li>
-	<li class="nav-global-favorite"><a class="header-btn" id="favorite"><span class="text">Favorite</span></a></li>
-	<li class="nav-global-timeline"><a class="header-btn" id="timeline"><span class="text">Timeline</span></a></li>
-	<li class="nav-global-me"><a class="header-btn" id="mypage"><span class="text">Me</span></a></li>
+	<li class="nav-global-me"><a class="header-btn" id="me"><span class="text">Me</span></a></li>
 </ul>
 </div>
 <div class="topBar-right-nav">
