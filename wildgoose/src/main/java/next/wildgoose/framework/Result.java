@@ -25,6 +25,12 @@ public abstract class Result {
 		this.data = new HashMap<String, Object>();
 	}
 	
+	public Result(String pageName) {
+		this();
+		this.setPageName(pageName);
+	}
+
+
 	public int getStatus() {
 		return status;
 	}
@@ -50,6 +56,14 @@ public abstract class Result {
 	}
 	protected void setData(String key, Object value) {
 		this.data.put(key, value);
+	}
+	
+	public void setPageName(String pageName) {
+		this.setData("pageName", pageName);
+	}
+	
+	public String getPageName() {
+		return (String) this.getData("pageName");
 	}
 	
 	

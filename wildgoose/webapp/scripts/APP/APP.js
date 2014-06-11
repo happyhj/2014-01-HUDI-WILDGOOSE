@@ -190,7 +190,9 @@
 					requestNum: 7
 				},
 				more: {
-					button: ".search-more"
+					button: ".search-more button",
+					curNum: ".search-more .state-search-curNum",
+					totalNum: ".search-more .state-search-totalNum"
 				}
 			});
 		},

@@ -6,6 +6,14 @@ import java.util.Map;
 import next.wildgoose.framework.Result;
 
 public class SearchResult extends Result {
+	
+	public SearchResult() {
+		this(null);
+	}
+	
+	public SearchResult(String pageName) {
+		super(pageName);
+	}
 
 	public List<Reporter> getReporters() {
 		return (List<Reporter>) super.getData("reporters");
@@ -37,14 +45,6 @@ public class SearchResult extends Result {
 	
 	public void setTotalNum(int totalNum) {
 		super.setData("totalNum", totalNum);
-	}
-
-	public void setPageName(String pageName) {
-		super.setData("pageName", pageName);
-	}
-	
-	public String getPageName() {
-		return (String) super.getData("pageName");
 	}
 	
 }

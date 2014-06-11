@@ -8,9 +8,13 @@ import next.wildgoose.framework.Result;
 public class TimelineResult extends Result {
 
 	public TimelineResult() {
-		super();
+		super(null);
 	}
 	
+	public TimelineResult(String pageName) {
+		super(pageName);
+	}
+
 	public List<Article> getArticles() {
 		return (List<Article>) super.getData("articles");
 	}

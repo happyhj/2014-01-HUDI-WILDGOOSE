@@ -67,7 +67,7 @@ public class SearchController implements BackController {
 	}
 	
 	private SearchResult getSearchResult (HttpServletRequest request, String searchQuery, int start, int howMany) {
-		SearchResult searchResult = new SearchResult();
+		SearchResult searchResult = new SearchResult("home");
 		ServletContext context = request.getServletContext();
 		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
 		List<Reporter> reporters = null;
@@ -79,7 +79,6 @@ public class SearchController implements BackController {
 		
 		reporters = getReporters(reporterDao, searchQuery, start, howMany);
 		searchResult.setStatus(200);
-		searchResult.setPageName("home");
 		searchResult.setMessage("getting search result success");
 		searchResult.setReporters(reporters);
 		searchResult.setSearchQuery(searchQuery);
@@ -115,9 +114,8 @@ public class SearchController implements BackController {
 		SearchResult searchResult = null;
 		
 		if (searchQuery == null) {
-			searchResult = new SearchResult();
+			searchResult = new SearchResult("home");
 			searchResult.setStatus(200);
-			searchResult.setPageName("home");
 			searchResult.setMessage("welcome to search page! This path is not provided as API.");
 			return searchResult;
 		}

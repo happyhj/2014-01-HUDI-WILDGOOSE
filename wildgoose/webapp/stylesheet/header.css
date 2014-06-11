@@ -36,8 +36,10 @@ li[class*='nav-'].hidden {
 
 /** ipad **/
 @media only screen
-and (max-width : 1024px)  {
+and (max-width : 980px)  {
 	.topBar-inner-wrapper {
 		width: 100%;
+		padding: 0 10px;
+		box-sizing: border-box;
 	}
 }

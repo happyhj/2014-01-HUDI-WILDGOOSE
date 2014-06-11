@@ -7,8 +7,12 @@ import next.wildgoose.framework.Result;
 public class FavoriteResult extends Result {
 
 	public FavoriteResult() {
-		super();
+		super(null);
 		// TODO Auto-generated constructor stub
+	}
+
+	public FavoriteResult(String pageName) {
+		super(pageName);
 	}
 
 	public List<Reporter> getFavorites() {
@@ -16,14 +20,6 @@ public class FavoriteResult extends Result {
 	}
 	public void setFavorites(String string, List<Reporter> reporters) {
 		super.setData("reporterCards", reporters);
-	}
-
-	public void setPageName(String pageName) {
-		super.setData("pageName", pageName);
-	}
-	
-	public String getPageName() {
-		return (String) super.getData("pageName");
 	}
 
 }

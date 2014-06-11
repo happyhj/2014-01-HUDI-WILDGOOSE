@@ -82,9 +82,8 @@ public class UserController implements BackController {
 		ArticleDAO articleDao =  (ArticleDAO) context.getAttribute("ArticleDAO");
 		List<Article> articles = articleDao.findArticlesByFavorite(userId);
 		
-		TimelineResult timelineResult = new TimelineResult();
+		TimelineResult timelineResult = new TimelineResult("timeline");
 		timelineResult.setStatus(200);
-		timelineResult.setPageName("timeline");
 		timelineResult.setMessage("OK");
 		timelineResult.setArticles("articles", articles);
 		return timelineResult;
@@ -96,9 +95,8 @@ public class UserController implements BackController {
 		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
 		List<Reporter> reporters = favoriteDao.findFavoriteReporters(userId);
 		
-		FavoriteResult favoriteResult = new FavoriteResult();
+		FavoriteResult favoriteResult = new FavoriteResult("favorite");
 		favoriteResult.setStatus(200);
-		favoriteResult.setPageName("timeline");
 		favoriteResult.setMessage("success");
 		LOGGER.debug(""+reporters.size());
 		favoriteResult.setFavorites("reporters", reporters);
