@@ -61,7 +61,7 @@
 		<%-- searchQuery 존재시 and 검색 결과가 더 많을 때 --%>
 		<c:if test = "${ not empty requestScope.data.searchQuery }" >
 		<div class="search-more">
-			<span class="search-button-ajax">더보기</span>
+			<button class="search-button-ajax">더보기</button>
 			<div class="search-state search-state-hidden">
 				<span class="state-search-curNum hidden">${ requestScope.data.reporters.size() }</span>
 				<span class="state-search-query hidden">${ requestScope.data.searchQuery }</span>

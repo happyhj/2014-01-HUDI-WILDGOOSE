@@ -98,7 +98,7 @@
 			this.userId = args.userId;
 
 			// 초기화
-			if (this.userId !== "" || this.userId !== undefined) {
+			if (this.userId !== undefined && this.userId != "") {
 				
 				// 모든 별에 eventlistener 붙이기
 				this.attatchEventToFavBtn();
@@ -109,7 +109,7 @@
 					"url" : url,
 					"callback" : function(jsonStr) {
 						var result = JSON.parse(jsonStr);
-						var reporterCards = result["data"]["reporterCards"]
+						var reporterCards = result["data"]["reporterCards"];
 						for (var i=0; i<reporterCards.length; i++) {
 							var card = reporterCards[i];
 							Favorite.favoriteList.push(card["id"]);
