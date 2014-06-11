@@ -41,19 +41,20 @@
 		},
 		
 		_userPage: function() {
-			var timelineBtn = document.querySelector("#timeline");
-			timelineBtn.addEventListener("click", function() {
-				location.href = "/users/?user_id?/timeline".replace("?user_id?", this.userId);
-			}.bind(this), false);
+//			var timelineBtn = document.querySelector("#timeline");
+//			timelineBtn.addEventListener("click", function() {
+//				location.href = "/users/?user_id?/timeline".replace("?user_id?", this.userId);
+//			}.bind(this), false);
+//			
+//			var favoriteBtn = document.querySelector("#favorite");
+//			favoriteBtn.addEventListener("click", function() {
+//				location.href = "/users/?user_id?/favorites".replace("?user_id?", this.userId);
+//			}.bind(this), false);
 			
-			var favoriteBtn = document.querySelector("#favorite");
-			favoriteBtn.addEventListener("click", function() {
-				location.href = "/users/?user_id?/favorites".replace("?user_id?", this.userId);
-			}.bind(this), false);
-			
-			var mypageBtn = document.querySelector("#mypage");
+			var mypageBtn = document.querySelector("#me");
 			mypageBtn.addEventListener("click", function() {
-				location.href = "/users/?user_id?/mypage".replace("?user_id?", this.userId);
+//				location.href = "/users/?user_id?/mypage".replace("?user_id?", this.userId);
+				location.href = "/me/?user_id?".replace("?user_id?", this.userId);
 			}.bind(this), false);
 		}
 	};

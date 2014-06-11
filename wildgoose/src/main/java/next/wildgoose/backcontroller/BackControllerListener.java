@@ -20,6 +20,7 @@ public class BackControllerListener implements ServletContextListener {
 		controllerMap = new HashMap<String, BackController>();
 		controllerMap.put("", new SearchController());
 		controllerMap.put("search", new SearchController());
+		controllerMap.put("me", new MeController());
 		controllerMap.put("reporters", new ReporterController());
 		controllerMap.put("users", new UserController());
 		controllerMap.put("templates", new TemplateController());
