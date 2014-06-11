@@ -63,7 +63,7 @@
 			this._removeKeyEvent();
 		},
 		
-		exec: function(callback) {
+		exec: function(callback, failCallback) {
 			if (this.rule !== undefined && Dom.hasClass(this.submitEl, "disable")) {
 				console.log("누르지마 바보야");
 			}
@@ -75,6 +75,9 @@
 						console.log("Success!");
 					},
 					"failure": function() {
+						if (failCallback !== undefined) {
+							failCallback();
+						}
 						console.log("FAIL!");
 					},
 					"data": this._getPayload()

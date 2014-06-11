@@ -71,7 +71,10 @@
 				LoginAccount.exec(function() {
 					loginPopup.afterclose.add(function() {location.reload();});
 					loginPopup.close();
-				}.bind(this));
+				}.bind(this), function() {
+					var messageDiv = document.getElementById("result-msg");
+					messageDiv.innerText = "비밀번호가 틀렸습니다.";
+				});
 				
 			}, false);
 			
