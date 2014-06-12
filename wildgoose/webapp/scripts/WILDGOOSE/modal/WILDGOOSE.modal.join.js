@@ -33,7 +33,7 @@
 		},
 		
 		_openPopup: function() {
-			this._AccountInit();
+			this._accountInit();
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", this._clickHandler.bind(this), false);
 			
@@ -46,7 +46,7 @@
 			this.joinPopup.close();
 		},
 		
-		_AccountInit: function() {
+		_accountInit: function() {
 		
 			// Join객체를 생성한다.
 			this.joinAccount = new Join({

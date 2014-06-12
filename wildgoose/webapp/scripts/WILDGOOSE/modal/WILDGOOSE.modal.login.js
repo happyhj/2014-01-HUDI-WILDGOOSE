@@ -35,7 +35,7 @@
 		},
 		
 		_openPopup: function() {
-			this._AccountInit();
+			this._accountInit();
 			var btn = arguments[0].querySelector("#create");
 			btn.addEventListener("click", this._clickHandler.bind(this), false);
 			
@@ -48,7 +48,7 @@
 			this.loginPopup.close();
 		},
 		
-		_AccountInit: function() {
+		_accountInit: function() {
 			var randNum = User.getRandomNumber();
 			
 			this.loginAccount = new Login({

@@ -18,12 +18,21 @@
 	
 	var SettingModal = {
 		init: function() {
-			this.settingBtn = document.querySelector("#setting");
-			this.withdrawBtn = null;
-			this.changePwBtn = null;
+//			this.settingBtn = document.querySelector("#setting");
 			
+			this.button = {
+				setting: document.querySelector("#setting"),
+				withdraw: null,
+				changePw: null
+			};
+		
 			this.cache = {
-				clickHandler: this._settingHandler.bind(this)
+				settingHandler: this._settingHandler.bind(this),
+				submitHandler: this._submitHandler.bind(this),
+				openPopup: this._openPopup.bind(this),
+				closePopup: this._closePopup.bind(this),
+				withdraw: this._withdraw.bind(this),
+				changePw: this._changePw.bind(this)
 			};
 			
 			this.template = {
@@ -32,87 +41,89 @@
 				changePw: null
 			};
 			
-						
+			this.account = {
+				withdraw: null,
+				changePw: null
+			}
+			
 			this.settingPopup = new Popup.popup({
-				element: this.settingBtn,
+				element: this.button.setting,
 				template: this.template.setting
 			});
 			
-			this.settingPopup.afteropen.add(function() {
-				this._addClickEvent();
-				this._getTemplates();
-			}.bind(this));
-			
-			this.settingPopup.afterclose.add(function() {
-				this._removeClickEvent();
-			}.bind(this));
-			
+			this.settingPopup.afteropen.add(this.cache.openPopup);
+			this.settingPopup.afterclose.add(this.cache.closePopup);
 		},		
 		
 		_openPopup: function() {
-			this._AccountInit();
-			
-			var btn = arguments[0].querySelector("#withdraw");
-			btn.addEventListener("click", this._clickHandler.bind(this), false);
-			
-			var pwDom = document.querySelector(".form-container input[name=password]");
-			pwDom.focus();
-			
-			
-			
-			var btn = arguments[0].querySelector("#change");
-			btn.addEventListener("click", this._clickHandler.bind(this), false);
-			var oldPwDom = document.querySelector(".form-container input[name=oldPassword]");
-			oldPwDom.focus();
-			
+			this._addClickEvent();
+			this._getTemplates();
 		},
 		
 		_closePopup: function() {
+			this._removeClickEvent();
 			this.settingPopup.afterclose.add(function() {location.reload();});
 			this.settingPopup.close();
 		},
 		
-		_AccountInit: function() {
-		
-			// Join객체를 생성한다.
-			this.joinAccount = new Join({
-				method: "POST",
-				url: "/api/v1/accounts/",
-				form: ".form-container",
-				rule: {
-					email: {
-						type: "email"
-					},
-					password: {
-						type: "password"
-					},
-					confirm: {
-						type: "confirm",
-						target: "password"
-					}
-				}
-			});
-			// joinPopup이 딷히면 JoinAccount.stop()을 호출하여 this.selectedEl에 붙어있던 keyup event를 해제한다.
-			this.joinPopup.afterclose.add(this.joinAccount.stop.bind(this.joinAccount));
+		_settingHandler: function(evt) {
+			var targetEl = evt.target;
+			console.log(targetEl);
+			this._selectUI(targetEl.name);
 		},
 		
-		
-		_clickHandler: function(evt) {
-			if (this.leaveAccount !== null) {
-				this.leaveAccount.exec(this._closePopup.bind(this));
-			}
+		_addClickEvent: function() {
+			this.button.withdraw = document.querySelector("#withdraw");
+			this.button.changePw = document.querySelector("#changePw");
 			
-			else if (this.changePwAccount !== null) {
-				this.changePwAccount.exec(this._closePopup.bind(this));
+			this.button.withdraw.addEventListener("click", this.cache.settingHandler, false);
+			this.button.changePw.addEventListener("click", this.cache.settingHandler, false);
+		},
+		
+		_removeClickEvent: function() {
+			this.button.withdraw.removeEventListener("click", this.cache.settingHandler, false);
+			this.button.changePw.removeEventListener("click", this.cache.settingHandler, false);
+		},
+		
+		_selectUI: function(name) {
+			var template = this.template[name];
+			var popupContent = document.querySelector(".popup-content");
+			if (template !== null) {
+				debugger;
+				popupContent.innerHTML = template;
+				// account init				
+				this._accountInit(name);
 			}
 		},
 		
-		/////////////
 		
+		_accountInit: function(name) {
+			// init
+			this.cache[name]();
+			
+			// afterclose
+			this.settingPopup.afterclose.add(this.account[name].stop.bind(this.account[name]));
+			
+			// submitEl init
+			var submitEl = document.querySelector(".form-container button[name=submit]");
+			submitEl.addEventListener("click", this.cache.submitHandler, false);
+			
+			
+			// focus first input element
+			var partialSelector = (name == "changePw")?"oldP":"p";
+			var firstInputEl = document.querySelector(".form-container input[name=" + partialSelector + "assword]");
+			firstInputEl.focus();
+		},
+
+		_submitHandler: function(evt) {
+			var targetEl = evt.target
+			var name = targetEl.form.name;
+			
+			this.account[name].exec(this.cache.closePopup);
+		},
 		
 		_withdraw: function() {
-//			this.leaveBtn = document.querySelector("#leave");
-			this.leaveAccount = new Leave({
+			this.account.withdraw = new Withdraw({
 				method: "POST",
 				url: "/api/v1/accounts/",
 				form: ".form-container",
@@ -127,13 +138,10 @@
 				},
 				randNum: User.getRandomNumber()
 			});
-			
-			this.settingPopup.afterclose.add(this.leaveAccount.stop.bind(this.leaveAccount));
 		},
 		
 		_changePw: function() {
-			
-			this.changePwAccount = new ChangePw({
+			this.account.changePw = new ChangePw({
 				method: "PUT",
 				url: "/api/v1/accounts/",
 				form: ".form-container",
@@ -158,8 +166,8 @@
 										callback(validity, isProgressing);
 									},
 									data: (function() {
-										var email = escape(document.getElementById("userId").textContent);
-										var password = SHA256(SHA256(escape(inputEl.value)) + randNum);
+										var email = User.getId();
+										var password = SHA256(SHA256(escape(inputEl.value)) + User.getRandomNumber());
 										return "email=" + email + "&password=" + password;
 									}())
 								});
@@ -176,21 +184,8 @@
 				},
 				randNum: User.getRandomNumber()
 			});
-			
-			
-			this.settingPopup.afterclose.add(this.changePwAccount.stop.bind(this.changePwAccount));
 		},
 		
-		
-		/////////////
-		
-		_updateUI: function(name) {
-			var template = this.template[name];
-			var popupWrap = document.querySelector(".popup-wrap");
-			if (template !== undefined) {
-				popupWrap.innerHTML = template;
-			}
-		},
 		
 		_getTemplates: function() {
 			if (this.template.withdraw === null) {
@@ -204,30 +199,10 @@
 			if (this.template.changePw === null) {				
 				var template = Template.get({"url":"/api/v1/templates/changePassword.html"});
 				var compiler = Template.getCompiler(template);
-				this.template.withdraw = compiler({
+				this.template.changePw = compiler({
 					"email": User.getId()
 				}, template);
 			}
-		},
-		_addClickEvent: function() {
-			this.withdrawBtn = document.querySelector("#withdraw");
-			this.changePwBtn = document.querySelector("#changePw");
-			
-			this.withdrawBtn.addEventListener("click", this.cache.settingHandler, false);
-			this.changePwBtn.addEventListener("click", this.cache.settingHandler, false);
-		},
-		
-		_removeClickEvent: function() {
-			this.withdrawBtn.removeEventListener("click", this.cache.settingHandler, false);
-			this.changePwBtn.removeEventListener("click", this.cache.settingHandler, false);
-			
-			this.withdrawBtn = null;
-			this.changePwBtn = null;
-		},
-		
-		_settingHandler: function(evt) {
-			var targetEl = evt.target;
-			this._updateUI(targetEl.name);
 		}
 	}
 	
