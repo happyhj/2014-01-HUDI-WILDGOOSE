@@ -26,16 +26,17 @@ public class ReporterController implements BackController {
 	public Result execute(HttpServletRequest request) {
 		Result result = null;
 		Uri uri = new Uri(request);
-
-		// id가 입력되지 않은 경우 처리
+		
+		// id가 필요없는 api
+		if (request.getParameter("method") != null) {
+			int max = Integer.parseInt(request.getParameter("max"));
+			result = getRandomReporters(request, max);
+		}
+		// id가 필요없는 경우가 아님에도 입력되지 않은 경우 처리
 		if (uri.size() <= 1 || uri.check(1, "")) {
 			result = new ReporterResult();
 			result.setMessage("parameter is missing.");
 			return result;
-		}
-		if (request.getParameter("method") != null) {
-			int max = Integer.parseInt(request.getParameter("max"));
-			result = getRandomReporters(request, max);
 		}
 		int reporterId = Integer.parseInt(uri.get(1));
 		if (uri.get(2) == null) {
