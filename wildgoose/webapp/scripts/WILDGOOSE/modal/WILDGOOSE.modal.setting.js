@@ -54,7 +54,17 @@
 				element: settingBtn,
 				template: this.template.setting
 			});
-					
+			
+			
+//			var settingPopup = new Popup.ajaxPopup({
+//				element: settingBtn,
+//				templateUrl: "/api/v1/templates/setting.html",
+//				templateLoader: function(AjaxResponse) {
+//					var templateStr = JSON.parse(AjaxResponse).data.template;
+//					return templateStr;
+//				}
+//			});
+//					
 			
 			settingPopup.afteropen.add(function() {
 				this._addClickEvent();
