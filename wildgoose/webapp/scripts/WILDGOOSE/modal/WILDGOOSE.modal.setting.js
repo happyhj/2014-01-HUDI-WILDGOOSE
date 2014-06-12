@@ -32,21 +32,6 @@
 			this.userId = document.getElementById("userId").textContent;
 			this.randNum = null;
 			
-			
-			console.log(this.template.setting);
-			/*
-			this.el = config.element;
-			this.template = config.template;	
-			this.transitionEffect = (config.transitionEffect)?(config.transitionEffect):("zoom");	
-			//this.data = (config.data)?(config.data):({});
-			this.afteropen = new eventEmitter("afteropen");
-			this.afterclose = new eventEmitter("afterclose");
-			
-			this.status = {
-				data: false
-			};
-			*/
-			
 			var settingBtn = document.querySelector("#setting");
 			var randNum = null;
 			
@@ -55,16 +40,6 @@
 				template: this.template.setting
 			});
 			
-			
-//			var settingPopup = new Popup.ajaxPopup({
-//				element: settingBtn,
-//				templateUrl: "/api/v1/templates/setting.html",
-//				templateLoader: function(AjaxResponse) {
-//					var templateStr = JSON.parse(AjaxResponse).data.template;
-//					return templateStr;
-//				}
-//			});
-//					
 			
 			settingPopup.afteropen.add(function() {
 				this._addClickEvent();
@@ -75,12 +50,16 @@
 				this._removeClickEvent();
 				
 			}.bind(this));
-//			
-			
-			
-//			this._withdraw();
-//			this._changePw();
+
 		},
+		_updateUI: function(name) {
+			var template = this.template[name];
+			var popupWrap = document.querySelector(".popup-wrap");
+			if (template !== undefined) {
+				popupWrap.innerHTML = template;
+			}
+		},
+		
 		_getTemplates: function() {
 			if (this.template.withdraw === null) {				
 				this.template.withdraw = Template.get({"url":"/api/v1/templates/withdraw.html"});
@@ -108,37 +87,12 @@
 		
 		_clickHandler: function(evt) {
 			var targetEl = evt.target;
-			console.log(targetEl);
-			// targetEl의 template을 가져오고
-			// 화면을 바꾼다.
+			this._updateUI(targetEl.name);
 		},
-		
-		
-//		_getTemplate: fucntion(args) {
-//			
-//		},
-		
 		
 		_withdraw: function() {
 			var leaveBtn = document.querySelector("#leave");
-			var randNum = null;
-			var leavePopup = new Popup.ajaxPopup({
-				element: leaveBtn,
-				templateUrl: "/api/v1/templates/withdraw.html",
-				templateLoader: function(AjaxResponse) {
-					var templateStr = JSON.parse(AjaxResponse).data.template;
-					randNum = JSON.parse(AjaxResponse).data.rand;
-					var userId = document.getElementById("userId").textContent;
-					var compiler = TemplateUtil.getCompiler(templateStr);
-					return compiler({
-						"randNum": randNum,
-						"email": userId
-					}, templateStr);		
-				}
-			});
-			
-			leavePopup.afteropen.add(function() {
-				var args = {
+			var args = {
 					method: "POST",
 					url: "/api/v1/accounts/",
 					form: ".form-container",
@@ -168,8 +122,7 @@
 				
 				var pwDom = document.querySelector(".form-container input[name=password]");
 				pwDom.focus();
-				
-			});
+			
 		},
 		
 		_changePw: function() {

@@ -73,8 +73,7 @@
     				this.template = this.templateLoader(response);
     				event.preventDefault();
     				event.stopPropagation();
-    				
-    				debugger;
+
     				this._modularizeDOM();
 						
     			}).bind(this)
