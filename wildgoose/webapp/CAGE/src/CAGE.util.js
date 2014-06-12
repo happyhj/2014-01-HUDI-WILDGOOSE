@@ -123,7 +123,8 @@
 		        var resultStr = Util.string.trim(templateString);
 		        for (var variableName in dataObj) {
 		            if (dataObj[variableName]===0||dataObj[variableName]) {
-		                resultStr = resultStr.replace("<%= "+variableName+" %>", dataObj[variableName]);
+		            	var reg = "<%= "+variableName+" %>"
+		                resultStr = resultStr.replace(RegExp(reg, "gm"), dataObj[variableName]);
 		            }
 		        }
 		        return resultStr;

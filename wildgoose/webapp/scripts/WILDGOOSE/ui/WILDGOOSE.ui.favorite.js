@@ -81,14 +81,16 @@
 			if (reporterCards.length != 0) {
 				(curNum == undefined) ? curNum = reporterCards.length : true;
 				(reqNum == undefined) ? reqNum = reporterCards.length : true;
+				console.log(curNum, reqNum);
 				for (var i = curNum - reqNum ; i < curNum; i++) {
 					var card = reporterCards[i];
 					if (card == undefined) {
 						continue;
 					}
 					var reporterId = card.dataset.reporter_id;
+					Dom.removeClass(card.querySelector(".star"), "invisible");
 					if (this.favoriteList.indexOf(parseInt(reporterId)) >= 0) {
-						card.querySelector(".star").className = "star on";
+						Dom.addClass(card.querySelector(".star"), "on");
 					}
 				}				
 			}
