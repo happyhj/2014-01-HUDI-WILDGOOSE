@@ -13,6 +13,54 @@ import next.wildgoose.dto.Reporter;
 
 public class ReporterDAO {
 	
+	public List<Reporter> getRandomReporters(final String userId, final int howmany) {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+
+			@Override
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, userId);
+				psmt.setInt(2, howmany);
+			}
+			
+		};
+		
+		RowMapper rm = new RowMapper() {
+
+			@Override
+			public Object mapRow(ResultSet rs) throws SQLException {
+				ArrayList<Reporter> randomReporters = new ArrayList<Reporter>();
+				if (rs.first()) {
+					Reporter reporter = new Reporter();
+					reporter.setId(rs.getInt("id"));
+					reporter.setName(rs.getString("name"));
+					reporter.setEmail(rs.getString("email"));
+					reporter.setArticleTitle(rs.getString("title"));
+					reporter.setPressName(rs.getString("press"));
+					randomReporters.add(reporter);
+				}
+				return randomReporters;
+			}
+			
+		};
+		
+		StringBuilder query = new StringBuilder();
+		query.append("select result.id as id, result.name as name, result.email as email, title.title, press.name from ");
+		query.append("(SELECT author.id, author.name, author.email, author.press_id FROM author JOIN ");
+		query.append("(select author.id from author where author.id not in ");
+		query.append("(select author_id from favorite where user_email=?) ");
+		query.append("ORDER BY RAND() LIMIT 0,?) as random ");
+		query.append("ON author.id = random.id) as result ");
+		query.append("JOIN ");
+		query.append("(select article.title, aa.author_id from article join ");
+		query.append("article_author AS aa ON article.URL = aa.article_URL ");
+		query.append("GROUP BY aa.author_id ORDER BY article.datetime desc) as title ");
+		query.append("ON result.id = title.author_id ");
+		query.append("JOIN press ON result.press_id = press.id;");
+
+		return (List<Reporter>) t.execute(query.toString(), pss, rm);
+	}
+	
 	public Reporter findReporterById (final int reporterId) {		
 		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {

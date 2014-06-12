@@ -1,9 +1,11 @@
 package next.wildgoose.backcontroller;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.ArticleDAO;
 import next.wildgoose.dao.DummyData;
@@ -18,9 +20,6 @@ import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.utility.Uri;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class ReporterController implements BackController {
 
 	@Override
@@ -34,7 +33,10 @@ public class ReporterController implements BackController {
 			result.setMessage("parameter is missing.");
 			return result;
 		}
-		
+		if (request.getParameter("method") != null) {
+			int max = Integer.parseInt(request.getParameter("max"));
+			result = getRandomReporters(request, max);
+		}
 		int reporterId = Integer.parseInt(uri.get(1));
 		if (uri.get(2) == null) {
 			result = getReporterPage(request, reporterId);
@@ -44,6 +46,39 @@ public class ReporterController implements BackController {
 		}
 
 		return result;
+	}
+
+	private Result getRandomReporters(HttpServletRequest request, int reportersNum) {
+		ServletContext context = request.getServletContext();
+		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
+		HttpSession session = request.getSession();
+		String userId = (String) session.getAttribute("userId");
+		int howmany = Math.min(reportersNum, 20);
+		
+		ReporterResult reporterResult = new ReporterResult();
+		if (userId == null) {
+			reporterResult.setStatus("401");
+			reporterResult.setMessage("로그인되지 않았습니다");
+		} else {
+			reporterResult.setStatus("200");
+			reporterResult.setMessage("OK");
+			List<Reporter> totalReporters = reporterDao.getRandomReporters(userId, howmany);
+			reporterResult.setReporters(totalReporters);
+		}
+		
+		return null;
+	}
+	
+	private int[] getRandomIds(int num, int max) {
+		Random r = new Random();
+		int[] reporterIds = new int[num];
+		
+		for (int i = 0; i < num; i++) {
+			int reporter = r.nextInt(max);
+			reporterIds[i] = reporter;
+		}
+		
+		return null;
 	}
 
 	private ReporterResult getGraphData(HttpServletRequest request, Uri uri, int reporterId) {

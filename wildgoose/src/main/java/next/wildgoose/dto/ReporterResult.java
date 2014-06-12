@@ -43,4 +43,12 @@ public class ReporterResult extends Result {
 		return (StatPoints) super.getData("statPoints");
 	}
 
+	public void setReporters(List<Reporter> totalReporters) {
+		super.setData("reporters", totalReporters);
+		
+	}
+	public List<Reporter> getReporters() {
+		return (List<Reporter>) super.getData("reporters");
+	}
+
 }
