@@ -21,6 +21,8 @@ public class JSONView implements View {
 		// TODO Auto-generated method stub
 		ServletContext context = request.getServletContext();
 		String jsonString = Utility.toJsonString(resultData);
+		LOGGER.debug(jsonString);
+		LOGGER.debug(resultData.toString());
 		PrintWriter out = null;
 
 		response.setCharacterEncoding(context.getInitParameter("encoding"));

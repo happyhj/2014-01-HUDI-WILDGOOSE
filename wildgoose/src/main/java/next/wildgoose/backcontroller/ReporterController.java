@@ -31,6 +31,7 @@ public class ReporterController implements BackController {
 		if (request.getParameter("method") != null) {
 			int max = Integer.parseInt(request.getParameter("max"));
 			result = getRandomReporters(request, max);
+			return result;
 		}
 		// id가 필요없는 경우가 아님에도 입력되지 않은 경우 처리
 		if (uri.size() <= 1 || uri.check(1, "")) {
@@ -67,7 +68,7 @@ public class ReporterController implements BackController {
 			reporterResult.setReporters(totalReporters);
 		}
 		
-		return null;
+		return reporterResult;
 	}
 	
 	private int[] getRandomIds(int num, int max) {

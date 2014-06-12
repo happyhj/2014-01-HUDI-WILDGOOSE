@@ -30,7 +30,7 @@ public class ReporterDAO {
 			@Override
 			public Object mapRow(ResultSet rs) throws SQLException {
 				ArrayList<Reporter> randomReporters = new ArrayList<Reporter>();
-				if (rs.first()) {
+				while (rs.next()) {
 					Reporter reporter = new Reporter();
 					reporter.setId(rs.getInt("id"));
 					reporter.setName(rs.getString("name"));
@@ -45,7 +45,7 @@ public class ReporterDAO {
 		};
 		
 		StringBuilder query = new StringBuilder();
-		query.append("select result.id as id, result.name as name, result.email as email, title.title, press.name from ");
+		query.append("select result.id as id, result.name as name, result.email as email, title.title, press.name as press from ");
 		query.append("(SELECT author.id, author.name, author.email, author.press_id FROM author JOIN ");
 		query.append("(select author.id from author where author.id not in ");
 		query.append("(select author_id from favorite where user_email=?) ");
