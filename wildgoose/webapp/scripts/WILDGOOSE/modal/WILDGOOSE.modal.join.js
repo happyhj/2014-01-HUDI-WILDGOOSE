@@ -66,6 +66,7 @@
 					}
 				}
 			});
+			
 			// joinPopup이 딷히면 JoinAccount.stop()을 호출하여 this.selectedEl에 붙어있던 keyup event를 해제한다.
 			this.joinPopup.afterclose.add(this.joinAccount.stop.bind(this.joinAccount));
 		},

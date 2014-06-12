@@ -11,15 +11,12 @@
 	var Popup = CAGE.ui.popup;
 	var Template = CAGE.util.template;
 	
-//	var JoinAccount = WILDGOOSE.account.join;
 	var Withdraw = WILDGOOSE.account.withdraw;
 	var ChangePw = WILDGOOSE.account.change.pw;
 	var User = WILDGOOSE.user;
 	
 	var SettingModal = {
 		init: function() {
-//			this.settingBtn = document.querySelector("#setting");
-			
 			this.button = {
 				setting: document.querySelector("#setting"),
 				withdraw: null,
@@ -89,7 +86,6 @@
 			var template = this.template[name];
 			var popupContent = document.querySelector(".popup-content");
 			if (template !== null) {
-				debugger;
 				popupContent.innerHTML = template;
 				// account init				
 				this._accountInit(name);
