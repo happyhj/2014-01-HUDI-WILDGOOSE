@@ -36,10 +36,30 @@ li[class*='nav-'].hidden {
 
 /** ipad **/
 @media only screen
-and (max-width : 980px)  {
+and (max-width : 1024px)
+and (min-width : 650px) {
 	.topBar-inner-wrapper {
-		width: 100%;
+		width: 640px;
 		padding: 0 10px;
+		box-sizing: border-box;
+	}
+}
+
+/** pablet **/
+@media only screen 
+and (max-width : 650px)  
+and (min-width : 490px) {
+	.topBar-inner-wrapper {
+		width: 475px;
+		box-sizing: border-box;
+	}
+}
+
+/** iphone **/
+@media only screen 
+and (max-width : 490px)  {
+	.topBar-inner-wrapper {
+		width:95%;
 		box-sizing: border-box;
 	}
 }
