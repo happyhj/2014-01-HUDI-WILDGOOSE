@@ -10,8 +10,8 @@ import next.wildgoose.dto.Reporter;
 import next.wildgoose.dto.SearchResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
+import next.wildgoose.framework.utility.Utility;
 import next.wildgoose.utility.Constants;
-import next.wildgoose.utility.Utility;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

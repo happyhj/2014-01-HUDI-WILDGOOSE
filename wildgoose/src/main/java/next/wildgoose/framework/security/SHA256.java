@@ -1,4 +1,4 @@
-package next.wildgoose.utility;
+package next.wildgoose.framework.security;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

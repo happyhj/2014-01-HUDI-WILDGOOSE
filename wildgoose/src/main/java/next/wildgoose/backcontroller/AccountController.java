@@ -16,9 +16,9 @@ import next.wildgoose.dto.AccountResult;
 import next.wildgoose.dto.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
-import next.wildgoose.utility.SHA256;
-import next.wildgoose.utility.Uri;
-import next.wildgoose.utility.Utility;
+import next.wildgoose.framework.security.SHA256;
+import next.wildgoose.framework.utility.Uri;
+import next.wildgoose.framework.utility.Utility;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -11,9 +11,10 @@ import next.wildgoose.dto.AccountResult;
 import next.wildgoose.dto.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
+import next.wildgoose.framework.security.RandomNumber;
+import next.wildgoose.framework.security.SHA256;
+import next.wildgoose.framework.utility.Uri;
 import next.wildgoose.utility.Constants;
-import next.wildgoose.utility.SHA256;
-import next.wildgoose.utility.Uri;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,9 +40,23 @@ public class SessionController implements BackController {
 				result = joinedEmail(request, email);
 			}
 		}
+		else if (uri.check(1, "rand")) {
+			result = getRanomNumber(request);
+		}
 		
 		return result;
 	}
+	private AccountResult getRanomNumber(HttpServletRequest request) {
+		AccountResult accountResult = new AccountResult();
+		String randNum = RandomNumber.set(request.getSession());
+		accountResult.setRand(randNum);
+		LOGGER.debug("issue a randNum: " + randNum);
+		
+		accountResult.setStatus(200);
+		accountResult.setMessage("fetching random number info succeed");
+		return accountResult; 
+	}
+	
 	private AccountResult joinedEmail(HttpServletRequest request, String email) {
 		ServletContext context = request.getServletContext();
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
@@ -81,17 +96,19 @@ public class SessionController implements BackController {
 		return false;
 		
 	}
-
+	
 	private SimpleResult login(HttpServletRequest request) {
-		SimpleResult simpleResult = new SimpleResult();
-		String email = request.getParameter("email");
-		String hashedPassword = request.getParameter("password");
-		LOGGER.debug("email: " + email + ", passw: " + hashedPassword);
 		ServletContext context = request.getServletContext();
+		HttpSession session = request.getSession();
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
 		
-		HttpSession session = request.getSession();
-		String randNum = (String) session.getAttribute("randNum");
+		String email = request.getParameter("email");
+		String hashedPassword = request.getParameter("password");
+		String randNum = RandomNumber.get(session);
+		LOGGER.debug ("check randNum: " + randNum);
+
+		SimpleResult simpleResult = new SimpleResult();
+		LOGGER.debug("email: " + email + ", passw: " + hashedPassword);
 		LOGGER.debug(randNum);
 		
 		String accountPw = signDao.findAccount(email);
@@ -103,6 +120,7 @@ public class SessionController implements BackController {
 		}
 		// H(db_password+random)
 		if(SHA256.testSHA256(accountPw + randNum).equals(hashedPassword)){
+			
 			simpleResult.setStatus(200);
 			simpleResult.setMessage("getting user authentication succeed");
 			simpleResult.setData("userId", email);

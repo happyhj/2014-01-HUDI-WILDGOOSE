@@ -6,10 +6,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import next.wildgoose.dao.template.JdbcTemplate;
-import next.wildgoose.dao.template.PreparedStatementSetter;
-import next.wildgoose.dao.template.RowMapper;
 import next.wildgoose.dto.NumberOfArticles;
+import next.wildgoose.framework.dao.template.JdbcTemplate;
+import next.wildgoose.framework.dao.template.PreparedStatementSetter;
+import next.wildgoose.framework.dao.template.RowMapper;
 
 public class NumberOfArticlesDAO {
 	

@@ -69,7 +69,6 @@
 		var status = this.status;
 		
 		var close = this.close;
-
 		el.addEventListener("click", this.openHandler.bind(this), false);
     }
     
