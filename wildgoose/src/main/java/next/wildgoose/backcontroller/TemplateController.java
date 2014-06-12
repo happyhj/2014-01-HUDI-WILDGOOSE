@@ -32,10 +32,10 @@ public class TemplateController implements BackController {
 		String path = root +"html_templates/"+ templateFileName;
 		TemplateResult result = new TemplateResult();
 	
-		if ("account.html".equals(templateFileName) || "login.html".equals(templateFileName) || "withdraw.html".equals(templateFileName) || "changePassword.html".equals(templateFileName)) {
+		if ("account.html".equals(templateFileName) || "login.html".equals(templateFileName) || "withdraw.html".equals(templateFileName) || "changePassword.html".equals(templateFileName)  || "setting.html".equals(templateFileName)) {
 			LOGGER.debug(templateFileName + " template");
-			result.setRand(RandomNumber.set(request.getSession()));
-			LOGGER.debug(result.getRand());
+//			result.setRand(RandomNumber.set(request.getSession()));
+//			LOGGER.debug(result.getRand());
 			
 			StringBuilder htmlDocumentSB = ResourceLoader.load(path);
 			LOGGER.debug(htmlDocumentSB.toString());
