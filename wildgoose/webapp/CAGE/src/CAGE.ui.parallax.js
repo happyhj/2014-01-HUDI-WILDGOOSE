@@ -32,6 +32,7 @@
 			[].forEach.call(
 				wrapperCollections[i].querySelectorAll(".parallax-item"), 
 				function(el){
+					el.style.transform="translateY(0px)";
 					var elStyle = window.getComputedStyle(el);
 					el.setAttribute("data-initialTopOffset", getOffset(el).top);
 					el.setAttribute("data-initialLeftOffset", getOffset(el).left);
@@ -52,12 +53,14 @@
 		 
 		function mousemoveHandler(event) {
 			var parallaxItems = document.querySelector(".parallax-wrapper").querySelectorAll(".parallax-item");
+			console.log("parallax_set start");
 			[].forEach.call(
 				parallaxItems, 
 				function(targetEl){
 					parallax_set(targetEl, event);
 				}
 			);	
+			console.log("parallax_set end");
 		}
 		
 		function parallax_set(targetEl, event){
@@ -67,15 +70,21 @@
 			var bodyStyle = window.getComputedStyle(document.body);	
 			var xPosition = event.x?event.x/parseInt(window.innerWidth):0.5;
 			var yPosition = event.y?event.y/parseInt(window.innerHeight):0.5;
-	
+			
+			console.log(window.innerWidth);
+			//if(targetEl.getAttribute("src").indexof("404msg") > -1) {
+				//console.log(xPosition);
+			//}
+			
 			targetEl.style.left = (parseInt(targetEl.getAttribute("data-initialLeftOffset")) + reverse*xRange*(xPosition-0.5)) + "px";
 			targetEl.style.marginLeft = "0";
-			targetEl.style.top = (parseInt(targetEl.getAttribute("data-initialTopOffset")) + reverse*yRange*(yPosition-0.5)) + "px";
+			targetEl.style.top = (parseInt(targetEl.getAttribute("data-initialTopOffset")) + reverse*yRange*(yPosition-0.5) - 40) + "px";
 			targetEl.style.marginTop = "0";
 		}
 		
 		function resizeHandler(event) {
 			var parallaxItems = document.querySelector(".parallax-wrapper").querySelectorAll(".parallax-item");
+			
 			[].forEach.call(
 				parallaxItems, 
 				function(targetEl){
@@ -85,18 +94,14 @@
 		}
 		function parallax_reset(targetEl){
 			// top, left, margin-left 를 원래대로 되돌리기 
+			targetEl.setAttribute("style","");
+			/*
 			targetEl.style.left = targetEl.getAttribute("data-initialLeft");
 			targetEl.style.marginLeft = targetEl.getAttribute("data-initialMarginLeft");
 			targetEl.style.top = targetEl.getAttribute("data-initialTop");
-			
-			
-			var doit;
-			clearTimeout(doit);
-			doit = setTimeout(resizedw, 100);
-			function resizedw(){
-				targetEl.setAttribute("data-initialTopOffset", getOffset(targetEl).top);
-				targetEl.setAttribute("data-initialLeftOffset", getOffset(targetEl).left);				  
-			}
+			*/
+			targetEl.setAttribute("data-initialTopOffset", getOffset(targetEl).top);
+			targetEl.setAttribute("data-initialLeftOffset", getOffset(targetEl).left);			
 		}
 	}
 	
