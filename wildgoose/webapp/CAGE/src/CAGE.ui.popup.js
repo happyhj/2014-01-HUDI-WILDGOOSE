@@ -11,8 +11,15 @@
 	var Dom = CAGE.util.dom;
 	var Template = CAGE.util.template;
 	var Ajax = CAGE.ajax;
-
-  
+ 
+	// 이벤트 emitter 
+	// 개별 Popup 인스턴스마다 가지고 있으며 커스텀 이벤트의 콜백등록과 삭제, 이벤트 발생시 해당 이벤트에 등록된 모든 콜백 순서대로 실행시키기를 담당한다.
+	// 현재는 이벤트마다 가지고 있지만, 인스턴스마다 하나씩 가지고 여러종류의 이벤트를 다룰수 있도록 바꾸어야 한다.
+	// 그럴려면 현재 popup.afteropen.add(callback); 이렇게 쓰던걸
+	// popup.on.afteropen(callback); popup.off.afteropen(callback);  popup.trigger.afteropen([parmeter1, parameter2]); 
+	// 이렇게 되도록 API를 변경해야 한다...
+	// pupup 생성자 내에서 eventEmitter의 인스턴스멤버와, 프로토타입 상속을 하면 될것 같다.
+	
     function eventEmitter(eventType) {
     	this.type = eventType;
 	    this.eventHandlers = [];
@@ -74,32 +81,22 @@
 					event.preventDefault();
 					event.stopPropagation();
 					
-					var originalTarget;
-					if(event.toElement) {
-						originalTarget = event.toElement;
-					} else if(event.originalTarget){
-						originalTarget = event.originalTarget;
-					}
-//					if(originalTarget === el) {
-						this._counstructDOM();
-						var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");	
-						popupWrapAnimation.addEventListener("transitionend", afteropenCallbackRef, false);
-//					}
+					this._counstructDOM();
+					var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");	
+					popupWrapAnimation.addEventListener("transitionend", afteropenCallbackRef, false);
+
 				}).bind(this)
 			});
 			
 		}
 
 		function afteropenCallbackRef(event){
-			//console.log(event);
 			if(event.propertyName === "-webkit-transform" && status.data === false){	
-				
-				
+						
 				var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");
 				popupWrapAnimation.removeEventListener("webkitTransitionEnd", afteropenCallbackRef, false);    
 	
 				// 오픈 엔드 콜백 실행
-				//console.log("왜 두번 실행되지?");
 				afteropen.dispatch(document.querySelector(".popup-content"));
 				status.data=!status.data;
 				
@@ -178,9 +175,8 @@
 		
 		popupWrap.appendChild(popupContainer);			
 
-		document.body.insertAdjacentHTML("afterbegin", popupWrap.outerHTML);			
-		document.body.insertAdjacentHTML("afterbegin", popupBg.outerHTML);			
-
+		document.body.insertAdjacentHTML("afterbegin", popupBg.outerHTML + popupWrap.outerHTML);			
+		
 		//data-role : close 인 엘리먼트에 팝업 닫기 리스너 연결해 줌 
 		var closeBtn = document.querySelector(".popup-wrap button[data-role='close']");
 		if(closeBtn) {
@@ -190,9 +186,10 @@
 		var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");
 		var popupBgAnimation = document.querySelector(".popup-bg.popup-animation");
 
-		// 크롬 애니메이션 버그해결을 위한 코드					
+		// 크롬 애니메이션 버그해결을 위한 코드 // render tree를 업데이트하는 style프로퍼티를 호출				
 		popupWrapAnimation.offsetHeight;
 		popupBgAnimation.offsetHeight;
+		// graphic layer화 시켜서 애니메이션을 부드럽게 만들기
 		popupBgAnimation.style.transform="translateY(0px)";
 
 		// start opening animation

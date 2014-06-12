@@ -1,0 +1,155 @@
+/* Layout rules */
+html, 
+body {
+	height: 100%;
+}
+
+.wrap {
+	position: relative;
+	width: 100%;
+	min-height: 100%;	
+}
+
+.header {
+	width: 100%;
+	height: 50px;
+}
+.topbar {
+	height: 50px;
+}
+.container {
+	width: 100%;
+	margin: 0;
+}
+.bg {
+	1top: 50%;
+	left: 50%;
+}
+.logo {
+	top: 70px;
+	left: 50%;
+	margin-left: 257px;
+	opacity: .4;
+}
+.primary {
+	top: 80px;
+	left: 50%;
+	margin-left: -77px;
+}
+.sweat-drop {
+	top: 80px;
+	left: 50%;
+	margin-left: 180px;
+}
+.msg {
+	top: 60px;
+	left: 50%;
+	margin-left: -350px;
+}
+.search-container{
+	position: relative;
+	max-width: 800px;
+	1background: blue;
+	margin: 0 auto;
+	padding-top: 50px;
+	
+	text-align: center;
+	max-width: 960px;
+}
+.search-input {
+outline:none;
+display: inline-block;
+width: 400px;
+height: 40px;
+padding: 5px 27px 6px 12px;
+font-size: 28px;
+line-height: 1;
+color: #ffffff;
+background-color: #6b2e7a;
+border: 0;
+border-radius: 8px;
+transition: all .2s ease-in-out;
+}
+
+.search-input::-webkit-input-placeholder{
+	color: white;
+	opacity: .7;
+}
+
+.search-wrapper {
+  position: relative;
+}
+label {
+	display: inline-block;
+	1width: 300px;
+	1font-size: 16px;
+	margin-bottom: 10px;
+}
+
+.input-query-entry input[type='submit'] {
+display: inline-block;
+text-align: center;
+1width: 80px;
+height: 50px;
+padding: 5px 27px 6px 27px;
+font-size: 28px;
+line-height: 1;
+color: #ffffff;
+background-color: #6b2e7a;
+border: 0;
+border-radius: 8px;
+transition: all .2s ease-in-out;
+}
+
+/** ipad **/
+@media only screen 
+and (max-width : 565px) {
+.bg {
+	1top: 50%;
+	left: 50%;
+}
+.logo {
+	top: 70px;
+	left: 50%;
+	margin-left: 50px;
+	width: 50px;
+}
+.primary {
+	top: 160px;
+	left: 50%;
+	margin-left: -60px;
+	width: 220px;
+}
+.sweat-drop {
+	top: 180px;
+	left: 50%;
+	margin-left: 120px;
+	width: 34px;
+}
+.msg {
+	top: 50px;
+	left: 50%;
+	margin-left: -155px;
+	width: 180px;
+}
+
+label {
+	display: inline-block;
+	width: 300px;
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+.search-container{
+	padding-top: 25px;
+}
+.search-input {
+	width: 200px;
+	height: 20px;
+	font-size: 14px;
+}
+.input-query-entry input[type='submit'] {
+	height: 30px;
+	padding: 5px 13px 6px 13px;
+	font-size: 14px;
+}
+}
