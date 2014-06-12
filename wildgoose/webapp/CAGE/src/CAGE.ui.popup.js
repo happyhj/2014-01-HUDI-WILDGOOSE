@@ -52,7 +52,6 @@
 		this.el = config.element;
 		this.template = config.template;	
 		this.transitionEffect = (config.transitionEffect)?(config.transitionEffect):("zoom");	
-		//this.data = (config.data)?(config.data):({});
 		this.afteropen = new eventEmitter("afteropen");
 		this.afterclose = new eventEmitter("afterclose");
 		
@@ -71,81 +70,117 @@
 		
 		var close = this.close;
 
-		el.addEventListener("click", openHandler.bind(this), false);
-
-		function openHandler(event) {
-			Ajax.GET({
-				url: this.templateUrl,
-				callback: (function(response){
-					this.template = this.templateLoader(response);
-					event.preventDefault();
-					event.stopPropagation();
-					
-					this._counstructDOM();
-					var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");	
-					popupWrapAnimation.addEventListener("transitionend", afteropenCallbackRef, false);
-
-				}).bind(this)
-			});
-			
-		}
-
-		function afteropenCallbackRef(event){
-			if(event.propertyName === "-webkit-transform" && status.data === false){	
-						
-				var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");
-				popupWrapAnimation.removeEventListener("webkitTransitionEnd", afteropenCallbackRef, false);    
-	
-				// 오픈 엔드 콜백 실행
-				afteropen.dispatch(document.querySelector(".popup-content"));
-				status.data=!status.data;
-				
-				var popupBg = document.querySelector(".popup-bg");			
-				var popupWrap = document.querySelector(".popup-wrap");
-				var popupContainer = document.querySelector(".popup-container");
-				var popupContent = document.querySelector(".popup-content");
-				
-				// esc 버튼으로 팝업 닫기 
-				var escClose = function(e) {
-				  if (e.keyCode == 27) { 
-					  close();
-				  }
-				};
-				
-				document.addEventListener("keyup", escClose, false);				
-				
-				popupContainer.addEventListener("click",function(event){
-					if(event.target === popupContainer || event.target === popupContent) {												
-						var that = this;
-						
-						// 역 애니메이션 걸기
-						Dom.removeClass(popupBg, "popup-ready");
-						Dom.removeClass(popupWrap, "popup-ready");		
-	 				        
-				        popupBg.addEventListener("transitionend", (function(event){
-							if(event.propertyName === "opacity" && status.data === true){	
-								afterclose.dispatch(document.querySelector(".popup-content"));
-								status.data=!status.data;
-	
-								var popupBg = document.querySelector(".popup-bg");			
-								var popupWrap = document.querySelector(".popup-wrap");
-		
-						        popupBg?document.body.removeChild(popupBg):undefined;
-						        popupWrap?document.body.removeChild(popupWrap):undefined;					        
-							}	
-				        }).bind(that), false);
-					}
-				}, false);											
-	        }
-		}
+		el.addEventListener("click", this.openHandler.bind(this), false);
     }
+    
+    popup.prototype.openHandler = function(event) {
+    	if (this.template === "!") {
+    		Ajax.GET({
+    			url: this.templateUrl,
+    			callback: (function(response){
+    				this.template = this.templateLoader(response);
+    				event.preventDefault();
+    				event.stopPropagation();
+
+    				this._modularizeDOM();
+						
+    			}).bind(this)
+    		});
+    	}
+    	else {
+    		this._modularizeDOM();
+    	}
+    };
+    
+    popup.prototype._modularizeDOM = function() {
+    	this._counstructDOM();
+		this._wrapAnimation();
+    };
+    
+    popup.prototype._wrapAnimation = function() {
+    	var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");
+		popupWrapAnimation.addEventListener("transitionend", this.afteropenCallbackRef.bind(this), false);
+    };
+    
+    popup.prototype.afteropenCallbackRef = function(event){
+//    	debugger;
+		//console.log(event);
+		if(event.propertyName === "-webkit-transform" && this.status.data === false){	
+			
+			
+			var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");
+			popupWrapAnimation.removeEventListener("webkitTransitionEnd", this.afteropenCallbackRef.bind(this), false);    
+
+			// 오픈 엔드 콜백 실행
+			//console.log("왜 두번 실행되지?");
+			this.afteropen.dispatch(document.querySelector(".popup-content"));
+			this.status.data = !this.status.data;
+			
+			var popupContainer = document.querySelector(".popup-container");
+			var popupContent = document.querySelector(".popup-content");
+			
+			// esc 버튼으로 팝업 닫기 
+			var escClose = function(e) {
+			  if (e.keyCode == 27) { 
+				  close();
+			  }
+			};
+			document.addEventListener("keyup", escClose, false);				
+
+			popupContainer.addEventListener("click",this._closeHandler.bind(this), false);
+        }
+	}
+    
 	popup.prototype.open = function(){
 		this.el.click();				
 	};
 	popup.prototype.close = function(){
 		var popupContainer = document.querySelector(".popup-container");
 		popupContainer.click();
-	};	
+	};
+	
+	popup.prototype._closeHandler = function(evt) {
+		var args ={
+			popupContainer: document.querySelector(".popup-container"),
+			popupContent: document.querySelector(".popup-content"),
+			popupBg: document.querySelector(".popup-bg"),
+			popupWrap: document.querySelector(".popup-wrap")
+		};
+		
+		if(evt.target === args.popupContainer || evt.target === args.popupContent) {
+			this._closePopup(args);
+		}
+	};
+	
+	popup.prototype._closePopup = function(args) {
+		var popupBg = args.popupBg;			
+		var popupWrap = args.popupWrap;
+		
+		// 역 애니메이션 걸기
+		Dom.removeClass(popupBg, "popup-ready");
+		Dom.removeClass(popupWrap, "popup-ready");		
+
+        popupBg.addEventListener("transitionend", this._closePopupTransitionend.bind(this, event, args), false);
+	}
+	
+	
+	popup.prototype._closePopupTransitionend = function(event, args) {
+		var popupContainer = args.popupContainer;
+		var popupContent = args.popupContent;
+		var popupBg = args.popupBg;			
+		var popupWrap = args.popupWrap;
+
+//		뭔지 모르겠어염 ㅠ
+//		if(event.propertyName === "opacity" && this.status.data === true){
+		if(this.status.data === true){
+			this.afterclose.dispatch(popupContent);
+			this.status.data = !this.status.data;
+
+	        popupBg?document.body.removeChild(popupBg):undefined;
+	        popupWrap?document.body.removeChild(popupWrap):undefined;					        
+		}
+	};
+	
     popup.prototype._getTemplate = function() {
 	    return this.template;
     }
@@ -196,7 +231,11 @@
 		Dom.addClass(popupWrapAnimation, "popup-ready");
 		Dom.addClass(popupBgAnimation, "popup-ready");	
 	}	    
-	   
+	  
+	
+	
+	
+	
 	// POPUP을 상속받은 AJAX POPUP  
 	function ajaxPopup(config){
 		this.el = config.element;

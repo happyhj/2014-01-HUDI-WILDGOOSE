@@ -87,6 +87,12 @@
 		init: init
 	}
 
-	window.WILDGOOSE = WILDGOOSE;
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = WILDGOOSE;
+		// browser export
+	} else {
+		window.WILDGOOSE = WILDGOOSE;
+	}
 	
 }(this));

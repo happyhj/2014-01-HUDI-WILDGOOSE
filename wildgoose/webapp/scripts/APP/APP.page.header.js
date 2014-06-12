@@ -13,11 +13,13 @@
 	var Join = WILDGOOSE.modal.join;
 	var Login = WILDGOOSE.modal.login;
 	var Logout = WILDGOOSE.account.logout;
+	var Setting = WILDGOOSE.modal.setting;
 	
 	var HeaderPage = {
 		init: function() {
 			Join.init();
 			Login.init();
+			Setting.init();
 			this.userId = User.getId();
 			this._logout();
 			this._userPage();
