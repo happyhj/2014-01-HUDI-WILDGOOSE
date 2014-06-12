@@ -27,16 +27,18 @@ public class TemplateController implements BackController {
 		ServletContext context = request.getServletContext();
 		Uri uri = new Uri(request);
 		String templateFileName = uri.get(1);
+		LOGGER.debug("templateFileName: " + templateFileName);
 		String root = context.getRealPath(Constants.RESOURCE_ROOT);
 		String path = root +"html_templates/"+ templateFileName;
 		TemplateResult result = new TemplateResult();
 	
-		if ("login.html".equals(templateFileName) || "withdraw.html".equals(templateFileName) || "changePassword.html".equals(templateFileName)) {
+		if ("account.html".equals(templateFileName) || "login.html".equals(templateFileName) || "withdraw.html".equals(templateFileName) || "changePassword.html".equals(templateFileName)) {
 			LOGGER.debug(templateFileName + " template");
 			result.setRand(RandomNumber.set(request.getSession()));
 			LOGGER.debug(result.getRand());
 			
 			StringBuilder htmlDocumentSB = ResourceLoader.load(path);
+			LOGGER.debug(htmlDocumentSB.toString());
 			result.setTemplate(htmlDocumentSB.toString());
 			result.setMessage("Loading template string success");
 			result.setStatus(200);

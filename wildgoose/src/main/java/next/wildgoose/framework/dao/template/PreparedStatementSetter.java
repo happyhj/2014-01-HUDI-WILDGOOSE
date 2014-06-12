@@ -1,4 +1,4 @@
-package next.wildgoose.dao.template;
+package next.wildgoose.framework.dao.template;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

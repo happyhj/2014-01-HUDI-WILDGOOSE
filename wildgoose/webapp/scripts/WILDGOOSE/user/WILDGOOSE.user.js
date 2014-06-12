@@ -6,20 +6,41 @@
 	var WILDGOOSE = window.WILDGOOSE || {};
 	WILDGOOSE.user = WILDGOOSE.user || {};
 	
-	var User = {			
+	var Ajax = CAGE.ajax;
+	
+	var User = {
+		randNum: null,
+		userId: undefined,
 		getId: function() {
+			if (this.userId !== undefined) {
+				return this.userId;
+			}
+			
 			var userIdDiv = document.getElementById("userId");
 			if (userIdDiv !== undefined) {
 				this.userId = userIdDiv.innerText;
-				return this.userId;
 			}
-			return undefined;
+			return this.userId;
 		},
 		isLogined: function() {
 			if (this.getId() == "") {
 				return false;
 			}
 			return true;
+		},
+		getRandomNumber: function() {
+			if (this.randNum !== null) {
+				return this.randNum;
+			}
+
+			Ajax.GET({
+				isAsync: false,
+				url:"/api/v1/session/rand",
+				success: function(responseObj){
+					this.randNum = responseObj.data.rand;
+				}.bind(this)
+			});
+			return this.randNum;
 		}
 	};
 	

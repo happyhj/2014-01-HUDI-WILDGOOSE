@@ -48,7 +48,12 @@ public class SessionController implements BackController {
 	}
 	private AccountResult getRanomNumber(HttpServletRequest request) {
 		AccountResult accountResult = new AccountResult();
-		accountResult.setRand(RandomNumber.set(request.getSession()));
+		String randNum = RandomNumber.set(request.getSession());
+		accountResult.setRand(randNum);
+		LOGGER.debug("issue a randNum: " + randNum);
+		
+		accountResult.setStatus(200);
+		accountResult.setMessage("fetching random number info succeed");
 		return accountResult; 
 	}
 	
@@ -100,6 +105,7 @@ public class SessionController implements BackController {
 		String email = request.getParameter("email");
 		String hashedPassword = request.getParameter("password");
 		String randNum = RandomNumber.get(session);
+		LOGGER.debug ("check randNum: " + randNum);
 
 		SimpleResult simpleResult = new SimpleResult();
 		LOGGER.debug("email: " + email + ", passw: " + hashedPassword);
