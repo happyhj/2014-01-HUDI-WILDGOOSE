@@ -25,6 +25,9 @@
 						continue;
 					}
 					var star = card.querySelector(".star");
+					if (star == null) {
+						continue;
+					}
 					star.addEventListener("click", this.toggleFav, false);
 					star.addEventListener("click", function(e) {
 						Dom.addClass(e.target, "pumping");

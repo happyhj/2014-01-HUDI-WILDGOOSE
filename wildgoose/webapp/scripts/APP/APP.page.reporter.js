@@ -10,10 +10,13 @@
 
 	// 하위 모듈 import
 	var Graph = WILDGOOSE.ui.graph;
+	var Fav = WILDGOOSE.ui.favorite;
 	
 	var ReporterPage = {
 		init: function() {
 			Graph.init();
+			Fav.updateFavs();
+			Fav.attatchEventToFavBtn();
 		}		
 	}
 		
