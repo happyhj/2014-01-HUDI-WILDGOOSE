@@ -134,13 +134,17 @@
 			},
 			
 			// xhr, using synchronized get method
-			get: function(orgs) {
+			get: function(args) {
 				var Ajax = CAGE.ajax;
-				var url = orgs.url;
+				var url = args.url;
 				var template = null;
-				Ajax.GET({"url":url, "isAsync":false, "callback":function(templateResponse) {
-					template = JSON.parse(templateResponse)["data"]["template"];
-				}});
+				Ajax.GET({
+					"url":url,
+					"isAsync":false,
+					"callback":function(templateResponse) {
+						template = JSON.parse(templateResponse)["data"]["template"];
+					}
+				});
 				
 				return template;
 			}

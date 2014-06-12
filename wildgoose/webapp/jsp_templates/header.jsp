@@ -89,39 +89,44 @@ li[class*='nav'] a  {
 <div class="topBar-wrapper">
 <div class="topBar-inner-wrapper">
 <div class="topBar-left-nav">
-<c:if test="${ empty sessionScope.userId }">
 
-<ul class="nav-global <c:if test="${ not empty requestScope.data.pageName }">
-${ requestScope.data.pageName }</c:if>">
-	<li class="nav-global-home"><a class="header-btn" href="/"><span class="text">Home</span></a></li>
-	<li class="nav-global-me hidden"><a class="header-btn" id="me"><span class="text">Me</span></a></li>
-</ul>
-</div>
-<div class="topBar-right-nav">
-<ul class="nav">
-	<span id ="userId" class="hidden"></span>
-	<li class="nav-login"><a class="header-btn" id="login"><span class="text">로그인</span></a></li>
-	<li class="nav-join"><a class="header-btn" id="join"><span class="text">가입</span></a></li>
-	<li class="nav-logout hidden"><a class="header-btn" id="logout"><span class="text">로그아웃</span></a></li>
-</ul>
-</c:if>
-<c:if test="${ not empty sessionScope.userId }">
-<ul class="nav-global <c:if test="${ not empty requestScope.data.pageName }">
-${ requestScope.data.pageName }</c:if>">
-	<li class="nav-global-home"><a href="/"><span class="text">Home</span></a></li>
-	<li class="nav-global-me"><a class="header-btn" id="me"><span class="text">Me</span></a></li>
-</ul>
-</div>
-<div class="topBar-right-nav">
-<ul class="nav">
-	<c:if test="${ initParam.debuggerMode eq 'on' }">
-		<span id ="userId" class="hidden">${sessionScope.userId}</span>
-	</c:if>
-	<li class="nav-login hidden"><a class="header-btn" id="login"><span class="text">로그인</span></a></li>
-	<li class="nav-join hidden"><a class="header-btn" id="join"><span class="text">가입</span></a></li>
-	<li class="nav-logout"><a class="header-btn" id="logout"><span class="text">로그아웃</span></a></li>
-</ul>
-</c:if>
+<c:choose>
+	<c:when test="${ empty sessionScope.userId }">
+		<ul class="nav-global <c:if test="${ not empty requestScope.data.pageName }">
+		${ requestScope.data.pageName }</c:if>">
+			<li class="nav-global-home"><a class="header-btn" href="/"><span class="text">Search</span></a></li>
+			<li class="nav-global-me hidden"><a class="header-btn" id="me"><span class="text">Me</span></a></li>
+		</ul>
+		</div>
+		<div class="topBar-right-nav">
+		<ul class="nav">
+			<span id ="userId" class="hidden"></span>
+			<li class="nav-login"><a class="header-btn" id="login"><span class="text">로그인</span></a></li>
+			<li class="nav-join"><a class="header-btn" id="join"><span class="text">가입</span></a></li>
+			<li class="nav-logout hidden"><a class="header-btn" id="logout"><span class="text">로그아웃</span></a></li>
+			<li class="nav-setting hidden"><a class="header-btn" id="setting"><span class="text">설정</span></a></li>
+		</ul>
+	</c:when>
+	<c:otherwise>
+		<ul class="nav-global <c:if test="${ not empty requestScope.data.pageName }">
+		${ requestScope.data.pageName }</c:if>">
+			<li class="nav-global-home"><a href="/"><span class="text">Search</span></a></li>
+			<li class="nav-global-me"><a class="header-btn" id="me"><span class="text">Me</span></a></li>
+		</ul>
+		</div>
+		<div class="topBar-right-nav">
+		<ul class="nav">
+			<c:if test="${ initParam.debuggerMode eq 'on' }">
+				<span id ="userId" class="hidden">${sessionScope.userId}</span>
+			</c:if>
+			<li class="nav-login hidden"><a class="header-btn" id="login"><span class="text">로그인</span></a></li>
+			<li class="nav-join hidden"><a class="header-btn" id="join"><span class="text">가입</span></a></li>
+			<li class="nav-logout"><a class="header-btn" id="logout"><span class="text">로그아웃</span></a></li>
+			<li class="nav-setting"><a class="header-btn" id="setting"><span class="text">설정</span></a></li>
+		</ul>
+	</c:otherwise>
+</c:choose>
+
 </div>
 </div>
 </div>
@@ -138,8 +143,11 @@ ${ requestScope.data.pageName }</c:if>">
 		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.login.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.logout.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.join.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.withdraw.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/account/WILDGOOSE.account.change.pw.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/modal/WILDGOOSE.modal.join.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/modal/WILDGOOSE.modal.login.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/modal/WILDGOOSE.modal.setting.js"></script>
 		<script type="text/javascript" src="/scripts/APP/APP.page.header.js"></script>
 	</c:when>
 	<c:otherwise>

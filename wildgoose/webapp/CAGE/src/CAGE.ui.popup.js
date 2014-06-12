@@ -65,7 +65,7 @@
 		var close = this.close;
 
 		el.addEventListener("click", openHandler.bind(this), false);
-
+		
 		function openHandler(event) {
 			Ajax.GET({
 				url: this.templateUrl,
