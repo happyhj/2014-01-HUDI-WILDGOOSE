@@ -7,7 +7,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import next.wildgoose.utility.Uri;
+import next.wildgoose.framework.utility.Uri;
 
 public class WebListener implements ServletContextListener {
 	

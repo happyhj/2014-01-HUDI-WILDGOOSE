@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import next.wildgoose.framework.utility.Uri;
 import next.wildgoose.utility.Constants;
-import next.wildgoose.utility.Uri;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

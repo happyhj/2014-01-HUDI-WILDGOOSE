@@ -28,12 +28,20 @@
 				withdraw: null,
 				changePw: null
 			};
-			
+			var randNum = null;
 			this.userId = document.getElementById("userId").textContent;
-			this.randNum = null;
+			this.randNum = Ajax.GET({
+				"uri": "/api/v1/sessions/rand",
+				"success": function(responseObj) {
+					this.randNum = responseObj.data.randNum;
+				}.bind(this),
+				"failure": function(responseObj) {
+					console.log("randomnumber can't downloaded");
+				},
+			});
 			
 			var settingBtn = document.querySelector("#setting");
-			var randNum = null;
+			
 			
 			var settingPopup = new Popup.popup({
 				element: settingBtn,
@@ -61,12 +69,22 @@
 		},
 		
 		_getTemplates: function() {
-			if (this.template.withdraw === null) {				
-				this.template.withdraw = Template.get({"url":"/api/v1/templates/withdraw.html"});
+			if (this.template.withdraw === null) {
+				var template = Template.get({"url":"/api/v1/templates/withdraw.html"});
+				var compiler = Template.getCompiler(template);
+				this.template.withdraw = comiler({
+					"randNum": randNum,
+					"email": userId
+				}, template);
 			}
 			
 			if (this.template.changePw === null) {				
-				this.template.changePw = Template.get({"url":"/api/v1/templates/changePassword.html"});
+				var template = Template.get({"url":"/api/v1/templates/changePassword.html"});
+				var compiler = Template.getCompiler(template);
+				this.template.withdraw = comiler({
+					"randNum": randNum,
+					"email": userId
+				}, template);
 			}
 		},
 		_addClickEvent: function() {

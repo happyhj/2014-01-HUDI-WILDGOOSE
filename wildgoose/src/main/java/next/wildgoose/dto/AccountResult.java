@@ -15,5 +15,13 @@ public class AccountResult extends Result{
 	public void setEmail(String email) {
 		super.setData("email", email);
 	}
+	
+	public String getRand() {
+		return (String) super.getData("rand");
+	}
+	
+	public void setRand(String rand) {
+		super.setData("rand", rand);
+	}
 
 }

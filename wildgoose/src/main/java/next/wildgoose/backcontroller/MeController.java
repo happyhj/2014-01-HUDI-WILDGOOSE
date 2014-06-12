@@ -15,7 +15,7 @@ import next.wildgoose.dto.Reporter;
 import next.wildgoose.dto.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
-import next.wildgoose.utility.Uri;
+import next.wildgoose.framework.utility.Uri;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package next.wildgoose.utility;
+package next.wildgoose.framework.utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
