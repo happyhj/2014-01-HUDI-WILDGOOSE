@@ -10,58 +10,55 @@
 	// 의존성 선언
 	var Ajax = CAGE.ajax;
 	var Dom = CAGE.util.dom;
-
-	var Favorite = {
-		favoriteList : [],
-
-		attatchEventToFavBtn : function(curNum, reqNum) {
-			var reporterCards = document.querySelectorAll(".card");
-			if (reporterCards.length != 0) {
-				(curNum == undefined) ? curNum = reporterCards.length : true;
-				(reqNum == undefined) ? reqNum = reporterCards.length : true;
-				for (var i = curNum - reqNum ; i < curNum; i++) {
-					var card = reporterCards[i];
-					if (card == undefined) {
-						continue;
-					}
-					var star = card.querySelector(".star");
-					star.addEventListener("click", this.toggleFav, false);
-					star.addEventListener("click", function(e) {
-						Dom.addClass(e.target, "pumping");
-						setTimeout(function() {
-							Dom.removeClass(e.target, "pumping");
-						}, 300)
-					}, false);
-				}				
+	var User = WILDGOOSE.user;
+	
+	function Star(element) {
+		if (element == null) {
+			console.error("No element found");
+			return;
+		}
+		this.star = element;
+		this.reporterId = this.getReporterId();
+		this.show();
+		this.attatchEvent();
+	}
+	
+	Star.prototype = {
+		constructor: Star,
+		show: function() {
+			Dom.removeClass(this.star, "invisible");
+		},
+		getReporterId: function(){
+			var reporterId = this.star.parentElement.parentElement.dataset["reporter_id"];
+			return parseInt(reporterId);
+		},
+		toggleStar: function(onoff) {
+			var star = this.star;
+			var card = star.parentElement.parentElement.parentElement;
+			if (onoff == true) {
+				Dom.addClass(star, "on");
+				Dom.removeClass(star, "off");
+				Dom.removeClass(card, "blur");
+			} else if (onoff == false) {
+				Dom.removeClass(star, "on");
+				Dom.addClass(star, "off");
+				Dom.addClass(card, "blur");
 			}
 		},
-		on: function(targetEl) {
-			var card = targetEl.parentElement.parentElement.parentElement;
-			Dom.addClass(targetEl, "on");
-			Dom.removeClass(targetEl, "off");
-			Dom.removeClass(card, "blur");
-		},
-		
-		off: function(targetEl) {
-			var card = targetEl.parentElement.parentElement.parentElement;
-			Dom.removeClass(targetEl, "on");
-			Dom.addClass(targetEl, "off");
-			Dom.addClass(card, "blur");
-		},
 
-		toggleFav : function(e) {
-			var target = e.target;
-			var card = target.parentElement.parentElement.parentElement;
+		clickStar : function(e) {
+			var star = e.target;
+			var card = star.parentElement.parentElement.parentElement;
 			var reporterId = card.firstElementChild.dataset.reporter_id;
 			var url = "/api/v1/users/" + Favorite.userId + "/favorites/?reporter_id="
 					+ reporterId;
 
-			if (Dom.hasClass(target, "on")) {
+			if (Dom.hasClass(star, "on")) {
 				Ajax.DELETE({
 					"url" : url,
 					"success" : function(responseObj) {
-						this.off(target);
-					}.bind(Favorite),
+						this.toggleStar(false);
+					}.bind(this),
 					"failure" : function(responseObj) {
 						console.log("Failure!");
 					},
@@ -73,7 +70,7 @@
 				Ajax.POST({
 					"url" : url,
 					"success" : function(responseObj) {
-						this.on(target);
+						this.toggleStar(true);
 					}.bind(Favorite),
 					"failure" : function(responseObj) {
 						console.log("Failure!");
@@ -84,58 +81,86 @@
 				});
 			}
 		},
+		attatchEvent: function() {
+			this.star.addEventListener("click", this.clickStar.bind(this), false);
+			this.star.addEventListener("click", function(e) {
+				Dom.addClass(e.target, "pumping");
+				setTimeout(function() {
+					Dom.removeClass(e.target, "pumping");
+				}, 300)
+			}, false);
+		},
+		updateStar: function() {
+			var url = "/api/v1/users/:userId/favorites/:reporterId";
+			url.replace(":userId", this.userId);
+			url.replace(":reporterId", this.reporterId)
+			Ajax.GET({
+				"url" : url,
+				"callback" : function(jsonStr) {
+					var result = JSON.parse(jsonStr);
+					if (result.data.bool == true) {
+						this.toggleStar();
+					}
+				}.bind(this)
+			});
+		}
 
-		updateFavs : function(curNum, reqNum) {
-			var reporterCards = document.querySelectorAll(".card-section-identity");
-			if (reporterCards.length != 0) {
-				(curNum == undefined) ? curNum = reporterCards.length : true;
-				(reqNum == undefined) ? reqNum = reporterCards.length : true;
-				console.log(curNum, reqNum);
-				for (var i = curNum - reqNum ; i < curNum; i++) {
-					var card = reporterCards[i];
-					if (card == undefined) {
-						continue;
-					}
-					var reporterId = card.dataset.reporter_id;
-					Dom.removeClass(card.querySelector(".star"), "invisible");
-					if (this.favoriteList.indexOf(parseInt(reporterId)) >= 0) {
-						Dom.addClass(card.querySelector(".star"), "on");
-					}
-				}				
+	}
+	
+	var Favorite = {
+		starList: [],
+		userFavorites: [],
+		
+		init: function() {
+			var userId = User.getId();
+			if (userId == "" || userId == undefined) {
+				console.error("Not logined");
+				return;
+			}
+			this.userId = userId;
+			
+			var favStars = document.querySelectorAll(".star");
+			for (var i = 0; i < favStars.length; i++) {
+				var favStar = favStars[i];
+				var star = new Star(favStar);
+				this.starList.push(star);
+			}
+			this.getStarListFromServer();
+		},
+		addCards: function(cards) {
+			for (var i =0; i<cards.length; i++) {
+				var card = cards[i];
+				var star = card.querySelector(".star");
+				star = new Star(star);
+				if (this.userFavorites.indexOf(star.reporterId) >= 0) {
+					star.toggleStar(true);
+				}
+				this.starList.push(star);
 			}
 		},
-		
-		init: function(args) {
-			this.userId = args.userId;
-
-			// 초기화
-			if (this.userId !== undefined && this.userId != "") {
-				
-				// 모든 별에 eventlistener 붙이기
-				this.attatchEventToFavBtn();
-				
-				// user의 Favorite 목록 획득
-				var url = "/api/v1/users/" + this.userId + "/favorites/";
-				Ajax.GET({
-					"url" : url,
-					"success" : function(responseObj) {
-						var reporterCards = responseObj["data"]["reporterCards"];
-						for (var i=0; i<reporterCards.length; i++) {
-							var card = reporterCards[i];
-							Favorite.favoriteList.push(card["id"]);
-						}
-						// 불러온 목록 내부에 존재하는 favorite 업데이트
-						// 인자가 없으면 모두!
-						this.updateFavs();
-					}.bind(this),
-					"failure" : function(responseObj) {
-						console.log("Failure!");
-					},
-					"error" : function(responseObj) {
-						console.log("Error!");
-					}
-				});
+		updateStars: function(stars) {
+			for (var i = 0; i < stars.length; i++) {
+				var star = stars[i];
+				if (this.userFavorites.indexOf(star.reporterId) >= 0) {
+					star.toggleStar(true);
+				}
 			}
+		},
+		getStarListFromServer: function() {
+			var url = "/api/v1/users/:userId/favorites/";
+			url = url.replace(":userId", this.userId);
+			Ajax.GET({
+				"url" : url,
+				"callback" : function(jsonStr) {
+					var result = JSON.parse(jsonStr);
+					var reporterCards = result["data"]["reporterCards"];
+					for (var i=0; i<reporterCards.length; i++) {
+						var card = reporterCards[i];
+						Favorite.userFavorites.push(card["id"]);
+					}
+					this.updateStars(this.starList);
+				}.bind(this)
+			});
 		}
 	};
 	

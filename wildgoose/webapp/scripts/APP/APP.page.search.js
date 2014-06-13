@@ -40,7 +40,7 @@
 		},
 		
 		_favoriteModule: function() {
-			Favorite.init({"userId":User.getId()});
+			Favorite.init();
 		}
 	}
 		
