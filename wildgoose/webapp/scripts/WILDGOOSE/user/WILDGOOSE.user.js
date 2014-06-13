@@ -10,7 +10,7 @@
 	
 	var User = {
 		randNum: null,
-		userId: undefined,
+		userId: undefined, // null이 아닌 이유는, 어디선가 userId를 undefined로 조건을 확인하여 잠재적인 버그를 없애고자 땜빵함.
 		getId: function() {
 			if (this.userId !== undefined) {
 				return this.userId;
