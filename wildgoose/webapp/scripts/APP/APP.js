@@ -13,11 +13,13 @@
 	var Join = WILDGOOSE.modal.join;
 	var Login = WILDGOOSE.modal.login;
 	var Logout = WILDGOOSE.account.logout;
+	var Setting = WILDGOOSE.modal.setting;
 	
 	var HeaderPage = {
 		init: function() {
 			Join.init();
 			Login.init();
+			Setting.init();
 			this.userId = User.getId();
 			this._logout();
 			this._userPage();
@@ -41,19 +43,9 @@
 		},
 		
 		_userPage: function() {
-			var timelineBtn = document.querySelector("#timeline");
-			timelineBtn.addEventListener("click", function() {
-				location.href = "/users/?user_id?/timeline".replace("?user_id?", this.userId);
-			}.bind(this), false);
-			
-			var favoriteBtn = document.querySelector("#favorite");
-			favoriteBtn.addEventListener("click", function() {
-				location.href = "/users/?user_id?/favorites".replace("?user_id?", this.userId);
-			}.bind(this), false);
-			
-			var mypageBtn = document.querySelector("#mypage");
+			var mypageBtn = document.querySelector("#me");
 			mypageBtn.addEventListener("click", function() {
-				location.href = "/users/?user_id?/mypage".replace("?user_id?", this.userId);
+				location.href = "/me/?user_id?".replace("?user_id?", this.userId);
 			}.bind(this), false);
 		}
 	};

@@ -6,20 +6,41 @@
 	var WILDGOOSE = window.WILDGOOSE || {};
 	WILDGOOSE.user = WILDGOOSE.user || {};
 	
-	var User = {			
+	var Ajax = CAGE.ajax;
+	
+	var User = {
+		randNum: null,
+		userId: undefined, // null이 아닌 이유는, 어디선가 userId를 undefined로 조건을 확인하여 잠재적인 버그를 없애고자 땜빵함.
 		getId: function() {
+			if (this.userId !== undefined) {
+				return this.userId;
+			}
+			
 			var userIdDiv = document.getElementById("userId");
 			if (userIdDiv !== undefined) {
 				this.userId = userIdDiv.innerText;
-				return this.userId;
 			}
-			return undefined;
+			return this.userId;
 		},
 		isLogined: function() {
 			if (this.getId() == "") {
 				return false;
 			}
 			return true;
+		},
+		getRandomNumber: function() {
+			if (this.randNum !== null) {
+				return this.randNum;
+			}
+
+			Ajax.GET({
+				isAsync: false,
+				url:"/api/v1/session/rand",
+				success: function(responseObj){
+					this.randNum = responseObj.data.rand;
+				}.bind(this)
+			});
+			return this.randNum;
 		}
 	};
 	
@@ -70,6 +91,19 @@
 				}				
 			}
 		},
+		on: function(targetEl) {
+			var card = targetEl.parentElement.parentElement.parentElement;
+			Dom.addClass(targetEl, "on");
+			Dom.removeClass(targetEl, "off");
+			Dom.removeClass(card, "blur");
+		},
+		
+		off: function(targetEl) {
+			var card = targetEl.parentElement.parentElement.parentElement;
+			Dom.removeClass(targetEl, "on");
+			Dom.addClass(targetEl, "off");
+			Dom.addClass(card, "blur");
+		},
 
 		toggleFav : function(e) {
 			var target = e.target;
@@ -81,31 +115,27 @@
 			if (Dom.hasClass(target, "on")) {
 				Ajax.DELETE({
 					"url" : url,
-					"callback" : function(data) {
-						var data = JSON.parse(data);
-						if (data.status == 200) {
-							Dom.removeClass(target, "on");
-							Dom.addClass(target, "off");
-							Dom.addClass(card, "blur");
-						} else {
-							// react fail
-						}
+					"success" : function(responseObj) {
+						this.off(target);
+					}.bind(Favorite),
+					"failure" : function(responseObj) {
+						console.log("Failure!");
+					},
+					"error" : function(responseObj) {
+						console.log("Error!");
 					}
 				});
 			} else {
 				Ajax.POST({
 					"url" : url,
-					"callback" : function(data) {
-						console.log(data)
-						var data = JSON.parse(data);
-						if (data.status == 200) {
-							Dom.addClass(target, "on");
-							Dom.removeClass(target, "off");
-							Dom.removeClass(card, "blur");
-
-						} else {
-							// react fail
-						}
+					"success" : function(responseObj) {
+						this.on(target);
+					}.bind(Favorite),
+					"failure" : function(responseObj) {
+						console.log("Failure!");
+					},
+					"error" : function(responseObj) {
+						console.log("Error!");
 					}
 				});
 			}
@@ -116,14 +146,16 @@
 			if (reporterCards.length != 0) {
 				(curNum == undefined) ? curNum = reporterCards.length : true;
 				(reqNum == undefined) ? reqNum = reporterCards.length : true;
+				console.log(curNum, reqNum);
 				for (var i = curNum - reqNum ; i < curNum; i++) {
 					var card = reporterCards[i];
 					if (card == undefined) {
 						continue;
 					}
 					var reporterId = card.dataset.reporter_id;
+					Dom.removeClass(card.querySelector(".star"), "invisible");
 					if (this.favoriteList.indexOf(parseInt(reporterId)) >= 0) {
-						card.querySelector(".star").className = "star on";
+						Dom.addClass(card.querySelector(".star"), "on");
 					}
 				}				
 			}
@@ -142,9 +174,8 @@
 				var url = "/api/v1/users/" + this.userId + "/favorites/";
 				Ajax.GET({
 					"url" : url,
-					"callback" : function(jsonStr) {
-						var result = JSON.parse(jsonStr);
-						var reporterCards = result["data"]["reporterCards"];
+					"success" : function(responseObj) {
+						var reporterCards = responseObj["data"]["reporterCards"];
 						for (var i=0; i<reporterCards.length; i++) {
 							var card = reporterCards[i];
 							Favorite.favoriteList.push(card["id"]);
@@ -152,7 +183,13 @@
 						// 불러온 목록 내부에 존재하는 favorite 업데이트
 						// 인자가 없으면 모두!
 						this.updateFavs();
-					}.bind(this)
+					}.bind(this),
+					"failure" : function(responseObj) {
+						console.log("Failure!");
+					},
+					"error" : function(responseObj) {
+						console.log("Error!");
+					}
 				});
 			}
 		}
@@ -1246,143 +1283,52 @@
 	var console = window.console;
 	var WILDGOOSE = window.WILDGOOSE || {};
 	WILDGOOSE.modal = WILDGOOSE.modal || {};
-	WILDGOOSE.modal.change = WILDGOOSE.modal.change || {};
-	WILDGOOSE.modal.change.pw = WILDGOOSE.modal.change.pw || {};
-
-	// 의존성 선언 
-//	var Account = WILDGOOSE.account;
-	var Popup = CAGE.ui.popup;
-	var Ajax = CAGE.ajax;
-	var TemplateUtil = CAGE.util.template;
-	var Dom = CAGE.util.dom;
-//	var ChangePwAccount = WILDGOOSE.account.change.pw;
-	var ChangePw = WILDGOOSE.account.change.pw;
-	
-	function init() {
-		var changePwBtn = document.querySelector("#change-password");
-		var randNum = null;
-		var changePwPopup = new Popup.ajaxPopup({
-			element: changePwBtn,
-			templateUrl: "/api/v1/templates/changePassword.html",
-			templateLoader: function(AjaxResponse) {
-				var templateStr = JSON.parse(AjaxResponse).data.template;
-				randNum = JSON.parse(AjaxResponse).data.rand;
-				var userId = document.getElementById("userId").textContent;
-//				console.log(AjaxResponse);
-//				console.log("template Rand: " + randNum);
-				var compiler = TemplateUtil.getCompiler(templateStr);
-				return compiler({
-					"randNum": randNum,
-					"email": userId
-				}, templateStr);
-			}
-		});
-		
-		changePwPopup.afteropen.add(function() {
-			var args = {
-				method: "PUT",
-				url: "/api/v1/accounts/",
-				form: ".form-container",
-				rule: {
-					oldPassword: {
-						type: "password",
-						extend: {
-							exist: [ function(inputEl, callback) {
-								Ajax.POST({
-									isAsync: false,
-									url: "/api/v1/session",
-									success: function(responseObj) {
-										console.log("Success!");
-										var validity = true;
-										var isProgressing = true;
-										callback(validity, isProgressing);
-									},
-									failure: function(responseObj) {
-										console.log("Failure!");
-										var validity = false;
-										var isProgressing = true;
-										callback(validity, isProgressing);
-									},
-									data: (function() {
-										var email = escape(document.getElementById("userId").textContent);
-										var password = SHA256(SHA256(escape(inputEl.value)) + randNum);
-										return "email=" + email + "&password=" + password;
-									}())
-								});
-							}, "비밀번호가 다릅니다."]
-						}
-					},
-					newPassword:{
-						type: "password"
-					},
-					newConfirm: {
-						type: "confirm",
-						target: "newPassword"
-					}
-				},
-				randNum: randNum
-			};
-			var ChangePwAccount = new ChangePw(args);
-			changePwPopup.afterclose.add(ChangePwAccount.stop.bind(ChangePwAccount));
-
-			var btn = arguments[0].querySelector("#change");
-			btn.addEventListener("click", function(evt) {
-				
-				ChangePwAccount.exec(function() {
-					changePwPopup.afterclose.add(function() {location.reload();});
-					changePwPopup.close();
-				}.bind(this));
-				
-			}, false);
-			
-			var oldPwDom = document.querySelector(".form-container input[name=oldPassword]");
-			oldPwDom.focus();
-			
-		});
-	}
-	
-	WILDGOOSE.modal.change.pw = {
-		init: init
-	};
-
-	window.WILDGOOSE = WILDGOOSE;
-	
-	
-	
-}(this));(function(window) {
-	'use strict';
-	var document = window.document;
-	var console = window.console;
-	var WILDGOOSE = window.WILDGOOSE || {};
-	WILDGOOSE.modal = WILDGOOSE.modal || {};
 	WILDGOOSE.modal.join = WILDGOOSE.modal.join || {};
 
 	// 의존성 선언
 	var Ajax = CAGE.ajax; 
+	var Template = CAGE.util.template;
 	var Popup = CAGE.ui.popup;
 //	var JoinAccount = WILDGOOSE.account.join;
 	var Join = WILDGOOSE.account.join;
 
-	function init() {
-
-		// 회원가입 버튼을 찾는다
-		var joinBtn = document.querySelector("#join");
+	
+	var JoinModal = {
+		init: function() {
+			// 회원가입 버튼을 찾는다
+			this.joinBtn = document.querySelector("#join");
+			
+			// 버튼에 가입창을 연결시킨다
+			this.template = Template.get({"url":"/api/v1/templates/account.html"});
+			
+			this.joinPopup = new Popup.popup({
+				element: this.joinBtn,
+				template: this.template
+			});
+			
+			// 가입창에 스크립트를 적용한다.
+			// Ajax로 불러온 팝업창에는 스크립트를 넣을 수 없기 때문이다.
+			this.joinPopup.afteropen.add(this._openPopup.bind(this));
+		},
 		
-		// 버튼에 가입창을 연결시킨다
-		var joinPopup = new Popup.ajaxPopup({
-			element: joinBtn,
-			templateUrl: "/api/v1/templates/account.html",
-			templateLoader: function(AjaxResponse) {
-				return JSON.parse(AjaxResponse).data.template;
-			}
-		});
-		// 가입창에 스크립트를 적용한다.
-		// Ajax로 불러온 팝업창에는 스크립트를 넣을 수 없기 때문이다.
-		joinPopup.afteropen.add(function() {
-			/*
-			 * JoinAccount를 생성할때 인자로 전달하기위한 객체
-			 */
-			var args = {
+		_openPopup: function() {
+			this._accountInit();
+			var btn = arguments[0].querySelector("#create");
+			btn.addEventListener("click", this._clickHandler.bind(this), false);
+			
+			var emailDom = document.querySelector(".form-container input[name=email]");
+			emailDom.focus();
+		},
+		
+		_closePopup: function() {
+			this.joinPopup.afterclose.add(function() {location.reload();});
+			this.joinPopup.close();
+		},
+		
+		_accountInit: function() {
+		
+			// Join객체를 생성한다.
+			this.joinAccount = new Join({
 				method: "POST",
 				url: "/api/v1/accounts/",
 				form: ".form-container",
@@ -1398,40 +1344,35 @@
 						target: "password"
 					}
 				}
-			};
+			});
 			
-			// Join객체를 생성한다.
-			var JoinAccount = new Join(args);
 			// joinPopup이 딷히면 JoinAccount.stop()을 호출하여 this.selectedEl에 붙어있던 keyup event를 해제한다.
-			joinPopup.afterclose.add(JoinAccount.stop.bind(JoinAccount));
+			this.joinPopup.afterclose.add(this.joinAccount.stop.bind(this.joinAccount));
+		},
+		
+		_clickHandler: function(evt) {
 
-			var btn = arguments[0].querySelector("#create");
-			btn.addEventListener("click", function(evt) {
-				
-				/*
-				 * submit 버튼을 누르면
-				 * JoinAccount의 exec()함수를 호출하여 ajax 통신을 한다.
-				 * 
-				 * exec()함수에 아래의 callback 함수를 전달하여
-				 * exec()함수가 호출되면 joinPopup이 닫히도록 한다.
-				 */ 
-				JoinAccount.exec(function() {
-					joinPopup.afterclose.add(function() {location.reload();});
-					joinPopup.close();
-				}.bind(this));
-				
-			}, false);
-			
-			var emailDom = document.querySelector(".form-container input[name=email]");
-			emailDom.focus();
-		});
+			/*
+			 * submit 버튼을 누르면
+			 * JoinAccount의 exec()함수를 호출하여 ajax 통신을 한다.
+			 * 
+			 * exec()함수에 아래의 callback 함수를 전달하여
+			 * exec()함수가 호출되면 joinPopup이 닫히도록 한다.
+			 */ 
+			this.joinAccount.exec(this._closePopup.bind(this));
+		}
 	}
+	
+	WILDGOOSE.modal.join = JoinModal;
 
-	WILDGOOSE.modal.join = {
-		init: init
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = WILDGOOSE;
+		// browser export
+	} else {
+		window.WILDGOOSE = WILDGOOSE;
 	}
-
-	window.WILDGOOSE = WILDGOOSE;
+	
 }(this));
 (function(window) {
 	'use strict';
@@ -1443,29 +1384,50 @@
 
 	// 의존성 선언
 	var Ajax = CAGE.ajax; 
+	var Template = CAGE.util.template;
 	var Popup = CAGE.ui.popup;
+	
 	var TemplateUtil = CAGE.util.template;
 //	var LoginAccount = WILDGOOSE.account.login;
 	var Login = WILDGOOSE.account.login;
+	var User = WILDGOOSE.user;
+	
+	
+	var LoginModal = {
+		init: function() {
+			this.loginBtn = document.querySelector("#login");
+			this.template = Template.get({"url":"/api/v1/templates/login.html"});
+			
+			this.loginPopup = new Popup.popup({
+				element: this.loginBtn,
+				template: this.template
+			});
+			
+			// 가입창에 스크립트를 적용한다.
+			// Ajax로 불러온 팝업창에는 스크립트를 넣을 수 없기 때문이다.
+			this.loginPopup.afteropen.add(this._openPopup.bind(this));
+			
 
-	function init() {
-		var randNum = null;
-		var loginBtn = document.querySelector("#login");
-		var loginPopup = new Popup.ajaxPopup({
-			element: loginBtn,
-			templateUrl: "/api/v1/templates/login.html",
-			templateLoader: function(AjaxResponse) {
-				var templateStr = JSON.parse(AjaxResponse).data.template;
-				randNum = JSON.parse(AjaxResponse).data.rand;
-				var compiler = TemplateUtil.getCompiler(templateStr);
-				return compiler({
-					"randNum": randNum
-				}, templateStr);		
-			}
-		});
-				
-		loginPopup.afteropen.add(function() {
-			var args = {
+		},
+		
+		_openPopup: function() {
+			this._accountInit();
+			var btn = arguments[0].querySelector("#create");
+			btn.addEventListener("click", this._clickHandler.bind(this), false);
+			
+			var emailDom = document.querySelector(".form-container input[name=email]");
+			emailDom.focus();
+		},
+		
+		_closePopup: function() {
+			this.loginPopup.afterclose.add(function() {location.reload();});
+			this.loginPopup.close();
+		},
+		
+		_accountInit: function() {
+			var randNum = User.getRandomNumber();
+			
+			this.loginAccount = new Login({
 				method: "POST",
 				url: "/api/v1/session/",
 				form: ".form-container",
@@ -1478,14 +1440,19 @@
 									isAsync: false,
 									url: "/api/v1/session?email=" + inputEl.value,
 									success: function(responseObj) {
+										console.log("Success!");
 										var validity = true;
 										var isProgressing = true;
 										callback(validity, isProgressing);
 									},
 									failure: function(responseObj) {
+										console.log("Failure!");
 										var validity = false;
 										var isProgressing = true;
 										callback(validity, isProgressing);
+									},
+									error: function(responseObj) {
+										console.log("Error!")
 									}
 								});
 							}, "가입되지 않은 이메일입니다."]
@@ -1496,113 +1463,30 @@
 					}
 				},
 				randNum: randNum
-			};
-			var LoginAccount = new Login(args);
-			loginPopup.afterclose.add(LoginAccount.stop.bind(LoginAccount));
-			
-			var btn = arguments[0].querySelector("#create");
-			btn.addEventListener("click", function(evt) {
-				
-				LoginAccount.exec(function() {
-					loginPopup.afterclose.add(function() {location.reload();});
-					loginPopup.close();
-				}.bind(this), function() {
-					var messageDiv = document.getElementById("result-msg");
-					messageDiv.innerText = "비밀번호가 틀렸습니다.";
-				});
-				
-			}, false);
-			
-			var emailDom = document.querySelector(".form-container input[name=email]");
-			emailDom.focus();
-		});
+			});
+			this.loginPopup.afterclose.add(this.loginAccount.stop.bind(this.loginAccount));
+		},
+		
+		_clickHandler: function(evt) {
+			this.loginAccount.exec(this._closePopup.bind(this), function() {
+				var messageDiv = document.getElementById("result-msg");
+				messageDiv.innerText = "비밀번호가 틀렸습니다.";
+			});
+		}
 	}
+	
+	WILDGOOSE.modal.login = LoginModal;
 
-	WILDGOOSE.modal.login = {
-		init: init
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = WILDGOOSE;
+		// browser export
+	} else {
+		window.WILDGOOSE = WILDGOOSE;
 	}
-
-	window.WILDGOOSE = WILDGOOSE;
 	
 }(this));
-(function(window) {
-	'use strict';
-	var document = window.document;
-	var console = window.console;
-	var WILDGOOSE = window.WILDGOOSE || {};
-	WILDGOOSE.modal = WILDGOOSE.modal || {};
-	WILDGOOSE.modal.withdraw = WILDGOOSE.modal.withdraw || {};
-
-	// 의존성 선언 
-//	var Account = WILDGOOSE.account;
-	var Popup = CAGE.ui.popup;
-	var TemplateUtil = CAGE.util.template;
-	var Dom = CAGE.util.dom;
-//	var LeaveAccount = WILDGOOSE.account.withdraw;
-	var Leave = WILDGOOSE.account.withdraw;
-	
-	function init() {
-		var leaveBtn = document.querySelector("#leave");
-		var randNum = null;
-		var leavePopup = new Popup.ajaxPopup({
-			element: leaveBtn,
-			templateUrl: "/api/v1/templates/withdraw.html",
-			templateLoader: function(AjaxResponse) {
-				var templateStr = JSON.parse(AjaxResponse).data.template;
-				randNum = JSON.parse(AjaxResponse).data.rand;
-				var userId = document.getElementById("userId").textContent;
-				var compiler = TemplateUtil.getCompiler(templateStr);
-				return compiler({
-					"randNum": randNum,
-					"email": userId
-				}, templateStr);		
-			}
-		});
-		
-		leavePopup.afteropen.add(function() {
-			var args = {
-				method: "POST",
-				url: "/api/v1/accounts/",
-				form: ".form-container",
-				rule: {
-					password: {
-						type: "password"
-					},
-					confirm: {
-						type: "confirm",
-						target: "password"
-					}
-				},
-				randNum: randNum
-			};
-			var LeaveAccount = new Leave(args);
-			leavePopup.afterclose.add(LeaveAccount.stop.bind(LeaveAccount));
-
-			var btn = arguments[0].querySelector("#withdraw");
-			btn.addEventListener("click", function(evt) {
-				
-				LeaveAccount.exec(function() {
-					leavePopup.afterclose.add(function() {location.reload();});
-					leavePopup.close();
-				}.bind(this));
-				
-			}, false);
-			
-			var pwDom = document.querySelector(".form-container input[name=password]");
-			pwDom.focus();
-			
-		});
-	}
-	
-	WILDGOOSE.modal.withdraw = {
-		init: init
-	}
-
-	window.WILDGOOSE = WILDGOOSE;
-	
-	
-	
-}(this));(function() {	
+(function() {	
 	// 자주 사용하는 글로벌 객체 레퍼런스 확보
 	var document = window.document;
 	var console = window.console;
