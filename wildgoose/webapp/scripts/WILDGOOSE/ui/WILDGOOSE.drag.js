@@ -69,6 +69,7 @@ var values = {sourceEle : null, destEle : null};
 		}
 		
 		function execute(args){
+			console.log("DRAG_START");
 			values.target = args.body;
 			values.tagName = args.tagName;
 			values.movedClassName = args.movedClassName;

@@ -78,8 +78,10 @@
 		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/user/WILDGOOSE.user.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.ui.favorite.js"></script>
-		
 		<script type="text/javascript" src="/scripts/APP/APP.page.favorite.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.drag.js"></script>
+		<script type="text/javascript" src="/scripts/APP/APP.page.me.js"></script>
+		
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
@@ -87,3 +89,9 @@
 		<script type="text/javascript" src="/scripts/APP/APP.min.js"></script>
 	</c:otherwise>
 </c:choose>
+
+<script>
+window.addEventListener("load", function(evt){
+	APP.page.me.init();
+}, false);
+</script>

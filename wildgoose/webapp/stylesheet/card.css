@@ -193,3 +193,6 @@ body{
 	background: rgb(255,170,51);	
 }
 
+.moving {
+	opacity: 0.4;
+}

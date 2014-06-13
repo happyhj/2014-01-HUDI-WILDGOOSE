@@ -6,20 +6,26 @@
 	// 사용할 네임 스페이스 확보	
 	var APP = window.APP || {};
 	APP.page = APP.page || {};
-	APP.page.mypage = APP.page.mypage || {};
+	APP.page.me = APP.page.me || {};
 
 	// 하위 모듈 import
-	var Withdraw = WILDGOOSE.modal.withdraw;
-	var ChangePw = WILDGOOSE.modal.change.pw;
+	var Drag = WILDGOOSE.drag;
 	
 	var MyPage = {
 		init: function() {
-			Withdraw.init();
-			ChangePw.init();
+			console.log("init이 실행되었습니다!");
+			
+			var args = {
+					body: document.querySelector('.dashboard-left ul'),
+					tagName: "LI",
+					movedClassName : "moving"
+					}
+
+			Drag.exe(args);
 		}		
 	}
 		
-	APP.page.mypage = MyPage;
+	APP.page.me = MyPage;
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
 	if (typeof module !== 'undefined' && module.exports) {
