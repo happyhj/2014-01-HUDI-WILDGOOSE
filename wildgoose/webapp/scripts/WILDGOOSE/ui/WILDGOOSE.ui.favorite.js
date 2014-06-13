@@ -20,7 +20,7 @@
 		this.star = element;
 		this.reporterId = this.getReporterId();
 		this.show();
-		this._attatchEvent();
+		this.attatchEvent();
 	}
 	
 	Star.prototype = {
@@ -32,8 +32,21 @@
 			var reporterId = this.star.parentElement.parentElement.dataset["reporter_id"];
 			return parseInt(reporterId);
 		},
-		toggleStar : function() {
+		toggleStar: function(onoff) {
 			var star = this.star;
+			var card = star.parentElement.parentElement.parentElement;
+			if (onoff == true) {
+				Dom.addClass(star, "on");
+				Dom.removeClass(star, "off");
+				Dom.removeClass(card, "blur");
+			} else if (onoff == false) {
+				Dom.removeClass(star, "on");
+				Dom.addClass(star, "off");
+				Dom.addClass(card, "blur");
+			}
+		},
+		clickStar : function(e) {
+			var star = e.target;
 			var card = star.parentElement.parentElement.parentElement;
 			var reporterId = card.firstElementChild.dataset.reporter_id;
 			var url = "/api/v1/users/" + Favorite.userId + "/favorites/?reporter_id="
@@ -45,34 +58,24 @@
 					"callback" : function(data) {
 						var data = JSON.parse(data);
 						if (data.status == 200) {
-							Dom.removeClass(star, "on");
-							Dom.addClass(star, "off");
-							Dom.addClass(card, "blur");
-						} else {
-							// react fail
+							this.toggleStar(false);
 						}
-					}
+					}.bind(this)
 				});
 			} else {
 				Ajax.POST({
 					"url" : url,
 					"callback" : function(data) {
-						console.log(data)
 						var data = JSON.parse(data);
 						if (data.status == 200) {
-							Dom.addClass(star, "on");
-							Dom.removeClass(star, "off");
-							Dom.removeClass(card, "blur");
-
-						} else {
-							// react fail
+							this.toggleStar(true);
 						}
-					}
+					}.bind(this)
 				});
 			}
 		},
-		_attatchEvent: function() {
-			this.star.addEventListener("click", this.toggleStar, false);
+		attatchEvent: function() {
+			this.star.addEventListener("click", this.clickStar.bind(this), false);
 			this.star.addEventListener("click", function(e) {
 				Dom.addClass(e.target, "pumping");
 				setTimeout(function() {
@@ -80,7 +83,7 @@
 				}, 300)
 			}, false);
 		},
-		_updateStar: function() {
+		updateStar: function() {
 			var url = "/api/v1/users/:userId/favorites/:reporterId";
 			url.replace(":userId", this.userId);
 			url.replace(":reporterId", this.reporterId)
@@ -89,7 +92,7 @@
 				"callback" : function(jsonStr) {
 					var result = JSON.parse(jsonStr);
 					if (result.data.bool == true) {
-						this.toggleFav();
+						this.toggleStar();
 					}
 				}.bind(this)
 			});
@@ -115,23 +118,28 @@
 				var star = new Star(favStar);
 				this.starList.push(star);
 			}
-			this._getStarListFromServer();
+			this.getStarListFromServer();
 		},
-		
-		_updateStars: function() {
-			console.log(this.userFavorites);
-			for (var i = 0; i < this.starList.length; i++) {
-				var star = this.starList[i];
-				console.log(this.userFavorites.indexOf(star.reporterId));
+		addCards: function(cards) {
+			for (var i =0; i<cards.length; i++) {
+				var card = cards[i];
+				var star = card.querySelector(".star");
+				star = new Star(star);
 				if (this.userFavorites.indexOf(star.reporterId) >= 0) {
-					console.log(star);
-					star.toggleStar();
+					star.toggleStar(true);
+				}
+				this.starList.push(star);
+			}
+		},
+		updateStars: function(stars) {
+			for (var i = 0; i < stars.length; i++) {
+				var star = stars[i];
+				if (this.userFavorites.indexOf(star.reporterId) >= 0) {
+					star.toggleStar(true);
 				}
 			}
 		},
-		
-		
-		_getStarListFromServer: function() {
+		getStarListFromServer: function() {
 			var url = "/api/v1/users/:userId/favorites/";
 			url = url.replace(":userId", this.userId);
 			Ajax.GET({
@@ -143,7 +151,7 @@
 						var card = reporterCards[i];
 						Favorite.userFavorites.push(card["id"]);
 					}
-					this._updateStars();
+					this.updateStars(this.starList);
 				}.bind(this)
 			});
 		}
