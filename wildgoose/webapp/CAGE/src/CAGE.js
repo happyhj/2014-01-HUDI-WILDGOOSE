@@ -123,7 +123,8 @@
 		        var resultStr = Util.string.trim(templateString);
 		        for (var variableName in dataObj) {
 		            if (dataObj[variableName]===0||dataObj[variableName]) {
-		                resultStr = resultStr.replace("<%= "+variableName+" %>", dataObj[variableName]);
+		            	var reg = "<%= "+variableName+" %>"
+		                resultStr = resultStr.replace(RegExp(reg, "gm"), dataObj[variableName]);
 		            }
 		        }
 		        return resultStr;
@@ -134,13 +135,17 @@
 			},
 			
 			// xhr, using synchronized get method
-			get: function(orgs) {
+			get: function(args) {
 				var Ajax = CAGE.ajax;
-				var url = orgs.url;
+				var url = args.url;
 				var template = null;
-				Ajax.GET({"url":url, "isAsync":false, "callback":function(templateResponse) {
-					template = JSON.parse(templateResponse)["data"]["template"];
-				}});
+				Ajax.GET({
+					"url":url,
+					"isAsync":false,
+					"callback":function(templateResponse) {
+						template = JSON.parse(templateResponse)["data"]["template"];
+					}
+				});
 				
 				return template;
 			}
@@ -208,17 +213,20 @@
 		return str;
 	}
 	
-	function _error(evt, request, failure) {
-		if (request.detail !== undefined) {
-			failure(request.detail);
+	function _error(evt, request, failure, error) {
+		// failure
+		if (evt.detail !== undefined) {
+			failure(evt.detail);
 			return;
 		}
 		
+		// error
 		var responseText = removeNewLine(request.responseText);
 		var responseObj = JSON.parse(request.responseText);
-		failure(responseObj);
+		error(responseObj);
 	}
 	
+	// success
 	function _load(evt, request, success) {
 		var targetEl = evt.target;
 		if (request.status >= 200 && request.status < 300 || request.status == 304) {
@@ -228,13 +236,13 @@
 			if (apiStatus >= 200 && apiStatus < 300 || apiStatus == 304) {
 				success(responseObj);
 			}
+			// failure, error이벤트를 거쳐 실행되어야 callback을 실행할 수 있음.
 			else {
 				var errorEvt = new CustomEvent("error", { "detail": responseObj });
 				targetEl.dispatchEvent(errorEvt);
 			}
 		}
 	}
-	
 	
 	function _exec(config){
 		var method = config.method,
@@ -244,7 +252,8 @@
 		data = config.data,
 		isAsync = config.isAsync,
 		success = config.success,
-		failure = config.failure;
+		failure = config.failure,
+		error = config.error;
 
 		if (url == undefined) {
 			return;
@@ -272,12 +281,14 @@
 		if (success !== undefined){ 
 			request.addEventListener("load", function(evt){
 				_load(evt, request, success);
+//				_load(evt, success);
 			}, false);
 		}
 		
 		if (failure !== undefined) {
 			request.addEventListener("error", function(evt){
-				_error(evt, request, failure);
+				_error(evt, request, failure, error);
+//				_error(evt, failure, error);
 			}, false);
 		}
 		
@@ -359,8 +370,15 @@
 	var Dom = CAGE.util.dom;
 	var Template = CAGE.util.template;
 	var Ajax = CAGE.ajax;
-
-  
+ 
+	// 이벤트 emitter 
+	// 개별 Popup 인스턴스마다 가지고 있으며 커스텀 이벤트의 콜백등록과 삭제, 이벤트 발생시 해당 이벤트에 등록된 모든 콜백 순서대로 실행시키기를 담당한다.
+	// 현재는 이벤트마다 가지고 있지만, 인스턴스마다 하나씩 가지고 여러종류의 이벤트를 다룰수 있도록 바꾸어야 한다.
+	// 그럴려면 현재 popup.afteropen.add(callback); 이렇게 쓰던걸
+	// popup.on.afteropen(callback); popup.off.afteropen(callback);  popup.trigger.afteropen([parmeter1, parameter2]); 
+	// 이렇게 되도록 API를 변경해야 한다...
+	// pupup 생성자 내에서 eventEmitter의 인스턴스멤버와, 프로토타입 상속을 하면 될것 같다.
+	
     function eventEmitter(eventType) {
     	this.type = eventType;
 	    this.eventHandlers = [];
@@ -393,7 +411,6 @@
 		this.el = config.element;
 		this.template = config.template;	
 		this.transitionEffect = (config.transitionEffect)?(config.transitionEffect):("zoom");	
-		//this.data = (config.data)?(config.data):({});
 		this.afteropen = new eventEmitter("afteropen");
 		this.afterclose = new eventEmitter("afterclose");
 		
@@ -411,93 +428,117 @@
 		var status = this.status;
 		
 		var close = this.close;
-
-		el.addEventListener("click", openHandler.bind(this), false);
-
-		function openHandler(event) {
-			Ajax.GET({
-				url: this.templateUrl,
-				callback: (function(response){
-					console.log(response)
-					this.template = this.templateLoader(response);
-					event.preventDefault();
-					event.stopPropagation();
-					
-					var originalTarget;
-					if(event.toElement) {
-						originalTarget = event.toElement;
-					} else if(event.originalTarget){
-						originalTarget = event.originalTarget;
-					}
-					if(originalTarget === el) {
-						this._counstructDOM();
-						var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");	
-						popupWrapAnimation.addEventListener("transitionend", afteropenCallbackRef, false);
-					}
-				}).bind(this)
-			});
-			
-		}
-
-		function afteropenCallbackRef(event){
-			//console.log(event);
-			if(event.propertyName === "-webkit-transform" && status.data === false){	
-				
-				
-				var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");
-				popupWrapAnimation.removeEventListener("webkitTransitionEnd", afteropenCallbackRef, false);    
-	
-				// 오픈 엔드 콜백 실행
-				//console.log("왜 두번 실행되지?");
-				afteropen.dispatch(document.querySelector(".popup-content"));
-				status.data=!status.data;
-				
-				var popupBg = document.querySelector(".popup-bg");			
-				var popupWrap = document.querySelector(".popup-wrap");
-				var popupContainer = document.querySelector(".popup-container");
-				var popupContent = document.querySelector(".popup-content");
-				
-				// esc 버튼으로 팝업 닫기 
-				var escClose = function(e) {
-				  if (e.keyCode == 27) { 
-					  close();
-				  }
-				};
-				
-				document.addEventListener("keyup", escClose, false);				
-				
-				popupContainer.addEventListener("click",function(event){
-					if(event.target === popupContainer || event.target === popupContent) {												
-						var that = this;
-						
-						// 역 애니메이션 걸기
-						Dom.removeClass(popupBg, "popup-ready");
-						Dom.removeClass(popupWrap, "popup-ready");		
-	 				        
-				        popupBg.addEventListener("transitionend", (function(event){
-							if(event.propertyName === "opacity" && status.data === true){	
-								afterclose.dispatch(document.querySelector(".popup-content"));
-								status.data=!status.data;
-	
-								var popupBg = document.querySelector(".popup-bg");			
-								var popupWrap = document.querySelector(".popup-wrap");
-		
-						        popupBg?document.body.removeChild(popupBg):undefined;
-						        popupWrap?document.body.removeChild(popupWrap):undefined;					        
-							}	
-				        }).bind(that), false);
-					}
-				}, false);											
-	        }
-		}
+		el.addEventListener("click", this.openHandler.bind(this), false);
     }
+    
+    popup.prototype.openHandler = function(event) {
+    	if (this.template === "!") {
+    		Ajax.GET({
+    			url: this.templateUrl,
+    			callback: (function(response){
+    				this.template = this.templateLoader(response);
+    				event.preventDefault();
+    				event.stopPropagation();
+
+    				this._modularizeDOM();
+						
+    			}).bind(this)
+    		});
+    	}
+    	else {
+    		this._modularizeDOM();
+    	}
+    };
+    
+    popup.prototype._modularizeDOM = function() {
+    	this._counstructDOM();
+		this._wrapAnimation();
+    };
+    
+    popup.prototype._wrapAnimation = function() {
+    	var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");
+		popupWrapAnimation.addEventListener("transitionend", this.afteropenCallbackRef.bind(this), false);
+    };
+    
+    popup.prototype.afteropenCallbackRef = function(event){
+//    	debugger;
+		//console.log(event);
+		if(event.propertyName === "-webkit-transform" && this.status.data === false){	
+			
+			
+			var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");
+			popupWrapAnimation.removeEventListener("webkitTransitionEnd", this.afteropenCallbackRef.bind(this), false);    
+
+			// 오픈 엔드 콜백 실행
+			//console.log("왜 두번 실행되지?");
+			this.afteropen.dispatch(document.querySelector(".popup-content"));
+			this.status.data = !this.status.data;
+			
+			var popupContainer = document.querySelector(".popup-container");
+			var popupContent = document.querySelector(".popup-content");
+			
+			// esc 버튼으로 팝업 닫기 
+			var escClose = function(e) {
+			  if (e.keyCode == 27) { 
+				  close();
+			  }
+			};
+			document.addEventListener("keyup", escClose, false);				
+
+			popupContainer.addEventListener("click",this._closeHandler.bind(this), false);
+        }
+	}
+    
 	popup.prototype.open = function(){
 		this.el.click();				
 	};
 	popup.prototype.close = function(){
 		var popupContainer = document.querySelector(".popup-container");
 		popupContainer.click();
-	};	
+	};
+	
+	popup.prototype._closeHandler = function(evt) {
+		var args ={
+			popupContainer: document.querySelector(".popup-container"),
+			popupContent: document.querySelector(".popup-content"),
+			popupBg: document.querySelector(".popup-bg"),
+			popupWrap: document.querySelector(".popup-wrap")
+		};
+		
+		if(evt.target === args.popupContainer || evt.target === args.popupContent) {
+			this._closePopup(args);
+		}
+	};
+	
+	popup.prototype._closePopup = function(args) {
+		var popupBg = args.popupBg;			
+		var popupWrap = args.popupWrap;
+		
+		// 역 애니메이션 걸기
+		Dom.removeClass(popupBg, "popup-ready");
+		Dom.removeClass(popupWrap, "popup-ready");		
+
+        popupBg.addEventListener("transitionend", this._closePopupTransitionend.bind(this, event, args), false);
+	}
+	
+	
+	popup.prototype._closePopupTransitionend = function(event, args) {
+		var popupContainer = args.popupContainer;
+		var popupContent = args.popupContent;
+		var popupBg = args.popupBg;			
+		var popupWrap = args.popupWrap;
+
+//		뭔지 모르겠어염 ㅠ
+//		if(event.propertyName === "opacity" && this.status.data === true){
+		if(this.status.data === true){
+			this.afterclose.dispatch(popupContent);
+			this.status.data = !this.status.data;
+
+	        popupBg?document.body.removeChild(popupBg):undefined;
+	        popupWrap?document.body.removeChild(popupWrap):undefined;					        
+		}
+	};
+	
     popup.prototype._getTemplate = function() {
 	    return this.template;
     }
@@ -527,9 +568,8 @@
 		
 		popupWrap.appendChild(popupContainer);			
 
-		document.body.insertAdjacentHTML("afterbegin", popupWrap.outerHTML);			
-		document.body.insertAdjacentHTML("afterbegin", popupBg.outerHTML);			
-
+		document.body.insertAdjacentHTML("afterbegin", popupBg.outerHTML + popupWrap.outerHTML);			
+		
 		//data-role : close 인 엘리먼트에 팝업 닫기 리스너 연결해 줌 
 		var closeBtn = document.querySelector(".popup-wrap button[data-role='close']");
 		if(closeBtn) {
@@ -539,16 +579,21 @@
 		var popupWrapAnimation = document.querySelector(".popup-wrap.popup-animation");
 		var popupBgAnimation = document.querySelector(".popup-bg.popup-animation");
 
-		// 크롬 애니메이션 버그해결을 위한 코드					
+		// 크롬 애니메이션 버그해결을 위한 코드 // render tree를 업데이트하는 style프로퍼티를 호출				
 		popupWrapAnimation.offsetHeight;
 		popupBgAnimation.offsetHeight;
+		// graphic layer화 시켜서 애니메이션을 부드럽게 만들기
 		popupBgAnimation.style.transform="translateY(0px)";
 
 		// start opening animation
 		Dom.addClass(popupWrapAnimation, "popup-ready");
 		Dom.addClass(popupBgAnimation, "popup-ready");	
 	}	    
-	   
+	  
+	
+	
+	
+	
 	// POPUP을 상속받은 AJAX POPUP  
 	function ajaxPopup(config){
 		this.el = config.element;
