@@ -161,6 +161,9 @@
 										var isProgressing = true;
 										callback(validity, isProgressing);
 									},
+									error: function(responseObj) {
+										console.log("Error!")
+									},
 									data: (function() {
 										var email = User.getId();
 										var password = SHA256(SHA256(escape(inputEl.value)) + User.getRandomNumber());

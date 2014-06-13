@@ -45,17 +45,20 @@
 		return str;
 	}
 	
-	function _error(evt, request, failure) {
-		if (request.detail !== undefined) {
-			failure(request.detail);
+	function _error(evt, request, failure, error) {
+		// failure
+		if (evt.detail !== undefined) {
+			failure(evt.detail);
 			return;
 		}
 		
+		// error
 		var responseText = removeNewLine(request.responseText);
 		var responseObj = JSON.parse(request.responseText);
-		failure(responseObj);
+		error(responseObj);
 	}
 	
+	// success
 	function _load(evt, request, success) {
 		var targetEl = evt.target;
 		if (request.status >= 200 && request.status < 300 || request.status == 304) {
@@ -65,13 +68,13 @@
 			if (apiStatus >= 200 && apiStatus < 300 || apiStatus == 304) {
 				success(responseObj);
 			}
+			// failure, error이벤트를 거쳐 실행되어야 callback을 실행할 수 있음.
 			else {
 				var errorEvt = new CustomEvent("error", { "detail": responseObj });
 				targetEl.dispatchEvent(errorEvt);
 			}
 		}
 	}
-	
 	
 	function _exec(config){
 		var method = config.method,
@@ -81,7 +84,8 @@
 		data = config.data,
 		isAsync = config.isAsync,
 		success = config.success,
-		failure = config.failure;
+		failure = config.failure,
+		error = config.error;
 
 		if (url == undefined) {
 			return;
@@ -109,12 +113,14 @@
 		if (success !== undefined){ 
 			request.addEventListener("load", function(evt){
 				_load(evt, request, success);
+//				_load(evt, success);
 			}, false);
 		}
 		
 		if (failure !== undefined) {
 			request.addEventListener("error", function(evt){
-				_error(evt, request, failure);
+				_error(evt, request, failure, error);
+//				_error(evt, failure, error);
 			}, false);
 		}
 		

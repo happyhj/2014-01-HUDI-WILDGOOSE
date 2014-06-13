@@ -35,6 +35,19 @@
 				}				
 			}
 		},
+		on: function(targetEl) {
+			var card = targetEl.parentElement.parentElement.parentElement;
+			Dom.addClass(targetEl, "on");
+			Dom.removeClass(targetEl, "off");
+			Dom.removeClass(card, "blur");
+		},
+		
+		off: function(targetEl) {
+			var card = targetEl.parentElement.parentElement.parentElement;
+			Dom.removeClass(targetEl, "on");
+			Dom.addClass(targetEl, "off");
+			Dom.addClass(card, "blur");
+		},
 
 		toggleFav : function(e) {
 			var target = e.target;
@@ -46,31 +59,27 @@
 			if (Dom.hasClass(target, "on")) {
 				Ajax.DELETE({
 					"url" : url,
-					"callback" : function(data) {
-						var data = JSON.parse(data);
-						if (data.status == 200) {
-							Dom.removeClass(target, "on");
-							Dom.addClass(target, "off");
-							Dom.addClass(card, "blur");
-						} else {
-							// react fail
-						}
+					"success" : function(responseObj) {
+						this.off(target);
+					}.bind(Favorite),
+					"failure" : function(responseObj) {
+						console.log("Failure!");
+					},
+					"error" : function(responseObj) {
+						console.log("Error!");
 					}
 				});
 			} else {
 				Ajax.POST({
 					"url" : url,
-					"callback" : function(data) {
-						console.log(data)
-						var data = JSON.parse(data);
-						if (data.status == 200) {
-							Dom.addClass(target, "on");
-							Dom.removeClass(target, "off");
-							Dom.removeClass(card, "blur");
-
-						} else {
-							// react fail
-						}
+					"success" : function(responseObj) {
+						this.on(target);
+					}.bind(Favorite),
+					"failure" : function(responseObj) {
+						console.log("Failure!");
+					},
+					"error" : function(responseObj) {
+						console.log("Error!");
 					}
 				});
 			}
@@ -109,9 +118,8 @@
 				var url = "/api/v1/users/" + this.userId + "/favorites/";
 				Ajax.GET({
 					"url" : url,
-					"callback" : function(jsonStr) {
-						var result = JSON.parse(jsonStr);
-						var reporterCards = result["data"]["reporterCards"];
+					"success" : function(responseObj) {
+						var reporterCards = responseObj["data"]["reporterCards"];
 						for (var i=0; i<reporterCards.length; i++) {
 							var card = reporterCards[i];
 							Favorite.favoriteList.push(card["id"]);
@@ -119,7 +127,13 @@
 						// 불러온 목록 내부에 존재하는 favorite 업데이트
 						// 인자가 없으면 모두!
 						this.updateFavs();
-					}.bind(this)
+					}.bind(this),
+					"failure" : function(responseObj) {
+						console.log("Failure!");
+					},
+					"error" : function(responseObj) {
+						console.log("Error!");
+					}
 				});
 			}
 		}
