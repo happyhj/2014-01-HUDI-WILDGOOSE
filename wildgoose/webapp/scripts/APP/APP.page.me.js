@@ -10,7 +10,7 @@
 
 	// 하위 모듈 import
 	var Drag = WILDGOOSE.drag;
-	
+	var Fav = WILDGOOSE.ui.favorite;
 	var MyPage = {
 		init: function() {
 			var args = {
@@ -20,6 +20,7 @@
 					}
 
 			Drag.exe(args);
+			Fav.init();
 		}		
 	}
 		
