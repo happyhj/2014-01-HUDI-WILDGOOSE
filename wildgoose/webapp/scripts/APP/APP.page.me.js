@@ -13,8 +13,6 @@
 	
 	var MyPage = {
 		init: function() {
-			console.log("init이 실행되었습니다!");
-			
 			var args = {
 					body: document.querySelector('.dashboard-left ul'),
 					tagName: "LI",

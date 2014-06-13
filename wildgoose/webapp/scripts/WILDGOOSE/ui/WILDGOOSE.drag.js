@@ -1,3 +1,13 @@
+/**
+ * 외부에서는 WILDGOOSE.drag.exe(args)로 드래스 함수에 접근할 수 있다.
+ * 전달해야 하는 인자 args는 dictionary로 인자는 3개이
+ * 
+ * 1. target: 드래그 되어야 하는 DOM들을 담고있는 DOM 		ex.ul
+ * 2. tagName: 드래가 되는 DOM의 태그이름 				ex."LI"(태그이름은 모두 대문자임을 주의)
+ * 3. movedClassName: 드래그 중인 DOM의 클래스명. 드래그 중의 CSS를 위한 것. 	ex. 드래그 중인 DOM은 투명도를 조절 함  
+ * 
+ * */
+
 (function(window){
 
 'use strict';
@@ -65,11 +75,13 @@ var values = {sourceEle : null, destEle : null};
 				child.addEventListener('dragover', function(e){ _dragOver(e);}, false);
 				child.addEventListener('drop', function(e){ _drop(e);}, false);
 				child.addEventListener('dragend', function(e){ _dragEnd(e);}, false);
+//				child.style.transition = "all 2s";
+//				child.style.WebkitTransition = "all 2s";
+				
 			});
 		}
 		
 		function execute(args){
-			console.log("DRAG_START");
 			values.target = args.body;
 			values.tagName = args.tagName;
 			values.movedClassName = args.movedClassName;
