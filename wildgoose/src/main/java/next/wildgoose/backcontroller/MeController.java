@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.ArticleDAO;
 import next.wildgoose.dao.FavoriteDAO;
+import next.wildgoose.dao.ReporterDAO;
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Article;
 import next.wildgoose.dto.MeResult;
@@ -64,10 +65,14 @@ public class MeController implements BackController {
 		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
 		List<Reporter> reporters = favoriteDao.findFavoriteReporters(userId);
 		
+		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
+		List<Reporter> recommands = reporterDao.getRandomReporters(userId, 10);
+		
 		meResult.setStatus(200);
 		meResult.setMessage("success");
 		meResult.setArticles("articles", articles);
 		meResult.setFavorites("reporters", reporters);
+		meResult.setRecommands("recommands", recommands);
 
 		return meResult;
 	}

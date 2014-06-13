@@ -64,9 +64,18 @@
 		</div>
 		</div>
 		<div class="dashboard dashboard-right">
-		<div class="dashboard-header">
-			<h2>추천기자</h2>
-		</div>
+			<div class="dashboard-header">
+				<h2>추천기자</h2>
+			</div>
+			<ul>
+				<c:if test="${ not empty sessionScope.userId }">
+					<c:forEach var="reporter" items="${ requestScope.data.recommands }">
+					<li class="card card-reporter">
+						<%@ include file = "/jsp_templates/reporterCard.jsp" %>
+					</li>
+					</c:forEach>
+				</c:if>
+			</ul>
 		</div>
 	</div>
 	<footer class="footer"></footer>

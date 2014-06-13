@@ -28,4 +28,12 @@ public class MeResult extends Result{
 		super.setData("reporterCards", reporters);
 	}
 
+	public List<Reporter> getRecommands() {
+		return (List<Reporter>) super.getData("reporterCards");
+	}
+	public void setRecommands(String string, List<Reporter> recommands) {
+		super.setData("recomands", recommands);
+		
+	}
+
 }
