@@ -11,7 +11,7 @@
 	</div>
 </div>
 <div class="card-section card-section-footer">
-	<a href="/reporters/${ article.authorId }"><span></span></a>
+	<a href="/reporters/${ article.authorId }"><span>${ article.name } 기자</span></a>
 	<c:set var="date" value="${fn:split(article.datetime, ' ')}" />
-	${ article.name } 기자의 ${ date[0] }일자 기사입니다
+	의 ${ date[0] }일자 기사입니다
 </div>

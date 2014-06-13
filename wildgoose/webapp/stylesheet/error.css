@@ -100,10 +100,9 @@ border: 0;
 border-radius: 8px;
 transition: all .2s ease-in-out;
 }
-
 /** ipad **/
 @media only screen 
-and (max-width : 565px) {
+and (max-width : 700px) {
 .bg {
 	1top: 50%;
 	left: 50%;
@@ -132,7 +131,11 @@ and (max-width : 565px) {
 	margin-left: -155px;
 	width: 180px;
 }
+}
 
+/** ipad **/
+@media only screen 
+and (max-width : 600px) {
 label {
 	display: inline-block;
 	width: 300px;

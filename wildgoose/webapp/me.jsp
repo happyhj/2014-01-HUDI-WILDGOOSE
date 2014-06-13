@@ -9,14 +9,41 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/article_card.css" />
-
+<style>
+.card {
+	margin: 10px 0;
+	width: 100%;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box; /* Firefox */
+} 
+</style>
 <title>Wildgoose</title>
 
 <div class="wrap">
 	<header class="header">
 		<%@ include file ="jsp_templates/header.jsp" %>
 	</header>
+	<link type="text/css" rel="stylesheet" href="/stylesheet/me.css" />
 	<div class="container">
+		<div class="dashboard dashboard-left">
+			<div class="dashboard-header">
+				<h2>나의 기자</h2>
+			</div>
+			<ul>
+				<c:if test="${ not empty sessionScope.userId }">
+					<c:forEach var="reporter" items="${ requestScope.data.favorites }">
+					<li class="card card-reporter">
+						<%@ include file = "/jsp_templates/reporterCard.jsp" %>
+					</li>
+					</c:forEach>
+				</c:if>
+			</ul>
+		</div>
+		<div class="content-main">
+		
+		<div class="content-main-header">
+			<h2>타임라인</h2>
+		</div>
 		<div class="timeline-result">
 			<ul>
 				<%-- session 존재시 --%>
@@ -27,17 +54,19 @@
 					</li>
 					</c:forEach>
 					
-					<c:forEach var="reporter" items="${ requestScope.data.favorites }">
-					<li class="card card-reporter">
-						<%@ include file = "/jsp_templates/reporterCard.jsp" %>
-					</li>
-					</c:forEach>
+
 				</c:if>
 				<%-- session 없을시 --%>
 				<c:if test="${ empty sessionScope.userId }">
 					로그인 필요
 				</c:if>
 			</ul>
+		</div>
+		</div>
+		<div class="dashboard dashboard-right">
+		<div class="dashboard-header">
+			<h2>추천기자</h2>
+		</div>
 		</div>
 	</div>
 	<footer class="footer"></footer>
