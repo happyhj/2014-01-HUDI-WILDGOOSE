@@ -50,7 +50,12 @@ public class UserController implements BackController {
 		 
 		if ("favorites".equals(pageName)) {
 			if ("GET".equals(method)) {
-				result = getFavorites(request, userId);
+				if (uri.check(3, null)) {
+					result = getFavorites(request, userId);
+				} else {
+					int reporterId = Integer.parseInt(uri.get(3));
+					result = isFavorite(request, userId, reporterId);
+				}
 			} else if ("POST".equals(method)) {
 				result = addFavorites(request, userId);
 			} else if ("DELETE".equals(method)) {
@@ -61,6 +66,15 @@ public class UserController implements BackController {
 		return result;
 	}
 	
+	private Result isFavorite(HttpServletRequest request, String userId,
+			int reporterId) {
+		ServletContext context = request.getServletContext();
+		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
+		SimpleResult result = new SimpleResult(true);
+		result.setData("bool", favoriteDao.isFavorite(userId, reporterId));
+		return result;
+	}
+
 	private boolean isValidUserId(HttpServletRequest request, String userId) {
 		ServletContext context = request.getServletContext();
 		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
