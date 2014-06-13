@@ -21,7 +21,7 @@
 			this.requestNum = args.requestNum;
 			this.template = args.template;
 			this.isLogined = User.isLogined();
-			
+			this.tempDiv = document.createElement("div");
 			this.metaData = {
 				curNum : args.more.curNum,
 				totalNum: args.more.totalNum,
@@ -77,13 +77,14 @@
 			// response data가 존재할 경우만 실행
 			if (reporters.length != 0) {	
 				var cards = this._makeReporterCards(this.isLogined, reporters);
-				this._attachRecievedData(cards);
+				for (var i=0; i<cards.length; i++) {
+					this.searchResult.appendChild(cards[i]);
+				}
 
 				this._updateMetaData(cards.length);
 				this._updateUI();
 				
-				Fav.updateFavs(this.metaData.curNum, this.requestNum);
-				Fav.attatchEventToFavBtn(this.metaData.curNum, this.requestNum);
+				Fav.addCards(cards);
 			}
 		},
 		
@@ -108,6 +109,7 @@
 		// card template에 데이터를 담은 template array를 반환
 		_makeReporterCards: function(isLogined, reporters) {
 			var templateCompiler = Template.getCompiler();
+			var tempDiv = this.tempDiv;
 			var className = "card card-reporter";
 			var reporterNum = reporters.length;
 			var cards = [];
@@ -115,15 +117,12 @@
 			// card template을 cards array에 담음
 			for (var i=0; i<reporterNum; i++) {
 				var cardData = reporters[i];
-				var newLi = '<li class="' + className + '">' + templateCompiler(cardData, this.template) + '</li>';
-				cards.push(newLi);
+				var newLiStr = '<li class="' + className + '">' + templateCompiler(cardData, this.template) + '</li>';
+				tempDiv.innerHTML = newLiStr;
+				cards.push(tempDiv.firstElementChild);
 			}
 			
 			return cards;
-		},
-				
-		_attachRecievedData: function(cards) {
-			this.searchResult.innerHTML += cards.join("");
 		}
 	};
 	

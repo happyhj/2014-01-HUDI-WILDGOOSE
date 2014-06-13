@@ -125,4 +125,35 @@ public class FavoriteDAO {
 		
 		return (List<Reporter>) t.execute(query.toString(), pss, rm);
 	}
+
+
+	public boolean isFavorite(final String userId, final int reporterId) {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+
+			@Override
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, userId);
+				psmt.setInt(2, reporterId);
+			}
+		};
+		
+		RowMapper rm = new RowMapper() {
+			@Override
+			public Object mapRow(ResultSet rs) throws SQLException {
+				if (rs.first()) {
+					return new Object();
+				}
+				return null;
+			}
+		};
+		
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT * FROM favorite WHERE user_email=? AND author_id=? ");
+		
+		if (t.execute(query.toString(), pss, rm) != null) {
+			return true;
+		}
+		return false;
+	}
 }
