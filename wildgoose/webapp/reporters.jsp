@@ -23,7 +23,7 @@
 <div class="container test-outline">
 	<!-- 기자 정보 -->
 	<div class="card">
-		<div class="card-section card-section-identity">
+		<div class="card-section card-section-identity" data-reporter_id="${ requestScope.data.reporter.id }">
 			<h3 class="name">
 				<a href="/reporters/${ requestScope.data.reporter.id }">${ requestScope.data.reporter.name }</a>
 			</h3>

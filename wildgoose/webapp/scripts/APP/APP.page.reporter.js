@@ -15,8 +15,7 @@
 	var ReporterPage = {
 		init: function() {
 			Graph.init();
-			Fav.updateFavs();
-			Fav.attatchEventToFavBtn();
+			Fav.init();
 		}		
 	}
 		
