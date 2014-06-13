@@ -28,4 +28,12 @@ public class MeResult extends Result{
 		super.setData("reporterCards", reporters);
 	}
 
+	public int getTotalNum() {
+		return (Integer) super.getData("totalNum");
+	}
+	
+	public void setTotalNum(int totalNum) {
+		super.setData("totalNum", totalNum);
+	}
+
 }

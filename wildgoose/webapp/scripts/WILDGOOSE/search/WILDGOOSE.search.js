@@ -10,7 +10,7 @@
 	// 의존성 주입
 	var Ajax = CAGE.ajax;
 	var Template = CAGE.util.template;
-	var More = WILDGOOSE.search.more;
+	var SearchMore = WILDGOOSE.more.search;
 	var AutoComplement = WILDGOOSE.search.auto_complement;
 	var Submit = WILDGOOSE.search.submit;
 	
@@ -59,7 +59,8 @@
 			if (more !== undefined && moreEl !== null) {
 				var curNumDiv = document.querySelector(args.more.curNum);
 				var totalNumDiv = document.querySelector(args.more.totalNum);
-				More.init({
+				
+				var searchMore = new SearchMore({
 					more: {
 						button: moreEl,
 						curNum: (curNumDiv !== undefined)? parseInt(curNumDiv.innerText) : 0,
@@ -67,7 +68,7 @@
 					},
 					container: this.form.container,
 					template: this.search.template,
-					searchQuery: this.form.box.value,
+					keyword: this.form.box.value,
 					requestNum: this.search.requestNum
 				});
 			}

@@ -6,11 +6,13 @@
 	
 	CAGE.ui = CAGE.ui || {};
 	CAGE.ui.popup = CAGE.ui.popup || {};
+	CAGE.ui.popup.super_type = CAGE.ui.popup.super_type || {};
 
 
 	var Dom = CAGE.util.dom;
 	var Template = CAGE.util.template;
 	var Ajax = CAGE.ajax;
+	var eventEmitter = CAGE.event.emitter;
  
 	// 이벤트 emitter 
 	// 개별 Popup 인스턴스마다 가지고 있으며 커스텀 이벤트의 콜백등록과 삭제, 이벤트 발생시 해당 이벤트에 등록된 모든 콜백 순서대로 실행시키기를 담당한다.
@@ -20,30 +22,6 @@
 	// 이렇게 되도록 API를 변경해야 한다...
 	// pupup 생성자 내에서 eventEmitter의 인스턴스멤버와, 프로토타입 상속을 하면 될것 같다.
 	
-    function eventEmitter(eventType) {
-    	this.type = eventType;
-	    this.eventHandlers = [];
-    }
-    eventEmitter.prototype.add = function(handler){
-	    this.eventHandlers.push(handler);       
-    };   
-    eventEmitter.prototype.remove = function(handler){
-    	var eventHandlers = this.eventHandlers;
-    	for(var i in eventHandlers){
-	    	if(eventHandlers[i] === handler){
-		    	eventHandlers.splice(i, 1);
-	    	}
-    	}
-    };   
-    eventEmitter.prototype.dispatch = function(){
-    	var eventHandlers = this.eventHandlers;
-    	var param = undefined;
-    	for(var i in eventHandlers){
-    		param = (arguments[i])?arguments[i]:undefined;
-	    	eventHandlers[i](param);
-    	}
-    };
-    
 	/*
 	myPopup2.open.dispatch(param1, param2, ...);   
     */
@@ -230,39 +208,9 @@
 		Dom.addClass(popupWrapAnimation, "popup-ready");
 		Dom.addClass(popupBgAnimation, "popup-ready");	
 	}	    
-	  
-	
-	
-	
-	
-	// POPUP을 상속받은 AJAX POPUP  
-	function ajaxPopup(config){
-		this.el = config.element;
-		this.template = "!";	// ajaxPopup 은 템플릿을 비동기로 로딩한다.
-		this.transitionEffect = (config.transitionEffect)?(config.transitionEffect):("zoom");	
-		this.templateUrl = config.templateUrl; // 템플릿을 요청할 주소. 필수 옵션이다.
-		this.templateLoader = (config.templateLoader)?(config.templateLoader):(
-			function(response){
-				return response;
-			}
-		);
 		
-		this.afteropen = new eventEmitter("afteropen");
-		this.afterclose = new eventEmitter("afterclose");
-		
-		this.status = {
-			data: false
-		};
-		// preload 되면 session에 어떤 randNum이 저장될 지 알 수가 없다ㅠ
-		this._init();
-	}	
 	
-	ajaxPopup.prototype = popup.prototype;	
-	
-	CAGE.ui.popup = {
-		popup: popup,
-		ajaxPopup: ajaxPopup
-	};
+	CAGE.ui.popup.super_type = popup;
 
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
 	if (typeof module !== 'undefined' && module.exports) {
