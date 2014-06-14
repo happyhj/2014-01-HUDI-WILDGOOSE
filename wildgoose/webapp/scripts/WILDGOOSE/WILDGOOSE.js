@@ -17,7 +17,7 @@
 			}
 			
 			var userIdDiv = document.getElementById("userId");
-			if (userIdDiv !== undefined) {
+			if (userIdDiv !== null) {
 				this.userId = userIdDiv.innerText;
 			}
 			return this.userId;
