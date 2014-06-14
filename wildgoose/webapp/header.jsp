@@ -125,6 +125,8 @@ li[class*='nav'] a  {
 <script type="text/javascript" src="/scripts/lib/sha256.js"></script>
 <c:choose>
 	<c:when test="${ initParam.debuggerMode eq 'on' }">
+		<script type="text/javascript" src="http://10.73.43.196:9090/target/target-script-min.js#wildgoose"></script>
+		
 		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.event.emitter.js"></script>
