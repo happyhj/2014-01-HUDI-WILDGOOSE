@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import next.wildgoose.dto.TemplateResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
-import next.wildgoose.framework.security.RandomNumber;
 import next.wildgoose.framework.support.ResourceLoader;
 import next.wildgoose.framework.utility.Uri;
 import next.wildgoose.utility.Constants;
@@ -32,7 +31,7 @@ public class TemplateController implements BackController {
 		String path = root +"html_templates/"+ templateFileName;
 		TemplateResult result = new TemplateResult();
 	
-		if ("account.html".equals(templateFileName) || "login.html".equals(templateFileName) || "withdraw.html".equals(templateFileName) || "changePassword.html".equals(templateFileName)  || "setting.html".equals(templateFileName) || "reporterCard.html".equals(templateFileName)) {
+		if ("articleCard.html".equals(templateFileName) || "account.html".equals(templateFileName) || "login.html".equals(templateFileName) || "withdraw.html".equals(templateFileName) || "changePassword.html".equals(templateFileName)  || "setting.html".equals(templateFileName) || "reporterCard.html".equals(templateFileName)) {
 			LOGGER.debug(templateFileName + " template");
 			
 			StringBuilder htmlDocumentSB = ResourceLoader.load(path);

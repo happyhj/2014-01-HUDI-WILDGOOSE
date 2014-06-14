@@ -71,7 +71,7 @@
 					"url" : url,
 					"success" : function(responseObj) {
 						this.toggleStar(true);
-					}.bind(Favorite),
+					}.bind(this),
 					"failure" : function(responseObj) {
 						console.log("Failure!");
 					},
@@ -127,16 +127,16 @@
 			}
 			this.getStarListFromServer();
 		},
-		addCards: function(cards) {
-			for (var i =0; i<cards.length; i++) {
-				var card = cards[i];
-				var star = card.querySelector(".star");
-				star = new Star(star);
+
+		addCards: function(conatiner) {
+			var stars = conatiner.querySelectorAll(".star");
+			Array.prototype.forEach.call(stars, function(value){
+				var star = new Star(value);
 				if (this.userFavorites.indexOf(star.reporterId) >= 0) {
 					star.toggleStar(true);
 				}
-				this.starList.push(star);
-			}
+				
+			}.bind(this));
 		},
 		updateStars: function(stars) {
 			for (var i = 0; i < stars.length; i++) {

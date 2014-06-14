@@ -9,7 +9,7 @@
 	// 의존성 선언
 	var Ajax = CAGE.ajax; 
 	var Template = CAGE.util.template;
-	var Popup = CAGE.ui.popup;
+	var Popup = CAGE.ui.popup.super_type;
 //	var JoinAccount = WILDGOOSE.account.join;
 	var Join = WILDGOOSE.account.join;
 
@@ -22,7 +22,7 @@
 			// 버튼에 가입창을 연결시킨다
 			this.template = Template.get({"url":"/api/v1/templates/account.html"});
 			
-			this.joinPopup = new Popup.popup({
+			this.joinPopup = new Popup({
 				element: this.joinBtn,
 				template: this.template
 			});

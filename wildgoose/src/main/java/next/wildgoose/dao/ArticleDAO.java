@@ -94,4 +94,83 @@ public class ArticleDAO {
 		
 		return (List<Article>) t.execute(query.toString(), pss, rm);
 	}
+
+	public List<Article> findArticlesByFavorite(final String email, final int start, final int howMany) {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+
+			@Override
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, email);
+				psmt.setInt(2, start);
+				psmt.setInt(3, howMany);
+			}
+			
+		};
+		
+		RowMapper rm = new RowMapper() {
+
+			@Override
+			public Object mapRow(ResultSet rs) throws SQLException {
+				List<Article> articles = new ArrayList<Article>();
+				Article article = null;
+				while (rs.next()) {
+					article = new Article();
+					article.setUrl(rs.getString("URL"));
+					article.setTitle(rs.getString("title"));
+					article.setAuthorId(rs.getInt("id"));
+					article.setName(rs.getString("name"));
+					article.setContent(rs.getString("content"));
+					article.setDatetime(rs.getTimestamp("datetime").toString());
+					articles.add(article);
+				}
+				return articles;
+			}
+			
+		};
+		
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT author.name, author.id, favorite.* from author JOIN ");
+		query.append("(SELECT * FROM article JOIN article_author ON article_author.article_URL = article.URL ");
+		query.append("WHERE article_author.author_id IN ");
+		query.append("(SELECT author_id FROM favorite WHERE user_email = ?) ");
+		query.append("ORDER BY article.datetime desc limit ?,?) AS favorite ON author.id = favorite.author_id;");
+		
+		return (List<Article>) t.execute(query.toString(), pss, rm);
+	}
+	
+	public int findNumberOfArticlesByFavorite(final String email) {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+
+			@Override
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, email);
+			}
+			
+		};
+		
+		RowMapper rm = new RowMapper() {
+
+			@Override
+			public Object mapRow(ResultSet rs) throws SQLException {
+				int result = 0;
+				if (rs.first()) {
+					result = rs.getInt("count");
+				}
+				return result;
+			}
+			
+		};
+		
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT COUNT(*) AS count from author JOIN ");
+		query.append("(SELECT * FROM article JOIN article_author ON article_author.article_URL = article.URL ");
+		query.append("WHERE article_author.author_id IN ");
+		query.append("(SELECT author_id FROM favorite WHERE user_email = ?)) AS favorite ");
+		query.append("ON author.id = favorite.author_id;");
+		
+		return (Integer) t.execute(query.toString(), pss, rm);
+	}
+	
 }

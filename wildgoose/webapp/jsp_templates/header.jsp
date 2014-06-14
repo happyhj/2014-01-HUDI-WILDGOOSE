@@ -135,6 +135,7 @@ li[class*='nav'] a  {
 	<c:when test="${ initParam.debuggerMode eq 'on' }">
 		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
+		<script type="text/javascript" src="/CAGE/src/CAGE.event.emitter.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.ui.popup.js"></script>
 		
 		<script type="text/javascript" src="/scripts/WILDGOOSE/user/WILDGOOSE.user.js"></script>

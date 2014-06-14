@@ -9,7 +9,7 @@
 	// 의존성 선언
 	var Ajax = CAGE.ajax; 
 	var Template = CAGE.util.template;
-	var Popup = CAGE.ui.popup;
+	var Popup = CAGE.ui.popup.super_type;
 	
 	var TemplateUtil = CAGE.util.template;
 //	var LoginAccount = WILDGOOSE.account.login;
@@ -22,7 +22,7 @@
 			this.loginBtn = document.querySelector("#login");
 			this.template = Template.get({"url":"/api/v1/templates/login.html"});
 			
-			this.loginPopup = new Popup.popup({
+			this.loginPopup = new Popup({
 				element: this.loginBtn,
 				template: this.template
 			});

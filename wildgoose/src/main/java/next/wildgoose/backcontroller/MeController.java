@@ -13,10 +13,12 @@ import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Article;
 import next.wildgoose.dto.MeResult;
 import next.wildgoose.dto.Reporter;
+import next.wildgoose.dto.SearchResult;
 import next.wildgoose.dto.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.framework.utility.Uri;
+import next.wildgoose.utility.Constants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +30,8 @@ public class MeController implements BackController {
 	public Result execute(HttpServletRequest request) {
 		Result result = null;
 		Uri uri = new Uri(request);
+		
 		String userId = uri.get(1);
-		String method = request.getMethod();
-		LOGGER.debug(uri.toString());
 		
 		if (isValidUserId(request, userId) == false) {
 			result = new SimpleResult();
@@ -41,6 +42,7 @@ public class MeController implements BackController {
 		
 		HttpSession session = request.getSession();
 		String visitor = (String) session.getAttribute("userId");
+		
 		if (visitor == null) {
 			// 로그인 하도록 유도하기
 			SimpleResult sResult = new SimpleResult();
@@ -50,17 +52,23 @@ public class MeController implements BackController {
 			return sResult;
 		}
 		
-		LOGGER.debug("userId: " + userId + ", method: " + method);
-
-		return getMe(request, userId);
+		int startItem = (request.getParameter("start_item") != null)? Integer.parseInt(request.getParameter("start_item")) : 0;
+		int howMany = (request.getParameter("how_many") != null)? Integer.parseInt(request.getParameter("how_many")) : Constants.NUM_OF_ARTICLES;
+		LOGGER.debug("startItem: " + startItem + ", howMany: " + howMany);
+		
+		return getMe(request, userId, startItem, howMany);
 	}
 	
-	private Result getMe(HttpServletRequest request, String userId) {
+	private Result getMe(HttpServletRequest request, String userId, int start, int howMany) {
 		ServletContext context = request.getServletContext();
 
 		MeResult meResult = new MeResult("me");
+		
+		
+		
 		ArticleDAO articleDao =  (ArticleDAO) context.getAttribute("ArticleDAO");
-		List<Article> articles = articleDao.findArticlesByFavorite(userId);
+		List<Article> articles = articleDao.findArticlesByFavorite(userId, start, howMany);
+		int totalNum = articleDao.findNumberOfArticlesByFavorite(userId);
 		
 		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
 		List<Reporter> reporters = favoriteDao.findFavoriteReporters(userId);
@@ -70,6 +78,7 @@ public class MeController implements BackController {
 		
 		meResult.setStatus(200);
 		meResult.setMessage("success");
+		meResult.setTotalNum(totalNum);
 		meResult.setArticles("articles", articles);
 		meResult.setFavorites("reporters", reporters);
 		meResult.setRecommands("recommands", recommands);

@@ -8,7 +8,7 @@
 
 	// 의존성 선언
 	var Ajax = CAGE.ajax; 
-	var Popup = CAGE.ui.popup;
+	var Popup = CAGE.ui.popup.super_type;
 	var Template = CAGE.util.template;
 	
 	var Withdraw = WILDGOOSE.account.withdraw;
@@ -43,7 +43,7 @@
 				changePw: null
 			}
 			
-			this.settingPopup = new Popup.popup({
+			this.settingPopup = new Popup({
 				element: this.button.setting,
 				template: this.template.setting
 			});

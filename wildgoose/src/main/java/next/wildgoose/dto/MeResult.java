@@ -31,9 +31,17 @@ public class MeResult extends Result{
 	public List<Reporter> getRecommands() {
 		return (List<Reporter>) super.getData("reporterCards");
 	}
+	
 	public void setRecommands(String string, List<Reporter> recommands) {
 		super.setData("recomands", recommands);
+	}
 		
+	public int getTotalNum() {
+		return (Integer) super.getData("totalNum");
+	}
+	
+	public void setTotalNum(int totalNum) {
+		super.setData("totalNum", totalNum);
 	}
 
 }
