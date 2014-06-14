@@ -212,9 +212,13 @@
 							
 							<jsSourceDir>CAGE/src</jsSourceDir>
 							<jsSourceFiles>
+								<jsSourceFile>CAGE.event.emitter.js</jsSourceFile>
 								<jsSourceFile>CAGE.util.js</jsSourceFile>
+								<jsSourceFile>CAGE.type.observer.js</jsSourceFile>
 								<jsSourceFile>CAGE.ajax.js</jsSourceFile>
 								<jsSourceFile>CAGE.ui.popup.js</jsSourceFile>
+								<jsSourceFile>CAGE.ui.popup.ajax.js</jsSourceFile>
+								<jsSourceFile>CAGE.ui.parallax.js</jsSourceFile>
 							</jsSourceFiles>
 								
 							<jsFinalFile>CAGE.js</jsFinalFile>

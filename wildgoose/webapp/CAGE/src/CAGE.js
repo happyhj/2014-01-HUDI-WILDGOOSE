@@ -1,4 +1,57 @@
 (function(window) {
+//	'use strict';
+	var document = window.document;
+	var console = window.console;
+	var CAGE = window.CAGE || {};
+	
+	CAGE.event = CAGE.event || {};
+	CAGE.event.emitter = CAGE.event.emitter || {};
+
+
+	// 이벤트 emitter 
+	// 개별 Popup 인스턴스마다 가지고 있으며 커스텀 이벤트의 콜백등록과 삭제, 이벤트 발생시 해당 이벤트에 등록된 모든 콜백 순서대로 실행시키기를 담당한다.
+	// 현재는 이벤트마다 가지고 있지만, 인스턴스마다 하나씩 가지고 여러종류의 이벤트를 다룰수 있도록 바꾸어야 한다.
+	// 그럴려면 현재 popup.afteropen.add(callback); 이렇게 쓰던걸
+	// popup.on.afteropen(callback); popup.off.afteropen(callback);  popup.trigger.afteropen([parmeter1, parameter2]); 
+	// 이렇게 되도록 API를 변경해야 한다...
+	// pupup 생성자 내에서 eventEmitter의 인스턴스멤버와, 프로토타입 상속을 하면 될것 같다.
+	
+    function eventEmitter(eventType) {
+    	this.type = eventType;
+	    this.eventHandlers = [];
+    }
+    eventEmitter.prototype.add = function(handler){
+	    this.eventHandlers.push(handler);       
+    };   
+    eventEmitter.prototype.remove = function(handler){
+    	var eventHandlers = this.eventHandlers;
+    	for(var i in eventHandlers){
+	    	if(eventHandlers[i] === handler){
+		    	eventHandlers.splice(i, 1);
+	    	}
+    	}
+    };   
+    eventEmitter.prototype.dispatch = function(){
+    	var eventHandlers = this.eventHandlers;
+    	var param = undefined;
+    	for(var i in eventHandlers){
+    		param = (arguments[i])?arguments[i]:undefined;
+	    	eventHandlers[i](param);
+    	}
+    };	
+	
+	CAGE.event.emitter = eventEmitter;
+
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = CAGE;
+		// browser export
+	} else {
+		window.CAGE = CAGE;
+	}    	
+
+}(this));
+(function(window) {
 	'use strict';
 	var document = window.document;
 	var console = window.console;
@@ -166,6 +219,89 @@
 
 
 
+(function(window) {
+	'use strict';
+	// 자주 사용하는 글로벌 객체 레퍼런스 확보
+	var document = window.document;
+	var console = window.console;
+
+	// 사용할 네임 스페이스 확보	
+	var CAGE = window.CAGE || {};
+	CAGE.type = CAGE.type || {};
+	CAGE.type.observer = CAGE.type.observer || {};
+	
+	
+	var Dom = CAGE.util.dom;
+
+	function Observer(args) {
+		this.interval = null;
+		this.observerEl = null;
+		this.targetEl = null;
+		
+		this.status = null;
+		this.usable = false;
+		
+		this._observer(args);
+	};
+	
+	Observer.prototype = {
+		constructor: "Observer",
+		_observer: function(args) {
+			if (args !== undefined) {
+				if (args.interval !== undefined) {
+					this.interval = args.interval;
+				}
+				this.observerEl = args.observerEl;
+				this.targetEl = args.targetEl;
+				this.usable = (this.observerEl === null || this.targetEl === null)? false: true;
+			}
+		},
+		activate: function() {
+			if (this.usable === true && this.status === null) {
+				this.status = setInterval(this._handler.bind(this), this.interval);
+			}
+//			if (this.usable === true) {
+//				setTimeout(this._handler.bind(this));
+//			}
+		},
+		deactivate: function() {
+			clearInterval(this.status);
+			this.status = null;
+			/*
+			 * interface
+			 * do - something;
+			 */
+		},
+		_handler: function() {
+			this._trigger(this._observe());
+			this.deactivate();
+		},
+		_trigger: function(detailObj) {
+			if (detailObj.flag) {
+				var observeEvt = new CustomEvent("observe", {detail: detailObj});
+				this.observerEl.dispatchEvent(observeEvt);				
+			}
+		},
+		_observe: function() {
+			// interface
+			return null;
+		}
+	};
+
+
+	
+	// 공개 메서드 노출
+	CAGE.type.observer = Observer;
+	
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = CAGE;
+		// browser export
+	} else {
+		window.CAGE = CAGE;
+	}    	
+
+}(this));
 (function(window) {
 	'use strict';
 	// 자주 사용하는 글로벌 객체 레퍼런스 확보
@@ -570,6 +706,196 @@
 		
 	
 	CAGE.ui.popup.super_type = popup;
+
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = CAGE;
+		// browser export
+	} else {
+		window.CAGE = CAGE;
+	}    	
+
+}(this));
+(function(window) {
+//	'use strict';
+	var document = window.document;
+	var console = window.console;
+	var CAGE = window.CAGE || {};
+	
+	CAGE.ui = CAGE.ui || {};
+	CAGE.ui.popup = CAGE.ui.popup || {};
+	CAGE.ui.popup.ajax = CAGE.ui.popup.ajax || {};
+
+
+	var Dom = CAGE.util.dom;
+	var Template = CAGE.util.template;
+	var Ajax = CAGE.ajax;
+	var eventEmitter = CAGE.event.emitter;
+	var popup = CAGE.ui.popup;
+ 
+	// 이벤트 emitter 
+	// 개별 Popup 인스턴스마다 가지고 있으며 커스텀 이벤트의 콜백등록과 삭제, 이벤트 발생시 해당 이벤트에 등록된 모든 콜백 순서대로 실행시키기를 담당한다.
+	// 현재는 이벤트마다 가지고 있지만, 인스턴스마다 하나씩 가지고 여러종류의 이벤트를 다룰수 있도록 바꾸어야 한다.
+	// 그럴려면 현재 popup.afteropen.add(callback); 이렇게 쓰던걸
+	// popup.on.afteropen(callback); popup.off.afteropen(callback);  popup.trigger.afteropen([parmeter1, parameter2]); 
+	// 이렇게 되도록 API를 변경해야 한다...
+	// pupup 생성자 내에서 eventEmitter의 인스턴스멤버와, 프로토타입 상속을 하면 될것 같다.
+	
+	
+	// POPUP을 상속받은 AJAX POPUP  
+	function ajaxPopup(config){
+		this.el = config.element;
+		this.template = "!";	// ajaxPopup 은 템플릿을 비동기로 로딩한다.
+		this.transitionEffect = (config.transitionEffect)?(config.transitionEffect):("zoom");	
+		this.templateUrl = config.templateUrl; // 템플릿을 요청할 주소. 필수 옵션이다.
+		this.templateLoader = (config.templateLoader)?(config.templateLoader):(
+			function(response){
+				return response;
+			}
+		);
+		
+		this.afteropen = new eventEmitter("afteropen");
+		this.afterclose = new eventEmitter("afterclose");
+		
+		this.status = {
+			data: false
+		};
+		// preload 되면 session에 어떤 randNum이 저장될 지 알 수가 없다ㅠ
+		this._init();
+	}	
+	
+	ajaxPopup.prototype = popup.prototype;	
+	
+	CAGE.ui.popup.ajax = ajaxPopup;
+
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = CAGE;
+		// browser export
+	} else {
+		window.CAGE = CAGE;
+	}    	
+
+}(this));
+(function(window) {
+	'use strict';
+	// 자주 사용하는 글로벌 객체 레퍼런스 확보
+	var document = window.document;
+	var console = window.console;
+
+	// 사용할 네임 스페이스 확보	
+	var CAGE = window.CAGE || {};
+	CAGE.ui = CAGE.ui || {};
+	
+	function Parallax(){
+		this.wrapperCollections = [];
+		this.itemCollections = [];
+		this.init();
+		this.setEvent();
+	}
+	
+	Parallax.prototype.init = function(){
+		// 랩퍼들을 저장
+		var parallaxWrappers = document.querySelectorAll(".parallax-wrapper");
+		var wrapperCollections = this.wrapperCollections;
+	
+		[].forEach.call(
+			parallaxWrappers, 
+			function(el){
+				wrapperCollections.push(el);
+				
+			}
+		);
+		// 모든 아이템의 기본 좌표를 저장
+		for(var i in wrapperCollections) {
+			[].forEach.call(
+				wrapperCollections[i].querySelectorAll(".parallax-item"), 
+				function(el){
+					el.style.transform="translateY(0px)";
+					var elStyle = window.getComputedStyle(el);
+					el.setAttribute("data-initialTopOffset", getOffset(el).top);
+					el.setAttribute("data-initialLeftOffset", getOffset(el).left);
+					
+					el.setAttribute("data-initialTop", elStyle.top);
+					el.setAttribute("data-initialLeft", elStyle.left);
+					el.setAttribute("data-initialMarginLeft", elStyle.marginLeft);
+				}
+			);
+		}
+		
+
+	};
+	
+	Parallax.prototype.setEvent = function(){
+		document.addEventListener("mousemove", mousemoveHandler, false);
+		window.addEventListener("resize", resizeHandler, false);
+		 
+		function mousemoveHandler(event) {
+			var parallaxItems = document.querySelector(".parallax-wrapper").querySelectorAll(".parallax-item");
+			console.log("parallax_set start");
+			[].forEach.call(
+				parallaxItems, 
+				function(targetEl){
+					parallax_set(targetEl, event);
+				}
+			);	
+			console.log("parallax_set end");
+		}
+		
+		function parallax_set(targetEl, event){
+			var xRange = parseInt(targetEl.getAttribute("data-rangex")) || 0;
+			var yRange = parseInt(targetEl.getAttribute("data-rangey")) || 0;
+			var reverse = (targetEl.parentNode.getAttribute("class").indexOf("parallax-bg") >- 1)||(targetEl.hasAttribute("data-reverse"))?-1:1;
+			var bodyStyle = window.getComputedStyle(document.body);	
+			var xPosition = event.x?event.x/parseInt(window.innerWidth):0.5;
+			var yPosition = event.y?event.y/parseInt(window.innerHeight):0.5;
+			
+			console.log(window.innerWidth);
+			//if(targetEl.getAttribute("src").indexof("404msg") > -1) {
+				//console.log(xPosition);
+			//}
+			
+			targetEl.style.left = (parseInt(targetEl.getAttribute("data-initialLeftOffset")) + reverse*xRange*(xPosition-0.5)) + "px";
+			targetEl.style.marginLeft = "0";
+			targetEl.style.top = (parseInt(targetEl.getAttribute("data-initialTopOffset")) + reverse*yRange*(yPosition-0.5) - 40) + "px";
+			targetEl.style.marginTop = "0";
+		}
+		
+		function resizeHandler(event) {
+			var parallaxItems = document.querySelector(".parallax-wrapper").querySelectorAll(".parallax-item");
+			
+			[].forEach.call(
+				parallaxItems, 
+				function(targetEl){
+					parallax_reset(targetEl);
+				}
+			);
+		}
+		function parallax_reset(targetEl){
+			// top, left, margin-left 를 원래대로 되돌리기 
+			targetEl.setAttribute("style","");
+			/*
+			targetEl.style.left = targetEl.getAttribute("data-initialLeft");
+			targetEl.style.marginLeft = targetEl.getAttribute("data-initialMarginLeft");
+			targetEl.style.top = targetEl.getAttribute("data-initialTop");
+			*/
+			targetEl.setAttribute("data-initialTopOffset", getOffset(targetEl).top);
+			targetEl.setAttribute("data-initialLeftOffset", getOffset(targetEl).left);			
+		}
+	}
+	
+	function getOffset( el ) {
+	    var _x = 0,
+	    _y = 0;
+	    while( el && el.tagName.toLowerCase() != 'body' && !isNaN( el.offsetLeft ) && !isNaN(el.offsetTop ) ) {
+	        _x += el.offsetLeft - el.scrollLeft;
+	        _y += el.offsetTop - el.scrollTop;
+	        el = el.offsetParent;
+	    }
+	    return { top: _y, left: _x };
+	}
+		
+	CAGE.ui.parallax = Parallax;
 
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
 	if (typeof module !== 'undefined' && module.exports) {
