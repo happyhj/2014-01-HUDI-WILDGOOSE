@@ -12,13 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.SignDAO;
-import next.wildgoose.dto.AccountResult;
-import next.wildgoose.dto.SimpleResult;
+import next.wildgoose.dto.result.AccountResult;
+import next.wildgoose.dto.result.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.framework.security.SHA256;
 import next.wildgoose.framework.utility.Uri;
 import next.wildgoose.framework.utility.Utility;
+import next.wildgoose.utility.Constants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,30 +38,20 @@ public class AccountController implements BackController {
 		if (uri.check(1, null)) {
 			if("POST".equals(method)){
 				// 체크하고 유효한 경우 가입
+				result = join(request);
+				/*
 				if(request.getParameter("check") == null){
-					result = join(request);
+				
 				} else {
 					result = withdraw(request);
 				}
+				*/
 			} else if("GET".equals(method)){
 				String email = request.getParameter("email");
 				result = usedEmail(request, email);
-			} else if("PUT".equals(method)){
+			}/*else if("PUT".equals(method)){
 				result = changePassword(request);
-				
-			}
-		}
-		else if (uri.check(1, "login")) {
-			LOGGER.debug("this is login");
-			
-			result = new AccountResult();
-			result.setStatus(200);
-			
-		}
-		else if (uri.check(1, "signup")) {
-			LOGGER.debug("this is signup");
-			result = new AccountResult();
-			result.setStatus(200);
+			} */
 		}
 		
 		LOGGER.debug("result: " + Utility.toJsonString(result));
@@ -89,7 +80,7 @@ public class AccountController implements BackController {
 			boolean changed = SignDAO.changePassword(email, newPassword);
 			result = new SimpleResult(changed);
 		} else {
-			result.setMessage("getting user authentication failed");
+			result.setMessage(Constants.MSG_WRONG_PW);
 		}
 		return result;
 	}
@@ -99,7 +90,7 @@ public class AccountController implements BackController {
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 			String data = br.readLine();
-			data = URLDecoder.decode(data, "UTF-8"); // 한글 처리
+			data = URLDecoder.decode(data, Constants.CHAR_ENCODING); // 한글 처리
 			String parameter[] = data.split("&");
 			for(int i = 0; i < parameter.length; i++) {
 				String parameterTemp[] = parameter[i].split("=");
@@ -130,7 +121,7 @@ public class AccountController implements BackController {
 			simpleResult = (AccountResult) leave(request);
 		} else {
 			// 비밀번호 틀려서 탈퇴 못함! 
-			simpleResult.setMessage("getting user authentication failed");
+			simpleResult.setMessage(Constants.MSG_WRONG_PW);
 		}
 		return simpleResult;
 	}
@@ -144,12 +135,12 @@ public class AccountController implements BackController {
 		AccountResult accountResult = new AccountResult();
 		
 		// 기본 세팅 fail
-		accountResult.setMessage("withdrawing user account failed");
+		accountResult.setMessage(Constants.MSG_WRONG_PW);
 				
 		if (signDao.withdrawAccount(email) == true) {
 			// 탈퇴 성공
 			accountResult.setStatus(200);
-			accountResult.setMessage("withdrawing user account succeed");
+			accountResult.setMessage("OK");
 			
 			HttpSession session = request.getSession();
 			session.removeAttribute("userId");

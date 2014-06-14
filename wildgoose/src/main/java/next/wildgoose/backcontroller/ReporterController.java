@@ -1,7 +1,6 @@
 package next.wildgoose.backcontroller;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +13,12 @@ import next.wildgoose.dao.ReporterDAO;
 import next.wildgoose.dto.Article;
 import next.wildgoose.dto.NumberOfArticles;
 import next.wildgoose.dto.Reporter;
-import next.wildgoose.dto.ReporterResult;
 import next.wildgoose.dto.StatPoints;
+import next.wildgoose.dto.result.ReporterResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.framework.utility.Uri;
+import next.wildgoose.utility.Constants;
 
 public class ReporterController implements BackController {
 
@@ -36,14 +36,14 @@ public class ReporterController implements BackController {
 		// id가 필요없는 경우가 아님에도 입력되지 않은 경우 처리
 		if (uri.size() <= 1 || uri.check(1, "")) {
 			result = new ReporterResult();
-			result.setMessage("parameter is missing.");
+			result.setMessage(Constants.MSG_WENT_WRONG);
 			return result;
 		}
 		int reporterId = Integer.parseInt(uri.get(1));
 		if (uri.get(2) == null) {
 			result = getReporterPage(request, reporterId);
 		}
-		else if (uri.check(2, "statistics")) {
+		else if (uri.check(2, Constants.RESOURCE_STATISTICS)) {
 			result = getGraphData(request, uri, reporterId);
 		}
 
@@ -60,7 +60,7 @@ public class ReporterController implements BackController {
 		ReporterResult reporterResult = new ReporterResult();
 		if (userId == null) {
 			reporterResult.setStatus("401");
-			reporterResult.setMessage("로그인되지 않았습니다");
+			reporterResult.setMessage(Constants.MSG_AUTH_NEED);
 		} else {
 			reporterResult.setStatus("200");
 			reporterResult.setMessage("OK");
@@ -80,7 +80,7 @@ public class ReporterController implements BackController {
 		String by = request.getParameter("by");
 		List<NumberOfArticles> numberOfArticlesList = null;
 		
-		if("number_of_articles".equals(graph)){
+		if(Constants.RESOURCE_NOA.equals(graph)){
 			NumberOfArticlesDAO numberOfArticlesDao = (NumberOfArticlesDAO) context.getAttribute("NumberOfArticlesDAO");
 			if("day".equals(by)){
 				reporterResult.setStatus(200);
@@ -118,7 +118,7 @@ public class ReporterController implements BackController {
 		reporterResult.setReporter(reporter);
 		reporterResult.setArticles(articles);
 		reporterResult.setStatus(200);
-		reporterResult.setMessage("getting Reporter Info success");
+		reporterResult.setMessage("OK");
 		
 		return reporterResult;
 	}

@@ -1,18 +1,15 @@
-package next.wildgoose.dto;
+package next.wildgoose.dto.result;
 
 import java.util.List;
 import java.util.Map;
 
+import next.wildgoose.dto.Reporter;
 import next.wildgoose.framework.Result;
 
 public class SearchResult extends Result {
 	
 	public SearchResult() {
-		this(null);
-	}
-	
-	public SearchResult(String pageName) {
-		super(pageName);
+		super();
 	}
 
 	public List<Reporter> getReporters() {

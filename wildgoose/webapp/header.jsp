@@ -69,12 +69,6 @@ li[class*='nav'] a  {
 .nav-global.home li.nav-global-home {
 	border-bottom-width: 4px;	
 }
-.nav-global.favorite li.nav-global-favorite {
-	border-bottom-width: 4px;	
-}
-.nav-global.timeline li.nav-global-timeline {
-	border-bottom-width: 4px;	
-}
 .nav-global.me li.nav-global-me {
 	border-bottom-width: 4px;	
 }
@@ -110,7 +104,7 @@ li[class*='nav'] a  {
 	<c:otherwise>
 		<ul class="nav-global <c:if test="${ not empty requestScope.data.pageName }">
 		${ requestScope.data.pageName }</c:if>">
-			<li class="nav-global-home"><a href="/"><span class="text">Search</span></a></li>
+			<li class="nav-global-search"><a href="/"><span class="text">Search</span></a></li>
 			<li class="nav-global-me"><a class="header-btn" id="me"><span class="text">Me</span></a></li>
 		</ul>
 		</div>

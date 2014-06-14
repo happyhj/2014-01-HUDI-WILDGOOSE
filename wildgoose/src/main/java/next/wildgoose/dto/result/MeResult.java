@@ -1,17 +1,15 @@
-package next.wildgoose.dto;
+package next.wildgoose.dto.result;
 
 import java.util.List;
 
+import next.wildgoose.dto.Article;
+import next.wildgoose.dto.Reporter;
 import next.wildgoose.framework.Result;
 
 public class MeResult extends Result{
 	
 	public MeResult() {
-		super(null);
-	}
-	
-	public MeResult(String pageName) {
-		super(pageName);
+		super();
 	}
 	
 	public List<Article> getArticles() {

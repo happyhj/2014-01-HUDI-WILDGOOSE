@@ -1,18 +1,15 @@
-package next.wildgoose.dto;
+package next.wildgoose.dto.result;
 
 import java.util.List;
 
+import next.wildgoose.dto.Reporter;
 import next.wildgoose.framework.Result;
 
 public class FavoriteResult extends Result {
 
 	public FavoriteResult() {
-		super(null);
+		super();
 		// TODO Auto-generated constructor stub
-	}
-
-	public FavoriteResult(String pageName) {
-		super(pageName);
 	}
 
 	public List<Reporter> getFavorites() {

@@ -24,12 +24,6 @@ public abstract class Result {
 		}
 		this.data = new HashMap<String, Object>();
 	}
-	
-	public Result(String pageName) {
-		this();
-		this.setPageName(pageName);
-	}
-
 
 	public int getStatus() {
 		return status;

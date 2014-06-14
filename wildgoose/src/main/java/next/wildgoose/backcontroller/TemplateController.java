@@ -3,7 +3,7 @@ package next.wildgoose.backcontroller;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.dto.TemplateResult;
+import next.wildgoose.dto.result.TemplateResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.framework.support.ResourceLoader;
@@ -31,14 +31,11 @@ public class TemplateController implements BackController {
 		String path = root +"html_templates/"+ templateFileName;
 		TemplateResult result = new TemplateResult();
 	
-		if ("articleCard.html".equals(templateFileName) || "account.html".equals(templateFileName) || "login.html".equals(templateFileName) || "withdraw.html".equals(templateFileName) || "changePassword.html".equals(templateFileName)  || "setting.html".equals(templateFileName) || "reporterCard.html".equals(templateFileName)) {
-			LOGGER.debug(templateFileName + " template");
-			
-			StringBuilder htmlDocumentSB = ResourceLoader.load(path);
-			LOGGER.debug(htmlDocumentSB.toString());
-			result.setTemplate(htmlDocumentSB.toString());
-			result.setMessage("Loading template string success");
+		StringBuilder htmlDocumentSB = ResourceLoader.load(path);
+		if (htmlDocumentSB != null) {
 			result.setStatus(200);
+			result.setMessage("OK");
+			result.setTemplate(htmlDocumentSB.toString());
 		}
 		
 		return result;

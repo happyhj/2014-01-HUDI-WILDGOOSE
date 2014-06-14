@@ -8,6 +8,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import next.wildgoose.framework.utility.Uri;
+import next.wildgoose.utility.Constants;
 
 public class WebListener implements ServletContextListener {
 	
@@ -20,19 +21,12 @@ public class WebListener implements ServletContextListener {
 		Map<Uri, String> jspMap;
 
 		jspMap = new HashMap<Uri, String>();
-		jspMap.put(new Uri(""), "search.jsp");
-//		jspMap.put(new Uri(""), "error.jsp");
-
-		jspMap.put(new Uri("search"), "search.jsp");
-		jspMap.put(new Uri("reporters/[reporter_id]"), "reporters.jsp");
-//		jspMap.put(new Uri("users/[user_id]/favorites"), "favorites.jsp");
-//		jspMap.put(new Uri("users/[user_id]/timeline"), "timeline.jsp");
-//		jspMap.put(new Uri("users/[user_id]/mypage"), "mypage.jsp");
-		jspMap.put(new Uri("me/[user_id]"), "me.jsp");
-//		jspMap.put(new Uri("accounts"), "search.jsp");
-//		jspMap.put(new Uri("accounts/login"), "login.jsp");
-//		jspMap.put(new Uri("accounts/signup"), "signup.jsp");
-		jspMap.put(null, "error.jsp");
+		jspMap.put(new Uri(""), Constants.PAGE_SEARCH);
+		jspMap.put(new Uri("search"), Constants.PAGE_SEARCH);
+		jspMap.put(new Uri("reporters/[reporter_id]"), Constants.PAGE_REPORTER);
+		jspMap.put(new Uri("me/[user_id]"), Constants.PAGE_ME);
+		
+		jspMap.put(null, Constants.PAGE_ERROR);
 		
 		context.setAttribute("jspMap", jspMap);
 	}

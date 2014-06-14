@@ -20,7 +20,7 @@
 			this.joinBtn = document.querySelector("#join");
 			
 			// 버튼에 가입창을 연결시킨다
-			this.template = Template.get({"url":"/api/v1/templates/account.html"});
+			this.template = Template.get({"url":"/api/v1/templates/join.html"});
 			
 			this.joinPopup = new Popup({
 				element: this.joinBtn,

@@ -10,15 +10,15 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/basic_layout.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/header.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/articles.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/reporters-articles.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/show_reporter.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/reporters.css" />
 <title>${ requestScope.data.reporter.name }기자</title>
 </head>
 <body>
 <div class="wrap viewport">
 <header class="header"> 
-	<%@ include file="jsp_templates/header.jsp" %> 
+	<%@ include file="/header.jsp" %> 
 </header>
 <div class="container test-outline">
 	<!-- 기자 정보 -->

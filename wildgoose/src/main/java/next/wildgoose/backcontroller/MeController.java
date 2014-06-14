@@ -11,10 +11,10 @@ import next.wildgoose.dao.FavoriteDAO;
 import next.wildgoose.dao.ReporterDAO;
 import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Article;
-import next.wildgoose.dto.MeResult;
 import next.wildgoose.dto.Reporter;
-import next.wildgoose.dto.SearchResult;
-import next.wildgoose.dto.SimpleResult;
+import next.wildgoose.dto.result.MeResult;
+import next.wildgoose.dto.result.SearchResult;
+import next.wildgoose.dto.result.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.framework.utility.Uri;
@@ -36,7 +36,7 @@ public class MeController implements BackController {
 		if (isValidUserId(request, userId) == false) {
 			result = new SimpleResult();
 			result.setStatus(404);
-			result.setMessage("존재하지 않는 유저입니다");
+			result.setMessage(Constants.MSG_WRONG_ID);
 			return result;
 		}
 		
@@ -47,7 +47,7 @@ public class MeController implements BackController {
 			// 로그인 하도록 유도하기
 			SimpleResult sResult = new SimpleResult();
 			sResult.setStatus(401);
-			sResult.setMessage("로그인이 필요합니다");
+			sResult.setMessage(Constants.MSG_AUTH_NEED);
 			sResult.setData("requestedUri", uri.toString());
 			return sResult;
 		}
@@ -62,7 +62,8 @@ public class MeController implements BackController {
 	private Result getMe(HttpServletRequest request, String userId, int start, int howMany) {
 		ServletContext context = request.getServletContext();
 
-		MeResult meResult = new MeResult("me");
+		MeResult meResult = new MeResult();
+		meResult.setPageName("me");
 		
 		
 		

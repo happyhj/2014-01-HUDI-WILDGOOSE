@@ -23,8 +23,8 @@
 		var viewportHeight = window.innerHeight;
 		var footerHeight = parseInt(window.getComputedStyle(footer, null).height);
 		var footerTopPos = footer.getBoundingClientRect().bottom - footerHeight;
-//		var condition = viewportHeight - 15 > footerTopPos; 
-		var condition = viewportHeight - 30 > footerTopPos;
+		var condition = viewportHeight - 15 > footerTopPos; 
+//		var condition = viewportHeight - 30 > footerTopPos;
 		
 		return condition;
 	};
@@ -38,7 +38,9 @@
 	
 	ArticleMore.prototype.getURL = function() {
 		var userId = User.getId();
-		return "/api/v1/me/" + userId + "?start_item=" + this.metadata.curNum + "&how_many=" + this.requestNum;
+		var uri = "/api/v1/me/" + userId + "?start_item=" + this.metadata.curNum + "&how_many=" + this.requestNum;
+		console.log(uri);
+		return uri;
 	};
 	
 	ArticleMore.prototype.success = function(responseObj) {

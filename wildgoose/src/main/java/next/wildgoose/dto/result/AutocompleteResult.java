@@ -1,4 +1,4 @@
-package next.wildgoose.dto;
+package next.wildgoose.dto.result;
 
 import java.util.List;
 import java.util.Map;

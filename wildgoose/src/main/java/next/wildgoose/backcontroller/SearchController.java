@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import next.wildgoose.dao.ReporterDAO;
 import next.wildgoose.dto.Reporter;
-import next.wildgoose.dto.SearchResult;
+import next.wildgoose.dto.result.SearchResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.framework.utility.Utility;
@@ -27,26 +27,27 @@ public class SearchController implements BackController {
 		int howMany = (request.getParameter("how_many") != null)? Integer.parseInt(request.getParameter("how_many")) : Constants.NUM_OF_CARDS;
 //		int startPage = (request.getParameter("start_page") != null)? Integer.parseInt(request.getParameter("start_page")) : -1;
 		int startItem = (request.getParameter("start_item") != null)? Integer.parseInt(request.getParameter("start_item")) : -1;
-		SearchResult searchResult = checkQuery(request, searchQuery);
 		
+		SearchResult searchResult = checkQuery(request, searchQuery);
 		// 결과 반환
 		// 에러 혹은 root인 경우 반환
 		if (searchResult != null) {
+			searchResult.setPageName("home");
 			return searchResult;
 		}
-		// 자동완성 반환
 		if (autoComplete) {
+			// 자동완성 반환
 			LOGGER.debug("searchQuery: " + searchQuery + ", autocompete: " + request.getParameter("autocomplete"));
-			return getAutoCompleteResult(request, searchQuery, howMany);
+			searchResult = getAutoCompleteResult(request, searchQuery, howMany);
+		} else if (startItem != -1) {
+			// 결과를 특정 부분부터 반환
+			searchResult = getSearchResult(request, searchQuery, startItem, howMany);
+		} else {
+			// 결과를 처음부터 반환
+			searchResult = getSearchResult(request, searchQuery, howMany);
 		}
-		
-		// 결과를 특정 부분부터 반환
-		if (startItem != -1) {
-			return getSearchResult(request, searchQuery, startItem, howMany);
-		}
-		
-		// 결과를 처음부터 반환
-		return getSearchResult(request, searchQuery, howMany);
+		searchResult.setPageName("home");
+		return searchResult;
 	}
 	
 	
@@ -58,7 +59,7 @@ public class SearchController implements BackController {
 		List<Reporter> reporters = reporterDao.getSimilarNames(searchQuery, howMany);
 		
 		searchResult.setStatus(200);
-		searchResult.setMessage("getting similar names result success");
+		searchResult.setMessage("OK");
 		searchResult.setReporters(reporters);
 		searchResult.setSearchQuery(searchQuery);
 		
@@ -67,7 +68,7 @@ public class SearchController implements BackController {
 	}
 	
 	private SearchResult getSearchResult (HttpServletRequest request, String searchQuery, int start, int howMany) {
-		SearchResult searchResult = new SearchResult("home");
+		SearchResult searchResult = new SearchResult();
 		ServletContext context = request.getServletContext();
 		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
 		List<Reporter> reporters = null;
@@ -79,7 +80,7 @@ public class SearchController implements BackController {
 		
 		reporters = getReporters(reporterDao, searchQuery, start, howMany);
 		searchResult.setStatus(200);
-		searchResult.setMessage("getting search result success");
+		searchResult.setMessage("OK");
 		searchResult.setReporters(reporters);
 		searchResult.setSearchQuery(searchQuery);
 		
@@ -111,12 +112,11 @@ public class SearchController implements BackController {
 	}
 	
 	private SearchResult checkQuery(HttpServletRequest request, String searchQuery) {
-		SearchResult searchResult = null;
+		SearchResult searchResult = new SearchResult();
 		
 		if (searchQuery == null) {
-			searchResult = new SearchResult("home");
 			searchResult.setStatus(200);
-			searchResult.setMessage("welcome to search page! This path is not provided as API.");
+			searchResult.setMessage("OK");
 			return searchResult;
 		}
 				
@@ -124,10 +124,9 @@ public class SearchController implements BackController {
 		searchQuery.replaceAll("%", "");
 		String trimmedQuery = searchQuery.trim();
 		if ("".equals(trimmedQuery)) {
-			searchResult = new SearchResult();
-			searchResult.setMessage("You can not search with whitespace");
+			searchResult.setMessage(Constants.MSG_WRONG_QUERY);
 			return searchResult;
 		}
-		return null;
+		return searchResult;
 	}
 }

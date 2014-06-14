@@ -8,12 +8,13 @@ import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.FavoriteDAO;
 import next.wildgoose.dao.SignDAO;
-import next.wildgoose.dto.FavoriteResult;
 import next.wildgoose.dto.Reporter;
-import next.wildgoose.dto.SimpleResult;
+import next.wildgoose.dto.result.FavoriteResult;
+import next.wildgoose.dto.result.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.framework.utility.Uri;
+import next.wildgoose.utility.Constants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class UserController implements BackController {
 		if (isValidUserId(request, userId) == false) {
 			result = new SimpleResult();
 			result.setStatus(404);
-			result.setMessage("존재하지 않는 유저입니다");
+			result.setMessage(Constants.MSG_WRONG_ID);
 			return result;
 		}
 		
@@ -43,7 +44,7 @@ public class UserController implements BackController {
 			// 로그인 하도록 유도하기
 			SimpleResult sResult = new SimpleResult();
 			sResult.setStatus(401);
-			sResult.setMessage("로그인이 필요합니다");
+			sResult.setMessage(Constants.MSG_AUTH_NEED);
 			sResult.setData("requestedUri", uri.toString());
 			return sResult;
 		}
@@ -62,7 +63,7 @@ public class UserController implements BackController {
 				result = removeFavorites(request, userId);
 			}
 		}
-		
+		result.setPageName("me");
 		return result;
 	}
 	
@@ -90,9 +91,9 @@ public class UserController implements BackController {
 		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
 		List<Reporter> reporters = favoriteDao.findFavoriteReporters(userId);
 		
-		FavoriteResult favoriteResult = new FavoriteResult("favorite");
+		FavoriteResult favoriteResult = new FavoriteResult();
 		favoriteResult.setStatus(200);
-		favoriteResult.setMessage("success");
+		favoriteResult.setMessage("OK");
 		LOGGER.debug(""+reporters.size());
 		favoriteResult.setFavorites("reporters", reporters);
 		return favoriteResult;
@@ -106,7 +107,7 @@ public class UserController implements BackController {
 		int reporterId = Integer.parseInt(request.getParameter("reporter_id"));
 		if (favDao.addFavorite(reporterId, userId)) {
 			simpleResult.setStatus(200);
-			simpleResult.setMessage("success");
+			simpleResult.setMessage("OK");
 		}
 		return simpleResult;
 	}
@@ -119,7 +120,7 @@ public class UserController implements BackController {
 		int reporterId = Integer.parseInt(request.getParameter("reporter_id"));
 		if (favDao.removeFavorite(reporterId, userId)) {
 			simpleResult.setStatus(200);
-			simpleResult.setMessage("success");
+			simpleResult.setMessage("OK");
 		}
 		return simpleResult;
 	}

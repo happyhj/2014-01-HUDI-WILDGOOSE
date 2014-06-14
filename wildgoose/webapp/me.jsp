@@ -9,7 +9,7 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/basic_layout.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/article_card.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/me-article.css" />
 <style>
 .card {
 	margin: 10px 0;
@@ -22,7 +22,7 @@
 
 <div class="wrap">
 	<header class="header">
-		<%@ include file ="jsp_templates/header.jsp" %>
+		<%@ include file ="/header.jsp" %>
 	</header>
 	<link type="text/css" rel="stylesheet" href="/stylesheet/me.css" />
 	<%-- session 존재시 --%>

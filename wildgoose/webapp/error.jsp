@@ -11,7 +11,7 @@
 <title>Wildgoose</title>
 <div class="wrap">
 	<header class="header">
-		<%@ include file ="jsp_templates/header.jsp" %>
+		<%@ include file ="/header.jsp" %>
 	</header>
 	<div class="container">
 	<div class="parallax-wrapper">

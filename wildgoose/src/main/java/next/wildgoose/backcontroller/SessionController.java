@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.SignDAO;
-import next.wildgoose.dto.AccountResult;
-import next.wildgoose.dto.SimpleResult;
+import next.wildgoose.dto.result.AccountResult;
+import next.wildgoose.dto.result.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.framework.security.RandomNumber;
@@ -53,7 +53,7 @@ public class SessionController implements BackController {
 		LOGGER.debug("issue a randNum: " + randNum);
 		
 		accountResult.setStatus(200);
-		accountResult.setMessage("fetching random number info succeed");
+		accountResult.setMessage("OK");
 		return accountResult; 
 	}
 	
@@ -64,10 +64,10 @@ public class SessionController implements BackController {
 		
 		if(isJoinable(signDao, email)){
 			accountResult.setStatus(500);
-			accountResult.setMessage("fetching email info failed");
+			accountResult.setMessage(Constants.MSG_EXIST_ID);
 		} else {
 			accountResult.setStatus(200);
-			accountResult.setMessage("fetching email info succeed");
+			accountResult.setMessage("OK");
 		}
 		accountResult.setEmail(email);
 
@@ -112,23 +112,21 @@ public class SessionController implements BackController {
 		LOGGER.debug(randNum);
 		
 		String accountPw = signDao.findAccount(email);
-		LOGGER.debug(accountPw + randNum);
-		LOGGER.debug(SHA256.testSHA256(accountPw + randNum));
 		if (accountPw == null) {
-			// 가입되지 않은 아이디입니다. 다시 확인해주세요.
+			simpleResult.setMessage(Constants.MSG_WRONG_ID);
 			return simpleResult;
 		}
 		// H(db_password+random)
 		if(SHA256.testSHA256(accountPw + randNum).equals(hashedPassword)){
 			
 			simpleResult.setStatus(200);
-			simpleResult.setMessage("getting user authentication succeed");
+			simpleResult.setMessage("OK");
 			simpleResult.setData("userId", email);
 			session.setAttribute("userId", email);
 			session.setMaxInactiveInterval(Constants.SESSION_EXPIRING_TIME);
 
 		} else {
-			simpleResult.setMessage("getting user authentication failed");
+			simpleResult.setMessage(Constants.MSG_WRONG_PW);
 		}
 		return simpleResult;
 	}
@@ -139,7 +137,7 @@ public class SessionController implements BackController {
 		
 		SimpleResult simpleResult = new SimpleResult();
 		simpleResult.setStatus(200);
-	    simpleResult.setMessage("removing user authentication succeed");
+	    simpleResult.setMessage("OK");
 		return simpleResult;
 	}
 }
