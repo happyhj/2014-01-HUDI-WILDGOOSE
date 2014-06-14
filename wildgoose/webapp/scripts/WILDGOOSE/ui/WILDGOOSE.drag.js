@@ -65,6 +65,8 @@ var values = {sourceEle : null, destEle : null};
 			if(values.destEle != null &&values.sourceEle != null){
 				values.destEle.insertAdjacentElement('afterend',values.sourceEle);
 			}
+			
+			_localSave();
 		}
 		
 		function _addEvent(target){
@@ -87,6 +89,32 @@ var values = {sourceEle : null, destEle : null};
 			values.movedClassName = args.movedClassName;
 			
 			_addEvent(args.body);
+			
+			_myAuthorOrder();
+		}
+		
+		//test
+		function _localSave(){
+			var testString ="";
+			var child = values.target.children;
+			for(var i=0; i < child.length; i++){
+				testString = testString+child[i].firstElementChild.getAttribute('data-reporter_id')+" ";
+			}
+			
+			localStorage.myAuthor = testString;
+		}
+		
+		function _myAuthorOrder(){
+			var ul = document.querySelector('.dashboard-left ul');
+			var child = ul.children;
+			var numLi = localStorage.myAuthor.split(" ");
+			numLi.length = numLi.length-1; // ""를 제거하기 위해서
+			
+			for(var j=0; j<numLi.length; j++){
+				for(var i=0; i<child.length; i++){
+					if(child[i].firstElementChild.getAttribute('data-reporter_id')==numLi[j]){ul.appendChild(child[i])}
+					}
+			}
 		}
 
 		
