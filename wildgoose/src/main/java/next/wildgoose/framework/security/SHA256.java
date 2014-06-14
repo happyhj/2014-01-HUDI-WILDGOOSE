@@ -8,22 +8,25 @@ import org.slf4j.LoggerFactory;
 
 public class SHA256 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SHA256.class.getName());
+	private SHA256() {
+		
+	}
 	public static String testSHA256(String str){
-		String SHA = ""; 
+		String sha = ""; 
 		try {
 			MessageDigest sh = MessageDigest.getInstance("SHA-256"); 
 			sh.update(str.getBytes()); 
 			byte byteData[] = sh.digest();
-			StringBuffer sb = new StringBuffer(); 
+			StringBuilder sb = new StringBuilder(); 
 			for(int i = 0 ; i < byteData.length ; i++){
 				sb.append(Integer.toString((byteData[i]&0xff) + 0x100, 16).substring(1));
 			}
-			SHA = sb.toString();
+			sha = sb.toString();
 			
 		} catch(NoSuchAlgorithmException e){
 			LOGGER.error(e.getMessage(), e);
-			SHA = null; 
+			sha = null; 
 		}
-		return SHA;
+		return sha;
 	}
 }

@@ -6,12 +6,7 @@ import java.sql.SQLException;
 import next.wildgoose.framework.dao.template.JdbcTemplate;
 import next.wildgoose.framework.dao.template.PreparedStatementSetter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class SearchKeywordDAO {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(SearchKeywordDAO.class.getName());
 	
 	public boolean addKeywordRecord (final String keyword) {
 		JdbcTemplate t = new JdbcTemplate();

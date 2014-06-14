@@ -33,8 +33,6 @@ public class DataSource {
 	}
 	
 	public static DataSource getInstance() {
-		if (dataSource == null) {
-		}
 		return dataSource;
 	}
 

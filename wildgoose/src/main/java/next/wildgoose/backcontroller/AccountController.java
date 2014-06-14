@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
@@ -59,7 +60,7 @@ public class AccountController implements BackController {
 		Result result = new AccountResult();
 
 		// PUT method doesn't parse request parameter
-		HashMap<String,String> parameterMap = getParameterMap(request);
+		Map<String,String> parameterMap = getParameterMap(request);
 
 		String email = parameterMap.get("email");
 		String oldPassword = parameterMap.get("old_pw");
@@ -82,8 +83,8 @@ public class AccountController implements BackController {
 		return result;
 	}
 
-	private HashMap<String, String> getParameterMap(HttpServletRequest request) {
-		HashMap<String,String> parameterMap = new HashMap<String, String>();
+	private Map<String, String> getParameterMap(HttpServletRequest request) {
+		Map<String,String> parameterMap = new HashMap<String, String>();
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 			String data = br.readLine();
@@ -134,7 +135,7 @@ public class AccountController implements BackController {
 		// 기본 세팅 fail
 		accountResult.setMessage(Constants.MSG_WRONG_PW);
 				
-		if (signDao.withdrawAccount(email) == true) {
+		if (signDao.withdrawAccount(email)) {
 			// 탈퇴 성공
 			accountResult.setStatus(200);
 			accountResult.setMessage("OK");
@@ -176,7 +177,7 @@ public class AccountController implements BackController {
 		// 기본 세팅 fail
 		accountResult.setMessage("adding user account failed");
 		
-		if (isJoinable(signDao, email) && isHashedPassword(password) && signDao.joinAccount(email, password) == true) {
+		if (isJoinable(signDao, email) && isHashedPassword(password) && signDao.joinAccount(email, password)) {
 			// 가입 성공
 			accountResult.setStatus(200);
 			accountResult.setMessage("adding user account succeed");
@@ -202,10 +203,16 @@ public class AccountController implements BackController {
 	}
 
 	private boolean isHashedPassword(String password) {
-		return (password.length() == 64);
+		if (password.length() == 64) {
+			return true;
+		}
+		return false;
 	}
 	
 	private boolean isFilled(String data) {
-		return (data != null && data.length() > 0);
+		if (data != null && data.length() > 0) {
+			return true;
+		}
+		return false;
 	}
 }

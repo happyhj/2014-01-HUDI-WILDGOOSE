@@ -31,16 +31,13 @@ public class SessionController implements BackController {
 		if (uri.check(1, null)) {
 			if ("POST".equals(method)) {
 				result = login(request);
-			}
-			else if ("DELETE".equals(method)) {
+			} else if ("DELETE".equals(method)) {
 				result = logout(request);
-			}
-			else if ("GET".equals(method)) {
+			} else if ("GET".equals(method)) {
 				String email = request.getParameter("email");
 				result = joinedEmail(request, email);
 			}
-		}
-		else if (uri.check(1, "rand")) {
+		} else if (uri.check(1, "rand")) {
 			result = getRanomNumber(request);
 		}
 		

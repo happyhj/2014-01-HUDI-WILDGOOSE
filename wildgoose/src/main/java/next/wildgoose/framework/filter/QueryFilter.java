@@ -26,7 +26,7 @@ public class QueryFilter implements Filter {
 		
 		ServletContext sc = request.getServletContext();
 		String keyword = request.getParameter("q");
-		if (keyword != null && "".equals(keyword) == false) {
+		if (keyword != null && "".equals(keyword)) {
 			SearchKeywordDAO sdao = (SearchKeywordDAO) sc.getAttribute("SearchKeywordDAO");
 			sdao.addKeywordRecord(keyword);
 		}

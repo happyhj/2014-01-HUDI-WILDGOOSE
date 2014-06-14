@@ -29,7 +29,7 @@ public class ReporterDAO {
 
 			@Override
 			public Object mapRow(ResultSet rs) throws SQLException {
-				ArrayList<Reporter> randomReporters = new ArrayList<Reporter>();
+				List<Reporter> randomReporters = new ArrayList<Reporter>();
 				while (rs.next()) {
 					Reporter reporter = new Reporter();
 					reporter.setId(rs.getInt("id"));
@@ -147,15 +147,15 @@ public class ReporterDAO {
 			@Override
 			public Object mapRow(ResultSet rs) throws SQLException {
 				List<Reporter> reporters = new ArrayList<Reporter>();
-				Reporter Reporter = null;
+				Reporter reporter = null;
 				while (rs.next()) {
-					Reporter = new Reporter();
-					Reporter.setId(rs.getInt("id"));
-					Reporter.setEmail(rs.getString("email"));
-					Reporter.setName(rs.getString("name"));
-					Reporter.setPressName(rs.getString("press_name"));
-					Reporter.setArticleTitle(rs.getString("title"));
-					reporters.add(Reporter);
+					reporter = new Reporter();
+					reporter.setId(rs.getInt("id"));
+					reporter.setEmail(rs.getString("email"));
+					reporter.setName(rs.getString("name"));
+					reporter.setPressName(rs.getString("press_name"));
+					reporter.setArticleTitle(rs.getString("title"));
+					reporters.add(reporter);
 				}
 				return reporters;
 			}
@@ -211,8 +211,7 @@ public class ReporterDAO {
 
 		if ("name".equals(type)) {
 			where = "author.name";
-		}
-		else if ("url".equals(type)) {
+		} else if ("url".equals(type)) {
 			where = "aa.article_URL";
 		}
 		

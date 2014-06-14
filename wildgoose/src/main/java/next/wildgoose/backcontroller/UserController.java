@@ -4,17 +4,13 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import next.wildgoose.dao.FavoriteDAO;
-import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Reporter;
 import next.wildgoose.dto.result.FavoriteResult;
 import next.wildgoose.dto.result.SimpleResult;
-import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.framework.utility.Uri;
-import next.wildgoose.utility.Constants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,9 +41,9 @@ public class UserController extends AuthController {
 					result = isFavorite(request, userId, reporterId);
 				}
 			} else if ("POST".equals(method)) {
-				result = addFavorites(request, userId);
+				result = modifyFavorites("add", request, userId);
 			} else if ("DELETE".equals(method)) {
-				result = removeFavorites(request, userId);
+				result = modifyFavorites("remove", request, userId);
 			}
 		}
 		result.setPageName("me");
@@ -73,33 +69,22 @@ public class UserController extends AuthController {
 		favoriteResult.setStatus(200);
 		favoriteResult.setMessage("OK");
 		LOGGER.debug(""+reporters.size());
-		favoriteResult.setFavorites("reporters", reporters);
+		favoriteResult.setFavorites(reporters);
 		return favoriteResult;
 	}
 	
-	private SimpleResult addFavorites(HttpServletRequest request, String userId) {
+	private SimpleResult modifyFavorites(String how, HttpServletRequest request, String userId) {
 		ServletContext context = request.getServletContext();
 		FavoriteDAO favDao = (FavoriteDAO) context.getAttribute("FavoriteDAO");
-		SimpleResult simpleResult = new SimpleResult();
+		boolean success = false;
 		
 		int reporterId = Integer.parseInt(request.getParameter("reporter_id"));
-		if (favDao.addFavorite(reporterId, userId)) {
-			simpleResult.setStatus(200);
-			simpleResult.setMessage("OK");
-		}
-		return simpleResult;
-	}
-
-	private SimpleResult removeFavorites(HttpServletRequest request, String userId) {
-		ServletContext context = request.getServletContext();
-		FavoriteDAO favDao = (FavoriteDAO) context.getAttribute("FavoriteDAO");
-		SimpleResult simpleResult = new SimpleResult();
 		
-		int reporterId = Integer.parseInt(request.getParameter("reporter_id"));
-		if (favDao.removeFavorite(reporterId, userId)) {
-			simpleResult.setStatus(200);
-			simpleResult.setMessage("OK");
+		if ("add".equals(how) && favDao.addFavorite(reporterId, userId)) {
+			success = true;
+		} else if ("remove".equals(how) && favDao.removeFavorite(reporterId, userId)) {
+			success = true;
 		}
-		return simpleResult;
+		return new SimpleResult(success);
 	}
 }

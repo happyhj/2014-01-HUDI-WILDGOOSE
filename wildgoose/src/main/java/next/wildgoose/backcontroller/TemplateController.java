@@ -18,19 +18,19 @@ public class TemplateController implements BackController {
 	
 	@Override
 	public Result execute(HttpServletRequest request) {
-		Result result = readTemplate(request);
-		return result;
-	}
-	
-	private TemplateResult readTemplate(HttpServletRequest request) {
 		ServletContext context = request.getServletContext();
 		Uri uri = new Uri(request);
 		String templateFileName = uri.get(1);
 		LOGGER.debug("templateFileName: " + templateFileName);
 		String root = context.getRealPath(Constants.RESOURCE_ROOT);
 		String path = root +"html_templates/"+ templateFileName;
-		TemplateResult result = new TemplateResult();
+		Result result = readTemplate(request, path);
+		
+		return result;
+	}
 	
+	private TemplateResult readTemplate(HttpServletRequest request, String path) {
+		TemplateResult result = new TemplateResult();
 		StringBuilder htmlDocumentSB = ResourceLoader.load(path);
 		if (htmlDocumentSB != null) {
 			result.setStatus(200);

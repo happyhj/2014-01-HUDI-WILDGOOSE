@@ -15,7 +15,7 @@ public abstract class Result {
 		this.data = new HashMap<String, Object>();
 	}
 	protected Result(boolean success) {
-		if (success == true) {
+		if (success) {
 			this.status = 200;
 			this.message = "success";	
 		} else {
@@ -27,9 +27,6 @@ public abstract class Result {
 
 	public int getStatus() {
 		return status;
-	}
-	public void setStatus(String status) {
-		setStatus(Integer.parseInt(status));
 	}
 	public void setStatus(int status) {
 		this.status = status;
@@ -44,9 +41,6 @@ public abstract class Result {
 	
 	public Object getData(String key) {
 		return this.data.get(key);
-	}
-	public Map<String, Object> getData() {
-		return this.data;
 	}
 	protected void setData(String key, Object value) {
 		this.data.put(key, value);

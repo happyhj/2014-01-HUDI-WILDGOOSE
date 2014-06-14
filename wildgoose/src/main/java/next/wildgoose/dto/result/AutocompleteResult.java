@@ -1,7 +1,6 @@
 package next.wildgoose.dto.result;
 
 import java.util.List;
-import java.util.Map;
 
 import next.wildgoose.framework.Result;
 

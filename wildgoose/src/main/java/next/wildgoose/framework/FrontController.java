@@ -32,6 +32,7 @@ public class FrontController extends HttpServlet {
 			renewAuth(request, response);
 		}
 		
+		LOGGER.debug(request.getRequestURI());
 		BackController backController = getBackController(request);
 		Result resultData = backController.execute(request);
 
@@ -47,7 +48,7 @@ public class FrontController extends HttpServlet {
 
 		for (int i=0; i<cookies.length; i++) {
 			Cookie cookie = cookies[i];
-			if(cookie.getName().equals("JSESSIONID")) {
+			if("JSESSIONID".equals(cookie.getName())) {
 				jsessionid = cookie;
 			}
 		}
@@ -120,7 +121,7 @@ public class FrontController extends HttpServlet {
 					continue;
 				}
 				
-				if (subSchema.equals(uri.get(i)) == false) {
+				if (!subSchema.equals(uri.get(i))) {
 					break;
 				}
 				

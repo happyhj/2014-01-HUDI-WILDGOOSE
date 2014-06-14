@@ -1,7 +1,6 @@
 package next.wildgoose.dto.result;
 
 import java.util.List;
-import java.util.Map;
 
 import next.wildgoose.dto.Reporter;
 import next.wildgoose.framework.Result;
@@ -16,8 +15,8 @@ public class SearchResult extends Result {
 		return (List<Reporter>) super.getData("reporters");
 	}
 
-	public void setReporters(List<Reporter> Reporters) {
-		super.setData("reporters", Reporters);
+	public void setReporters(List<Reporter> reporters) {
+		super.setData("reporters", reporters);
 	}
 
 	public String getSearchQuery() {

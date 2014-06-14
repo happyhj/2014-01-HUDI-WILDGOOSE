@@ -7,11 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Uri {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Uri.class.getName());
 	private List<String> resources;
 	private boolean api = false;
 	
@@ -23,7 +19,6 @@ public class Uri {
 	
 	public Uri(String uri) {
 		this.resources = regularizedList(uri.split("/"));
-		LOGGER.debug("uri: " + this.toString());
 	}
 	
 	public String getPrimeResource() {
@@ -37,7 +32,7 @@ public class Uri {
 	private List<String> regularizedList(String[] uriArr) {
 		
 		List<String> splitedList = null;
-		if (uriArr[0] == "") {
+		if ("".equals(uriArr[0])) {
 			splitedList = new ArrayList<String>();
 			splitedList.add("");
 			return splitedList;

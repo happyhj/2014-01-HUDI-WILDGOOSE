@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import next.wildgoose.dao.ArticleDAO;
 import next.wildgoose.dao.FavoriteDAO;
 import next.wildgoose.dao.ReporterDAO;
-import next.wildgoose.dao.SignDAO;
 import next.wildgoose.dto.Article;
 import next.wildgoose.dto.Reporter;
 import next.wildgoose.dto.result.MeResult;

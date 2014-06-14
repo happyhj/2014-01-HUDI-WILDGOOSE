@@ -23,14 +23,14 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 	
 	private String encodingType;
 	private Map<String, String[]> parameters;
-	private String URI;
+	private String uri;
 
 	
 	public EncodingRequestWrapper(HttpServletRequest request, String encodingType) {
 		super(request);
 		this.encodingType = encodingType;
 		this.parameters = encodeParameters(super.getParameterMap());
-		this.URI = encodeURI (super.getRequestURI());
+		this.uri = encodeURI (super.getRequestURI());
 	}
 
 	private String encodeURI(String requestURI) {
@@ -115,7 +115,7 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 
 	@Override
 	public String getRequestURI() {
-		return this.URI;
+		return this.uri;
 	}
 
 }

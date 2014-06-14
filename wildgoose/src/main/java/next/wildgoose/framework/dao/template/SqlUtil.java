@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 public class SqlUtil {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SqlUtil.class.getName());
 	// database
+	private SqlUtil() {
+		
+	}
 	public static void closeConnection(final Connection conn) {
 		if (conn != null) {
 			try {

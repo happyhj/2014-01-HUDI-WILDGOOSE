@@ -9,7 +9,9 @@ import java.util.regex.Pattern;
 import com.google.gson.Gson;
 
 public class Utility {
-
+	private Utility() {
+		
+	}
 	public static String getDate(Date date, int addDate) {
 		DateFormat dateFormat = new SimpleDateFormat("MM-dd");
 		Calendar cal = Calendar.getInstance();
@@ -18,18 +20,20 @@ public class Utility {
 		return dateFormat.format(cal.getTime());
 	}
 	
-	public static boolean isURL(String URL) {
-		if (URL == null) {
+	public static boolean isURL(String url) {
+		if (url == null) {
 			return false;
 		}
 		String regex = "(?i)^(http://)?(www.)?[a-z0-9-_]+.[a-z]{2,3}(.[a-z]{2,3})?.*";
 
-		return Pattern.matches(regex, URL);
+		return Pattern.matches(regex, url);
 	}
 	
 	public static String toJsonString(Object obj) {
 		
-		if (obj == null) return null;
+		if (obj == null) {
+			return null;
+		}
 		
 		Gson gson = new Gson();
 		return gson.toJson(obj);

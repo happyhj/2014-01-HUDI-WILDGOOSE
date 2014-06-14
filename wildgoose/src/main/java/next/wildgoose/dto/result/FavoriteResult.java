@@ -15,7 +15,7 @@ public class FavoriteResult extends Result {
 	public List<Reporter> getFavorites() {
 		return (List<Reporter>) super.getData("reporterCards");
 	}
-	public void setFavorites(String string, List<Reporter> reporters) {
+	public void setFavorites(List<Reporter> reporters) {
 		super.setData("reporterCards", reporters);
 	}
 

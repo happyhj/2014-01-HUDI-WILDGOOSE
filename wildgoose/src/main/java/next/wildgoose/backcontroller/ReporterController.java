@@ -43,7 +43,7 @@ public class ReporterController implements BackController {
 		if (uri.get(2) == null) {
 			result = getReporterPage(request, reporterId);
 		} else if (uri.check(2, Constants.RESOURCE_STATISTICS)) {
-			result = getGraphData(request, uri, reporterId);
+			result = getGraphData(request, reporterId);
 		}
 
 		return result;
@@ -58,10 +58,10 @@ public class ReporterController implements BackController {
 		
 		ReporterResult reporterResult = new ReporterResult();
 		if (userId == null) {
-			reporterResult.setStatus("401");
+			reporterResult.setStatus(401);
 			reporterResult.setMessage(Constants.MSG_AUTH_NEED);
 		} else {
-			reporterResult.setStatus("200");
+			reporterResult.setStatus(200);
 			reporterResult.setMessage("OK");
 			List<Reporter> totalReporters = reporterDao.getRandomReporters(userId, howmany);
 			reporterResult.setReporters(totalReporters);
@@ -70,7 +70,7 @@ public class ReporterController implements BackController {
 		return reporterResult;
 	}
 	
-	private ReporterResult getGraphData(HttpServletRequest request, Uri uri, int reporterId) {
+	private ReporterResult getGraphData(HttpServletRequest request, int reporterId) {
 		
 		ReporterResult reporterResult = new ReporterResult();
 		ServletContext context = request.getServletContext();

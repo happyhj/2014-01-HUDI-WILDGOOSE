@@ -28,7 +28,7 @@ public class SearchController implements BackController {
 //		int startPage = (request.getParameter("start_page") != null)? Integer.parseInt(request.getParameter("start_page")) : -1;
 		int startItem = (request.getParameter("start_item") != null)? Integer.parseInt(request.getParameter("start_item")) : -1;
 		
-		SearchResult searchResult = checkQuery(request, searchQuery);
+		SearchResult searchResult = checkQuery(searchQuery);
 		// 결과 반환
 		// 에러 혹은 root인 경우 반환
 		if (searchResult != null) {
@@ -111,7 +111,7 @@ public class SearchController implements BackController {
 		return reporterDao.findReportersByType(type, searchQuery, start, howMany);
 	}
 	
-	private SearchResult checkQuery(HttpServletRequest request, String searchQuery) {
+	private SearchResult checkQuery(String searchQuery) {
 		SearchResult searchResult = null;
 		
 		if (searchQuery == null) {

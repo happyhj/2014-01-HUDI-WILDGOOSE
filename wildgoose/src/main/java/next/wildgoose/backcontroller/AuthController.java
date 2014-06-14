@@ -17,7 +17,7 @@ public abstract class AuthController implements BackController {
 	
 	public SimpleResult authenticate(HttpServletRequest request, String userId) {
 		SimpleResult sResult = null;
-		if (isValidUserId(request, userId) == false) {
+		if (isValidUserId(request, userId)) {
 			sResult = new SimpleResult();
 			sResult.setStatus(404);
 			sResult.setMessage(Constants.MSG_WRONG_ID);
