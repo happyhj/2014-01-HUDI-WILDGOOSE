@@ -18,6 +18,7 @@
 		init: function() {
 			this._articleMoreModule();
 			this._dragModule();
+			Fav.init();
 		},
 		
 		_articleMoreModule: function() {
@@ -44,7 +45,6 @@
 				tagName: "LI",
 				movedClassName : "moving"
 			});
-			Fav.init();
 		}
 	}
 		
