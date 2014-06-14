@@ -38,20 +38,17 @@ public class AccountController implements BackController {
 		if (uri.check(1, null)) {
 			if("POST".equals(method)){
 				// 체크하고 유효한 경우 가입
-				result = join(request);
-				/*
 				if(request.getParameter("check") == null){
-				
+					result = join(request);
 				} else {
 					result = withdraw(request);
 				}
-				*/
 			} else if("GET".equals(method)){
 				String email = request.getParameter("email");
 				result = usedEmail(request, email);
-			}/*else if("PUT".equals(method)){
+			} else if("PUT".equals(method)){
 				result = changePassword(request);
-			} */
+			} 
 		}
 		
 		LOGGER.debug("result: " + Utility.toJsonString(result));

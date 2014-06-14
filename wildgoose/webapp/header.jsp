@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <link type="text/css" rel="stylesheet" href="/stylesheet/modal.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/account.css" />
 <link rel="stylesheet" type="text/css" href="/CAGE/src/CAGE.ui.popup.css">
 <link type="text/css" rel="stylesheet" href="/stylesheet/header.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/header-account-popup.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/header-setting-popup.css" />
 <style>
 @font-face {
     font-family: "The-Noun-Project-UI";
@@ -104,7 +105,7 @@ li[class*='nav'] a  {
 	<c:otherwise>
 		<ul class="nav-global <c:if test="${ not empty requestScope.data.pageName }">
 		${ requestScope.data.pageName }</c:if>">
-			<li class="nav-global-search"><a href="/"><span class="text">Search</span></a></li>
+			<li class="nav-global-home"><a class="header-btn" href="/"><span class="text">Search</span></a></li>
 			<li class="nav-global-me"><a class="header-btn" id="me"><span class="text">Me</span></a></li>
 		</ul>
 		</div>

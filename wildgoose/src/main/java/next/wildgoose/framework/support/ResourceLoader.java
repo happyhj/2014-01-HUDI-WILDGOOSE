@@ -37,7 +37,10 @@ public class ResourceLoader {
 			} catch (IOException ioe) {
 				 LOGGER.debug(ioe.getMessage(), ioe);
 //				message = "can't read file";
-			}
+			} catch (NullPointerException ioe) {
+				 LOGGER.debug(ioe.getMessage(), ioe);
+//					message = "can't read file";
+				}
 		}
 		return sb;
 		
