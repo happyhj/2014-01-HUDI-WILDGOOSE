@@ -107,6 +107,7 @@ var values = {sourceEle : null, destEle : null};
 		function _myAuthorOrder(){
 			var ul = document.querySelector('.dashboard-left ul');
 			var child = ul.children;
+			if(localStorage.myAuthor == undefined) return;
 			var numLi = localStorage.myAuthor.split(" ");
 			numLi.length = numLi.length-1; // ""를 제거하기 위해서
 			
