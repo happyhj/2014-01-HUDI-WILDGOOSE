@@ -43,6 +43,10 @@
 					scrollingHandler: this._scrollingHandler.bind(this)
 				};
 				
+				this.status = {
+					exec: true
+				};
+				
 				// 더보기 버튼 클릭이벤트 설정
 				if (this.moreBtnEl != null) {
 					this.moreBtnEl.addEventListener("click", this.cache.exec, false);
@@ -53,13 +57,19 @@
 		},
 		
 		_exec: function(evt) {
-			// search
-			Ajax.GET({
-				"url": this.getURL(),
-				"success" : this._successHandler.bind(this),
-				"failure" : this.failure,
-				"error" : this.error
-			});
+			// 현재함수 사용 가능여부 확인
+			if (this.status.exec) {
+				// 사용 못하도록 방지				
+				this.status.exec = false;
+
+				// search
+				Ajax.GET({
+					"url": this.getURL(),
+					"success" : this._successHandler.bind(this),
+					"failure" : this.failure,
+					"error" : this.error
+				});
+			}
 		},
 		
 		_addPageEndEvent: function() {
@@ -93,6 +103,9 @@
 				
 				this._updateMetaData(dataArr.length);
 				this._updateUI();
+				
+				// 사용 가능하도록 설정 변경
+				this.status.exec = true;
 				
 			}
 		},

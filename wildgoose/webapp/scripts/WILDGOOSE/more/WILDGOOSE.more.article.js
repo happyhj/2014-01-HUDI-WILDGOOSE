@@ -23,13 +23,19 @@
 		var viewportHeight = window.innerHeight;
 		var footerHeight = parseInt(window.getComputedStyle(footer, null).height);
 		var footerTopPos = footer.getBoundingClientRect().bottom - footerHeight;
-		var condition = viewportHeight - 15 > footerTopPos; 
-//		var condition = viewportHeight - 30 > footerTopPos;
+		
+		/*
+		 *  mobile 상태 확인하여 scrolling 조건 변경
+		 *  아래처럼 조건을 바꾸는 이유는 모바일에서 성능문제때문.
+		 */
+		var condition = (User.isMobile() == true)? viewportHeight > footerTopPos - 100 : viewportHeight > footerTopPos; 
 		
 		return condition;
 	};
 	
 	ArticleMore.prototype.getMoldedData = function(data, templateCompiler, template) {
+		var datetime = data.datetime;
+		data.datetime = datetime.substring(0, datetime.length-11);
 		var className = "card card-reporter";	
 		var newLi = '<li class="' + className + '">' + templateCompiler(data, template) + '</li>';
 		
@@ -38,7 +44,7 @@
 	
 	ArticleMore.prototype.getURL = function() {
 		var userId = User.getId();
-		var uri = "/api/v1/me/" + userId + "?start_item=" + this.metadata.curNum + "&how_many=" + this.requestNum;
+		var uri = "/api/v1/me/" + userId + "/timeline?start_item=" + this.metadata.curNum + "&how_many=" + this.requestNum;
 		console.log(uri);
 		return uri;
 	};
