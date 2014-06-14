@@ -96,7 +96,7 @@ public class AccountController implements BackController {
 				parameterMap.put(name, value);
 			}
 		} catch (IOException e) {
-			LOGGER.debug(e.getMessage());
+			LOGGER.error(e.getMessage(), e);
 		}
 		return parameterMap;
 	}
@@ -176,15 +176,13 @@ public class AccountController implements BackController {
 		// 기본 세팅 fail
 		accountResult.setMessage("adding user account failed");
 		
-		if (isJoinable(signDao, email) == true && isHashedPassword(password) == true) {
-			if (signDao.joinAccount(email, password) == true) {
-				// 가입 성공
-				accountResult.setStatus(200);
-				accountResult.setMessage("adding user account succeed");
-				
-				HttpSession session = request.getSession();
-				session.setAttribute("userId", email);
-			}
+		if (isJoinable(signDao, email) && isHashedPassword(password) && signDao.joinAccount(email, password) == true) {
+			// 가입 성공
+			accountResult.setStatus(200);
+			accountResult.setMessage("adding user account succeed");
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("userId", email);
 		}
 		return accountResult;
 	}
@@ -204,19 +202,10 @@ public class AccountController implements BackController {
 	}
 
 	private boolean isHashedPassword(String password) {
-		if (password.length() == 64) {
-			return true;
-		}
-		else return false;
+		return (password.length() == 64);
 	}
 	
 	private boolean isFilled(String data) {
-		
-		if (data != null && data.length() > 0) {
-			return true;
-		}
-		
-		return false;
-		
+		return (data != null && data.length() > 0);
 	}
 }

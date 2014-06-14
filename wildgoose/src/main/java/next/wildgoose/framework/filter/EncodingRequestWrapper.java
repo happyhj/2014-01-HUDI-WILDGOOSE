@@ -39,7 +39,8 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 		try {
 			encodedURI = URLDecoder.decode(requestURI, this.encodingType);
 		} catch (UnsupportedEncodingException e) {
-			LOGGER.debug("Encoding Wrapper Error" + e.getMessage());
+			LOGGER.error("Encoding Wrapper Error");
+			LOGGER.error(e.getMessage(), e);
 		}
 		
 		return encodedURI;
@@ -79,7 +80,8 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 		try {
 			encoded = new String(original.getBytes("8859_1"), encodingType);
 		} catch (UnsupportedEncodingException e) {
-			LOGGER.debug("Utility error" + e.getMessage());
+			LOGGER.error("Utility error");
+			LOGGER.error(e.getMessage(), e);
 		}
 
 		return encoded;

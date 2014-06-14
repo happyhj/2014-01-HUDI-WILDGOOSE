@@ -32,7 +32,9 @@ public class WebListener implements ServletContextListener {
 	}
 	
 	public void contextDestroyed(ServletContextEvent e) {
-		
+		/*
+		 * when webapp is finished, this function executed.
+		 */
 	}
 
 }

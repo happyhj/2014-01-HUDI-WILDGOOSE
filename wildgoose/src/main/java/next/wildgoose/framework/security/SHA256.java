@@ -3,10 +3,14 @@ package next.wildgoose.framework.security;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SHA256 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(SHA256.class.getName());
 	public static String testSHA256(String str){
 		String SHA = ""; 
-		try{
+		try {
 			MessageDigest sh = MessageDigest.getInstance("SHA-256"); 
 			sh.update(str.getBytes()); 
 			byte byteData[] = sh.digest();
@@ -16,8 +20,8 @@ public class SHA256 {
 			}
 			SHA = sb.toString();
 			
-		}catch(NoSuchAlgorithmException e){
-			e.printStackTrace(); 
+		} catch(NoSuchAlgorithmException e){
+			LOGGER.error(e.getMessage(), e);
 			SHA = null; 
 		}
 		return SHA;

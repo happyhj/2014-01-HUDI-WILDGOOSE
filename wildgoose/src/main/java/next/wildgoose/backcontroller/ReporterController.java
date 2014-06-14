@@ -42,8 +42,7 @@ public class ReporterController implements BackController {
 		int reporterId = Integer.parseInt(uri.get(1));
 		if (uri.get(2) == null) {
 			result = getReporterPage(request, reporterId);
-		}
-		else if (uri.check(2, Constants.RESOURCE_STATISTICS)) {
+		} else if (uri.check(2, Constants.RESOURCE_STATISTICS)) {
 			result = getGraphData(request, uri, reporterId);
 		}
 
@@ -86,14 +85,12 @@ public class ReporterController implements BackController {
 				reporterResult.setStatus(200);
 				numberOfArticlesList = numberOfArticlesDao.findNumberOfArticlesByDay(reporterId);
 				reporterResult.setNumberOfArticles(numberOfArticlesList);
-			}
-			else if ("section".equals(by)){
+			} else if ("section".equals(by)){
 				reporterResult.setStatus(200);
 				numberOfArticlesList = numberOfArticlesDao.findNumberOfArticlesBySection(reporterId);
 				reporterResult.setNumberOfArticles(numberOfArticlesList);
 			}
-		}
-		else if ("stat_points".equals(by)){
+		} else if ("stat_points".equals(by)){
 			DummyData dummy = (DummyData) context.getAttribute("DummyData");
 			StatPoints statPoints = dummy.getStatPoints(reporterId);
 			reporterResult.setStatus(200);

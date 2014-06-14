@@ -35,8 +35,7 @@ public class JdbcTemplate {
 				result = false;
 				psmt.execute();
 				result = true;
-			}
-			else {
+			} else {
 				rs = psmt.executeQuery();
 				result = rm.mapRow(rs);
 			}
