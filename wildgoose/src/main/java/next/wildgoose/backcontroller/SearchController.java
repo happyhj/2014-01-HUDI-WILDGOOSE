@@ -112,9 +112,10 @@ public class SearchController implements BackController {
 	}
 	
 	private SearchResult checkQuery(HttpServletRequest request, String searchQuery) {
-		SearchResult searchResult = new SearchResult();
+		SearchResult searchResult = null;
 		
 		if (searchQuery == null) {
+			searchResult = new SearchResult();
 			searchResult.setStatus(200);
 			searchResult.setMessage("OK");
 			return searchResult;
@@ -124,9 +125,10 @@ public class SearchController implements BackController {
 		searchQuery.replaceAll("%", "");
 		String trimmedQuery = searchQuery.trim();
 		if ("".equals(trimmedQuery)) {
+			searchResult = new SearchResult();
 			searchResult.setMessage(Constants.MSG_WRONG_QUERY);
 			return searchResult;
 		}
-		return searchResult;
+		return null;
 	}
 }

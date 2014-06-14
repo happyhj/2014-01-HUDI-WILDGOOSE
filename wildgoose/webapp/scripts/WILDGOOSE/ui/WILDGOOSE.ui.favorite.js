@@ -38,11 +38,9 @@
 			if (onoff == true) {
 				Dom.addClass(star, "on");
 				Dom.removeClass(star, "off");
-				Dom.removeClass(card, "blur");
 			} else if (onoff == false) {
 				Dom.removeClass(star, "on");
 				Dom.addClass(star, "off");
-				Dom.addClass(card, "blur");
 			}
 		},
 
@@ -129,6 +127,10 @@
 		},
 
 		addCards: function(conatiner) {
+			var userId = User.getId();
+			if (userId == "" || userId == undefined) {
+				return;
+			}
 			var stars = conatiner.querySelectorAll(".star");
 			Array.prototype.forEach.call(stars, function(value){
 				var star = new Star(value);
