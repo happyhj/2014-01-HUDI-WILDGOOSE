@@ -24,12 +24,12 @@ public class TemplateController implements BackController {
 		LOGGER.debug("templateFileName: " + templateFileName);
 		String root = context.getRealPath(Constants.RESOURCE_ROOT);
 		String path = root +"html_templates/"+ templateFileName;
-		Result result = readTemplate(request, path);
+		Result result = readTemplate(path);
 		
 		return result;
 	}
 	
-	private TemplateResult readTemplate(HttpServletRequest request, String path) {
+	private TemplateResult readTemplate(String path) {
 		TemplateResult result = new TemplateResult();
 		StringBuilder htmlDocumentSB = ResourceLoader.load(path);
 		if (htmlDocumentSB != null) {

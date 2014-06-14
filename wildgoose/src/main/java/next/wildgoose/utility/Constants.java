@@ -1,9 +1,6 @@
 package next.wildgoose.utility;
 
 public class Constants {
-	private Constants() {
-		
-	}
 	public static final String HEADER_CON_TYPE_JSON = "application/json; charset=UTF-8";
 	public static final String CHAR_ENCODING = "UTF-8";
 
@@ -29,4 +26,7 @@ public class Constants {
 	public static final int NUM_OF_ARTICLES = 10;
 	public static final int SESSION_EXPIRING_TIME = 3 * 24 * 60 * 60;
 	
+	private Constants() {
+		
+	}
 }
