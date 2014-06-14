@@ -163,6 +163,7 @@ var values = {sourceEle : null, destEle : null};
 		function _myAuthorOrder(){
 			var ul = document.querySelector('.dashboard-left ul');
 			var child = ul.children;
+			if(localStorage.myAuthor == undefined) return;
 			var numLi = localStorage.myAuthor.split(" ");
 			numLi.length = numLi.length-1; // ""를 제거하기 위해서
 			
@@ -226,11 +227,9 @@ var values = {sourceEle : null, destEle : null};
 			if (onoff == true) {
 				Dom.addClass(star, "on");
 				Dom.removeClass(star, "off");
-				Dom.removeClass(card, "blur");
 			} else if (onoff == false) {
 				Dom.removeClass(star, "on");
 				Dom.addClass(star, "off");
-				Dom.addClass(card, "blur");
 			}
 		},
 
@@ -317,6 +316,10 @@ var values = {sourceEle : null, destEle : null};
 		},
 
 		addCards: function(conatiner) {
+			var userId = User.getId();
+			if (userId == "" || userId == undefined) {
+				return;
+			}
 			var stars = conatiner.querySelectorAll(".star");
 			Array.prototype.forEach.call(stars, function(value){
 				var star = new Star(value);
@@ -1457,7 +1460,7 @@ var values = {sourceEle : null, destEle : null};
 			this.joinBtn = document.querySelector("#join");
 			
 			// 버튼에 가입창을 연결시킨다
-			this.template = Template.get({"url":"/api/v1/templates/account.html"});
+			this.template = Template.get({"url":"/api/v1/templates/join.html"});
 			
 			this.joinPopup = new Popup({
 				element: this.joinBtn,
@@ -2079,8 +2082,8 @@ var values = {sourceEle : null, destEle : null};
 		var viewportHeight = window.innerHeight;
 		var footerHeight = parseInt(window.getComputedStyle(footer, null).height);
 		var footerTopPos = footer.getBoundingClientRect().bottom - footerHeight;
-//		var condition = viewportHeight - 15 > footerTopPos; 
-		var condition = viewportHeight - 30 > footerTopPos;
+		var condition = viewportHeight - 15 > footerTopPos; 
+//		var condition = viewportHeight - 30 > footerTopPos;
 		
 		return condition;
 	};
@@ -2094,7 +2097,9 @@ var values = {sourceEle : null, destEle : null};
 	
 	ArticleMore.prototype.getURL = function() {
 		var userId = User.getId();
-		return "/api/v1/me/" + userId + "?start_item=" + this.metadata.curNum + "&how_many=" + this.requestNum;
+		var uri = "/api/v1/me/" + userId + "?start_item=" + this.metadata.curNum + "&how_many=" + this.requestNum;
+		console.log(uri);
+		return uri;
 	};
 	
 	ArticleMore.prototype.success = function(responseObj) {
