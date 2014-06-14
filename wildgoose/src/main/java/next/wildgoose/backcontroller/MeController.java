@@ -18,6 +18,7 @@ import next.wildgoose.dto.result.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
 import next.wildgoose.framework.utility.Uri;
+import next.wildgoose.framework.utility.Utility;
 import next.wildgoose.utility.Constants;
 
 import org.slf4j.Logger;
@@ -56,16 +57,41 @@ public class MeController implements BackController {
 		int howMany = (request.getParameter("how_many") != null)? Integer.parseInt(request.getParameter("how_many")) : Constants.NUM_OF_ARTICLES;
 		LOGGER.debug("startItem: " + startItem + ", howMany: " + howMany);
 		
-		return getMe(request, userId, startItem, howMany);
+		
+		if (uri.check(2, null)) {
+			result = getMe(request, userId, startItem, howMany);
+		}
+		else if (uri.check(2, "timeline")) {
+			result = getArticlesForTimeline(request, userId, startItem, howMany);
+		}
+		
+		
+		
+		return result;
 	}
 	
+	private Result getArticlesForTimeline(HttpServletRequest request, String userId, int start, int howMany) {
+		ServletContext context = request.getServletContext();
+
+		MeResult meResult = new MeResult();
+		
+		ArticleDAO articleDao =  (ArticleDAO) context.getAttribute("ArticleDAO");
+		List<Article> articles = articleDao.findArticlesByFavorite(userId, start, howMany);
+		
+		meResult.setStatus(200);
+		meResult.setMessage("success");
+		meResult.setArticles("articles", articles);
+		
+		LOGGER.debug("articles: " + Utility.toJsonString(articles));
+		
+		return meResult;
+	}
+
 	private Result getMe(HttpServletRequest request, String userId, int start, int howMany) {
 		ServletContext context = request.getServletContext();
 
 		MeResult meResult = new MeResult();
 		meResult.setPageName("me");
-		
-		
 		
 		ArticleDAO articleDao =  (ArticleDAO) context.getAttribute("ArticleDAO");
 		List<Article> articles = articleDao.findArticlesByFavorite(userId, start, howMany);
@@ -85,6 +111,9 @@ public class MeController implements BackController {
 		meResult.setRecommands("recommands", recommands);
 		return meResult;
 	}
+	
+
+	
 
 	private boolean isValidUserId(HttpServletRequest request, String userId) {
 		ServletContext context = request.getServletContext();
