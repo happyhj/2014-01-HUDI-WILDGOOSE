@@ -111,10 +111,7 @@ public class FrontController extends HttpServlet {
 		while (keySchema == null && schemaIr.hasNext()) {
 			Uri schema = schemaIr.next();
 			if (schema == null) {
-				return null;
-			}
-			if (schema.size() != uri.size()) {
-				return null;
+				continue;
 			}
 			for (int i=schema.size()-1; i>=0; --i) {
 				String subSchema = schema.get(i);
@@ -124,7 +121,7 @@ public class FrontController extends HttpServlet {
 				}
 				
 				if (subSchema.equals(uri.get(i)) == false) {
-					return null;
+					break;
 				}
 				
 				keySchema = schema;
