@@ -116,9 +116,7 @@ li[class*='nav'] a  {
 		</div>
 		<div class="topBar-right-nav">
 		<ul class="nav">
-			<c:if test="${ initParam.debuggerMode eq 'on' }">
-				<span id ="userId" class="hidden">${sessionScope.userId}</span>
-			</c:if>
+			<span id ="userId" class="hidden">${sessionScope.userId}</span>
 			<li class="nav-login hidden"><a class="header-btn" id="login"><span class="text">로그인</span></a></li>
 			<li class="nav-join hidden"><a class="header-btn" id="join"><span class="text">가입</span></a></li>
 			<li class="nav-logout"><a class="header-btn" id="logout"><span class="text">로그아웃</span></a></li>
