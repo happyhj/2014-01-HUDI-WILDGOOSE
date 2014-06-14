@@ -158,6 +158,7 @@
 							<jsSourceFiles>					
 								<jsSourceFile>user/WILDGOOSE.user.js</jsSourceFile>
 								
+								<jsSourceFile>ui/WILDGOOSE.drag.js</jsSourceFile>
 								<jsSourceFile>ui/WILDGOOSE.ui.favorite.js</jsSourceFile>
 								<jsSourceFile>ui/WILDGOOSE.ui.graph.js</jsSourceFile>
 								<jsSourceFile>validation/WILDGOOSE.validator.js</jsSourceFile>
@@ -165,16 +166,18 @@
 								<jsSourceFile>account/WILDGOOSE.account.super_type.js</jsSourceFile>
 								<jsSourceFile>account/WILDGOOSE.account.change.pw.js</jsSourceFile>
 								<jsSourceFile>account/WILDGOOSE.account.join.js</jsSourceFile>
-								<jsSourceFile>account/WILDGOOSE.account.logout.js</jsSourceFile>
 								<jsSourceFile>account/WILDGOOSE.account.login.js</jsSourceFile>
+								<jsSourceFile>account/WILDGOOSE.account.logout.js</jsSourceFile>
 								<jsSourceFile>account/WILDGOOSE.account.withdraw.js</jsSourceFile>
 								
-								<jsSourceFile>modal/WILDGOOSE.modal.change.pw.js</jsSourceFile>
 								<jsSourceFile>modal/WILDGOOSE.modal.join.js</jsSourceFile>
 								<jsSourceFile>modal/WILDGOOSE.modal.login.js</jsSourceFile>
-								<jsSourceFile>modal/WILDGOOSE.modal.withdraw.js</jsSourceFile>
+								<jsSourceFile>modal/WILDGOOSE.modal.setting.js</jsSourceFile>
 								
-								<jsSourceFile>search/WILDGOOSE.search.more.js</jsSourceFile>
+								<jsSourceFile>more/WILDGOOSE.more.super_type.js</jsSourceFile>
+								<jsSourceFile>more/WILDGOOSE.more.article.js</jsSourceFile>
+								<jsSourceFile>more/WILDGOOSE.more.search.js</jsSourceFile>
+
 								<jsSourceFile>search/WILDGOOSE.search.auto_complement.js</jsSourceFile>
 								<jsSourceFile>search/WILDGOOSE.search.submit.js</jsSourceFile>
 								<jsSourceFile>search/WILDGOOSE.search.js</jsSourceFile>
@@ -243,7 +246,7 @@
 							<jsSourceFiles>
 								<jsSourceFile>APP.page.header.js</jsSourceFile>
 								<jsSourceFile>APP.page.favorite.js</jsSourceFile>
-								<jsSourceFile>APP.page.mypage.js</jsSourceFile>
+								<jsSourceFile>APP.page.me.js</jsSourceFile>
 								<jsSourceFile>APP.page.reporter.js</jsSourceFile>
 								<jsSourceFile>APP.page.search.js</jsSourceFile>
 							</jsSourceFiles>

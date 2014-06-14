@@ -54,7 +54,111 @@
 	} else {
 		window.WILDGOOSE = WILDGOOSE;
 	}    	
-})();(function() {
+})();/**
+ * 외부에서는 WILDGOOSE.drag.exe(args)로 드래스 함수에 접근할 수 있다.
+ * 전달해야 하는 인자 args는 dictionary로 인자는 3개이
+ * 
+ * 1. target: 드래그 되어야 하는 DOM들을 담고있는 DOM 		ex.ul
+ * 2. tagName: 드래가 되는 DOM의 태그이름 				ex."LI"(태그이름은 모두 대문자임을 주의)
+ * 3. movedClassName: 드래그 중인 DOM의 클래스명. 드래그 중의 CSS를 위한 것. 	ex. 드래그 중인 DOM은 투명도를 조절 함  
+ * 
+ * */
+
+(function(window){
+
+'use strict';
+var document = window.document;
+var console = window.console;
+
+var WILDGOOSE = window.WILDGOOSE || {};
+WILDGOOSE.drag = WILDGOOSE.drag || {};
+	
+var values = {sourceEle : null, destEle : null};
+
+		function _dragStart(e){
+			var tar = e.target;
+			tar.classList.add(values.movedClassName);
+			
+			e.dataTransfer.effectAllowed = 'move';
+			if(tar.tagName == values.tagName){
+				values.sourceEle = tar;
+			}
+		}
+		
+		function _dragOver(e){
+			if(e.preventDefault){
+				e.preventDefault();
+			}
+			e.dataTransfer.dropEffect = 'move'; //cursor 모양
+			
+			return false;
+		}
+		
+		function _drop(e){
+			var tar = e.target;
+			if(e.stopPropagation){
+				e.stopPropagation(); //browser redirecting 방지
+			}
+			
+			while(true){
+				if(tar.tagName == values.tagName){
+					values.destEle = tar;
+					break;
+				}
+				tar = tar.parentNode;
+			}
+			
+			return false;
+		}
+		
+		function _dragEnd(e){
+			e.preventDefault();
+			var tar = e.target;
+			if(tar.className.indexOf(values.movedClassName) != -1){
+				tar.classList.remove(values.movedClassName);
+			}
+			
+			if(values.destEle != null &&values.sourceEle != null){
+				values.destEle.insertAdjacentElement('afterend',values.sourceEle);
+			}
+		}
+		
+		function _addEvent(target){
+			var children = target.children;
+			[].forEach.call(children, function(child){
+				child.draggable = "true";
+				child.addEventListener('dragstart', function(e){ _dragStart(e);}, false);
+				child.addEventListener('dragover', function(e){ _dragOver(e);}, false);
+				child.addEventListener('drop', function(e){ _drop(e);}, false);
+				child.addEventListener('dragend', function(e){ _dragEnd(e);}, false);
+//				child.style.transition = "all 2s";
+//				child.style.WebkitTransition = "all 2s";
+				
+			});
+		}
+		
+		function execute(args){
+			values.target = args.body;
+			values.tagName = args.tagName;
+			values.movedClassName = args.movedClassName;
+			
+			_addEvent(args.body);
+		}
+
+		
+		WILDGOOSE.drag = {
+			exe : execute
+		};
+
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = WILDGOOSE;
+		// browser export
+	} else {
+		window.WILDGOOSE = WILDGOOSE;
+	}	   	
+
+}(this));(function() {
 	'use strict';
 	var document = window.document;
 	var console = window.console;
@@ -127,7 +231,7 @@
 					"url" : url,
 					"success" : function(responseObj) {
 						this.toggleStar(true);
-					}.bind(Favorite),
+					}.bind(this),
 					"failure" : function(responseObj) {
 						console.log("Failure!");
 					},
@@ -183,16 +287,16 @@
 			}
 			this.getStarListFromServer();
 		},
-		addCards: function(cards) {
-			for (var i =0; i<cards.length; i++) {
-				var card = cards[i];
-				var star = card.querySelector(".star");
-				star = new Star(star);
+
+		addCards: function(conatiner) {
+			var stars = conatiner.querySelectorAll(".star");
+			Array.prototype.forEach.call(stars, function(value){
+				var star = new Star(value);
 				if (this.userFavorites.indexOf(star.reporterId) >= 0) {
 					star.toggleStar(true);
 				}
-				this.starList.push(star);
-			}
+				
+			}.bind(this));
 		},
 		updateStars: function(stars) {
 			for (var i = 0; i < stars.length; i++) {
@@ -1212,34 +1316,6 @@
 	var console = window.console;
 	var WILDGOOSE = window.WILDGOOSE || {};
 	WILDGOOSE.account = WILDGOOSE.account || {};
-	WILDGOOSE.account.logout = WILDGOOSE.account.logout || {};
-
-	// 의존성 주입.
-	var Account = WILDGOOSE.account.super_type;
-	
-	function Logout(args) {
-		Account.call(this, args);
-	};
-	
-	Logout.prototype = new Account();
-	Logout.prototype.constructor = Logout;
-
-	WILDGOOSE.account.logout = Logout;
-	
-	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
-	if (typeof module !== 'undefined' && module.exports) {
-		module.exports = WILDGOOSE;
-		// browser export
-	} else {
-		window.WILDGOOSE = WILDGOOSE;
-	}    	
-
-}(this));(function(window) {
-	'use strict';
-	var document = window.document;
-	var console = window.console;
-	var WILDGOOSE = window.WILDGOOSE || {};
-	WILDGOOSE.account = WILDGOOSE.account || {};
 	WILDGOOSE.account.login = WILDGOOSE.account.login || {};
 
 	// 의존성 주입.
@@ -1260,6 +1336,34 @@
 	
 	
 	WILDGOOSE.account.login = Login;
+	
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = WILDGOOSE;
+		// browser export
+	} else {
+		window.WILDGOOSE = WILDGOOSE;
+	}    	
+
+}(this));(function(window) {
+	'use strict';
+	var document = window.document;
+	var console = window.console;
+	var WILDGOOSE = window.WILDGOOSE || {};
+	WILDGOOSE.account = WILDGOOSE.account || {};
+	WILDGOOSE.account.logout = WILDGOOSE.account.logout || {};
+
+	// 의존성 주입.
+	var Account = WILDGOOSE.account.super_type;
+	
+	function Logout(args) {
+		Account.call(this, args);
+	};
+	
+	Logout.prototype = new Account();
+	Logout.prototype.constructor = Logout;
+
+	WILDGOOSE.account.logout = Logout;
 	
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
 	if (typeof module !== 'undefined' && module.exports) {
@@ -1314,7 +1418,7 @@
 	// 의존성 선언
 	var Ajax = CAGE.ajax; 
 	var Template = CAGE.util.template;
-	var Popup = CAGE.ui.popup;
+	var Popup = CAGE.ui.popup.super_type;
 //	var JoinAccount = WILDGOOSE.account.join;
 	var Join = WILDGOOSE.account.join;
 
@@ -1327,7 +1431,7 @@
 			// 버튼에 가입창을 연결시킨다
 			this.template = Template.get({"url":"/api/v1/templates/account.html"});
 			
-			this.joinPopup = new Popup.popup({
+			this.joinPopup = new Popup({
 				element: this.joinBtn,
 				template: this.template
 			});
@@ -1411,7 +1515,7 @@
 	// 의존성 선언
 	var Ajax = CAGE.ajax; 
 	var Template = CAGE.util.template;
-	var Popup = CAGE.ui.popup;
+	var Popup = CAGE.ui.popup.super_type;
 	
 	var TemplateUtil = CAGE.util.template;
 //	var LoginAccount = WILDGOOSE.account.login;
@@ -1424,7 +1528,7 @@
 			this.loginBtn = document.querySelector("#login");
 			this.template = Template.get({"url":"/api/v1/templates/login.html"});
 			
-			this.loginPopup = new Popup.popup({
+			this.loginPopup = new Popup({
 				element: this.loginBtn,
 				template: this.template
 			});
@@ -1512,6 +1616,466 @@
 	}
 	
 }(this));
+(function(window) {
+	'use strict';
+	var document = window.document;
+	var console = window.console;
+	var WILDGOOSE = window.WILDGOOSE || {};
+	WILDGOOSE.modal = WILDGOOSE.modal || {};
+	WILDGOOSE.modal.setting = WILDGOOSE.modal.setting || {};
+
+	// 의존성 선언
+	var Ajax = CAGE.ajax; 
+	var Popup = CAGE.ui.popup.super_type;
+	var Template = CAGE.util.template;
+	
+	var Withdraw = WILDGOOSE.account.withdraw;
+	var ChangePw = WILDGOOSE.account.change.pw;
+	var User = WILDGOOSE.user;
+	
+	var SettingModal = {
+		init: function() {
+			this.button = {
+				setting: document.querySelector("#setting"),
+				withdraw: null,
+				changePw: null
+			};
+		
+			this.cache = {
+				settingHandler: this._settingHandler.bind(this),
+				submitHandler: this._submitHandler.bind(this),
+				openPopup: this._openPopup.bind(this),
+				closePopup: this._closePopup.bind(this),
+				withdraw: this._withdraw.bind(this),
+				changePw: this._changePw.bind(this)
+			};
+			
+			this.template = {
+				setting: Template.get({"url":"/api/v1/templates/setting.html"}),
+				withdraw: null,
+				changePw: null
+			};
+			
+			this.account = {
+				withdraw: null,
+				changePw: null
+			}
+			
+			this.settingPopup = new Popup({
+				element: this.button.setting,
+				template: this.template.setting
+			});
+			
+			this.settingPopup.afteropen.add(this.cache.openPopup);
+			this.settingPopup.afterclose.add(this.cache.closePopup);
+		},		
+		
+		_openPopup: function() {
+			this._addClickEvent();
+			this._getTemplates();
+		},
+		
+		_closePopup: function() {
+			this._removeClickEvent();
+			this.settingPopup.afterclose.add(function() {location.reload();});
+			this.settingPopup.close();
+		},
+		
+		_settingHandler: function(evt) {
+			var targetEl = evt.target;
+			console.log(targetEl);
+			this._selectUI(targetEl.name);
+		},
+		
+		_addClickEvent: function() {
+			this.button.withdraw = document.querySelector("#withdraw");
+			this.button.changePw = document.querySelector("#changePw");
+			
+			this.button.withdraw.addEventListener("click", this.cache.settingHandler, false);
+			this.button.changePw.addEventListener("click", this.cache.settingHandler, false);
+		},
+		
+		_removeClickEvent: function() {
+			this.button.withdraw.removeEventListener("click", this.cache.settingHandler, false);
+			this.button.changePw.removeEventListener("click", this.cache.settingHandler, false);
+		},
+		
+		_selectUI: function(name) {
+			var template = this.template[name];
+			var popupContent = document.querySelector(".popup-content");
+			if (template !== null) {
+				popupContent.innerHTML = template;
+				// account init				
+				this._accountInit(name);
+			}
+		},
+		
+		
+		_accountInit: function(name) {
+			// init
+			this.cache[name]();
+			
+			// afterclose
+			this.settingPopup.afterclose.add(this.account[name].stop.bind(this.account[name]));
+			
+			// submitEl init
+			var submitEl = document.querySelector(".form-container button[name=submit]");
+			submitEl.addEventListener("click", this.cache.submitHandler, false);
+			
+			
+			// focus first input element
+			var partialSelector = (name == "changePw")?"oldP":"p";
+			var firstInputEl = document.querySelector(".form-container input[name=" + partialSelector + "assword]");
+			firstInputEl.focus();
+		},
+
+		_submitHandler: function(evt) {
+			var targetEl = evt.target
+			var name = targetEl.form.name;
+			
+			this.account[name].exec(this.cache.closePopup);
+		},
+		
+		_withdraw: function() {
+			this.account.withdraw = new Withdraw({
+				method: "POST",
+				url: "/api/v1/accounts/",
+				form: ".form-container",
+				rule: {
+					password: {
+						type: "password"
+					},
+					confirm: {
+						type: "confirm",
+						target: "password"
+					}
+				},
+				randNum: User.getRandomNumber()
+			});
+		},
+		
+		_changePw: function() {
+			this.account.changePw = new ChangePw({
+				method: "PUT",
+				url: "/api/v1/accounts/",
+				form: ".form-container",
+				rule: {
+					oldPassword: {
+						type: "password",
+						extend: {
+							exist: [ function(inputEl, callback) {
+								Ajax.POST({
+									isAsync: false,
+									url: "/api/v1/session",
+									success: function(responseObj) {
+										console.log("Success!");
+										var validity = true;
+										var isProgressing = true;
+										callback(validity, isProgressing);
+									},
+									failure: function(responseObj) {
+										console.log("Failure!");
+										var validity = false;
+										var isProgressing = true;
+										callback(validity, isProgressing);
+									},
+									error: function(responseObj) {
+										console.log("Error!")
+									},
+									data: (function() {
+										var email = User.getId();
+										var password = SHA256(SHA256(escape(inputEl.value)) + User.getRandomNumber());
+										return "email=" + email + "&password=" + password;
+									}())
+								});
+							}, "비밀번호가 다릅니다."]
+						}
+					},
+					newPassword:{
+						type: "password"
+					},
+					newConfirm: {
+						type: "confirm",
+						target: "newPassword"
+					}
+				},
+				randNum: User.getRandomNumber()
+			});
+		},
+		
+		
+		_getTemplates: function() {
+			if (this.template.withdraw === null) {
+				var template = Template.get({"url":"/api/v1/templates/withdraw.html"});
+				var compiler = Template.getCompiler(template);
+				this.template.withdraw = compiler({
+					"email": User.getId()
+				}, template);
+			}
+			
+			if (this.template.changePw === null) {				
+				var template = Template.get({"url":"/api/v1/templates/changePassword.html"});
+				var compiler = Template.getCompiler(template);
+				this.template.changePw = compiler({
+					"email": User.getId()
+				}, template);
+			}
+		}
+	}
+	
+
+	WILDGOOSE.modal.setting = SettingModal;
+	
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = WILDGOOSE;
+		// browser export
+	} else {
+		window.WILDGOOSE = WILDGOOSE;
+	}
+}(this));
+(function() {	
+	// 자주 사용하는 글로벌 객체 레퍼런스 확보
+	var document = window.document;
+	var console = window.console;
+
+	// 사용할 네임 스페이스 확보	
+	var WILDGOOSE = window.WILDGOOSE || {};
+	WILDGOOSE.more = WILDGOOSE.more || {};
+	WILDGOOSE.more.super_type = WILDGOOSE.more.super_type || {};
+
+	// 의존성 주입
+	var Ajax = CAGE.ajax;
+	var EventEmitter = CAGE.event.emitter;
+	var Template = CAGE.util.template;
+	var User = WILDGOOSE.user;
+	
+	function More (args) {
+		this._more(args);
+	};
+	
+	More.prototype = {
+		constructor: "More",
+		_more: function(args) {
+			if (args !== undefined) {
+				this.presuccess = new EventEmitter("presuccess");
+				this.postsuccess = new EventEmitter("postsuccess")
+				
+				this.moreBtnEl = args.more.button;
+				this.container = args.container;
+				this.requestNum = args.requestNum;
+				this.template = args.template;
+				this.templateCompiler = Template.getCompiler();
+				
+				this.metadata = {
+					curNum : args.more.curNum,
+					totalNum: args.more.totalNum,
+					updatedNum: 0,
+					keyword: args.keyword
+				};
+				
+				this.cache = {
+					exec: this._exec.bind(this),
+					scrollingHandler: this._scrollingHandler.bind(this)
+				};
+				
+				// 더보기 버튼 클릭이벤트 설정
+				if (this.moreBtnEl != null) {
+					this.moreBtnEl.addEventListener("click", this.cache.exec, false);
+					this.moreBtnEl.addEventListener("approachPageEnd", this.cache.exec, false);
+					this._updateUI();
+				}
+			}
+		},
+		
+		_exec: function(evt) {
+			// search
+			Ajax.GET({
+				"url": this.getURL(),
+				"success" : this._successHandler.bind(this),
+				"failure" : this.failure,
+				"error" : this.error
+			});
+		},
+		
+		_addPageEndEvent: function() {
+			window.addEventListener("scroll", this.cache.scrollingHandler, false);
+		},
+		_removePageEndEvent: function() {
+			window.removeEventListener("scroll", this.cache.scrollingHandler, false);
+		},
+		
+		_scrollingHandler: function(evt) {
+			if (this.getApproachEventCondition()) {
+				var approachPageEndEvt = new CustomEvent("approachPageEnd");
+				this.moreBtnEl.dispatchEvent(approachPageEndEvt);
+			}
+		},
+		
+		_successHandler: function(responseObj) {
+			var dataObj = this.success(responseObj);
+			
+			// response data가 존재할 경우만 실행
+			if (dataObj !== undefined && dataObj.length != 0) {
+				
+				// template화 하기전.
+				this.presuccess.dispatch(dataObj);
+				
+				var dataArr = this._moldDataIntoTempate(dataObj);
+				this._attachRecievedData(dataArr);
+				
+				// template화하여 화면에 붙인
+				this.postsuccess.dispatch(this.container);
+				
+				this._updateMetaData(dataArr.length);
+				this._updateUI();
+				
+			}
+		},
+		
+		getApproachEventCondition: function() {
+			/*
+			 * interface
+			 * do-something
+			 */
+			return false;
+		},
+		
+		getURL: function() {
+			/*
+			 * interface
+			 * do-something
+			 */
+			return "";
+		},
+		
+		getMoldedData: function(data, templateCompiler, template) {
+			/*
+			 * interface
+			 * do-something
+			 */
+			return "";
+		},
+		
+		success: function(responseObj) {
+			/*
+			 * interface
+			 * do-something
+			 */
+		},
+		
+		failure: function(responseObj) {
+			/*
+			 * interface
+			 * do-something
+			 */
+		},
+		
+		error: function(responseObj) {
+			/*
+			 * interface
+			 * do-something
+			 */
+		},
+		
+		// 현재 card의 개수를 업데이트
+		_updateMetaData: function(updatedNum) {
+			this.metadata.updatedNum = updatedNum;
+			this.metadata.curNum += updatedNum;
+		},
+		
+		// 더보기 버튼을 보여줄지 말지를 결정
+		_updateUI: function() {
+			var totalNum = this.metadata.totalNum;
+			var curNum = this.metadata.curNum;
+			this._addPageEndEvent();
+			
+			if (totalNum == 0 || totalNum <= curNum) {
+				this._removePageEndEvent();
+				this.moreBtnEl.setAttribute("style", "display: none;");
+			}
+		},
+		
+		_moldDataIntoTempate: function(dataObj) {			
+			var dataLength = dataObj.length;
+			var dataArr = [];
+		
+			// card template을 cards array에 담음
+			for (var i=0; i<dataLength; i++) {
+				var data = dataObj[i];
+				var moldedData = this.getMoldedData(data, this.templateCompiler, this.template);
+				dataArr.push(moldedData);
+			}
+			
+			return dataArr;
+		},
+				
+		_attachRecievedData: function(dataArr) {
+			this.container.innerHTML += dataArr.join("");
+		}
+	};
+
+	// 공개 메서드 노출
+	WILDGOOSE.more.super_type = More;
+	
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = WILDGOOSE;
+		// browser export
+	} else {
+		window.WILDGOOSE = WILDGOOSE;
+	}    
+})();
+(function() {	
+	// 자주 사용하는 글로벌 객체 레퍼런스 확보
+	var document = window.document;
+	var console = window.console;
+
+	// 사용할 네임 스페이스 확보	
+	var WILDGOOSE = window.WILDGOOSE || {};
+	WILDGOOSE.search = WILDGOOSE.search || {};
+	WILDGOOSE.search.article = WILDGOOSE.search.article || {};
+
+	// 의존성 주입
+	var More = WILDGOOSE.more.super_type;
+	var User = WILDGOOSE.user;
+	
+	function ArticleMore(args) {
+		More.call(this, args);
+	};
+	
+	ArticleMore.prototype = new More();
+	ArticleMore.prototype.constuctor = ArticleMore;
+	ArticleMore.prototype.getApproachEventCondition = function(evt) {
+		var footer = document.querySelector(".footer");
+		var viewportHeight = window.innerHeight;
+		var footerHeight = parseInt(window.getComputedStyle(footer, null).height);
+		var footerTopPos = footer.getBoundingClientRect().bottom - footerHeight;
+//		var condition = viewportHeight - 15 > footerTopPos; 
+		var condition = viewportHeight - 30 > footerTopPos;
+		
+		return condition;
+	};
+	
+	ArticleMore.prototype.getMoldedData = function(data, templateCompiler, template) {
+		var className = "card card-reporter";	
+		var newLi = '<li class="' + className + '">' + templateCompiler(data, template) + '</li>';
+		
+		return newLi;
+	};
+	
+	ArticleMore.prototype.getURL = function() {
+		var userId = User.getId();
+		return "/api/v1/me/" + userId + "?start_item=" + this.metadata.curNum + "&how_many=" + this.requestNum;
+	};
+	
+	ArticleMore.prototype.success = function(responseObj) {
+		return responseObj.data.articles;
+	};
+	
+	// 공개 메서드 노출
+	WILDGOOSE.more.article = ArticleMore;
+})();
 (function() {	
 	// 자주 사용하는 글로벌 객체 레퍼런스 확보
 	var document = window.document;
@@ -1523,125 +2087,48 @@
 	WILDGOOSE.search.more = WILDGOOSE.search.more || {};
 
 	// 의존성 주입
-	var Ajax = CAGE.ajax;
-	var Template = CAGE.util.template;
 	var Fav = WILDGOOSE.ui.favorite;
-	var User = WILDGOOSE.user;
+	var More = WILDGOOSE.more.super_type;
 	
-	var More = {
-		init: function(args) {
-			this.searchMoreBtn = args.more.button;
-			this.searchResult = args.container;
-			this.requestNum = args.requestNum;
-			this.template = args.template;
-			this.isLogined = User.isLogined();
-			this.tempDiv = document.createElement("div");
-			this.metaData = {
-				curNum : args.more.curNum,
-				totalNum: args.more.totalNum,
-				updatedNum: 0,
-				searchQuery: args.searchQuery
-			};
-			
-			
-			this.cache = {
-				exec: this.exec.bind(this),
-				scrollingHandler: this._scrollingHandler.bind(this),
-				responseHandler: this._responseHandler.bind(this)
-			}
-			
-			// 더보기 버튼 클릭이벤트 설정
-			if (this.searchMoreBtn != null) {
-				this.searchMoreBtn.addEventListener("click", this.cache.exec, false);
-				this.searchMoreBtn.addEventListener("approachPageEnd", this.cache.exec, false);
-				this._updateUI();
-			}
-		},
+	function SearchMore(args) {
+		More.call(this, args);
 		
-		exec: function(evt) {
-			// search
-			var url = "/api/v1/search?q=" + this.metaData.searchQuery + "&start_item=" + this.metaData.curNum + "&how_many=" + this.requestNum;
-			Ajax.GET({
-				"url": url,
-				"callback": this.cache.responseHandler
-			});
-		},
+		this.postsuccess.add(function(conatiner){
+//			Fav.updateFavs(this.metadata.curNum, this.requestNum);
+//			Fav.attatchEventToFavBtn(this.metadata.curNum, this.requestNum);
+			Fav.addCards(conatiner);
+		});
+	};
+	
+	SearchMore.prototype = new More();
+	SearchMore.prototype.constuctor = SearchMore;
+	SearchMore.prototype.getApproachEventCondition = function(evt) {
+		var footer = document.querySelector(".footer");
+		var viewportHeight = window.innerHeight;
+		var footerHeight = parseInt(window.getComputedStyle(footer, null).height);
+		var footerTopPos = footer.getBoundingClientRect().bottom - footerHeight;
+		var condition = viewportHeight - 15 > footerTopPos; 
 		
-		_addPageEndEvent: function() {
-			window.addEventListener("scroll", this.cache.scrollingHandler, false);
-		},
-		_removePageEndEvent: function() {
-			window.removeEventListener("scroll", this.cache.scrollingHandler, false);
-		},
-		_scrollingHandler: function(evt) {
-			// 뷰포트의 크기
-			var footer = document.querySelector(".footer");
-			var viewportHeight = window.innerHeight;
-			var footerHeight = parseInt(window.getComputedStyle(footer, null).height);
-			var footerTopPos = footer.getBoundingClientRect().bottom - footerHeight;
-			
-			if (viewportHeight - 15 > footerTopPos) {
-				var approachPageEndEvt = new CustomEvent("approachPageEnd");
-				this.searchMoreBtn.dispatchEvent(approachPageEndEvt);
-			}
-		},
-		_responseHandler: function(rawD) {
-			var reporters = JSON.parse(rawD)["data"]["reporters"];
-			
-			// response data가 존재할 경우만 실행
-			if (reporters.length != 0) {	
-				var cards = this._makeReporterCards(this.isLogined, reporters);
-				for (var i=0; i<cards.length; i++) {
-					this.searchResult.appendChild(cards[i]);
-				}
-
-				this._updateMetaData(cards.length);
-				this._updateUI();
-				
-				Fav.addCards(cards);
-			}
-		},
+		return condition;
+	};
+	
+	SearchMore.prototype.getMoldedData = function(data, templateCompiler, template) {
+		var className = "card card-reporter";
+		var newLi = '<li class="' + className + '">' + templateCompiler(data, template) + '</li>';
 		
-		// 현재 card의 개수를 업데이트
-		_updateMetaData: function(updatedNum) {
-			this.metaData.updatedNum = updatedNum;
-			this.metaData.curNum += updatedNum;
-		},
-		
-		// 더보기 버튼을 보여줄지 말지를 결정
-		_updateUI: function() {
-			var totalNum = this.metaData.totalNum;
-			var curNum = this.metaData.curNum;
-			this._addPageEndEvent();
-			
-			if (totalNum == 0 || totalNum <= curNum) {
-				this._removePageEndEvent();
-				this.searchMoreBtn.setAttribute("style", "display: none;");
-			}
-		},
-		
-		// card template에 데이터를 담은 template array를 반환
-		_makeReporterCards: function(isLogined, reporters) {
-			var templateCompiler = Template.getCompiler();
-			var tempDiv = this.tempDiv;
-			var className = "card card-reporter";
-			var reporterNum = reporters.length;
-			var cards = [];
-		
-			// card template을 cards array에 담음
-			for (var i=0; i<reporterNum; i++) {
-				var cardData = reporters[i];
-				var newLiStr = '<li class="' + className + '">' + templateCompiler(cardData, this.template) + '</li>';
-				tempDiv.innerHTML = newLiStr;
-				cards.push(tempDiv.firstElementChild);
-			}
-			
-			return cards;
-		}
+		return newLi;
+	};
+	
+	SearchMore.prototype.getURL = function() {
+		return "/api/v1/search?q=" + this.metadata.keyword + "&start_item=" + this.metadata.curNum + "&how_many=" + this.requestNum;
+	};
+	
+	SearchMore.prototype.success = function(responseObj) {
+		return responseObj.data.reporters;
 	};
 	
 	// 공개 메서드 노출
-	WILDGOOSE.search.more = More;
+	WILDGOOSE.more.search = SearchMore;
 })();
 (function() {	
 	// 자주 사용하는 글로벌 객체 레퍼런스 확보
@@ -1921,7 +2408,7 @@
 	// 의존성 주입
 	var Ajax = CAGE.ajax;
 	var Template = CAGE.util.template;
-	var More = WILDGOOSE.search.more;
+	var SearchMore = WILDGOOSE.more.search;
 	var AutoComplement = WILDGOOSE.search.auto_complement;
 	var Submit = WILDGOOSE.search.submit;
 	
@@ -1970,7 +2457,8 @@
 			if (more !== undefined && moreEl !== null) {
 				var curNumDiv = document.querySelector(args.more.curNum);
 				var totalNumDiv = document.querySelector(args.more.totalNum);
-				More.init({
+				
+				var searchMore = new SearchMore({
 					more: {
 						button: moreEl,
 						curNum: (curNumDiv !== undefined)? parseInt(curNumDiv.innerText) : 0,
@@ -1978,7 +2466,7 @@
 					},
 					container: this.form.container,
 					template: this.search.template,
-					searchQuery: this.form.box.value,
+					keyword: this.form.box.value,
 					requestNum: this.search.requestNum
 				});
 			}
