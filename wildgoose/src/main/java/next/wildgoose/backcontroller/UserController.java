@@ -19,7 +19,7 @@ import next.wildgoose.utility.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UserController implements BackController {
+public class UserController extends AuthController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class.getName());
 	
 	@Override
@@ -31,22 +31,9 @@ public class UserController implements BackController {
 		String method = request.getMethod();
 		LOGGER.debug(uri.toString());
 		
-		if (isValidUserId(request, userId) == false) {
-			result = new SimpleResult();
-			result.setStatus(404);
-			result.setMessage(Constants.MSG_WRONG_ID);
+		result = authenticate(request, userId);
+		if (result != null) {
 			return result;
-		}
-		
-		HttpSession session = request.getSession();
-		String visitor = (String) session.getAttribute("userId");
-		if (visitor == null) {
-			// 로그인 하도록 유도하기
-			SimpleResult sResult = new SimpleResult();
-			sResult.setStatus(401);
-			sResult.setMessage(Constants.MSG_AUTH_NEED);
-			sResult.setData("requestedUri", uri.toString());
-			return sResult;
 		}
 		 
 		if ("favorites".equals(pageName)) {
@@ -74,15 +61,6 @@ public class UserController implements BackController {
 		SimpleResult result = new SimpleResult(true);
 		result.setData("bool", favoriteDao.isFavorite(userId, reporterId));
 		return result;
-	}
-
-	private boolean isValidUserId(HttpServletRequest request, String userId) {
-		ServletContext context = request.getServletContext();
-		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
-		if (signDao.findEmail(userId)) {
-			return true;
-		}
-		return false;
 	}
 	
 	private Result getFavorites(HttpServletRequest request, String userId) {

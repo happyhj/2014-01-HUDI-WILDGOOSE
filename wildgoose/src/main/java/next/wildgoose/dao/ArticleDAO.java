@@ -12,6 +12,26 @@ import next.wildgoose.framework.dao.template.PreparedStatementSetter;
 import next.wildgoose.framework.dao.template.RowMapper;
 
 public class ArticleDAO {
+	static RowMapper articlesRm = new RowMapper() {
+
+		@Override
+		public Object mapRow(ResultSet rs) throws SQLException {
+			List<Article> articles = new ArrayList<Article>();
+			Article article = null;
+			while (rs.next()) {
+				article = new Article();
+				article.setUrl(rs.getString("URL"));
+				article.setTitle(rs.getString("title"));
+				article.setAuthorId(rs.getInt("id"));
+				article.setName(rs.getString("name"));
+				article.setContent(rs.getString("content"));
+				article.setDatetime(rs.getTimestamp("datetime").toString());
+				articles.add(article);
+			}
+			return articles;
+		}
+		
+	};
 	
 	public List<Article> findArticlesById(final int reporterId) {
 		JdbcTemplate t = new JdbcTemplate();
@@ -64,27 +84,6 @@ public class ArticleDAO {
 			
 		};
 		
-		RowMapper rm = new RowMapper() {
-
-			@Override
-			public Object mapRow(ResultSet rs) throws SQLException {
-				List<Article> articles = new ArrayList<Article>();
-				Article article = null;
-				while (rs.next()) {
-					article = new Article();
-					article.setUrl(rs.getString("URL"));
-					article.setTitle(rs.getString("title"));
-					article.setAuthorId(rs.getInt("id"));
-					article.setName(rs.getString("name"));
-					article.setContent(rs.getString("content"));
-					article.setDatetime(rs.getTimestamp("datetime").toString());
-					articles.add(article);
-				}
-				return articles;
-			}
-			
-		};
-		
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT author.name, author.id, favorite.* from author JOIN ");
 		query.append("(SELECT * FROM article JOIN article_author ON article_author.article_URL = article.URL ");
@@ -92,7 +91,7 @@ public class ArticleDAO {
 		query.append("(SELECT author_id FROM favorite WHERE user_email = ?) ");
 		query.append("ORDER BY article.datetime desc limit 24) AS favorite ON author.id = favorite.author_id;");
 		
-		return (List<Article>) t.execute(query.toString(), pss, rm);
+		return (List<Article>) t.execute(query.toString(), pss, articlesRm);
 	}
 
 	public List<Article> findArticlesByFavorite(final String email, final int start, final int howMany) {
@@ -108,27 +107,6 @@ public class ArticleDAO {
 			
 		};
 		
-		RowMapper rm = new RowMapper() {
-
-			@Override
-			public Object mapRow(ResultSet rs) throws SQLException {
-				List<Article> articles = new ArrayList<Article>();
-				Article article = null;
-				while (rs.next()) {
-					article = new Article();
-					article.setUrl(rs.getString("URL"));
-					article.setTitle(rs.getString("title"));
-					article.setAuthorId(rs.getInt("id"));
-					article.setName(rs.getString("name"));
-					article.setContent(rs.getString("content"));
-					article.setDatetime(rs.getTimestamp("datetime").toString());
-					articles.add(article);
-				}
-				return articles;
-			}
-			
-		};
-		
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT author.name, author.id, favorite.* from author JOIN ");
 		query.append("(SELECT * FROM article JOIN article_author ON article_author.article_URL = article.URL ");
@@ -136,7 +114,7 @@ public class ArticleDAO {
 		query.append("(SELECT author_id FROM favorite WHERE user_email = ?) ");
 		query.append("ORDER BY article.datetime desc limit ?,?) AS favorite ON author.id = favorite.author_id;");
 		
-		return (List<Article>) t.execute(query.toString(), pss, rm);
+		return (List<Article>) t.execute(query.toString(), pss, articlesRm);
 	}
 	
 	public int findNumberOfArticlesByFavorite(final String email) {
