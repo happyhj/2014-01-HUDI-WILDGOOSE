@@ -6,7 +6,7 @@ public class Constants {
 
 	public static final String PAGE_ERROR = "error.jsp";
 	public static final String PAGE_SEARCH = "search.jsp";
-	public static final String PAGE_REPORTER = "reporter.jsp";
+	public static final String PAGE_REPORTERS = "reporters.jsp";
 	public static final String PAGE_ME = "me.jsp";
 	
 	public static final String RESOURCE_ROOT = "/";

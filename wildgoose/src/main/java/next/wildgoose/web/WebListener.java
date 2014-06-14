@@ -23,7 +23,7 @@ public class WebListener implements ServletContextListener {
 		jspMap = new HashMap<Uri, String>();
 		jspMap.put(new Uri(""), Constants.PAGE_SEARCH);
 		jspMap.put(new Uri("search"), Constants.PAGE_SEARCH);
-		jspMap.put(new Uri("reporters/[reporter_id]"), Constants.PAGE_REPORTER);
+		jspMap.put(new Uri("reporters/[reporter_id]"), Constants.PAGE_REPORTERS);
 		jspMap.put(new Uri("me/[user_id]"), Constants.PAGE_ME);
 		
 		jspMap.put(null, Constants.PAGE_ERROR);
