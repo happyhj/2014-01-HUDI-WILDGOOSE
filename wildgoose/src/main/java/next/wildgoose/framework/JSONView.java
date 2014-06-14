@@ -6,7 +6,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import next.wildgoose.framework.utility.Uri;
 import next.wildgoose.framework.utility.Utility;
 import next.wildgoose.utility.Constants;
 
