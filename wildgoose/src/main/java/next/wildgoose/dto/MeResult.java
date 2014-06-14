@@ -29,11 +29,11 @@ public class MeResult extends Result{
 	}
 
 	public List<Reporter> getRecommands() {
-		return (List<Reporter>) super.getData("reporterCards");
+		return (List<Reporter>) super.getData("recommands");
 	}
 	
 	public void setRecommands(String string, List<Reporter> recommands) {
-		super.setData("recomands", recommands);
+		super.setData("recommands", recommands);
 	}
 		
 	public int getTotalNum() {

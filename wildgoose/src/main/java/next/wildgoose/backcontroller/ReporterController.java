@@ -71,18 +71,6 @@ public class ReporterController implements BackController {
 		return reporterResult;
 	}
 	
-	private int[] getRandomIds(int num, int max) {
-		Random r = new Random();
-		int[] reporterIds = new int[num];
-		
-		for (int i = 0; i < num; i++) {
-			int reporter = r.nextInt(max);
-			reporterIds[i] = reporter;
-		}
-		
-		return null;
-	}
-
 	private ReporterResult getGraphData(HttpServletRequest request, Uri uri, int reporterId) {
 		
 		ReporterResult reporterResult = new ReporterResult();

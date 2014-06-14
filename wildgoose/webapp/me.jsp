@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!DOCTYPE html>
 <meta charset="UTF-8" />
@@ -67,7 +68,7 @@
 			</div>
 			<ul>
 				<c:if test="${ not empty sessionScope.userId }">
-					<c:forEach var="reporter" items="${ requestScope.data.recommands }">
+					<c:forEach var="reporter" items="${ requestScope.data.recommands }" varStatus="status">
 					<li class="card card-reporter">
 						<%@ include file = "/jsp_templates/reporterCard.jsp" %>
 					</li>

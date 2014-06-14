@@ -82,7 +82,6 @@ public class MeController implements BackController {
 		meResult.setArticles("articles", articles);
 		meResult.setFavorites("reporters", reporters);
 		meResult.setRecommands("recommands", recommands);
-
 		return meResult;
 	}
 
