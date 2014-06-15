@@ -11,14 +11,14 @@
 	// 하위 모듈 import
 	var ArticleMore = WILDGOOSE.more.article;
 	var Drag = WILDGOOSE.drag;
-	var Fav = WILDGOOSE.ui.favorite;
+	var MeFav = WILDGOOSE.ui.favorite.me;
 	var Template = CAGE.util.template;	
 	
 	var MePage = {
 		init: function() {
 			this._articleMoreModule();
 			this._dragModule();
-			Fav.init();
+			MeFav.init();
 		},
 		
 		_articleMoreModule: function() {

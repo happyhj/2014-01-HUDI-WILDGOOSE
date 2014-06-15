@@ -160,6 +160,7 @@
 								
 								<jsSourceFile>ui/WILDGOOSE.drag.js</jsSourceFile>
 								<jsSourceFile>ui/WILDGOOSE.ui.favorite.js</jsSourceFile>
+								<jsSourceFile>ui/WILDGOOSE.ui.favorite.me.js</jsSourceFile>
 								<jsSourceFile>ui/WILDGOOSE.ui.graph.js</jsSourceFile>
 								<jsSourceFile>validation/WILDGOOSE.validator.js</jsSourceFile>
 								

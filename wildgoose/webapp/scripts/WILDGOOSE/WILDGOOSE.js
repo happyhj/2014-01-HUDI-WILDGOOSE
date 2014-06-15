@@ -1,59 +1,76 @@
-(function() {	
+(function() {
 	// 자주 사용하는 글로벌 객체 레퍼런스 확보
 	var document = window.document;
 
-	// 사용할 네임 스페이스 확보	
+	// 사용할 네임 스페이스 확보
 	var WILDGOOSE = window.WILDGOOSE || {};
 	WILDGOOSE.user = WILDGOOSE.user || {};
-	
+
 	var Ajax = CAGE.ajax;
-	
+
 	var User = {
-		randNum: null,
-		userId: undefined, // null이 아닌 이유는, 어디선가 userId를 undefined로 조건을 확인하여 잠재적인 버그를 없애고자 땜빵함.
-		getId: function() {
+		randNum : null,
+		userId : undefined, // null이 아닌 이유는, 어디선가 userId를 undefined로 조건을 확인하여
+							// 잠재적인 버그를 없애고자 땜빵함.,
+		mobileStatus: undefined,
+		getId : function() {
 			if (this.userId !== undefined) {
 				return this.userId;
 			}
-			
+
 			var userIdDiv = document.getElementById("userId");
 			if (userIdDiv !== null) {
 				this.userId = userIdDiv.innerText;
 			}
 			return this.userId;
 		},
-		isLogined: function() {
+		isLogined : function() {
 			if (this.getId() == "") {
 				return false;
 			}
 			return true;
 		},
-		getRandomNumber: function() {
+		getRandomNumber : function() {
 			if (this.randNum !== null) {
 				return this.randNum;
 			}
 
 			Ajax.GET({
-				isAsync: false,
-				url:"/api/v1/session/rand",
-				success: function(responseObj){
+				isAsync : false,
+				url : "/api/v1/session/rand",
+				success : function(responseObj) {
 					this.randNum = responseObj.data.rand;
 				}.bind(this)
 			});
 			return this.randNum;
+		},
+		isMobile : function() {
+			if (this.mobileStatus !== undefined) {
+				return this.mobileStatus
+			}
+
+			(function(a) {
+				if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i
+						.test(a)
+						|| /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i
+								.test(a.substr(0, 4)))
+					this.mobileStatus = true
+			}.bind(this))(navigator.userAgent || navigator.vendor || window.opera);
+			
+			return this.mobileStatus;
 		}
 	};
-	
+
 	// 공개 메서드 노출
 	WILDGOOSE.user = User;
-	
+
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
 	if (typeof module !== 'undefined' && module.exports) {
 		module.exports = WILDGOOSE;
 		// browser export
 	} else {
 		window.WILDGOOSE = WILDGOOSE;
-	}    	
+	}
 })();/**
  * 외부에서는 WILDGOOSE.drag.exe(args)로 드래스 함수에 접근할 수 있다.
  * 전달해야 하는 인자 args는 dictionary로 인자는 3개이
@@ -366,7 +383,221 @@ var values = {sourceEle : null, destEle : null};
 	}	
 
 })();
-(function() {	
+(function() {
+	'use strict';
+	var document = window.document;
+	var console = window.console;
+
+	var WILDGOOSE = window.WILDGOOSE || {};
+	WILDGOOSE.ui = WILDGOOSE.ui || {};
+	WILDGOOSE.favorite = WILDGOOSE.favorite || {};
+	WILDGOOSE.favorite.me = WILDGOOSE.favorite.me || {};
+	
+	// 의존성 선언
+	var Ajax = CAGE.ajax;
+	var Dom = CAGE.util.dom;
+	var User = WILDGOOSE.user;
+	
+	function Star(element) {
+		if (element == null) {
+			console.error("No element found");
+			return;
+		}
+		this.star = element;
+		this.reporterId = this.getReporterId();
+		this.show();
+		this.attatchEvent();
+	}
+	
+	Star.prototype = {
+		constructor: Star,
+		show: function() {
+			Dom.removeClass(this.star, "invisible");
+		},
+		getReporterId: function(){
+			var reporterId = this.star.parentElement.parentElement.dataset["reporter_id"];
+			return parseInt(reporterId);
+		},
+		toggleStar: function(onoff) {
+			var star = this.star;
+			var card = star.parentElement.parentElement.parentElement;
+			var leftList = document.querySelector(".dashboard-left");
+			var rightList = document.querySelector(".dashboard-right");
+			if (onoff == true) {
+				Dom.addClass(star, "on");
+				Dom.removeClass(star, "off");
+				Dom.removeClass(card, "blur");
+				if (Dom.isDescendant(rightList, card)) {
+					console.log("right to left");
+					
+					var container = document.querySelector(".container");
+					var containerPos = container.getBoundingClientRect();
+					var curPos = card.getBoundingClientRect();
+					card.style.position = "absolute";
+					card.style.width = curPos.width + "px";
+					card.style.height = curPos.height + "px";
+					card.style.top = curPos.top - containerPos.top + "px";
+					card.style.left = curPos.left - containerPos.left + "px";
+					card.style.zIndex = 1;
+					
+					var lastCard = document.querySelector(".card-last");
+					var lastCardPos = lastCard.getBoundingClientRect();
+					var margin = 10;
+					card.style.top = lastCardPos.top - containerPos.top - margin + "px";
+					card.style.left = lastCardPos.left - containerPos.left + "px";
+					
+					setTimeout(function() {
+						document.querySelector(".dashboard-left > ul").insertBefore(card.parentNode.removeChild(card), lastCard);
+						card.style.position = "";
+						card.style.width = "";
+						card.style.height = "";
+						card.style.top = "";
+						card.style.left = "";
+						card.style.zIndex = "";
+					}, 500);
+				}
+			} else if (onoff == false) {
+				Dom.removeClass(star, "on");
+				Dom.addClass(star, "off");
+				if (Dom.isDescendant(leftList, card)) {
+					Dom.addClass(card, "blur");
+				}
+			}
+		},
+
+		clickStar : function(e) {
+			var star = e.target;
+			var card = star.parentElement.parentElement.parentElement;
+			var reporterId = card.firstElementChild.dataset.reporter_id;
+			var url = "/api/v1/users/" + Favorite.userId + "/favorites/?reporter_id="
+					+ reporterId;
+
+			if (Dom.hasClass(star, "on")) {
+				Ajax.DELETE({
+					"url" : url,
+					"success" : function(responseObj) {
+						this.toggleStar(false);
+					}.bind(this),
+					"failure" : function(responseObj) {
+						console.log("Failure!");
+					},
+					"error" : function(responseObj) {
+						console.log("Error!");
+					}
+				});
+			} else {
+				Ajax.POST({
+					"url" : url,
+					"success" : function(responseObj) {
+						this.toggleStar(true);
+					}.bind(this),
+					"failure" : function(responseObj) {
+						console.log("Failure!");
+					},
+					"error" : function(responseObj) {
+						console.log("Error!");
+					}
+				});
+			}
+		},
+		attatchEvent: function() {
+			this.star.addEventListener("click", this.clickStar.bind(this), false);
+			this.star.addEventListener("click", function(e) {
+				Dom.addClass(e.target, "pumping");
+				setTimeout(function() {
+					Dom.removeClass(e.target, "pumping");
+				}, 300)
+			}, false);
+		},
+		updateStar: function() {
+			var url = "/api/v1/users/:userId/favorites/:reporterId";
+			url.replace(":userId", this.userId);
+			url.replace(":reporterId", this.reporterId)
+			Ajax.GET({
+				"url" : url,
+				"callback" : function(jsonStr) {
+					var result = JSON.parse(jsonStr);
+					if (result.data.bool == true) {
+						this.toggleStar();
+					}
+				}.bind(this)
+			});
+		}
+
+	}
+	
+	var Favorite = {
+		starList: [],
+		userFavorites: [],
+		
+		init: function() {
+			var userId = User.getId();
+			if (userId == "" || userId == undefined) {
+				console.error("Not logined");
+				return;
+			}
+			this.userId = userId;
+			
+			var favStars = document.querySelectorAll(".star");
+			for (var i = 0; i < favStars.length; i++) {
+				var favStar = favStars[i];
+				var star = new Star(favStar);
+				this.starList.push(star);
+			}
+			this.getStarListFromServer();
+		},
+
+		addCards: function(conatiner) {
+			var userId = User.getId();
+			if (userId == "" || userId == undefined) {
+				return;
+			}
+			var stars = conatiner.querySelectorAll(".star");
+			Array.prototype.forEach.call(stars, function(value){
+				var star = new Star(value);
+				if (this.userFavorites.indexOf(star.reporterId) >= 0) {
+					star.toggleStar(true);
+				}
+				
+			}.bind(this));
+		},
+		updateStars: function(stars) {
+			for (var i = 0; i < stars.length; i++) {
+				var star = stars[i];
+				if (this.userFavorites.indexOf(star.reporterId) >= 0) {
+					star.toggleStar(true);
+				}
+			}
+		},
+		getStarListFromServer: function() {
+			var url = "/api/v1/users/:userId/favorites/";
+			url = url.replace(":userId", this.userId);
+			Ajax.GET({
+				"url" : url,
+				"callback" : function(jsonStr) {
+					var result = JSON.parse(jsonStr);
+					var reporterCards = result["data"]["reporterCards"];
+					for (var i=0; i<reporterCards.length; i++) {
+						var card = reporterCards[i];
+						Favorite.userFavorites.push(card["id"]);
+					}
+					this.updateStars(this.starList);
+				}.bind(this)
+			});
+		}
+	};
+	
+	WILDGOOSE.ui.favorite.me = Favorite;
+	
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = WILDGOOSE;
+		// browser export
+	} else {
+		window.WILDGOOSE = WILDGOOSE;
+	}	
+
+})();(function() {	
 	// 자주 사용하는 글로벌 객체 레퍼런스 확보
 	var document = window.document;
 	var console = window.console;
@@ -1698,7 +1929,6 @@ var values = {sourceEle : null, destEle : null};
 			});
 			
 			this.settingPopup.afteropen.add(this.cache.openPopup);
-			this.settingPopup.afterclose.add(this.cache.closePopup);
 		},		
 		
 		_openPopup: function() {
@@ -1910,6 +2140,10 @@ var values = {sourceEle : null, destEle : null};
 					scrollingHandler: this._scrollingHandler.bind(this)
 				};
 				
+				this.status = {
+					exec: true
+				};
+				
 				// 더보기 버튼 클릭이벤트 설정
 				if (this.moreBtnEl != null) {
 					this.moreBtnEl.addEventListener("click", this.cache.exec, false);
@@ -1920,13 +2154,19 @@ var values = {sourceEle : null, destEle : null};
 		},
 		
 		_exec: function(evt) {
-			// search
-			Ajax.GET({
-				"url": this.getURL(),
-				"success" : this._successHandler.bind(this),
-				"failure" : this.failure,
-				"error" : this.error
-			});
+			// 현재함수 사용 가능여부 확인
+			if (this.status.exec) {
+				// 사용 못하도록 방지				
+				this.status.exec = false;
+
+				// search
+				Ajax.GET({
+					"url": this.getURL(),
+					"success" : this._successHandler.bind(this),
+					"failure" : this.failure,
+					"error" : this.error
+				});
+			}
 		},
 		
 		_addPageEndEvent: function() {
@@ -1960,6 +2200,9 @@ var values = {sourceEle : null, destEle : null};
 				
 				this._updateMetaData(dataArr.length);
 				this._updateUI();
+				
+				// 사용 가능하도록 설정 변경
+				this.status.exec = true;
 				
 			}
 		},
@@ -2082,13 +2325,19 @@ var values = {sourceEle : null, destEle : null};
 		var viewportHeight = window.innerHeight;
 		var footerHeight = parseInt(window.getComputedStyle(footer, null).height);
 		var footerTopPos = footer.getBoundingClientRect().bottom - footerHeight;
-		var condition = viewportHeight - 15 > footerTopPos; 
-//		var condition = viewportHeight - 30 > footerTopPos;
+		
+		/*
+		 *  mobile 상태 확인하여 scrolling 조건 변경
+		 *  아래처럼 조건을 바꾸는 이유는 모바일에서 성능문제때문.
+		 */
+		var condition = (User.isMobile() == true)? viewportHeight > footerTopPos - 100 : viewportHeight > footerTopPos; 
 		
 		return condition;
 	};
 	
 	ArticleMore.prototype.getMoldedData = function(data, templateCompiler, template) {
+		var datetime = data.datetime;
+		data.datetime = datetime.substring(0, datetime.length-11);
 		var className = "card card-reporter";	
 		var newLi = '<li class="' + className + '">' + templateCompiler(data, template) + '</li>';
 		
@@ -2097,7 +2346,7 @@ var values = {sourceEle : null, destEle : null};
 	
 	ArticleMore.prototype.getURL = function() {
 		var userId = User.getId();
-		var uri = "/api/v1/me/" + userId + "?start_item=" + this.metadata.curNum + "&how_many=" + this.requestNum;
+		var uri = "/api/v1/me/" + userId + "/timeline?start_item=" + this.metadata.curNum + "&how_many=" + this.requestNum;
 		console.log(uri);
 		return uri;
 	};
