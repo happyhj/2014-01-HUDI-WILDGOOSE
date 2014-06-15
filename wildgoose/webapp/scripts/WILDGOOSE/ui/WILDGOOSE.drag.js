@@ -16,6 +16,8 @@ var console = window.console;
 
 var WILDGOOSE = window.WILDGOOSE || {};
 WILDGOOSE.drag = WILDGOOSE.drag || {};
+
+var User = WILDGOOSE.user;
 	
 var values = {sourceEle : null, destEle : null};
 
@@ -91,19 +93,20 @@ var values = {sourceEle : null, destEle : null};
 			values.movedClassName = args.movedClassName;
 			
 			_addEvent(args.body);
-			
 			_myAuthorOrder();
+
+			
 		}
 		
 		//test
 		function _localSave(){
 			var testString ="";
 			var child = values.target.children;
-			for(var i=0; i < child.length; i++){
+			for(var i=0; i < child.length-1; i++){ // 빈 리스트 때문에 -1을 해 줌
 				testString = testString+child[i].firstElementChild.getAttribute('data-reporter_id')+" ";
 			}
 			
-			localStorage.myAuthor = testString;
+			localStorage.setItem(User.getId(), testString);
 		}
 		
 		function _myAuthorOrder(){
@@ -111,15 +114,22 @@ var values = {sourceEle : null, destEle : null};
 			
 			if (ul !== null) {
 				var child = ul.children;
-				if(localStorage.myAuthor == undefined) return;
-				var numLi = localStorage.myAuthor.split(" ");
-				numLi.length = numLi.length-1; // ""를 제거하기 위해서
+				if(localStorage.getItem(User.getId()) == undefined) return;
+				var numLi = localStorage.getItem(User.getId()).split(" ");
+				numLi.pop(); // 빈 값("") 때문에 -1을 해 줌
 				
-				for(var j=0; j<numLi.length; j++){
-					for(var i=0; i<child.length; i++){
-						if(child[i].firstElementChild.getAttribute('data-reporter_id')==numLi[j]){ul.appendChild(child[i])}
+				for(var j=0; j<numLi.length; j++){ 
+					for(var i=0; i<child.length-1; i++){ // 빈 리스트 때문에 -1을 해 줌
+						if(child[i].firstElementChild != null){
+							if(child[i].firstElementChild.getAttribute('data-reporter_id')==numLi[j]){
+								ul.appendChild(child[i]);
+							}
+						}
 					}
 				}
+				
+				var lastCard = document.querySelector('.card-last');
+				ul.appendChild(lastCard);
 			}
 		}
 
