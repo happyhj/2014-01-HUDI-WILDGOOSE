@@ -16,6 +16,8 @@ var console = window.console;
 
 var WILDGOOSE = window.WILDGOOSE || {};
 WILDGOOSE.drag = WILDGOOSE.drag || {};
+
+var User = WILDGOOSE.user;
 	
 var values = {sourceEle : null, destEle : null};
 
@@ -91,8 +93,9 @@ var values = {sourceEle : null, destEle : null};
 			values.movedClassName = args.movedClassName;
 			
 			_addEvent(args.body);
-			
 			_myAuthorOrder();
+
+			
 		}
 		
 		//test
@@ -103,8 +106,7 @@ var values = {sourceEle : null, destEle : null};
 				testString = testString+child[i].firstElementChild.getAttribute('data-reporter_id')+" ";
 			}
 			
-			localStorage.myAuthor = testString;
-			console.log(localStorage.myAuthor);
+			localStorage.setItem(User.getId(), testString);
 		}
 		
 		function _myAuthorOrder(){
@@ -112,8 +114,8 @@ var values = {sourceEle : null, destEle : null};
 			
 			if (ul !== null) {
 				var child = ul.children;
-				if(localStorage.myAuthor == undefined) return;
-				var numLi = localStorage.myAuthor.split(" ");
+				if(localStorage.getItem(User.getId()) == undefined) return;
+				var numLi = localStorage.getItem(User.getId()).split(" ");
 				numLi.pop(); // 빈 값("") 때문에 -1을 해 줌
 				
 				for(var j=0; j<numLi.length; j++){ 
