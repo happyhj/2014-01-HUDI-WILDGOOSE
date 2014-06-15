@@ -254,6 +254,7 @@
 								<jsSourceFile>APP.page.me.js</jsSourceFile>
 								<jsSourceFile>APP.page.reporter.js</jsSourceFile>
 								<jsSourceFile>APP.page.search.js</jsSourceFile>
+								<jsSourceFile>APP.page.error.js</jsSourceFile>
 							</jsSourceFiles>
 							
 							<jsFinalFile>APP.js</jsFinalFile>

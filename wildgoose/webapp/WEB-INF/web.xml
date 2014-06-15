@@ -120,6 +120,9 @@
 	<listener>
 		<listener-class>next.wildgoose.web.WebListener</listener-class>
 	</listener>
+	<listener>
+		<listener-class>next.wildgoose.framework.ErrorListener</listener-class>
+	</listener>
 	
 	
 	<!-- Filter -->

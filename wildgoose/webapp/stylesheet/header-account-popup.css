@@ -254,10 +254,10 @@ background-color:#ddd;
 			box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
 }
 
-.form-container .able {
+.form-container .enable {
 	background-color: rgb(72, 130, 253);
 }
-.form-container .able:active {
+.form-container .enable:active {
 	background-color: #3872DD;
 }
 

@@ -1466,10 +1466,10 @@ var values = {sourceEle : null, destEle : null};
 		_updateUI: function(flag) {
 			if (flag) {
 				Dom.removeClass(this.submitEl, "disable");
-				Dom.addClass(this.submitEl, "able");
+				Dom.addClass(this.submitEl, "enable");
 			}
 			else {
-				Dom.removeClass(this.submitEl, "able");
+				Dom.removeClass(this.submitEl, "enable");
 				Dom.addClass(this.submitEl, "disable");
 			}
 		}
