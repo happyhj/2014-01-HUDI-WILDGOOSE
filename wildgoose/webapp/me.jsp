@@ -9,7 +9,21 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/basic_layout.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/me-article.css" />
+
+<c:choose>
+	<%-- 보여줄 article이 있는경우 timeline-result를 보여줌 --%>
+	<c:when test="${ not empty requestScope.data.articles }">
+	<link type="text/css" rel="stylesheet" href="/stylesheet/me-article.css" />
+	<link type="text/css" rel="stylesheet" href="/stylesheet/me.css" />
+	</c:when>
+		
+	<%-- 보여줄 article이 없는 경우 intro-result를 보여줌 --%>
+	<c:otherwise>
+		<link type="text/css" rel="stylesheet" href="/stylesheet/me-intro.css" />
+		
+	</c:otherwise>
+</c:choose>
+
 <style>
 .card {
 	margin: 10px 0;
@@ -24,6 +38,8 @@
 .card.blur {
 	opacity: 0.4;
 }
+
+
 </style>
 <title>Wildgoose</title>
 
@@ -31,60 +47,52 @@
 	<header class="header">
 		<%@ include file ="/header.jsp" %>
 	</header>
-	<link type="text/css" rel="stylesheet" href="/stylesheet/me.css" />
 	<%-- session 존재시 --%>
 	<c:if test="${ not empty sessionScope.userId }"></c:if>
 	<div class="container">
-		<div class="dashboard dashboard-left">
-			<div class="dashboard-header">
-				<h2>나의 기자</h2>
-			</div>
-			<ul>
-				<c:forEach var="reporter" items="${ requestScope.data.favorites }">
-				<li class="card card-reporter">
-					<%@ include file = "/jsp_templates/reporterCard.jsp" %>
-				</li>
-				</c:forEach>
-				<li class="card card-reporter card-last" style="visibility:hidden;">
-				</li>
-			</ul>
-		</div>
-		<div class="content-main">
 		
-		<div class="content-main-header">
-			<h2>타임라인</h2>
-		</div>
-		<div class="timeline-result">
-			<ul>
-				<c:forEach var="article" items="${ requestScope.data.articles }">
-				<li class="card">
-					<%@ include file = "/jsp_templates/articleCard.jsp" %>
-				</li>
-				</c:forEach>
-			</ul>
-			<div class="article-more">
-				<button class="article-button-ajax">더보기</button>
-				<div class="article-state article-state-hidden">
-					<span class="state-article-curNum hidden">${ requestScope.data.articles.size() }</span>
-					<span class="state-article-totalNum hidden">${ requestScope.data.totalNum }</span>
+		<c:choose>
+			<%-- 보여줄 article이 있는경우 timeline-result를 보여줌 --%>
+			<c:when test="${ not empty requestScope.data.articles }">
+				<div class="dashboard dashboard-left">
+					<div class="dashboard-header">
+						<h2>나의 기자</h2>
+					</div>
+					<%@ include file = "/jsp_templates/content-favorite-reporter.jsp" %>
 				</div>
-			</div>
-		</div>
-		</div>
-		<div class="dashboard dashboard-right">
-			<div class="dashboard-header">
-				<h2>추천기자</h2>
-			</div>
-			<ul>
-				<c:if test="${ not empty sessionScope.userId }">
-					<c:forEach var="reporter" items="${ requestScope.data.recommands }" varStatus="status">
-					<li class="card card-reporter">
-						<%@ include file = "/jsp_templates/reporterCard.jsp" %>
-					</li>
-					</c:forEach>
-				</c:if>
-			</ul>
-		</div>
+				
+				
+				<div class="content-main">
+					<div class="content-main-header">
+						<h2>타임라인</h2>
+					</div>
+					<%@ include file = "/jsp_templates/content-timeline.jsp" %>
+				</div>
+				
+				<div class="dashboard dashboard-right">
+					<div class="dashboard-header">
+						<h2>추천기자</h2>
+					</div>
+					<%@ include file = "/jsp_templates/content-recommanded-reporter.jsp" %>
+				</div>
+			</c:when>
+				
+			<%-- 보여줄 article이 없는 경우 intro-result를 보여줌 --%>
+			<c:otherwise>
+				<div class="dashboard dashboard-left"></div>
+				
+				<div class="content-main">
+					<div class="content-main-header">
+						<h2>환영합니다!</h2>
+					</div>
+					<%@ include file = "/jsp_templates/content-recommanded-reporter.jsp" %>
+					<%-- <%@ include file = "/jsp_templates/content-intro.jsp" %> --%>
+				</div>
+				
+				<div class="dashboard dashboard-right"></div>
+			</c:otherwise>
+		</c:choose>
+		
 	</div>
 	<footer class="footer"></footer>
 </div>
@@ -101,8 +109,7 @@
 		<script type="text/javascript" src="/scripts/WILDGOOSE/more/WILDGOOSE.more.super_type.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/more/WILDGOOSE.more.article.js"></script>
 		
-		<!-- <script type="text/javascript" src="/scripts/APP/APP.page.favorite.js"></script> -->
-		<!-- ????????? -->
+		<script type="text/javascript" src="/scripts/APP/APP.page.favorite.js"></script>
 		<script type="text/javascript" src="/scripts/APP/APP.page.me.js"></script>
 	</c:when>
 	<c:otherwise>

@@ -70,17 +70,19 @@ var values = {sourceEle : null, destEle : null};
 		}
 		
 		function _addEvent(target){
-			var children = target.children;
-			[].forEach.call(children, function(child){
-				child.draggable = "true";
-				child.addEventListener('dragstart', function(e){ _dragStart(e);}, false);
-				child.addEventListener('dragover', function(e){ _dragOver(e);}, false);
-				child.addEventListener('drop', function(e){ _drop(e);}, false);
-				child.addEventListener('dragend', function(e){ _dragEnd(e);}, false);
-//				child.style.transition = "all 2s";
-//				child.style.WebkitTransition = "all 2s";
-				
-			});
+			if (target !== null) {
+				var children = target.children;
+				[].forEach.call(children, function(child){
+					child.draggable = "true";
+					child.addEventListener('dragstart', function(e){ _dragStart(e);}, false);
+					child.addEventListener('dragover', function(e){ _dragOver(e);}, false);
+					child.addEventListener('drop', function(e){ _drop(e);}, false);
+					child.addEventListener('dragend', function(e){ _dragEnd(e);}, false);
+//					child.style.transition = "all 2s";
+//					child.style.WebkitTransition = "all 2s";
+					
+				});
+			}
 		}
 		
 		function execute(args){
@@ -106,15 +108,18 @@ var values = {sourceEle : null, destEle : null};
 		
 		function _myAuthorOrder(){
 			var ul = document.querySelector('.dashboard-left ul');
-			var child = ul.children;
-			if(localStorage.myAuthor == undefined) return;
-			var numLi = localStorage.myAuthor.split(" ");
-			numLi.length = numLi.length-1; // ""를 제거하기 위해서
 			
-			for(var j=0; j<numLi.length; j++){
-				for(var i=0; i<child.length; i++){
-					if(child[i].firstElementChild.getAttribute('data-reporter_id')==numLi[j]){ul.appendChild(child[i])}
+			if (ul !== null) {
+				var child = ul.children;
+				if(localStorage.myAuthor == undefined) return;
+				var numLi = localStorage.myAuthor.split(" ");
+				numLi.length = numLi.length-1; // ""를 제거하기 위해서
+				
+				for(var j=0; j<numLi.length; j++){
+					for(var i=0; i<child.length; i++){
+						if(child[i].firstElementChild.getAttribute('data-reporter_id')==numLi[j]){ul.appendChild(child[i])}
 					}
+				}
 			}
 		}
 
