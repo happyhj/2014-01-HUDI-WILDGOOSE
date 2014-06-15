@@ -115,3 +115,18 @@ and (max-width : 320px)  {
 		font-size: 14px;
 	}
 }
+
+
+.card {
+	margin: 10px 0;
+	width: 100%;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box; /* Firefox */
+} 
+.card {
+	transition: all 0.5s ease-in;
+	-webkit-transition: all 0.5s ease-in 0;
+}
+.card.blur {
+	opacity: 0.4;
+}

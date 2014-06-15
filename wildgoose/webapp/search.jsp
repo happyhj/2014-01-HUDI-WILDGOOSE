@@ -25,10 +25,10 @@
 			<form class="search_form" action="./search" method="get">
 			<ul class="search-column-box">
 				<li class="search-query-entry">
-					<input type="search" id="query-entry" autocomplete="off" name="q" placeholder="기자, URL검색" value="${ requestScope.data.searchQuery }" />
+					<input type="search" id="query-entry" autocomplete="off" name="q" placeholder="기자 검색" value="${ requestScope.data.searchQuery }" />
 				</li>
 				<li class="search-button">
-					<input type="submit" id="search-action" value ="Search"/>
+					<input type="submit" id="search-action" value ="검색"/>
 				</li>
 			</ul>
 			<%-- 자동완성 --%>
