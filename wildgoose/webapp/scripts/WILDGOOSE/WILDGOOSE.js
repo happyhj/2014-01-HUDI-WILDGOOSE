@@ -143,17 +143,19 @@ var values = {sourceEle : null, destEle : null};
 		}
 		
 		function _addEvent(target){
-			var children = target.children;
-			[].forEach.call(children, function(child){
-				child.draggable = "true";
-				child.addEventListener('dragstart', function(e){ _dragStart(e);}, false);
-				child.addEventListener('dragover', function(e){ _dragOver(e);}, false);
-				child.addEventListener('drop', function(e){ _drop(e);}, false);
-				child.addEventListener('dragend', function(e){ _dragEnd(e);}, false);
-//				child.style.transition = "all 2s";
-//				child.style.WebkitTransition = "all 2s";
-				
-			});
+			if (target !== null) {
+				var children = target.children;
+				[].forEach.call(children, function(child){
+					child.draggable = "true";
+					child.addEventListener('dragstart', function(e){ _dragStart(e);}, false);
+					child.addEventListener('dragover', function(e){ _dragOver(e);}, false);
+					child.addEventListener('drop', function(e){ _drop(e);}, false);
+					child.addEventListener('dragend', function(e){ _dragEnd(e);}, false);
+//					child.style.transition = "all 2s";
+//					child.style.WebkitTransition = "all 2s";
+					
+				});
+			}
 		}
 		
 		function execute(args){
@@ -179,15 +181,18 @@ var values = {sourceEle : null, destEle : null};
 		
 		function _myAuthorOrder(){
 			var ul = document.querySelector('.dashboard-left ul');
-			var child = ul.children;
-			if(localStorage.myAuthor == undefined) return;
-			var numLi = localStorage.myAuthor.split(" ");
-			numLi.length = numLi.length-1; // ""를 제거하기 위해서
 			
-			for(var j=0; j<numLi.length; j++){
-				for(var i=0; i<child.length; i++){
-					if(child[i].firstElementChild.getAttribute('data-reporter_id')==numLi[j]){ul.appendChild(child[i])}
+			if (ul !== null) {
+				var child = ul.children;
+				if(localStorage.myAuthor == undefined) return;
+				var numLi = localStorage.myAuthor.split(" ");
+				numLi.length = numLi.length-1; // ""를 제거하기 위해서
+				
+				for(var j=0; j<numLi.length; j++){
+					for(var i=0; i<child.length; i++){
+						if(child[i].firstElementChild.getAttribute('data-reporter_id')==numLi[j]){ul.appendChild(child[i])}
 					}
+				}
 			}
 		}
 
@@ -390,8 +395,8 @@ var values = {sourceEle : null, destEle : null};
 
 	var WILDGOOSE = window.WILDGOOSE || {};
 	WILDGOOSE.ui = WILDGOOSE.ui || {};
-	WILDGOOSE.favorite = WILDGOOSE.favorite || {};
-	WILDGOOSE.favorite.me = WILDGOOSE.favorite.me || {};
+	WILDGOOSE.ui.favorite = WILDGOOSE.ui.favorite || {};
+	WILDGOOSE.ui.favorite.me = WILDGOOSE.ui.favorite.me || {};
 	
 	// 의존성 선언
 	var Ajax = CAGE.ajax;
@@ -926,7 +931,56 @@ var values = {sourceEle : null, destEle : null};
 
 	// 공개 메서드 노출
 	WILDGOOSE.ui.graph = Graph;
-})();(function(window) {
+})();(function() {
+	'use strict';
+	var document = window.document;
+	var console = window.console;
+
+	var WILDGOOSE = window.WILDGOOSE || {};
+	WILDGOOSE.ui = WILDGOOSE.ui || {};
+	WILDGOOSE.ui.startme = WILDGOOSE.ui.startme || {};
+	
+	// 의존성 선언
+	var Ajax = CAGE.ajax;
+	var Dom = CAGE.util.dom;
+	var User = WILDGOOSE.user;
+	
+	var StartMe = {
+		init: function(args) {
+			this.startBtn = args.button;
+			this.starEls = args.target;
+			this.targetArr = [];
+			
+			this.startBtn.addEventListener("click", this.start, false);
+			
+			if (this.startBtn !== null && this.starEls !== null) {
+				Array.prototype.forEach.call(this.starEls, function(node) {
+					node.addEventListener("click", this.check.bind(this), false);
+				}.bind(this));
+			}
+		},
+		
+		check: function(evt) {
+			Dom.removeClass(this.startBtn, "disable");
+		},
+		
+		start: function(evt) {
+			location.href = "/me/" + User.getId();
+		}
+	}
+
+	WILDGOOSE.ui.startme = StartMe;
+	
+	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = WILDGOOSE;
+		// browser export
+	} else {
+		window.WILDGOOSE = WILDGOOSE;
+	}	
+
+})();
+(function(window) {
 	'use strict';
 	var document = window.document;
 	var console = window.console;

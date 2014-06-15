@@ -103,12 +103,16 @@
 	var ArticleMore = WILDGOOSE.more.article;
 	var Drag = WILDGOOSE.drag;
 	var MeFav = WILDGOOSE.ui.favorite.me;
-	var Template = CAGE.util.template;	
+	var Template = CAGE.util.template;
+	var User = WILDGOOSE.user;
+	var Dom = CAGE.util.dom;
+	var StartMe = WILDGOOSE.ui.startme;
 	
 	var MePage = {
 		init: function() {
 			this._articleMoreModule();
 			this._dragModule();
+			this._startMeModule();
 			MeFav.init();
 		},
 		
@@ -121,8 +125,8 @@
 			this.articleMore = new ArticleMore({
 				more: {
 					button: moreEl,
-					curNum: (curNumDiv !== undefined)? parseInt(curNumDiv.innerText) : 0,
-					totalNum: (totalNumDiv !== undefined)? parseInt(totalNumDiv.innerText) : 0
+					curNum: (curNumDiv !== null)? parseInt(curNumDiv.innerText) : 0,
+					totalNum: (totalNumDiv !== null)? parseInt(totalNumDiv.innerText) : 0
 				},
 				container: document.querySelector(".timeline-result ul"),
 				template: Template.get({"url":"/api/v1/templates/articleCard.html"}),
@@ -136,6 +140,18 @@
 				tagName: "LI",
 				movedClassName : "moving"
 			});
+		},
+		
+		_startMeModule: function() {
+			var startBtn = document.querySelector(".start-me");
+			if (startBtn !== null) {
+				var starEls = document.getElementsByClassName("star");
+				
+				StartMe.init({
+					button: startBtn,
+					target: starEls
+				});
+			}				
 		}
 	}
 		
@@ -278,6 +294,9 @@
 					}.bind(this), false);
 				}
 			}
+			
+			var emailEl = document.querySelector(".error-container .form-container input[name=email]");
+			emailEl.focus();
 		},
 		
 		_join: function() {

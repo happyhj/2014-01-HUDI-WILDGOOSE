@@ -11,3 +11,57 @@
 	margin-top:8px;
 	text-align:center;
 }
+
+
+
+
+.container .start-me {
+	color: #fff;
+	text-align: center;
+	border: 1px solid #ccc;
+}
+
+.container .start-me {
+	width: 300px;
+	height: 44px;
+	display: block;
+	margin: 20px auto 0 auto;
+}
+
+
+/*** search more button ***/
+.container .start-me {
+	-webkit-transition: box-shadow 0.15s ease-in-out;
+	   -moz-transition: box-shadow 0.15s ease-in-out;
+		-ms-transition: box-shadow 0.15s ease-in-out;
+		 -o-transition: box-shadow 0.15s ease-in-out;
+		 
+	cursor: pointer;
+	outline: none;
+	border: 0 none;
+	border-radius: 5px;
+	font-size:1.1em;
+	font-weight: 300;
+	/* color: rgba(102,102,102,.95); */
+	color: #fff;
+
+	background: #4882FD;
+
+}
+
+.container .start-me:hover {
+	-webkit-box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
+	   -moz-box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
+			box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.39);
+}
+
+.container .start-me:active {
+	background-color: #3872DD;
+	-webkit-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+	   -moz-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+			box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+}
+
+.container .disable {
+	display: none;
+}
