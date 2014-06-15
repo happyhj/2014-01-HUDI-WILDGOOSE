@@ -1,0 +1,132 @@
+.container {
+	position: relative;
+	width: 890px;
+}
+.topBar-inner-wrapper {
+	width: 890px;
+	padding: 0 10px;
+	box-sizing: border-box;	
+}
+.container::before,
+.container::after {
+	content: " ";
+	display: table;
+}
+.container::after {
+	clear: both;
+}
+
+.dashboard {
+	float: left;
+	width: 300px;	
+	
+	!min-height: 400px; /* 임시 */
+	1background: rgba(255,0,0,.3);
+
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;	
+	padding: 10px 5px;
+	margin: 0;
+}
+.dashboard .card-reporter {
+	padding: 0;
+}
+.dashboard .card-section-headline {
+	display: none;
+}
+.dashboard .card-section-identity {
+	border-bottom-width: 0;
+}
+.dashboard .card,
+.content-main .card {
+	margin-top: 0px;
+	margin-bottom: 10px;
+}
+.dashboard .card:last-child,
+.content-main .card:last-child{
+	margin-bottom: 0;
+}
+.dashboard-right {
+	1background: rgba(0,255,0,.3);
+}
+
+.content-main {
+	float: right;
+	width: 590px;	
+	border-radius:6px;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;	
+	padding: 10px 5px;
+
+	margin: 0;
+	
+}
+.dashboard-header,
+.content-main-header {
+	padding: 5px;
+}
+.dashboard-header > h2, .content-main-header > h2 {
+	font-size: 24px;
+	color: #777;
+	font-weight: 300;
+}
+
+.timeline-result {
+	color: #444;
+}
+
+.card-section-footer > a > span {
+	position: relative;
+	color: #444;
+}
+@media only screen 
+and (min-width : 1236px)  {
+	.container, .topBar-inner-wrapper {	
+		width: 1190px;
+	}
+	.content-main {
+		float: left;
+	}
+	.dashboard-right {
+		float: right;
+	}
+}
+
+@media only screen 
+and (max-width : 640px)  {
+	.container, .topBar-inner-wrapper {
+		width: 100%;
+	}
+	.content-main  {
+		width: 100%;
+	}
+	.dashboard  {
+		display: none;
+	}
+}
+
+
+@media only screen 
+and (max-width : 320px)  {
+	.timeline-result .card-section-footer {
+		font-size: 14px;
+	}
+	.timeline-result .article-title {
+		font-size: 14px;
+	}
+}
+
+
+.card {
+	margin: 10px 0;
+	width: 100%;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box; /* Firefox */
+} 
+.card {
+	transition: all 0.5s ease-in;
+	-webkit-transition: all 0.5s ease-in 0;
+}
+.card.blur {
+	opacity: 0.4;
+}

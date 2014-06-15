@@ -23,14 +23,14 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 	
 	private String encodingType;
 	private Map<String, String[]> parameters;
-	private String URI;
+	private String uri;
 
 	
 	public EncodingRequestWrapper(HttpServletRequest request, String encodingType) {
 		super(request);
 		this.encodingType = encodingType;
 		this.parameters = encodeParameters(super.getParameterMap());
-		this.URI = encodeURI (super.getRequestURI());
+		this.uri = encodeURI (super.getRequestURI());
 	}
 
 	private String encodeURI(String requestURI) {
@@ -39,7 +39,8 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 		try {
 			encodedURI = URLDecoder.decode(requestURI, this.encodingType);
 		} catch (UnsupportedEncodingException e) {
-			LOGGER.debug("Encoding Wrapper Error" + e.getMessage());
+			LOGGER.error("Encoding Wrapper Error");
+			LOGGER.error(e.getMessage(), e);
 		}
 		
 		return encodedURI;
@@ -79,7 +80,8 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 		try {
 			encoded = new String(original.getBytes("8859_1"), encodingType);
 		} catch (UnsupportedEncodingException e) {
-			LOGGER.debug("Utility error" + e.getMessage());
+			LOGGER.error("Utility error");
+			LOGGER.error(e.getMessage(), e);
 		}
 
 		return encoded;
@@ -113,7 +115,7 @@ class EncodingRequestWrapper extends HttpServletRequestWrapper {
 
 	@Override
 	public String getRequestURI() {
-		return this.URI;
+		return this.uri;
 	}
 
 }

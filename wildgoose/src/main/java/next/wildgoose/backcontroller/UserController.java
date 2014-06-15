@@ -5,22 +5,17 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import next.wildgoose.dao.ArticleDAO;
 import next.wildgoose.dao.FavoriteDAO;
-import next.wildgoose.dao.SignDAO;
-import next.wildgoose.dto.Article;
-import next.wildgoose.dto.FavoriteResult;
 import next.wildgoose.dto.Reporter;
-import next.wildgoose.dto.SimpleResult;
-import next.wildgoose.dto.TimelineResult;
-import next.wildgoose.framework.BackController;
+import next.wildgoose.dto.result.FavoriteResult;
+import next.wildgoose.dto.result.SimpleResult;
 import next.wildgoose.framework.Result;
-import next.wildgoose.utility.Uri;
+import next.wildgoose.framework.utility.Uri;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UserController implements BackController {
+public class UserController extends AuthController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class.getName());
 	
 	@Override
@@ -32,45 +27,36 @@ public class UserController implements BackController {
 		String method = request.getMethod();
 		LOGGER.debug(uri.toString());
 		
-		if (isValidUserId(request, userId) == false) {
-			result = new SimpleResult();
-			result.setStatus(404);
-			result.setMessage("User Id Doesn't exists");
+		result = authenticate(request, userId);
+		if (result != null) {
 			return result;
 		}
-		
-		if ("timeline".equals(pageName)) {
-			result = getTimeline(request, userId);
-		} else if ("favorites".equals(pageName)) {
+		 
+		if ("favorites".equals(pageName)) {
 			if ("GET".equals(method)) {
-				result = getFavorites(request, userId);
+				if (uri.check(3, null)) {
+					result = getFavorites(request, userId);
+				} else {
+					int reporterId = Integer.parseInt(uri.get(3));
+					result = isFavorite(request, userId, reporterId);
+				}
 			} else if ("POST".equals(method)) {
-				result = addFavorites(request, userId);
+				result = modifyFavorites("add", request, userId);
 			} else if ("DELETE".equals(method)) {
-				result = removeFavorites(request, userId);
+				result = modifyFavorites("remove", request, userId);
 			}
 		}
+		result.setPageName("me");
 		return result;
 	}
 	
-	private boolean isValidUserId(HttpServletRequest request, String userId) {
+	private Result isFavorite(HttpServletRequest request, String userId,
+			int reporterId) {
 		ServletContext context = request.getServletContext();
-		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
-		if (signDao.findEmail(userId)) {
-			return true;
-		}
-		return false;
-	}
-
-	private TimelineResult getTimeline(HttpServletRequest request, String userId) {
-		ServletContext context = request.getServletContext();
-
-		ArticleDAO articleDao =  (ArticleDAO) context.getAttribute("ArticleDAO");
-		List<Article> articles = articleDao.findArticlesByFavorite(userId);
-		
-		TimelineResult timelineResult = new TimelineResult();
-		timelineResult.setArticles("articles", articles);
-		return timelineResult;
+		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
+		SimpleResult result = new SimpleResult(true);
+		result.setData("bool", favoriteDao.isFavorite(userId, reporterId));
+		return result;
 	}
 	
 	private Result getFavorites(HttpServletRequest request, String userId) {
@@ -81,44 +67,24 @@ public class UserController implements BackController {
 		
 		FavoriteResult favoriteResult = new FavoriteResult();
 		favoriteResult.setStatus(200);
-		favoriteResult.setMessage("success");
+		favoriteResult.setMessage("OK");
 		LOGGER.debug(""+reporters.size());
-		favoriteResult.setFavorites("reporters", reporters);
+		favoriteResult.setFavorites(reporters);
 		return favoriteResult;
 	}
 	
-	private SimpleResult addFavorites(HttpServletRequest request, String userId) {
+	private SimpleResult modifyFavorites(String how, HttpServletRequest request, String userId) {
 		ServletContext context = request.getServletContext();
 		FavoriteDAO favDao = (FavoriteDAO) context.getAttribute("FavoriteDAO");
-		SimpleResult simpleResult = new SimpleResult();
+		boolean success = false;
 		
 		int reporterId = Integer.parseInt(request.getParameter("reporter_id"));
-		if (favDao.addFavorite(reporterId, userId)) {
-			simpleResult.setStatus(200);
-			simpleResult.setMessage("success");
-		}
-		return simpleResult;
-	}
-
-	private SimpleResult removeFavorites(HttpServletRequest request, String userId) {
-		ServletContext context = request.getServletContext();
-		FavoriteDAO favDao = (FavoriteDAO) context.getAttribute("FavoriteDAO");
-		SimpleResult simpleResult = new SimpleResult();
 		
-		int reporterId = Integer.parseInt(request.getParameter("reporter_id"));
-		if (favDao.removeFavorite(reporterId, userId)) {
-			simpleResult.setStatus(200);
-			simpleResult.setMessage("success");
+		if ("add".equals(how) && favDao.addFavorite(reporterId, userId)) {
+			success = true;
+		} else if ("remove".equals(how) && favDao.removeFavorite(reporterId, userId)) {
+			success = true;
 		}
-		return simpleResult;
-	}
-	
-	private String dollarSignToAtMark(String dollarSignedId) {
-		String atMarkedId = null;
-		if (dollarSignedId == null) {
-			return null;
-		}
-		atMarkedId = dollarSignedId.replace("$", "@");
-		return atMarkedId;
+		return new SimpleResult(success);
 	}
 }

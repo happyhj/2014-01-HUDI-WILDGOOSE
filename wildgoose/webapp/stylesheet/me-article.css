@@ -1,0 +1,116 @@
+@CHARSET "UTF-8";
+/* @font-face{
+	font-family:"NM";
+	src:url('/fonts/NanumMyeongjo.eot');
+	src:url('/fonts/NanumMyeongjo.eot?#iefix') format('embedded-opentype'),
+	url('/fonts/NanumMyeongjo.woff') format('woff'),
+	url('/fonts/NanumMyeongjo.ttf') format('truetype');
+	src:local('※'), url('/fonts/NanumMyeongjo.woff') format('woff');
+
+	font-style: normal;
+	font-weight: normal;
+}
+ */
+
+
+
+/* 모든 해상도 공용 글꼴 - 시스템 글꼴만 선언 */
+/* body, input, textarea, button, select, table {
+    font-family: 나눔고딕, NanumGothic, Tahoma, Sans-serif;
+} */
+/* 태블릿 PC와 데스크톱용 글꼴 - 시스템 글꼴 다음으로 웹 폰트를 참조하도록 선언 */
+/* @media all and (min-width: 768px) {
+    @font-face{font-family:nm; src:url(/fonts/NanumMyeongjo.eot); src:local('※'), url(/fonts/NanumMyeongjo.woff) format('woff');}
+    .nm{font-family:NanumMyeongjo, nm,Tahoma,Sans-serif}
+} */
+
+
+/* .card-section .NM {
+	font-family:NanumMyeongjo,NM
+} */
+
+.card {
+	width: 580px;
+	margin-left: 150px;
+	padding: 18px;
+	font-family: 'NanumMyeongjo';
+
+}
+
+.card-section {
+	position: relative;
+	word-break: break-all;
+}
+.card-section-article > .article-preview {
+	text-align: left;
+}
+.card-section-article > .article-title > h1 {
+	font-size: 2em;
+	margin-bottom: 15px;
+	color: #333;
+}
+.card-section-article > .article-preview > p {
+	font-size: 1em;
+	line-height: 1.5em;
+	margin-bottom: 25px
+}
+
+
+.card-section-article > a > span,
+.card-section-footer > a > span {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+}
+
+.card-section-footer {
+	text-align: right;
+	padding-top: 15px;
+	color: #888;
+}
+
+/*** article more button ***/
+.article-more {
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+.article-more button {
+	width: 300px;
+	height: 44px;
+	display: block;
+	margin: 0 auto;
+}
+
+
+
+/*** article more button ***/
+.article-more button {
+	-webkit-transition: box-shadow 0.15s ease-in-out;
+	   -moz-transition: box-shadow 0.15s ease-in-out;
+		-ms-transition: box-shadow 0.15s ease-in-out;
+		 -o-transition: box-shadow 0.15s ease-in-out;
+		 
+	cursor: pointer;
+	outline: none;
+	border: 0 none;
+	border-radius: 5px;
+	font-size:1em;
+	font-weight: 400;
+	color: rgba(102,102,102,.95);
+	
+	background: rgba(202,202,202,.6);
+	
+}
+
+.article-more button:hover {
+	-webkit-box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.19);
+	   -moz-box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.19);
+			box-shadow: 1px 1px 1px 0 rgba(50,50,50,0.19);
+}
+
+.article-more button:active {
+	-webkit-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.19);
+	   -moz-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.19);
+			box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.19);
+}

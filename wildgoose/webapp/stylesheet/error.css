@@ -1,0 +1,297 @@
+/* Layout rules */
+html, 
+body {
+	height: 100%;
+}
+
+.wrap {
+	position: relative;
+	width: 100%;
+	min-height: 100%;	
+}
+
+.header {
+	width: 100%;
+	height: 50px;
+}
+.topbar {
+	height: 50px;
+}
+.container {
+	width: 100%;
+	margin: 0;
+}
+.bg {
+	1top: 50%;
+	left: 50%;
+}
+.logo {
+	top: 70px;
+	left: 50%;
+	margin-left: 257px;
+	opacity: .4;
+}
+.primary {
+	top: 80px;
+	left: 50%;
+	margin-left: -77px;
+}
+.sweat-drop {
+	top: 80px;
+	left: 50%;
+	margin-left: 180px;
+}
+.msg {
+	top: 60px;
+	left: 50%;
+	margin-left: -350px;
+}
+.search-container{
+	position: relative;
+	max-width: 800px;
+	1background: blue;
+	margin: 0 auto;
+	padding-top: 50px;
+	
+	text-align: center;
+	max-width: 960px;
+}
+.search-input {
+outline:none;
+display: inline-block;
+width: 400px;
+height: 40px;
+padding: 5px 27px 6px 12px;
+font-size: 28px;
+line-height: 1;
+color: #ffffff;
+background-color: #6b2e7a;
+border: 0;
+border-radius: 8px;
+transition: all .2s ease-in-out;
+}
+
+.search-input::-webkit-input-placeholder{
+	color: white;
+	opacity: .7;
+}
+
+.search-wrapper {
+  position: relative;
+}
+label {
+	display: inline-block;
+	1width: 300px;
+	1font-size: 16px;
+	!margin-bottom: 10px;
+}
+
+.input-query-entry input[type='submit'] {
+display: inline-block;
+text-align: center;
+1width: 80px;
+height: 50px;
+padding: 5px 27px 6px 27px;
+font-size: 28px;
+line-height: 1;
+color: #ffffff;
+background-color: #6b2e7a;
+border: 0;
+border-radius: 8px;
+transition: all .2s ease-in-out;
+}
+/** ipad **/
+@media only screen 
+and (max-width : 700px) {
+.bg {
+	1top: 50%;
+	left: 50%;
+}
+.logo {
+	top: 70px;
+	left: 50%;
+	margin-left: 50px;
+	width: 50px;
+}
+.primary {
+	top: 160px;
+	left: 50%;
+	margin-left: -60px;
+	width: 220px;
+}
+.sweat-drop {
+	top: 180px;
+	left: 50%;
+	margin-left: 120px;
+	width: 34px;
+}
+.msg {
+	top: 50px;
+	left: 50%;
+	margin-left: -155px;
+	width: 180px;
+}
+}
+
+/** ipad **/
+@media only screen 
+and (max-width : 600px) {
+label {
+	display: inline-block;
+	width: 300px;
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+.search-container{
+	padding-top: 25px;
+}
+.search-input {
+	width: 200px;
+	height: 20px;
+	font-size: 14px;
+}
+.input-query-entry input[type='submit'] {
+	height: 30px;
+	padding: 5px 13px 6px 13px;
+	font-size: 14px;
+}
+}
+
+
+
+
+
+/******  ******/
+
+/** ipad **/
+@media only screen 
+and (min-width : 650px) {
+	.error-container {
+		width: 500px;
+		margin-top:25%;
+	}
+}
+
+/** pablet **/
+@media only screen 
+and (max-width : 650px)  
+and (min-width : 490px) {
+	.error-container {
+		width: 450px;
+		margin-top:18%;
+	}
+}
+
+/** iphone **/
+@media only screen 
+and (max-width : 490px)  {
+	.error-container {
+		margin-left:2%;
+		width: 96%;
+		margin-top:6%;
+	}
+}
+
+.error-container {
+	margin: 0 auto;
+}
+
+
+.error-container .form-container .input {
+	border: 1px solid #B3B3B3;
+}
+
+.error-container .form-container .enable {
+	background-color: #67367B;
+}
+.error-container .form-container .enable:active {
+	background-color: #3D2149;
+}
+
+
+/*** parallax-stage ***/
+
+.parallax-stage .msg {
+	width: 270px;
+	height: 240px;
+	
+	position: absolute;
+	top: 60px;
+	left: 50%;
+	margin-left: -350px;
+}
+.parallax-stage .msg > div {
+	position: relative;
+}
+
+.parallax-stage .msg-code {
+	color: #fff;
+	font-size: 8em;
+	font-weight: 800;
+	hieght: 40%;
+	line-height:70%;
+	text-shadow: 2px 2px rgba(100, 100, 100, .5);
+}
+
+.parallax-stage .msg-content {
+	width:250px;
+	height: 130px;
+	background: rgba(255,255,255,.9);
+	border-radius: 5px;
+	padding: 10px;
+	
+	color: #3265C0;
+	font-size: 1.8em;
+	font-weight: 600;
+	
+	-webkit-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+	-moz-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+	box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+	
+	-webkit-box-shadow: 2px 2px 2px 0px rgba(50, 50, 50, .7);
+	-moz-box-shadow:    2px 2px 2px 0px rgba(50, 50, 50, .7);
+	box-shadow:         2px 2px 2px 0px rgba(50, 50, 50, .7);
+	
+	border: 1px solid rgba(255,255,255,.9);
+}
+
+.parallax-stage .msg-content .arrow {
+	position:absolute;
+
+	color: #fff;
+	z-index: 100;
+	top:100px;
+	margin-left: 258px;
+	font-size: 1em;
+	opacity: .9;
+	
+	text-shadow: 2px 2px rgba(50, 50, 50, .7);
+}
+
+
+/** iphone **/
+@media only screen 
+and (max-width : 700px) {
+.parallax-stage .msg {
+	
+	top: 50px;
+	left: 50%;
+	margin-left: -155px;
+	width: 180px;
+}
+
+.parallax-stage .msg-code {
+	font-size: 5em;
+}
+.parallax-stage .msg-content {
+	width:150px;
+	height: 80px;
+	font-size: 1.2em;
+}
+.parallax-stage .msg-content .arrow{
+	top:70px;
+	margin-left: 158px;
+	font-size: 0.8em;
+}
+}
+

@@ -1,20 +1,14 @@
 package next.wildgoose.backcontroller;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Random;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
-import next.wildgoose.dto.TemplateResult;
+import next.wildgoose.dto.result.TemplateResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
+import next.wildgoose.framework.support.ResourceLoader;
+import next.wildgoose.framework.utility.Uri;
 import next.wildgoose.utility.Constants;
-import next.wildgoose.utility.Uri;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,45 +18,25 @@ public class TemplateController implements BackController {
 	
 	@Override
 	public Result execute(HttpServletRequest request) {
-		Result result = readTemplate(request);
-		return result;
-	}
-	
-	private TemplateResult readTemplate(HttpServletRequest request) {
 		ServletContext context = request.getServletContext();
 		Uri uri = new Uri(request);
 		String templateFileName = uri.get(1);
+		LOGGER.debug("templateFileName: " + templateFileName);
 		String root = context.getRealPath(Constants.RESOURCE_ROOT);
 		String path = root +"html_templates/"+ templateFileName;
-		TemplateResult result = new TemplateResult();
-		String htmlDocument = null;
-	
-		if ("login.html".equals(templateFileName)) {
-			HttpSession session = request.getSession();
-			Random random = new Random();
-			String rand = Double.toString(random.nextDouble());
-			rand = rand.replace("0.", "");
-			session.setAttribute("randNum", rand);
-			result.setRand(rand);
-		}
-		try {
-			BufferedReader in = new BufferedReader(new FileReader(path));
-			StringBuilder sb = new StringBuilder();
-			String temp;
-			while ((temp = in.readLine()) != null) {
-		        sb.append(temp);
-		    }
-			in.close();
-			htmlDocument = sb.toString();
-			result.setMessage("Loading template string success");
-			result.setStatus(200);
-			result.setTemplate(htmlDocument);
-		} catch (FileNotFoundException e) {
-			result.setMessage("request file is not exist");
-		} catch (IOException e) {
-			result.setMessage("can't read file");
-		}
+		Result result = readTemplate(path);
 		
+		return result;
+	}
+	
+	private TemplateResult readTemplate(String path) {
+		TemplateResult result = new TemplateResult();
+		StringBuilder htmlDocumentSB = ResourceLoader.load(path);
+		if (htmlDocumentSB != null) {
+			result.setStatus(200);
+			result.setMessage("OK");
+			result.setTemplate(htmlDocumentSB.toString());
+		}
 		
 		return result;
 	}

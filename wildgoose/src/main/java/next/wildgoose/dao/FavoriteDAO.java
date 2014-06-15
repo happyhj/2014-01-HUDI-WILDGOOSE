@@ -6,10 +6,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import next.wildgoose.dao.template.JdbcTemplate;
-import next.wildgoose.dao.template.PreparedStatementSetter;
-import next.wildgoose.dao.template.RowMapper;
 import next.wildgoose.dto.Reporter;
+import next.wildgoose.framework.dao.template.JdbcTemplate;
+import next.wildgoose.framework.dao.template.PreparedStatementSetter;
+import next.wildgoose.framework.dao.template.RowMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,5 +124,36 @@ public class FavoriteDAO {
 		query.append("JOIN article ON article.URL = result.article_URL JOIN press ON result.press_id = press.id) AS author ON author.id = myfav.author_id");
 		
 		return (List<Reporter>) t.execute(query.toString(), pss, rm);
+	}
+
+
+	public boolean isFavorite(final String userId, final int reporterId) {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+
+			@Override
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, userId);
+				psmt.setInt(2, reporterId);
+			}
+		};
+		
+		RowMapper rm = new RowMapper() {
+			@Override
+			public Object mapRow(ResultSet rs) throws SQLException {
+				if (rs.first()) {
+					return new Object();
+				}
+				return null;
+			}
+		};
+		
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT * FROM favorite WHERE user_email=? AND author_id=? ");
+		
+		if (t.execute(query.toString(), pss, rm) != null) {
+			return true;
+		}
+		return false;
 	}
 }

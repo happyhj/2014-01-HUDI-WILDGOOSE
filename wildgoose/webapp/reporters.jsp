@@ -10,24 +10,27 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/basic_layout.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/header.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/articles.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/reporters-articles.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/show_reporter.css" />
+<link type="text/css" rel="stylesheet" href="/stylesheet/reporters.css" />
 <title>${ requestScope.data.reporter.name }기자</title>
 </head>
 <body>
 <div class="wrap viewport">
 <header class="header"> 
-	<%@ include file="jsp_templates/header.jsp" %> 
+	<%@ include file="/header.jsp" %> 
 </header>
 <div class="container test-outline">
 	<!-- 기자 정보 -->
 	<div class="card">
-		<div class="card-section card-section-identity">
+		<div class="card-section card-section-identity" data-reporter_id="${ requestScope.data.reporter.id }">
 			<h3 class="name">
 				<a href="/reporters/${ requestScope.data.reporter.id }">${ requestScope.data.reporter.name }</a>
 			</h3>
 			<p class="email">${ requestScope.data.reporter.email }</p>
+			<div class="favorite">
+				<div class="star<c:if test="${ empty sessionScope.userId }"> invisible</c:if>"></div>
+			</div>
 			<div class="${ requestScope.data.reporter.pressName } press-tag"></div>
 		</div>
 	</div>
@@ -85,18 +88,21 @@
 		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
 		<script type="text/javascript" src="/CAGE/src/CAGE.util.js"></script>
 		
-		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.ui.graph.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.ui.favorite.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.ui.graph.js"></script>
+		
+		<script type="text/javascript" src="/scripts/APP/APP.page.reporter.js"></script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript" src="/CAGE/src/CAGE.min.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/WILDGOOSE.min.js"></script>
+		<script type="text/javascript" src="/scripts/APP/APP.min.js"></script>
 	</c:otherwise>
 </c:choose>
 
 <script>
 window.addEventListener("load", function() {
-	var Graph = WILDGOOSE.ui.graph;
-	Graph.init();
+	APP.page.reporter.init();
 }, false);
 </script>
 </body>

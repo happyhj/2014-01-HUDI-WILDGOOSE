@@ -4,14 +4,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import next.wildgoose.dao.template.JdbcTemplate;
-import next.wildgoose.dao.template.PreparedStatementSetter;
-import next.wildgoose.dao.template.RowMapper;
+import next.wildgoose.framework.dao.template.JdbcTemplate;
+import next.wildgoose.framework.dao.template.PreparedStatementSetter;
+import next.wildgoose.framework.dao.template.RowMapper;
 
 
 public class SignDAO {
-		
-	public boolean findEmail (final String email) {		
+	public boolean findEmail (final String email) {	
 		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
@@ -103,6 +102,22 @@ public class SignDAO {
 			}
 		};
 		String query = "DELETE FROM user_account WHERE email =?";
+		return (Boolean) t.execute(query, pss);
+	}
+
+	public static boolean changePassword(final String email, final String newPassword) {
+		JdbcTemplate t = new JdbcTemplate();
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
+
+			@Override
+			public void setValues(PreparedStatement psmt) throws SQLException {
+				psmt.setString(1, newPassword);
+				psmt.setString(2, email);
+			}
+		};
+
+		String query = "UPDATE user_account SET password=? WHERE email=?";
+		
 		return (Boolean) t.execute(query, pss);
 	}
 }

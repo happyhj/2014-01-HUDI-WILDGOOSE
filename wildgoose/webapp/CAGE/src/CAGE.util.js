@@ -49,9 +49,17 @@
 		} else {
 			DOM.className = DOM.className.replace(className + " ", "");
 		}
-	}	
+	};
 	
 	var Util = {
+		object : {
+			extend: function(dest, src) {
+				for (var property in src) {
+					dest[property] = src[property];
+				}
+				return dest;
+			}
+		},
 		dom : {
 			hasClass : (function() {
 				if(isClassListExist) {
@@ -75,7 +83,17 @@
 						return DOM.classList.remove(className);
 					}
 				} else return addClass_common;
-			})()
+			})(), 
+			isDescendant : function(parent, child) {
+			     var node = child.parentNode;
+			     while (node != null) {
+			         if (node == parent) {
+			             return true;
+			         }
+			         node = node.parentNode;
+			     }
+			     return false;
+			}
 		},
 		
 		string: {
@@ -115,7 +133,8 @@
 		        var resultStr = Util.string.trim(templateString);
 		        for (var variableName in dataObj) {
 		            if (dataObj[variableName]===0||dataObj[variableName]) {
-		                resultStr = resultStr.replace("<%= "+variableName+" %>", dataObj[variableName]);
+		            	var reg = "<%= "+variableName+" %>"
+		                resultStr = resultStr.replace(RegExp(reg, "gm"), dataObj[variableName]);
 		            }
 		        }
 		        return resultStr;
@@ -126,13 +145,17 @@
 			},
 			
 			// xhr, using synchronized get method
-			get: function(orgs) {
+			get: function(args) {
 				var Ajax = CAGE.ajax;
-				var url = orgs.url;
+				var url = args.url;
 				var template = null;
-				Ajax.GET({"url":url, "isAsync":false, "callback":function(templateResponse) {
-					template = JSON.parse(templateResponse)["data"]["template"];
-				}});
+				Ajax.GET({
+					"url":url,
+					"isAsync":false,
+					"callback":function(templateResponse) {
+						template = JSON.parse(templateResponse)["data"]["template"];
+					}
+				});
 				
 				return template;
 			}

@@ -11,20 +11,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import next.wildgoose.dao.FavoriteDAO;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class EncodingFilter implements Filter {
-	private static final Logger LOGGER = LoggerFactory.getLogger(EncodingFilter.class.getName());
-	
 	private String encodingType = null;
-	private FilterConfig filterConfig;
-	
 	
 	public void init(FilterConfig filterConfig) throws ServletException {
-		this.filterConfig = filterConfig;
 		this.encodingType = filterConfig.getServletContext().getInitParameter("encoding");
 	}
 

@@ -1,0 +1,36 @@
+.parallax-wrapper {
+	position: relative;
+	z-index: 0;
+	transition: all 0.25s ease-in;
+	-webkit-transition: all 0.25s ease-in 0;
+	overflow: hidden;
+}
+.parallax-bg {
+	overflow: hidden;
+	position: relative;
+	left: 0;
+	top: 0;
+	height: 370px;
+	width: 100%;
+}
+.parallax-illustration {
+	display: block;
+	margin: 0 auto;
+	width: 940px;
+	height: 370px;
+	position: relative;
+	overflow: hidden;
+	clear: both;
+}
+.parallax-stage img {
+	position: absolute;
+}
+
+.parallax-bg .bg {
+position: absolute;
+top: -20px;
+left: -20px;
+width: 110%;
+height: 425px;
+z-index: -1;	
+}

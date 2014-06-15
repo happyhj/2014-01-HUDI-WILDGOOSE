@@ -1,0 +1,38 @@
+<div class="join-container">
+<form class="form-container" name="withdraw">
+	<div class="profile-circle">
+		<div class="profile-circle-photo"><img src="/image/logo.png" alt="photo" class="profile-photo"/></div>
+	</div>
+	
+	<div class="input input-column">
+		<ul class="input-column-box">
+			<li class="input-query-entry">
+				<input type="email" id="email" name="email" readonly="readonly"  data-check="true" value="<%= email %>"/>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="input input-column">
+		<ul class="input-column-box">
+			<li class="input-query-entry">
+				<input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" data-check="true"/>
+			</li>
+			<li class="input-error-label">
+				<label for="password" class="form-msg msg-password"></label>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="input input-column">
+		<ul class="input-column-box">
+			<li class="input-query-entry">
+				<input type="password" id="confirm" name="confirm" placeholder="다시 한 번 입력해주세요" data-check="true"/>
+			</li>
+			<li class="input-error-label">
+				<label for="confirm" class="form-msg msg-confirm"></label>
+			</li>
+		</ul>
+	</div>
+	<button type="button" name="submit" id="withdraw" class="disable">탈퇴하기</button>
+</form>
+</div>

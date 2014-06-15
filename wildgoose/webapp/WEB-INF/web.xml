@@ -36,6 +36,7 @@
 		<display-name>FrontController</display-name>
 		<servlet-name>FrontController</servlet-name>
 		<servlet-class>next.wildgoose.framework.FrontController</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 
@@ -63,6 +64,10 @@
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.ico</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.woff</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>FrontController</servlet-name>
@@ -96,7 +101,7 @@
 	<!-- value가 on이 아닌 경우만 *.min.js로 로딩 -->
 	<context-param>
 		<param-name>debuggerMode</param-name>
-		<param-value>on</param-value>
+		<param-value>off</param-value>
 	</context-param>
 	
 
@@ -112,6 +117,9 @@
 	</listener>
 	<listener>
 		<listener-class>next.wildgoose.web.WebListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>next.wildgoose.framework.ErrorListener</listener-class>
 	</listener>
 	
 	
@@ -136,4 +144,14 @@
 		<filter-name>QueryFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<!-- Error Page -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error.jsp</location>
+	</error-page>
 </web-app>

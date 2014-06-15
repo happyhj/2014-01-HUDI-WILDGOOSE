@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // THIS IS SINGLETON PATTERN
 public class DataSource {
+	private static final Logger LOGGER = LoggerFactory.getLogger(DataSource.class.getName());
 	private static DataSource dataSource;
 	private BasicDataSource bds;
 	
@@ -30,8 +33,6 @@ public class DataSource {
 	}
 	
 	public static DataSource getInstance() {
-		if (dataSource == null) {
-		}
 		return dataSource;
 	}
 
@@ -41,7 +42,7 @@ public class DataSource {
 		try {
 			con = this.bds.getConnection();
 		} catch (SQLException e) {
-			e.getMessage();
+			LOGGER.debug(e.getMessage(), e);
 		}
 		return con;
 	}

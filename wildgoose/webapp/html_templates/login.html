@@ -1,52 +1,35 @@
-<link type="text/css" rel="stylesheet" href="/stylesheet/account.css" />
-<div class="ajax-text-and-image white-popup-block card">
-	<style>
-	.ajax-text-and-image {
-		position: relative;
-		width:700px; margin: 0; padding: 0; line-height: 0;
-		background-color: #DDD;
-	}
-	.ajcol {
-		width: 50%; float:left;
-	}
-	.ajcol.left {
-		height: 350px;
-		background-image: url(image/wild-goose-chase.jpg);
-		background-size: cover;
-	}
-	.ajcol.right {
-		height: 200px;
-	}
-	@media all and (max-width:35em) {
-		.ajax-text-and-image {
-			width: 350px;
-			height: 450px;
-			1margin-top: -40px;
-		}
-		.ajcol.left {
-			height: 220px;
-			background-position: center center;
-		}
-		.ajcol { 
-			width: 100%;
-			float:none;
-		}
-		.form-container {
-			height:90%;
-		}
-	}
-	</style>
-	<div class="ajcol left">
+<div class="join-container">
+<form class="form-container" name="login">
+	<div class="profile-circle">
+		<div class="profile-circle-photo"><img src="/image/logo.png" alt="photo" class="profile-photo"/></div>
 	</div>
-	<div class="ajcol login-container right" style="line-height: 1.231;">
-		<form class="form-container">
-			<input name="randomNumber" type="hidden" value="<%= randNum %>" />
-			<input class="input" type="email" id="email" name="email" placeholder="이메일을 입력하세요" />
-			<label for="name" class="form-msg msg-email"></label>
-			<input class="input" type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" data-check="true"/>
-			<label for="password" class="form-msg msg-password"></label>
-			<input class="button" type="button" id="create" value="로그인하기"/>
-		</form>
+	
+	<div class="input input-column">
+		<ul class="input-column-box">
+			<li class="input-query-entry">
+				<input type="email" id="email" name="email" placeholder="이메일을 입력하세요" data-check="true"/>
+			</li>
+			<li class="input-error-label">
+				<label for="email" class="form-msg msg-email"></label>
+			</li>
+		</ul>
 	</div>
-	<div style="clear:both; line-height: 0;"></div>
+	
+	<div class="input input-column">
+		<ul class="input-column-box">
+			<li class="input-query-entry">
+				<input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" data-check="true"/>
+			</li>
+			<li class="input-error-label">
+				<label for="password" class="form-msg msg-password"></label>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="input-column">
+		<span id="result-msg"></span>
+	</div>
+
+	<button type="button" name="submit" id="create" class="disable">로그인하기</button>
+</form>
 </div>

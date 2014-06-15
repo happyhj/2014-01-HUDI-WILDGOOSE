@@ -6,10 +6,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import next.wildgoose.dao.template.JdbcTemplate;
-import next.wildgoose.dao.template.PreparedStatementSetter;
-import next.wildgoose.dao.template.RowMapper;
 import next.wildgoose.dto.NumberOfArticles;
+import next.wildgoose.framework.dao.template.JdbcTemplate;
+import next.wildgoose.framework.dao.template.PreparedStatementSetter;
+import next.wildgoose.framework.dao.template.RowMapper;
 
 public class NumberOfArticlesDAO {
 	
@@ -50,8 +50,7 @@ public class NumberOfArticlesDAO {
 			query.append("WHERE URL in (Select article_URL as url from article_author where author_id = ?) ");
 			query.append("and DATEDIFF(now(), article.datetime) < 7 ");
 			query.append("group by date_format(datetime, '%m/%d');");
-		}
-		else if ("section".equals(condition)) {
+		} else if ("section".equals(condition)) {
 			query.append("SELECT distinct sec.name, count(section_id) FROM article ");
 			query.append("JOIN (SELECT author_id, article_URL FROM article_author as aa WHERE aa.author_id = ?) as result ");
 			query.append("ON URL = result.article_URL ");
@@ -82,8 +81,7 @@ public class NumberOfArticlesDAO {
 				}
 				
 			};
-		}
-		else if ("section".equals(condition)) {
+		} else if ("section".equals(condition)) {
 			rm = new RowMapper() {
 
 				@Override
