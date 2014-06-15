@@ -83,7 +83,7 @@ label {
 	display: inline-block;
 	1width: 300px;
 	1font-size: 16px;
-	margin-bottom: 10px;
+	!margin-bottom: 10px;
 }
 
 .input-query-entry input[type='submit'] {
@@ -156,3 +156,142 @@ label {
 	font-size: 14px;
 }
 }
+
+
+
+
+
+/******  ******/
+
+/** ipad **/
+@media only screen 
+and (min-width : 650px) {
+	.error-container {
+		width: 500px;
+		margin-top:25%;
+	}
+}
+
+/** pablet **/
+@media only screen 
+and (max-width : 650px)  
+and (min-width : 490px) {
+	.error-container {
+		width: 450px;
+		margin-top:18%;
+	}
+}
+
+/** iphone **/
+@media only screen 
+and (max-width : 490px)  {
+	.error-container {
+		margin-left:2%;
+		width: 96%;
+		margin-top:6%;
+	}
+}
+
+.error-container {
+	margin: 0 auto;
+}
+
+
+.error-container .form-container .input {
+	border: 1px solid #B3B3B3;
+}
+
+.error-container .form-container .enable {
+	background-color: #67367B;
+}
+.error-container .form-container .enable:active {
+	background-color: #3D2149;
+}
+
+
+/*** parallax-stage ***/
+
+.parallax-stage .msg {
+	width: 270px;
+	height: 240px;
+	
+	position: absolute;
+	top: 60px;
+	left: 50%;
+	margin-left: -350px;
+}
+.parallax-stage .msg > div {
+	position: relative;
+}
+
+.parallax-stage .msg-code {
+	color: #fff;
+	font-size: 8em;
+	font-weight: 800;
+	hieght: 40%;
+	line-height:70%;
+	text-shadow: 2px 2px rgba(100, 100, 100, .5);
+}
+
+.parallax-stage .msg-content {
+	width:250px;
+	height: 130px;
+	background: rgba(255,255,255,.9);
+	border-radius: 5px;
+	padding: 10px;
+	
+	color: #3265C0;
+	font-size: 1.8em;
+	font-weight: 600;
+	
+	-webkit-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+	-moz-box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+	box-shadow: inset 1px 1px 1px 0 rgba(50,50,50,0.39);
+	
+	-webkit-box-shadow: 2px 2px 2px 0px rgba(50, 50, 50, .7);
+	-moz-box-shadow:    2px 2px 2px 0px rgba(50, 50, 50, .7);
+	box-shadow:         2px 2px 2px 0px rgba(50, 50, 50, .7);
+	
+	border: 1px solid rgba(255,255,255,.9);
+}
+
+.parallax-stage .msg-content .arrow {
+	position:absolute;
+
+	color: #fff;
+	z-index: 100;
+	top:100px;
+	margin-left: 258px;
+	font-size: 1em;
+	opacity: .9;
+	
+	text-shadow: 2px 2px rgba(50, 50, 50, .7);
+}
+
+
+/** iphone **/
+@media only screen 
+and (max-width : 700px) {
+.parallax-stage .msg {
+	
+	top: 50px;
+	left: 50%;
+	margin-left: -155px;
+	width: 180px;
+}
+
+.parallax-stage .msg-code {
+	font-size: 5em;
+}
+.parallax-stage .msg-content {
+	width:150px;
+	height: 80px;
+	font-size: 1.2em;
+}
+.parallax-stage .msg-content .arrow{
+	top:70px;
+	margin-left: 158px;
+	font-size: 0.8em;
+}
+}
+

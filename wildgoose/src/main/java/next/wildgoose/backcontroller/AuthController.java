@@ -20,6 +20,7 @@ public abstract class AuthController implements BackController {
 		if (!isValidUserId(request, userId)) {
 			sResult = new SimpleResult();
 			sResult.setStatus(404);
+			sResult.setPageName("join");
 			sResult.setMessage(Constants.MSG_WRONG_ID);
 			return sResult;
 		}
@@ -30,6 +31,7 @@ public abstract class AuthController implements BackController {
 		if (visitor == null) {
 			sResult = new SimpleResult();
 			sResult.setStatus(401);
+			sResult.setPageName("login");
 			sResult.setMessage(Constants.MSG_AUTH_NEED);
 			// 로그인 하도록 유도하기
 		}
