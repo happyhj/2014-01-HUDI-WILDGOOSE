@@ -162,6 +162,7 @@
 								<jsSourceFile>ui/WILDGOOSE.ui.favorite.js</jsSourceFile>
 								<jsSourceFile>ui/WILDGOOSE.ui.favorite.me.js</jsSourceFile>
 								<jsSourceFile>ui/WILDGOOSE.ui.graph.js</jsSourceFile>
+								<jsSourceFile>ui/WILDGOOSE.ui.startme.js</jsSourceFile>
 								<jsSourceFile>validation/WILDGOOSE.validator.js</jsSourceFile>
 								
 								<jsSourceFile>account/WILDGOOSE.account.super_type.js</jsSourceFile>
