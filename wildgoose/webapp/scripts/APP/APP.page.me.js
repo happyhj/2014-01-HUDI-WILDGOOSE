@@ -30,8 +30,8 @@
 			this.articleMore = new ArticleMore({
 				more: {
 					button: moreEl,
-					curNum: (curNumDiv !== undefined)? parseInt(curNumDiv.innerText) : 0,
-					totalNum: (totalNumDiv !== undefined)? parseInt(totalNumDiv.innerText) : 0
+					curNum: (curNumDiv !== null)? parseInt(curNumDiv.innerText) : 0,
+					totalNum: (totalNumDiv !== null)? parseInt(totalNumDiv.innerText) : 0
 				},
 				container: document.querySelector(".timeline-result ul"),
 				template: Template.get({"url":"/api/v1/templates/articleCard.html"}),

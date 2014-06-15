@@ -5,8 +5,8 @@
 
 	var WILDGOOSE = window.WILDGOOSE || {};
 	WILDGOOSE.ui = WILDGOOSE.ui || {};
-	WILDGOOSE.favorite = WILDGOOSE.favorite || {};
-	WILDGOOSE.favorite.me = WILDGOOSE.favorite.me || {};
+	WILDGOOSE.ui.favorite = WILDGOOSE.ui.favorite || {};
+	WILDGOOSE.ui.favorite.me = WILDGOOSE.ui.favorite.me || {};
 	
 	// 의존성 선언
 	var Ajax = CAGE.ajax;

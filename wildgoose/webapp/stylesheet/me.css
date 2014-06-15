@@ -4,8 +4,8 @@
 }
 .topBar-inner-wrapper {
 	width: 890px;
-padding: 0 10px;
-box-sizing: border-box;	
+	padding: 0 10px;
+	box-sizing: border-box;	
 }
 .container::before,
 .container::after {
@@ -20,7 +20,7 @@ box-sizing: border-box;
 	float: left;
 	width: 300px;	
 	
-	min-height: 400px; /* 임시 */
+	!min-height: 400px; /* 임시 */
 	1background: rgba(255,0,0,.3);
 
 	box-sizing:border-box;
