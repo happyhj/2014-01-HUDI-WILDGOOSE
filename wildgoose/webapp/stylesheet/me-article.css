@@ -1,4 +1,5 @@
 @CHARSET "UTF-8";
+@import url(http://fonts.googleapis.com/earlyaccess/nanummyeonjo.css);
 /* @font-face{
 	font-family:"NM";
 	src:url('/fonts/NanumMyeongjo.eot');
@@ -33,8 +34,6 @@
 	width: 580px;
 	margin-left: 150px;
 	padding: 18px;
-	font-family: 'NanumMyeongjo';
-
 }
 
 .card-section {
@@ -45,11 +44,13 @@
 	text-align: left;
 }
 .card-section-article > .article-title > h1 {
+	font-family: "Nanum Myeongjo", sans-serif;
 	font-size: 2em;
 	margin-bottom: 15px;
 	color: #333;
 }
 .card-section-article > .article-preview > p {
+	font-family: "Nanum Myeongjo", sans-serif;
 	font-size: 1em;
 	line-height: 1.5em;
 	margin-bottom: 25px
