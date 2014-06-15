@@ -50,12 +50,22 @@
 	color: #333;
 }
 .card-section-article > .article-preview > p {
+	margin-bottom: 25px;
 	font-family: "Nanum Myeongjo", sans-serif;
 	font-size: 1em;
 	line-height: 1.5em;
-	margin-bottom: 25px
 }
 
+/* ellipsis */
+.article-preview > p {
+	display:-webkit-box;
+	-webkit-box-orient:vertical;
+	-webkit-line-clamp:2;
+	text-overflow:ellipsis;
+	-o-text-overflow:ellipsis;
+	-ms-text-overflow:ellipsis;
+	overflow: hidden;
+}
 
 .card-section-article > a > span,
 .card-section-footer > a > span {
