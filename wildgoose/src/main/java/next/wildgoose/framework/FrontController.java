@@ -93,12 +93,14 @@ public class FrontController extends HttpServlet {
 		} else if (resultData.getStatus() == 200) {			
 			Uri keyUri = getKey(jspMap.keySet(), uri);
 			result = jspMap.get(keyUri);
-		} else if (resultData.getStatus() == 401) {
-			// Not Authenticated
-			result = "error.jsp";
-		} else if (resultData.getStatus() == 404) {
-			result = "404.jsp";
-		} else {
+		}
+//		else if (resultData.getStatus() == 401) {
+//			// Not Authenticated
+//			result = "error.jsp";
+//		} else if (resultData.getStatus() == 404) {
+//			result = "404.jsp";
+//		}
+		else {
 			result = "error.jsp";
 		}
 		

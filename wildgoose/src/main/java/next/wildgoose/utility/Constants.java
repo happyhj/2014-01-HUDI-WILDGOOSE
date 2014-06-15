@@ -22,11 +22,13 @@ public class Constants {
 	public static final String MSG_WRONG_PW = "비밀번호가 틀렸습니다";
 	public static final String MSG_WRONG_QUERY = "검색할 수 없는 입력입니다";
 	
+	
+	public static final String ERROR_404 = "존재하지 않는 주소입니다";
+	public static final String ERROR_401 = "로그인이 필요합니다";
+	public static final String ERROR_500 = "예상치 못한 문제가 발생했습니다";
+	
 	public static final int NUM_OF_CARDS = 24;
 	public static final int NUM_OF_ARTICLES = 10;
 	public static final int SESSION_EXPIRING_TIME = 3 * 24 * 60 * 60;
 	
-	private Constants() {
-		
-	}
 }
