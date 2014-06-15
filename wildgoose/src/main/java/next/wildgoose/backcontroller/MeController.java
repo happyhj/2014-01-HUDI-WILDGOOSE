@@ -25,14 +25,13 @@ public class MeController extends AuthController {
 	public Result execute(HttpServletRequest request) {
 		Result result = null;
 		Uri uri = new Uri(request);
-		
 		String userId = uri.get(1);
-		
+
 		result = authenticate(request, userId);
 		if (result != null) {
 			return result;
 		}
-		
+
 		int startItem = (request.getParameter("start_item") != null)? Integer.parseInt(request.getParameter("start_item")) : 0;
 		int howMany = (request.getParameter("how_many") != null)? Integer.parseInt(request.getParameter("how_many")) : Constants.NUM_OF_ARTICLES;
 		LOGGER.debug("startItem: " + startItem + ", howMany: " + howMany);
