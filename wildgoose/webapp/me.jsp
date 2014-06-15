@@ -60,16 +60,13 @@
 				
 			<%-- 보여줄 article이 없는 경우 intro-result를 보여줌 --%>
 			<c:otherwise>
-			<!-- 	<div class="dashboard dashboard-left"></div> -->
-				
 				<div class="content-main">
 					<div class="content-main-header">
 						<h3>추천 기자를 구독해보세요</h3>
 					</div>
 					<%@ include file = "/jsp_templates/content-recommanded-reporter.jsp" %>
 				</div>
-				
-				<!--  <div class="dashboard dashboard-right"></div> -->
+				<button class="start-me disable">WILDGOOSE 시작하기</button>
 			</c:otherwise>
 		</c:choose>
 		
@@ -85,6 +82,7 @@
 		<script type="text/javascript" src="/scripts/WILDGOOSE/user/WILDGOOSE.user.js"></script>
 
 		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.ui.favorite.me.js"></script>
+		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.ui.startme.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/ui/WILDGOOSE.drag.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/more/WILDGOOSE.more.super_type.js"></script>
 		<script type="text/javascript" src="/scripts/WILDGOOSE/more/WILDGOOSE.more.article.js"></script>

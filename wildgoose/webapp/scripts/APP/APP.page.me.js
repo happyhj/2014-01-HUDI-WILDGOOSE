@@ -12,12 +12,16 @@
 	var ArticleMore = WILDGOOSE.more.article;
 	var Drag = WILDGOOSE.drag;
 	var MeFav = WILDGOOSE.ui.favorite.me;
-	var Template = CAGE.util.template;	
+	var Template = CAGE.util.template;
+	var User = WILDGOOSE.user;
+	var Dom = CAGE.util.dom;
+	var StartMe = WILDGOOSE.ui.startme;
 	
 	var MePage = {
 		init: function() {
 			this._articleMoreModule();
 			this._dragModule();
+			this._startMeModule();
 			MeFav.init();
 		},
 		
@@ -45,6 +49,18 @@
 				tagName: "LI",
 				movedClassName : "moving"
 			});
+		},
+		
+		_startMeModule: function() {
+			var startBtn = document.querySelector(".start-me");
+			if (startBtn !== null) {
+				var starEls = document.getElementsByClassName("star");
+				
+				StartMe.init({
+					button: startBtn,
+					target: starEls
+				});
+			}				
 		}
 	}
 		
