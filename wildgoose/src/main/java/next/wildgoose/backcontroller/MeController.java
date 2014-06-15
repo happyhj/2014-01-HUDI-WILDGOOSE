@@ -80,7 +80,7 @@ public class MeController extends AuthController {
 		List<Reporter> reporters = favoriteDao.findFavoriteReporters(userId);
 		
 		ReporterDAO reporterDao = (ReporterDAO) context.getAttribute("ReporterDAO");
-		List<Reporter> recommands = reporterDao.getRandomReporters(userId, 10);
+		List<Reporter> recommands = reporterDao.getRandomReporters(userId, 12);
 		
 		meResult.setStatus(200);
 		meResult.setMessage("success");

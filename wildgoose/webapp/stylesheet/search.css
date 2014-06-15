@@ -85,8 +85,9 @@
 }
 
 .search .search-button > input[type='submit'] {
-	font-size: .9em;
-	font-weight: 400;
+	/* font-size: .9em; */
+	font-size:1.1em;
+	/* font-weight: 400; */
 	color: #fff;
 	background-color: #4882FD;
 	border-left: 1px solid white;

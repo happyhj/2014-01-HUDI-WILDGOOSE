@@ -8,8 +8,6 @@
 <link type="text/css" rel="stylesheet" href="/stylesheet/base.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/basic_layout.css" />
 <link type="text/css" rel="stylesheet" href="/stylesheet/card.css" />
-<link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
-
 <c:choose>
 	<%-- 보여줄 article이 있는경우 timeline-result를 보여줌 --%>
 	<c:when test="${ not empty requestScope.data.articles }">
@@ -20,27 +18,10 @@
 	<%-- 보여줄 article이 없는 경우 intro-result를 보여줌 --%>
 	<c:otherwise>
 		<link type="text/css" rel="stylesheet" href="/stylesheet/me-intro.css" />
-		
 	</c:otherwise>
 </c:choose>
+<link type="text/css" rel="stylesheet" href="/stylesheet/card-media.css" />
 
-<style>
-.card {
-	margin: 10px 0;
-	width: 100%;
-	box-sizing:border-box;
-	-moz-box-sizing:border-box; /* Firefox */
-} 
-.card {
-	transition: all 0.5s ease-in;
-	-webkit-transition: all 0.5s ease-in 0;
-}
-.card.blur {
-	opacity: 0.4;
-}
-
-
-</style>
 <title>Wildgoose</title>
 
 <div class="wrap">
@@ -79,17 +60,16 @@
 				
 			<%-- 보여줄 article이 없는 경우 intro-result를 보여줌 --%>
 			<c:otherwise>
-				<div class="dashboard dashboard-left"></div>
+			<!-- 	<div class="dashboard dashboard-left"></div> -->
 				
 				<div class="content-main">
 					<div class="content-main-header">
-						<h2>환영합니다!</h2>
+						<h3>추천 기자를 구독해보세요</h3>
 					</div>
 					<%@ include file = "/jsp_templates/content-recommanded-reporter.jsp" %>
-					<%-- <%@ include file = "/jsp_templates/content-intro.jsp" %> --%>
 				</div>
 				
-				<div class="dashboard dashboard-right"></div>
+				<!--  <div class="dashboard dashboard-right"></div> -->
 			</c:otherwise>
 		</c:choose>
 		

@@ -40,6 +40,9 @@
 					}.bind(this), false);
 				}
 			}
+			
+			var emailEl = document.querySelector(".error-container .form-container input[name=email]");
+			emailEl.focus();
 		},
 		
 		_join: function() {
