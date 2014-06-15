@@ -49,7 +49,6 @@
 			});
 			
 			this.settingPopup.afteropen.add(this.cache.openPopup);
-			this.settingPopup.afterclose.add(this.cache.closePopup);
 		},		
 		
 		_openPopup: function() {
