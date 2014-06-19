@@ -46,7 +46,8 @@
 		_dragModule: function() {
 			Drag.localSet({
 				attribute: "firstElementChild.getAttribute('data-reporter_id')",
-				emptyNode: 1
+				emptyNode: 1,
+				localStorageName: "myAuthor"
 			});
 			
 			Drag.exe({

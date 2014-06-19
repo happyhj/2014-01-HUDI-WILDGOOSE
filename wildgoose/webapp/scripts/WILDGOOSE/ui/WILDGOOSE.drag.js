@@ -34,30 +34,33 @@ drag.localStore = {
 	localSet: function(args){
 		forLocal.attribute = args.attribute;
 		forLocal.emptyNode = args.emptyNode;
+		values.StorageName = User.getId() + "_" +args.localStorageName;
 	},
 	_localSave: function(){
 		var testString ="";
 		var child = values.target.children;
 		for(var i=0; i < child.length-forLocal.emptyNode; i++){ // 빈 노드의 갯수만큼 뺌
-			var ident = "child["+i+"]" + forLocal.attribute;
-			testString = testString+eval(ident)+" ";
+			var ident = "child["+i+"]." + forLocal.attribute;
+			var result;
+			result = eval(ident);
+			testString = testString+result+" ";
 		}
-		
-		localStorage.setItem(User.getId(), testString);
+		localStorage.setItem(values.StorageName, testString);
 	},	
 	_myAuthorOrder: function(){
-		
 		if (values.target !== null) {
 			var child = values.target.children;
-			if(localStorage.getItem(User.getId()) == undefined) return;
-			var numLi = localStorage.getItem(User.getId()).split(" ");
+			if(localStorage.getItem(values.StorageName) == undefined) return;
+			var numLi = localStorage.getItem(values.StorageName).split(" ");
 			numLi.pop(); // 빈 값("") 때문에 -1을 해 줌
 			
 			for(var j=0; j<numLi.length; j++){ 
 				for(var i=0; i<child.length-forLocal.emptyNode; i++){ // 빈 노드의 갯수만큼 뺌
 					if(child[i].firstElementChild != null){
-						var ident = "child["+i+"]" + forLocal.attribute;
-						if(eval(ident)==numLi[j]){
+						var ident = "child["+i+"]." + forLocal.attribute;
+						var result;
+						result = eval(ident);
+						if(result==numLi[j]){
 							values.target.appendChild(child[i]);
 						}
 					}
