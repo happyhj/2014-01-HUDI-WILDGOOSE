@@ -57,6 +57,7 @@ drag.localStore = {
 		}
 	}
 }
+
 drag.dragfunc = {
 		_dragStart: function(e){
 			var tar = e.target;
@@ -102,7 +103,7 @@ drag.dragfunc = {
 				values.destEle.insertAdjacentElement('afterend',values.sourceEle);
 			}
 			
-			drag.localStore._localSave();
+			this._localSave();
 		}
 }
 
@@ -115,8 +116,7 @@ drag.action = {
 				child.addEventListener('dragstart', function(e){ drag.dragfunc._dragStart(e);}, false);
 				child.addEventListener('dragover', function(e){ drag.dragfunc._dragOver(e);}, false);
 				child.addEventListener('drop', function(e){ drag.dragfunc._drop(e);}, false);
-				child.addEventListener('dragend', function(e){ drag.dragfunc._dragEnd(e);}, false);
-				
+				child.addEventListener('dragend', function(e){ drag.dragfunc._dragEnd.call(this, e);}.bind(drag.localStore), false);
 			});
 		}
 	},
