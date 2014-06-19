@@ -20,8 +20,45 @@ WILDGOOSE.drag = WILDGOOSE.drag || {};
 var User = WILDGOOSE.user;
 	
 var values = {sourceEle : null, destEle : null};
-
-		function _dragStart(e){
+//nameSpace
+var drag = {};
+drag.localStore = {
+	_localSave: function(){
+		var testString ="";
+		var child = values.target.children;
+		for(var i=0; i < child.length-1; i++){ // 빈 리스트 때문에 -1을 해 줌
+			testString = testString+child[i].firstElementChild.getAttribute('data-reporter_id')+" ";
+		}
+		
+		localStorage.setItem(User.getId(), testString);
+	},
+	
+	_myAuthorOrder: function(){
+		var ul = document.querySelector('.dashboard-left ul');
+		
+		if (ul !== null) {
+			var child = ul.children;
+			if(localStorage.getItem(User.getId()) == undefined) return;
+			var numLi = localStorage.getItem(User.getId()).split(" ");
+			numLi.pop(); // 빈 값("") 때문에 -1을 해 줌
+			
+			for(var j=0; j<numLi.length; j++){ 
+				for(var i=0; i<child.length-1; i++){ // 빈 리스트 때문에 -1을 해 줌
+					if(child[i].firstElementChild != null){
+						if(child[i].firstElementChild.getAttribute('data-reporter_id')==numLi[j]){
+							ul.appendChild(child[i]);
+						}
+					}
+				}
+			}
+			
+			var lastCard = document.querySelector('.card-last');
+			ul.appendChild(lastCard);
+		}
+	}
+}
+drag.dragfunc = {
+		_dragStart: function(e){
 			var tar = e.target;
 			tar.classList.add(values.movedClassName);
 			
@@ -29,18 +66,16 @@ var values = {sourceEle : null, destEle : null};
 			if(tar.tagName == values.tagName){
 				values.sourceEle = tar;
 			}
-		}
-		
-		function _dragOver(e){
+		},
+		_dragOver: function(e){
 			if(e.preventDefault){
 				e.preventDefault();
 			}
 			e.dataTransfer.dropEffect = 'move'; //cursor 모양
 			
 			return false;
-		}
-		
-		function _drop(e){
+		},
+		_drop: function(e){
 			var tar = e.target;
 			if(e.stopPropagation){
 				e.stopPropagation(); //browser redirecting 방지
@@ -55,9 +90,8 @@ var values = {sourceEle : null, destEle : null};
 			}
 			
 			return false;
-		}
-		
-		function _dragEnd(e){
+		},
+		_dragEnd: function(e){
 			e.preventDefault();
 			var tar = e.target;
 			if(tar.className.indexOf(values.movedClassName) != -1){
@@ -68,74 +102,36 @@ var values = {sourceEle : null, destEle : null};
 				values.destEle.insertAdjacentElement('afterend',values.sourceEle);
 			}
 			
-			_localSave();
+			drag.localStore._localSave();
 		}
-		
-		function _addEvent(target){
-			if (target !== null) {
-				var children = target.children;
-				[].forEach.call(children, function(child){
-					child.draggable = "true";
-					child.addEventListener('dragstart', function(e){ _dragStart(e);}, false);
-					child.addEventListener('dragover', function(e){ _dragOver(e);}, false);
-					child.addEventListener('drop', function(e){ _drop(e);}, false);
-					child.addEventListener('dragend', function(e){ _dragEnd(e);}, false);
-//					child.style.transition = "all 2s";
-//					child.style.WebkitTransition = "all 2s";
-					
-				});
-			}
-		}
-		
-		function execute(args){
-			values.target = args.body;
-			values.tagName = args.tagName;
-			values.movedClassName = args.movedClassName;
-			
-			_addEvent(args.body);
-			_myAuthorOrder();
+}
 
-			
-		}
-		
-		//test
-		function _localSave(){
-			var testString ="";
-			var child = values.target.children;
-			for(var i=0; i < child.length-1; i++){ // 빈 리스트 때문에 -1을 해 줌
-				testString = testString+child[i].firstElementChild.getAttribute('data-reporter_id')+" ";
-			}
-			
-			localStorage.setItem(User.getId(), testString);
-		}
-		
-		function _myAuthorOrder(){
-			var ul = document.querySelector('.dashboard-left ul');
-			
-			if (ul !== null) {
-				var child = ul.children;
-				if(localStorage.getItem(User.getId()) == undefined) return;
-				var numLi = localStorage.getItem(User.getId()).split(" ");
-				numLi.pop(); // 빈 값("") 때문에 -1을 해 줌
+drag.action = {
+	_addEvent: function(target){
+		if (target !== null) {
+			var children = target.children;
+			[].forEach.call(children, function(child){
+				child.draggable = "true";
+				child.addEventListener('dragstart', function(e){ drag.dragfunc._dragStart(e);}, false);
+				child.addEventListener('dragover', function(e){ drag.dragfunc._dragOver(e);}, false);
+				child.addEventListener('drop', function(e){ drag.dragfunc._drop(e);}, false);
+				child.addEventListener('dragend', function(e){ drag.dragfunc._dragEnd(e);}, false);
 				
-				for(var j=0; j<numLi.length; j++){ 
-					for(var i=0; i<child.length-1; i++){ // 빈 리스트 때문에 -1을 해 줌
-						if(child[i].firstElementChild != null){
-							if(child[i].firstElementChild.getAttribute('data-reporter_id')==numLi[j]){
-								ul.appendChild(child[i]);
-							}
-						}
-					}
-				}
-				
-				var lastCard = document.querySelector('.card-last');
-				ul.appendChild(lastCard);
-			}
+			});
 		}
+	},
+	execute: function(args){
+		values.target = args.body;
+		values.tagName = args.tagName;
+		values.movedClassName = args.movedClassName;
+		
+		drag.action._addEvent(args.body);
+		drag.localStore._myAuthorOrder();
+	}
+}
 
-		
 		WILDGOOSE.drag = {
-			exe : execute
+			exe : drag.action.execute
 		};
 
 	// 글로벌 객체에 모듈을 프로퍼티로 등록한다.
