@@ -44,6 +44,11 @@
 		},
 		
 		_dragModule: function() {
+			Drag.localSet({
+				attribute: "firstElementChild.getAttribute('data-reporter_id')",
+				emptyNode: 1
+			});
+			
 			Drag.exe({
 				body: document.querySelector('.dashboard-left ul'),
 				tagName: "LI",
