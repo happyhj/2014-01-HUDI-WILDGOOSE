@@ -124,6 +124,7 @@ li[class*='nav'] a  {
 </div>
 </div>
 <script type="text/javascript" src="/scripts/lib/sha256.js"></script>
+<!-- <script src="http://10.73.43.194:9000/target/target-script-min.js#wildgosoe"></script> -->
 <c:choose>
 	<c:when test="${ initParam.debuggerMode eq 'on' }">
 		<script type="text/javascript" src="/CAGE/src/CAGE.ajax.js"></script>
