@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import next.wildgoose.framework.dao.template.JdbcTemplate;
 import next.wildgoose.framework.dao.template.PreparedStatementSetter;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class SearchKeywordDAO {
 	
 	public boolean addKeywordRecord (final String keyword) {

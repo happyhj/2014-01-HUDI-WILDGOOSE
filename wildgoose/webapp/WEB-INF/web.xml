@@ -107,6 +107,25 @@
 	</context-param>
 	
 
+	<!-- spring : enrolling root application context -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- spring : setting path of setting xml -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/applicationContext.xml
+		</param-value>
+	</context-param>
+	<!-- spring : use annotation & xml for setting -->	
+	<context-param>
+		<param-name>contextClass</param-name>
+		<param-value>
+			org.springframework.web.context.support.XmlWebApplicationContext
+		</param-value>
+	</context-param>	
+	
 	<!-- Listeners -->
 	<listener>
 		<listener-class>next.wildgoose.database.DatabaseListener</listener-class>

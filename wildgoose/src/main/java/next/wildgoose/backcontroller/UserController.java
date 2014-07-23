@@ -14,9 +14,12 @@ import next.wildgoose.framework.utility.Uri;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
 public class UserController extends AuthController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class.getName());
+	
+	@Autowired
+	private FavoriteDAO favoriteDao;
 	
 	@Override
 	public Result execute(HttpServletRequest request) {
@@ -52,17 +55,17 @@ public class UserController extends AuthController {
 	
 	private Result isFavorite(HttpServletRequest request, String userId,
 			int reporterId) {
-		ServletContext context = request.getServletContext();
-		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
+//		ServletContext context = request.getServletContext();
+//		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
 		SimpleResult result = new SimpleResult(true);
 		result.setData("bool", favoriteDao.isFavorite(userId, reporterId));
 		return result;
 	}
 	
 	private Result getFavorites(HttpServletRequest request, String userId) {
-		ServletContext context = request.getServletContext();
+//		ServletContext context = request.getServletContext();
 		
-		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
+//		FavoriteDAO favoriteDao =  (FavoriteDAO) context.getAttribute("FavoriteDAO");
 		List<Reporter> reporters = favoriteDao.findFavoriteReporters(userId);
 		
 		FavoriteResult favoriteResult = new FavoriteResult();
@@ -74,15 +77,15 @@ public class UserController extends AuthController {
 	}
 	
 	private SimpleResult modifyFavorites(String how, HttpServletRequest request, String userId) {
-		ServletContext context = request.getServletContext();
-		FavoriteDAO favDao = (FavoriteDAO) context.getAttribute("FavoriteDAO");
+//		ServletContext context = request.getServletContext();
+//		FavoriteDAO favoriteDao = (FavoriteDAO) context.getAttribute("FavoriteDAO");
 		boolean success = false;
 		
 		int reporterId = Integer.parseInt(request.getParameter("reporter_id"));
 		
-		if ("add".equals(how) && favDao.addFavorite(reporterId, userId)) {
+		if ("add".equals(how) && favoriteDao.addFavorite(reporterId, userId)) {
 			success = true;
-		} else if ("remove".equals(how) && favDao.removeFavorite(reporterId, userId)) {
+		} else if ("remove".equals(how) && favoriteDao.removeFavorite(reporterId, userId)) {
 			success = true;
 		}
 		return new SimpleResult(success);

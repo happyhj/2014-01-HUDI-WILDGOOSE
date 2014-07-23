@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import next.wildgoose.dto.result.SimpleResult;
 import next.wildgoose.framework.BackController;
 import next.wildgoose.framework.Result;
+import org.springframework.stereotype.Component;
 
+@Component("error")
 public class ErrorController implements BackController {
 
 	@Override

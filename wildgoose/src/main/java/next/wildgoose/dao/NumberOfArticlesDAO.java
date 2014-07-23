@@ -11,6 +11,9 @@ import next.wildgoose.framework.dao.template.JdbcTemplate;
 import next.wildgoose.framework.dao.template.PreparedStatementSetter;
 import next.wildgoose.framework.dao.template.RowMapper;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class NumberOfArticlesDAO {
 	
 	public List<NumberOfArticles> findNumberOfArticlesByDay(int reporterId) {
