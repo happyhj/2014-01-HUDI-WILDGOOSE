@@ -6,6 +6,7 @@ import javax.servlet.ServletContextListener;
 
 public class DatabaseListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event) {
+/*
 		ServletContext sc = event.getServletContext();
 		
 		// DATABASE
@@ -13,7 +14,8 @@ public class DatabaseListener implements ServletContextListener {
 		String dbUrl = sc.getInitParameter("dbUrl");
 		String userName = sc.getInitParameter("userName");
 		String userPassword = sc.getInitParameter("userPassword");
-		DataSource.init(dbDriver, userName, userPassword, dbUrl);
+		*/
+//		DataSource.init(dbDriver, userName, userPassword, dbUrl);
 	}
 	
 	public void contextDestroyed(ServletContextEvent event) {

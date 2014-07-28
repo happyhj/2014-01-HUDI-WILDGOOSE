@@ -13,8 +13,9 @@ public class BackControllerListener implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
+		
 		ServletContext context = event.getServletContext();
-
+		/*
 		Map<String, BackController> controllerMap;
 		
 		controllerMap = new HashMap<String, BackController>();
@@ -29,6 +30,7 @@ public class BackControllerListener implements ServletContextListener {
 		controllerMap.put("error", new ErrorController());
 		
 		context.setAttribute("controllerMap", controllerMap);
+		*/
 	}
 
 	@Override

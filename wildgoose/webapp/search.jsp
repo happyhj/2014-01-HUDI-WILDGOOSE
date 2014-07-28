@@ -51,7 +51,7 @@
 					</c:if>
 					<%-- searchResult 표시부 --%>
 					<c:forEach var="reporter" items="${ requestScope.data.reporters }" ><li class="card card-reporter">
-						<%@ include file = "jsp_templates/reporterCard.jsp" %>
+						<%@ include file = "/WEB-INF/jsp_templates/reporterCard.jsp" %>
 					</li></c:forEach>
 				</c:when>
 

@@ -1,3 +1,4 @@
+/*
 package next.wildgoose.dao;
 
 import javax.servlet.ServletContext;
@@ -17,6 +18,7 @@ public class DaoListener implements ServletContextListener {
 		sc.setAttribute("FavoriteDAO", new FavoriteDAO());
 		sc.setAttribute("SearchKeywordDAO", new SearchKeywordDAO());
 		sc.setAttribute("DummyData", new DummyData());
+		
 	}
 	
 	public void contextDestroyed(ServletContextEvent event) {
@@ -25,3 +27,4 @@ public class DaoListener implements ServletContextListener {
 	}
 
 }
+*/

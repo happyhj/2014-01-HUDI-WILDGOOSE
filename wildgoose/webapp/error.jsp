@@ -11,7 +11,7 @@
 <title>Wildgoose</title>
 <div class="wrap">
 	<header class="header">
-		<%@ include file ="/header.jsp" %>
+		<%@ include file ="header.jsp" %>
 	</header>
 	<div class="container">
 	<div class="parallax-wrapper">
@@ -62,12 +62,12 @@
 			<c:choose>
 				<%-- 로그인 페이지를 보여줄 때 --%>
 				<c:when test="${ requestScope.data.pageName eq 'login' }">
-					<%@ include file ="/jsp_templates/login.jsp" %>
+					<%@ include file ="/WEB-INF/jsp_templates/login.jsp" %>
 				</c:when>
 				
 				<%-- 가입 페이지를 보여줄 때 --%>
 				<c:when test="${ requestScope.data.pageName eq 'join' }">
-					<%@ include file ="/jsp_templates/join.jsp" %>
+					<%@ include file ="/WEB-INF/jsp_templates/join.jsp" %>
 				</c:when>
 				
 				<%-- 나머지 경우 --%>

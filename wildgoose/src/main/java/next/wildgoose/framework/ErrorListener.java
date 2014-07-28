@@ -16,8 +16,7 @@ public class ErrorListener implements ServletContextListener {
     	 Map<Integer, String> errorCodeMap = new HashMap<Integer, String>();
  		
     	 errorCodeMap.put(404, Constants.ERROR_404);
-    	 errorCodeMap.put(401, Constants.ERROR_401);
-    	 
+    	 errorCodeMap.put(401, Constants.ERROR_401);	 
     	 errorCodeMap.put(500, Constants.ERROR_500);
  		
     	 context.setAttribute("errorCodeMap", errorCodeMap);
