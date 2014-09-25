@@ -62,23 +62,25 @@ public class FrontController extends HttpServlet {
 	
 	// 요청(request path)에 해당하는 BackController 구현체를 받아오기
 	private BackController getBackController(HttpServletRequest request) {
+		// 서블릿 컨텍스트에서 가져오던걸 스프링 어플리케이션 컨텍스트를 가져오는걸로 바꿈.
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
 
-		//ServletContext context = request.getServletContext();
-		//Map<String, BackController> controllerMap = (Map<String, BackController>) context.getAttribute("controllerMap");
-
+		// 도메인을 제외한 요청 주소를 추출
 		Uri uri = new Uri(request);
-//		BackController result = null;
-//		result = controllerMap.get(uri.getPrimeResource());
+
 		String primeResource = uri.getPrimeResource();
 		if ("".equals(primeResource)) {
 			primeResource = "search";
-		}	
+		}
+		
+		// BackController Bean을 의존성 Lookup을 해서 가져온다.
 		BackController result = context.getBean(primeResource, BackController.class);		
+		
 		if (result == null) {
 			result = context.getBean("error", BackController.class);
 			//			result = controllerMap.get("error");
 		}
+		
 		return result;
 	}
 	

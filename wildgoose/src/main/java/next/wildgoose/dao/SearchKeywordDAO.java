@@ -6,21 +6,19 @@ import java.sql.SQLException;
 import next.wildgoose.framework.dao.template.JdbcTemplate;
 import next.wildgoose.framework.dao.template.PreparedStatementSetter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SearchKeywordDAO {
+	@Autowired private JdbcTemplate t;
 	
 	public boolean addKeywordRecord (final String keyword) {
-		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
-
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, keyword);
-				
 			}
-			
 		};
 		
 		StringBuilder query = new StringBuilder();

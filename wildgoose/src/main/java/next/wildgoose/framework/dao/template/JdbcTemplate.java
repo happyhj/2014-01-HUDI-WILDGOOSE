@@ -16,12 +16,15 @@ public class JdbcTemplate {
 	private static final Logger LOGGER = LoggerFactory.getLogger(JdbcTemplate.class.getName());
 //	Connection conn;
 
-	@Autowired
 	private BasicDataSource dataSource;	
 	
 //	public JdbcTemplate() {
 //		this.conn = DataSource.getInstance().getConnection();
 //	}
+	@Autowired
+	public JdbcTemplate(BasicDataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 	
 	public Object execute (String query, PreparedStatementSetter pss) {
 		return execute(query, pss, null);

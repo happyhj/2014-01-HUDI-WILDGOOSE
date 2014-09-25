@@ -1,6 +1,5 @@
 package next.wildgoose.backcontroller;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 

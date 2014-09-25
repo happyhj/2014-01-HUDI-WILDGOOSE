@@ -127,17 +127,6 @@
 	</context-param>	
 	
 	<!-- Listeners -->
-	<!--
-	<listener>
-		<listener-class>next.wildgoose.database.DatabaseListener</listener-class>
-	</listener>
-	<listener>
-		<listener-class>next.wildgoose.dao.DaoListener</listener-class>
-	</listener>
-	<listener>
-		<listener-class>next.wildgoose.backcontroller.BackControllerListener</listener-class>
-	</listener>
-	-->
 	<listener>
 		<listener-class>next.wildgoose.web.WebListener</listener-class>
 	</listener>
@@ -150,12 +139,12 @@
 	<filter>
 		<display-name>EncodingFilter</display-name>
 		<filter-name>EncodingFilter</filter-name>
-		<filter-class>next.wildgoose.framework.filter.EncodingFilter</filter-class>
+		<filter-class>next.wildgoose.filter.EncodingFilter</filter-class>
 	</filter>
 	<filter>
 		<display-name>QueryFilter</display-name>
 		<filter-name>QueryFilter</filter-name>
-		<filter-class>next.wildgoose.framework.filter.QueryFilter</filter-class>
+		<filter-class>next.wildgoose.filter.QueryFilter</filter-class>
 	</filter>
 	
 	<!-- Filter Mapping -->

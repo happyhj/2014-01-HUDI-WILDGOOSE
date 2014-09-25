@@ -11,13 +11,14 @@ import next.wildgoose.framework.dao.template.JdbcTemplate;
 import next.wildgoose.framework.dao.template.PreparedStatementSetter;
 import next.wildgoose.framework.dao.template.RowMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ReporterDAO {
+	@Autowired private JdbcTemplate t;
 	
 	public List<Reporter> getRandomReporters(final String userId, final int howmany) {
-		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
 			@Override
@@ -65,7 +66,6 @@ public class ReporterDAO {
 	}
 	
 	public Reporter findReporterById (final int reporterId) {		
-		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
 			@Override
@@ -100,7 +100,6 @@ public class ReporterDAO {
 	}
 	
 	public int findNumberOfReportersByType(String type, final String searchQuery) {
-		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
 			@Override
@@ -133,20 +132,16 @@ public class ReporterDAO {
 	}
 	
 	public List<Reporter> findReportersByType(String type, final String searchQuery, final int start, final int num) {
-		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
-
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, "%" + searchQuery + "%");
 				psmt.setInt(2, start);
 				psmt.setInt(3, num);
 			}
-			
 		};
 		
 		RowMapper rm = new RowMapper() {
-
 			@Override
 			public Object mapRow(ResultSet rs) throws SQLException {
 				List<Reporter> reporters = new ArrayList<Reporter>();
@@ -162,7 +157,6 @@ public class ReporterDAO {
 				}
 				return reporters;
 			}
-			
 		};
 		
 		StringBuilder query = new StringBuilder();
@@ -177,9 +171,7 @@ public class ReporterDAO {
 	}
 	
 	public List<Reporter> getSimilarNames(final String name, final int count) {
-		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
-
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, name + "%");

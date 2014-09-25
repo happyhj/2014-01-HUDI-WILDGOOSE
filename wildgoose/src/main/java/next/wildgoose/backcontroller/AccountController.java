@@ -30,8 +30,7 @@ import org.springframework.stereotype.Component;
 @Component("accounts")
 public class AccountController implements BackController {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AccountController.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class.getName());
 
 	@Autowired
 	private SignDAO signDao;
@@ -73,8 +72,8 @@ public class AccountController implements BackController {
 		String oldPassword = parameterMap.get("old_pw");
 		String newPassword = parameterMap.get("new_pw");
 
-		ServletContext context = request.getServletContext();
-		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
+	//	ServletContext context = request.getServletContext();
+	//	SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
 
 		HttpSession session = request.getSession();
 		String randNum = (String) session.getAttribute("randNum");
@@ -82,7 +81,7 @@ public class AccountController implements BackController {
 
 		// 비밀번호 확인
 		if (SHA256.testSHA256(accountPw + randNum).equals(oldPassword)) {
-			boolean changed = SignDAO.changePassword(email, newPassword);
+			boolean changed = signDao.changePassword(email, newPassword);
 			result = new SimpleResult(changed);
 		} else {
 			result.setMessage(Constants.MSG_WRONG_PW);
@@ -137,8 +136,6 @@ public class AccountController implements BackController {
 		// 확인하기 추가
 		String email = request.getParameter("email");
 
-//		ServletContext context = request.getServletContext();
-//		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
 		AccountResult accountResult = new AccountResult();
 
 		// 기본 세팅 fail
@@ -157,8 +154,6 @@ public class AccountController implements BackController {
 	}
 
 	private AccountResult usedEmail(HttpServletRequest request, String email) {
-//		ServletContext context = request.getServletContext();
-//		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
 		AccountResult accountResult = new AccountResult();
 
 		if (isJoinable(signDao, email)) {
@@ -178,8 +173,6 @@ public class AccountController implements BackController {
 		String password = request.getParameter("password");
 
 		LOGGER.debug("email: " + email + ",  passw: " + password);
-//		ServletContext context = request.getServletContext();
-//		SignDAO signDao = (SignDAO) context.getAttribute("SignDAO");
 		AccountResult accountResult = new AccountResult();
 
 		// 기본 세팅 fail

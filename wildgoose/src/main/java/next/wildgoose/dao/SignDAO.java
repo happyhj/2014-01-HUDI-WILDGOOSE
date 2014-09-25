@@ -8,24 +8,22 @@ import next.wildgoose.framework.dao.template.JdbcTemplate;
 import next.wildgoose.framework.dao.template.PreparedStatementSetter;
 import next.wildgoose.framework.dao.template.RowMapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SignDAO {
-	public boolean findEmail (final String email) {	
-		JdbcTemplate t = new JdbcTemplate();
-		PreparedStatementSetter pss = new PreparedStatementSetter() {
+	@Autowired private JdbcTemplate t;
 
+	public boolean findEmail (final String email) {	
+		PreparedStatementSetter pss = new PreparedStatementSetter() {
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, email);
-				
 			}
-			
 		};
 		
 		RowMapper rm = new RowMapper() {
-
 			@Override
 			public Object mapRow(ResultSet rs) throws SQLException {
 				if (rs.first()) {
@@ -36,7 +34,6 @@ public class SignDAO {
 				}
 				return false;
 			}
-			
 		};
 		
 		StringBuilder query = new StringBuilder();
@@ -46,56 +43,39 @@ public class SignDAO {
 	}
 	
 	public String findAccount (final String email) {
-		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
-
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, email);
 			}
-			
 		};
-		
 		RowMapper rm = new RowMapper() {
-
 			@Override
 			public Object mapRow(ResultSet rs) throws SQLException {
 				String result = null;
-
 				if (rs.first()) {
 					result = rs.getString("password");
 				}
 				return result;
 			}
-			
 		};
-		
-		
 		String query = "SELECT * FROM user_account WHERE email = ?";
-
 		return (String) t.execute(query, pss, rm);
-
 	}
 
 	public boolean joinAccount (final String email, final String password) {
-		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
-
 			@Override
 			public void setValues(PreparedStatement psmt) throws SQLException {
 				psmt.setString(1, email);
 				psmt.setString(2, password);
-			}
-			
+			}	
 		};
-
 		String query = "INSERT INTO user_account (email, password) VALUES (?, ?) ";
-		
 		return (Boolean) t.execute(query, pss);
 	}
 	
 	public boolean withdrawAccount (final String email) {
-		JdbcTemplate t = new JdbcTemplate();
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
 			@Override
@@ -107,8 +87,7 @@ public class SignDAO {
 		return (Boolean) t.execute(query, pss);
 	}
 
-	public static boolean changePassword(final String email, final String newPassword) {
-		JdbcTemplate t = new JdbcTemplate();
+	public boolean changePassword(final String email, final String newPassword) {
 		PreparedStatementSetter pss = new PreparedStatementSetter() {
 
 			@Override
